@@ -34,6 +34,8 @@ await new Promise((resolve, reject) => {
   socket.addEventListener("error", reject, { once: true });
 });
 
+await command("Page.enable");
+await command("Page.bringToFront");
 await command("Runtime.enable");
 
 const expression = `

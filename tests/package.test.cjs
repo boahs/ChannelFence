@@ -66,8 +66,9 @@ test("manifest description fits the store summary limit", () => {
   assert.ok(manifest.description.length <= 132);
 });
 
-test("recognizes class-based YouTube lockups used by membership shelves", () => {
+test("recognizes membership lockups and watch-page creator menus", () => {
   const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
   assert.match(contentScript, /"\.yt-lockup-view-model"/);
   assert.match(contentScript, /"\.yt-lockup-view-model--wrapper"/);
+  assert.match(contentScript, /control\.closest\("ytd-watch-metadata, ytd-video-primary-info-renderer"\)/);
 });

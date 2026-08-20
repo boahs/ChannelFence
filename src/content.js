@@ -330,15 +330,27 @@
     if (!state.enabled || !(event.target instanceof Element)) {
       return;
     }
-    const root = event.target.closest(CONTENT_SELECTOR);
     const control = event.target.closest(
       "button, yt-icon-button, tp-yt-paper-icon-button, button-view-model, [role='button']"
     );
-    if (!root || !isCreatorMenuTrigger(control)) {
+    if (!isCreatorMenuTrigger(control)) {
       return;
     }
 
-    const refs = refsFromElement(root);
+    let root = event.target.closest(CONTENT_SELECTOR);
+    let refs = root ? refsFromElement(root) : [];
+    let ownerNames = root ? ownerNamesFromElement(root) : [];
+    let displayName = root ? displayNameFromRoot(root, refs) : "";
+
+    if (!root && control.closest("ytd-watch-metadata, ytd-video-primary-info-renderer")) {
+      const pageContext = currentPageContext();
+      const owner = pageOwnerRoot();
+      root = owner || control.closest("ytd-watch-metadata, ytd-video-primary-info-renderer");
+      refs = pageContext.refs;
+      ownerNames = owner ? ownerNamesFromElement(owner) : [];
+      displayName = pageContext.displayName;
+    }
+
     if (refs.length === 0) {
       return;
     }
@@ -346,8 +358,8 @@
       root,
       trigger: control,
       refs,
-      ownerNames: ownerNamesFromElement(root),
-      displayName: displayNameFromRoot(root, refs),
+      ownerNames,
+      displayName,
       expiresAt: Date.now() + 5000
     };
     scheduleScan();
