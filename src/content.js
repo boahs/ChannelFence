@@ -19,6 +19,8 @@
     "ytd-channel-renderer",
     "ytd-radio-renderer",
     "yt-lockup-view-model",
+    ".yt-lockup-view-model",
+    ".yt-lockup-view-model--wrapper",
     "ytm-video-with-context-renderer",
     "ytm-compact-video-renderer"
   ].join(",");
@@ -57,6 +59,8 @@
     "a[href^='https://m.youtube.com/@']",
     "a[href^='https://m.youtube.com/channel/']",
     "yt-lockup-view-model a[href]",
+    ".yt-lockup-view-model a[href]",
+    ".yt-lockup-view-model--wrapper a[href]",
     "[class*='metadata-view-model'] a[href]"
   ].join(",");
 

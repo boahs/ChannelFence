@@ -42,8 +42,9 @@ const expression = `
   document.getElementById(testId)?.remove();
   document.querySelectorAll("[data-cf-menu-smoke-popup]").forEach((popup) => popup.remove());
 
-  const card = document.createElement("yt-lockup-view-model");
+  const card = document.createElement("div");
   card.id = testId;
+  card.className = "yt-lockup-view-model yt-lockup-view-model--compact";
 
   const channel = document.createElement("a");
   channel.href = "/@ChannelFenceMenuSmoke";
