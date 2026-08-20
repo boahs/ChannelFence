@@ -19,7 +19,7 @@ async function ensureDefaults() {
   }
 }
 
-async function updateBadge() {
+async function badgeState() {
   const values = await chrome.storage.local.get([
     Shared.STORAGE.enabled,
     Shared.STORAGE.blocked
@@ -28,16 +28,34 @@ async function updateBadge() {
   const count = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]).length;
   const badgeText = enabled && count > 0 ? (count > 999 ? "999+" : String(count)) : "";
 
+  return { enabled, count, badgeText };
+}
+
+async function clearGlobalActionState() {
   await chrome.action.setBadgeBackgroundColor({ color: "#ff5f46" });
-  await chrome.action.setBadgeText({ text: badgeText });
+  await chrome.action.setBadgeText({ text: "" });
+  await chrome.action.setTitle({ title: "ChannelFence" });
+}
+
+async function updateBadgeForTab(tabId) {
+  if (!Number.isInteger(tabId)) {
+    return;
+  }
+  const { enabled, count, badgeText } = await badgeState();
+
+  await chrome.action.setBadgeBackgroundColor({ color: "#ff5f46", tabId });
+  await chrome.action.setBadgeText({ text: badgeText, tabId });
   await chrome.action.setTitle({
-    title: enabled ? `ChannelFence — ${count} blocked` : "ChannelFence — paused"
+    title: enabled ? `ChannelFence — ${count} blocked` : "ChannelFence — paused",
+    tabId
   });
 }
 
+clearGlobalActionState().catch(() => undefined);
+
 chrome.runtime.onInstalled.addListener(async (details) => {
   await ensureDefaults();
-  await updateBadge();
+  await clearGlobalActionState();
 
   if (details.reason === "install") {
     await chrome.tabs.create({ url: chrome.runtime.getURL("ui/welcome.html") });
@@ -46,14 +64,20 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
 chrome.runtime.onStartup.addListener(async () => {
   await ensureDefaults();
-  await updateBadge();
+  await clearGlobalActionState();
 });
 
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName !== "local") {
+chrome.runtime.onMessage.addListener((message, sender) => {
+  if (!message || message.type !== "CF_SYNC_ACTION" || !Number.isInteger(sender.tab?.id)) {
     return;
   }
-  if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked]) {
-    updateBadge().catch(() => undefined);
+  updateBadgeForTab(sender.tab.id).catch(() => undefined);
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.status !== "loading") {
+    return;
   }
+  chrome.action.setBadgeText({ text: "", tabId }).catch(() => undefined);
+  chrome.action.setTitle({ title: "ChannelFence", tabId }).catch(() => undefined);
 });

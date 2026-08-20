@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ChannelFence – Creator Blocker",
   "short_name": "ChannelFence",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Block YouTube channels and creators across Home, search, recommendations, Shorts, comments, and direct visits.",
   "permissions": [
     "storage"

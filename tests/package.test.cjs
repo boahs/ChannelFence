@@ -82,3 +82,14 @@ test("creator menu item inherits YouTube's light or dark theme color", () => {
   assert.match(contentScript, /function nativeMenuTextColor\(host\)/);
   assert.match(contentScript, /button\.style\.setProperty\("--cf-menu-text-color", menuTextColor\)/);
 });
+
+test("scopes the blocked-count badge to YouTube tabs", () => {
+  const worker = fs.readFileSync(path.join(root, "src", "service-worker.js"), "utf8");
+  const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
+  assert.match(worker, /setBadgeText\(\{ text: "" \}\)/);
+  assert.match(worker, /setBadgeText\(\{ text: badgeText, tabId \}\)/);
+  assert.match(worker, /clearGlobalActionState\(\)\.catch/);
+  assert.match(worker, /chrome\.tabs\.onUpdated\.addListener/);
+  assert.match(worker, /changeInfo\.status !== "loading"/);
+  assert.match(contentScript, /sendMessage\(\{ type: "CF_SYNC_ACTION" \}\)/);
+});

@@ -115,6 +115,10 @@
     state.blockedKeys = new Set(state.blocked.flatMap((entry) => entry.aliases));
   }
 
+  function requestActionUpdate() {
+    chrome.runtime.sendMessage({ type: "CF_SYNC_ACTION" }).catch(() => undefined);
+  }
+
   async function loadState() {
     const values = await chrome.storage.local.get(Object.keys(Shared.DEFAULTS));
     state.enabled = values[Shared.STORAGE.enabled] !== false;
@@ -127,6 +131,7 @@
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         await loadState();
+        requestActionUpdate();
         scheduleScan();
         return;
       } catch {
@@ -723,6 +728,9 @@
     if (changes[Shared.STORAGE.blocked]) {
       state.blocked = changes[Shared.STORAGE.blocked].newValue || [];
       rebuildBlockedKeys();
+    }
+    if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked]) {
+      requestActionUpdate();
     }
     scheduleScan();
   });
