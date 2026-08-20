@@ -57,4 +57,8 @@ The uploadable archive is written to `dist/`. Store listing materials and tests 
 - `store/` — listing copy and submission guidance.
 - `tests/` — Node-based data-model and package checks.
 
+## License
+
+ChannelFence is open source software released under the [MIT License](LICENSE).
+
 YouTube is a trademark of Google LLC. ChannelFence is an independent extension and is not affiliated with, endorsed by, or sponsored by Google LLC.
