@@ -1,0 +1,199 @@
+.cf-hidden-by-channelfence {
+  display: none !important;
+}
+
+html.cf-watch-pending ytd-watch-flexy #movie_player,
+html.cf-watch-pending ytd-reel-video-renderer[is-active] video,
+html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
+  visibility: hidden !important;
+}
+
+.cf-block-button {
+  align-items: center !important;
+  appearance: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: var(--yt-spec-text-secondary, #606060) !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  font: 600 12px/1 Arial, sans-serif !important;
+  height: 24px !important;
+  justify-content: center !important;
+  margin-inline-start: 5px !important;
+  min-width: 24px !important;
+  padding: 0 6px !important;
+  position: relative !important;
+  vertical-align: middle !important;
+  z-index: 2 !important;
+}
+
+.cf-block-button:hover,
+.cf-block-button:focus-visible {
+  background: color-mix(in srgb, #ff5f46 14%, transparent) !important;
+  color: #e23c28 !important;
+  outline: none !important;
+}
+
+.cf-block-button:focus-visible {
+  box-shadow: 0 0 0 2px #18d9d2 !important;
+}
+
+.cf-block-button__symbol {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  transform: translateY(-0.5px) !important;
+}
+
+.cf-menu-item {
+  align-items: center !important;
+  appearance: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-sizing: border-box !important;
+  color: var(--yt-spec-text-primary, #0f0f0f) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  font: 400 14px/20px Roboto, Arial, sans-serif !important;
+  min-height: 48px !important;
+  padding: 0 12px !important;
+  text-align: start !important;
+  width: 100% !important;
+}
+
+.cf-menu-item:hover,
+.cf-menu-item:focus-visible {
+  background: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.1)) !important;
+  outline: none !important;
+}
+
+.cf-menu-item__symbol {
+  flex: 0 0 24px !important;
+  font: 400 24px/1 Arial, sans-serif !important;
+  margin-inline-end: 12px !important;
+  text-align: center !important;
+}
+
+.cf-menu-item__label {
+  font-size: 13px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+#cf-hard-block-overlay {
+  align-items: center !important;
+  background: rgba(7, 13, 48, 0.96) !important;
+  color: #fff !important;
+  display: flex !important;
+  inset: 0 !important;
+  justify-content: center !important;
+  padding: 28px !important;
+  position: fixed !important;
+  z-index: 2147483647 !important;
+}
+
+.cf-hard-block-card {
+  background: #111c56 !important;
+  border: 1px solid rgba(24, 217, 210, 0.45) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42) !important;
+  box-sizing: border-box !important;
+  color: #fff !important;
+  font-family: Arial, sans-serif !important;
+  max-width: 480px !important;
+  padding: 38px !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.cf-hard-block-icon {
+  align-items: center !important;
+  background: #ff5f46 !important;
+  border-radius: 50% !important;
+  color: #fff !important;
+  display: inline-flex !important;
+  font-size: 36px !important;
+  height: 70px !important;
+  justify-content: center !important;
+  margin-bottom: 20px !important;
+  width: 70px !important;
+}
+
+.cf-hard-block-card h1 {
+  color: #fff !important;
+  font: 750 27px/1.2 Arial, sans-serif !important;
+  margin: 0 0 10px !important;
+}
+
+.cf-hard-block-card p {
+  color: #cbd4ff !important;
+  font: 400 15px/1.55 Arial, sans-serif !important;
+  margin: 0 auto 26px !important;
+  max-width: 360px !important;
+}
+
+.cf-hard-block-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  justify-content: center !important;
+}
+
+.cf-hard-block-actions button {
+  appearance: none !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  font: 700 14px/1 Arial, sans-serif !important;
+  min-height: 42px !important;
+  padding: 0 20px !important;
+}
+
+.cf-hard-block-actions button:first-child {
+  background: #18d9d2 !important;
+  color: #071330 !important;
+}
+
+.cf-hard-block-actions button:last-child {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+#cf-toast {
+  align-items: center !important;
+  background: #101943 !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 12px !important;
+  bottom: 28px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.34) !important;
+  color: #fff !important;
+  display: flex !important;
+  font: 600 14px/1.3 Arial, sans-serif !important;
+  gap: 16px !important;
+  left: 50% !important;
+  max-width: min(460px, calc(100vw - 32px)) !important;
+  padding: 13px 14px 13px 17px !important;
+  position: fixed !important;
+  transform: translateX(-50%) !important;
+  z-index: 2147483647 !important;
+}
+
+#cf-toast button {
+  appearance: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: #22e8df !important;
+  cursor: pointer !important;
+  font: 750 13px/1 Arial, sans-serif !important;
+  padding: 6px !important;
+  text-transform: uppercase !important;
+}
+
+@media (max-width: 520px) {
+  .cf-hard-block-card {
+    border-radius: 18px !important;
+    padding: 28px 22px !important;
+  }
+}

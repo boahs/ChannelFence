@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChannelFence settings</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="../src/shared.js" defer></script>
+  <script src="options.js" defer></script>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="page-header">
+      <div class="brand">
+        <img class="brand__icon" src="../assets/icons/channelfence-128.png" alt="">
+        <div>
+          <div class="brand__name">ChannelFence</div>
+          <div class="brand__tagline">Creator blocker settings</div>
+        </div>
+      </div>
+      <div class="version" id="version"></div>
+    </header>
+
+    <section class="settings-card" aria-labelledby="settingsHeading">
+      <h1 id="settingsHeading">Settings</h1>
+      <p class="settings-intro">ChannelFence runs only on YouTube and keeps your preferences on this device.</p>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-row__title">Enable ChannelFence</div>
+          <div class="setting-row__copy">Pause all blocking without deleting your list.</div>
+        </div>
+        <label class="switch">
+          <input id="enabledToggle" type="checkbox" aria-label="Enable ChannelFence">
+          <span class="switch__track" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-row__title">Hide comments from blocked creators</div>
+          <div class="setting-row__copy">Also removes comments when ChannelFence can identify the commenter’s channel.</div>
+        </div>
+        <label class="switch">
+          <input id="commentsToggle" type="checkbox" aria-label="Hide comments from blocked creators">
+          <span class="switch__track" aria-hidden="true"></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="settings-card" aria-labelledby="blockListHeading">
+      <h2 id="blockListHeading">Blocked creators <span class="count-pill" id="blockedCount">0</span></h2>
+      <p class="settings-intro">Search, unblock, or back up your list. Imported entries are merged with the current list.</p>
+
+      <div class="list-toolbar">
+        <input class="search-input" id="searchInput" type="search" placeholder="Search blocked creators" aria-label="Search blocked creators">
+        <div class="toolbar-actions">
+          <button class="button button--secondary button--small" id="exportButton" type="button">Export</button>
+          <button class="button button--secondary button--small" id="importButton" type="button">Import</button>
+          <button class="button button--danger button--small" id="clearButton" type="button">Clear all</button>
+          <input id="importFile" type="file" accept="application/json,.json" hidden>
+        </div>
+      </div>
+
+      <ul class="block-list" id="blockList"></ul>
+      <div class="empty-state" id="emptyState" hidden>Your block list is empty.</div>
+
+      <div class="privacy-note">
+        <strong>Private by design.</strong> Channel names, channel links, settings, and your block list stay in Chrome’s local extension storage. ChannelFence does not send them to us or anyone else.
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>

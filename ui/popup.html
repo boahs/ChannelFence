@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChannelFence</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="../src/shared.js" defer></script>
+  <script src="popup.js" defer></script>
+</head>
+<body class="popup">
+  <header class="popup__header">
+    <div class="brand">
+      <img class="brand__icon" src="../assets/icons/channelfence-48.png" alt="">
+      <div>
+        <div class="brand__name">ChannelFence</div>
+        <div class="brand__tagline" id="statusText">Loading…</div>
+      </div>
+    </div>
+    <label class="switch" title="Pause or enable ChannelFence">
+      <input id="enabledToggle" type="checkbox" aria-label="Enable ChannelFence">
+      <span class="switch__track" aria-hidden="true"></span>
+    </label>
+  </header>
+
+  <main class="popup__main">
+    <section class="status-card" aria-labelledby="pageTitle">
+      <div class="status-card__eyebrow">Current page</div>
+      <h1 class="status-card__title" id="pageTitle">Checking this page…</h1>
+      <p class="status-card__copy" id="pageCopy">Open a creator, video, or Short to block its creator.</p>
+      <button class="button button--primary" id="pageAction" type="button" disabled>Block creator</button>
+    </section>
+
+    <section class="popup-section" aria-labelledby="recentHeading">
+      <div class="section-heading">
+        <h2 id="recentHeading">Recently blocked</h2>
+        <span class="count-pill" id="blockedCount">0</span>
+      </div>
+      <ul class="mini-list" id="recentList"></ul>
+      <div class="empty-state" id="emptyState" hidden>No creators blocked yet. Use the ⊘ button beside a creator on YouTube.</div>
+    </section>
+  </main>
+
+  <footer class="popup__footer">
+    <button class="link-button" id="openOptions" type="button">Manage block list</button>
+    <a class="link-button" href="privacy.html" target="_blank">Privacy</a>
+  </footer>
+</body>
+</html>
