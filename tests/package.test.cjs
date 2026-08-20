@@ -72,3 +72,13 @@ test("recognizes membership lockups and watch-page creator menus", () => {
   assert.match(contentScript, /"\.yt-lockup-view-model--wrapper"/);
   assert.match(contentScript, /control\.closest\("ytd-watch-metadata, ytd-video-primary-info-renderer"\)/);
 });
+
+test("creator menu item inherits YouTube's light or dark theme color", () => {
+  const contentStyles = fs.readFileSync(path.join(root, "src", "content.css"), "utf8");
+  const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
+  const menuRule = contentStyles.match(/\.cf-menu-item\s*\{([^}]*)\}/)?.[1] || "";
+  assert.match(menuRule, /color:\s*var\(--cf-menu-text-color, inherit\)\s*!important/);
+  assert.doesNotMatch(menuRule, /#0f0f0f/);
+  assert.match(contentScript, /function nativeMenuTextColor\(host\)/);
+  assert.match(contentScript, /button\.style\.setProperty\("--cf-menu-text-color", menuTextColor\)/);
+});

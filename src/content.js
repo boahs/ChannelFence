@@ -374,6 +374,29 @@
     }));
   }
 
+  function nativeMenuTextColor(host) {
+    const nativeItem = [...host.querySelectorAll(
+      "ytd-menu-service-item-renderer, yt-list-item-view-model, tp-yt-paper-item, [role='menuitem']"
+    )].find((item) => !item.classList.contains("cf-menu-item"));
+    if (!nativeItem) {
+      return "";
+    }
+
+    const label = nativeItem.querySelector(
+      "yt-formatted-string, .yt-core-attributed-string, #label, [class*='label'], [class*='text']"
+    );
+    for (const element of [label, nativeItem]) {
+      if (!element) {
+        continue;
+      }
+      const color = getComputedStyle(element).color;
+      if (color && color !== "transparent" && color !== "rgba(0, 0, 0, 0)") {
+        return color;
+      }
+    }
+    return "";
+  }
+
   function ensureCreatorMenuItem(popup) {
     if (!state.enabled || !popup || popup.querySelector(".cf-menu-item")) {
       return;
@@ -393,6 +416,10 @@
     button.setAttribute("aria-label", existingEntry
       ? "Unblock creator with ChannelFence"
       : "Block creator with ChannelFence");
+    const menuTextColor = nativeMenuTextColor(host);
+    if (menuTextColor) {
+      button.style.setProperty("--cf-menu-text-color", menuTextColor);
+    }
 
     const symbol = document.createElement("span");
     symbol.className = "cf-menu-item__symbol";
