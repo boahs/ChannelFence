@@ -2,6 +2,10 @@
 
 ChannelFence is a privacy-first Chrome extension that lets you block YouTube channels and creators across Home, search, recommendations, Shorts, comments, channel pages, and supported direct video pages. Block a creator once and their matching content disappears wherever ChannelFence can identify the channel.
 
+## Install
+
+[Install ChannelFence from the Chrome Web Store](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm)
+
 ## How to block a YouTube channel in Chrome
 
 1. Install ChannelFence.
