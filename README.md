@@ -34,13 +34,31 @@ After editing the extension, select **Reload** on its `chrome://extensions` card
 
 ## Tests
 
-Run:
+Install the developer dependencies and Playwright's pinned Chromium build once:
 
 ```powershell
-node --test tests/*.test.cjs
+npm install
+npx playwright install chromium
 ```
 
-The `scripts/smoke-youtube.mjs` and `scripts/smoke-menu.mjs` browser checks validate live direct-page blocking and the three-dot-menu block/unblock flow against a Chrome DevTools test session.
+Run the complete unit, type, and browser suite:
+
+```powershell
+npm test
+```
+
+Useful focused commands:
+
+```powershell
+npm run test:unit
+npm run test:e2e
+npm run test:e2e:headed
+npm run test:e2e:ui
+```
+
+The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, membership lockups, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
+
+GitHub Actions runs the complete deterministic suite on every push and pull request. A separate scheduled workflow runs the intentionally small live YouTube smoke check. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
 
 ## Create the Web Store ZIP
 
@@ -59,7 +77,7 @@ The uploadable archive is written to `dist/`. Store listing materials and tests 
 - `ui/` — popup, options, onboarding, and bundled privacy policy.
 - `assets/icons/` — extension icon assets.
 - `store/` — listing copy and submission guidance.
-- `tests/` — Node-based data-model and package checks.
+- `tests/` — Node-based data-model checks and Playwright extension tests.
 
 ## License
 
