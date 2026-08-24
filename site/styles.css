@@ -172,6 +172,11 @@ h1 {
   width: 44px;
 }
 
+.feature-icon--text {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
 .feature-grid h2 { font-size: 20px; margin-bottom: 9px; }
 .feature-grid p,
 .steps li span,
