@@ -172,9 +172,18 @@ h1 {
   width: 44px;
 }
 
-.feature-icon--text {
-  font-size: 11px;
-  letter-spacing: 0.04em;
+.surface-grid {
+  display: grid;
+  gap: 3px;
+  grid-template-columns: repeat(2, 7px);
+}
+
+.surface-grid i {
+  background: currentColor;
+  border-radius: 2px;
+  display: block;
+  height: 7px;
+  width: 7px;
 }
 
 .feature-grid h2 { font-size: 20px; margin-bottom: 9px; }
