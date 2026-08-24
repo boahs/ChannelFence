@@ -432,6 +432,39 @@ input:focus-visible {
   margin-top: 3px;
 }
 
+.manual-block-form {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin-top: 18px;
+  padding: 16px;
+}
+
+.manual-block-form__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 750;
+  margin-bottom: 8px;
+}
+
+.manual-block-form__row {
+  display: flex;
+  gap: 9px;
+}
+
+.manual-block-form__input {
+  background: var(--panel);
+  flex: 1;
+  min-width: 0;
+}
+
+.manual-block-form__help {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+  margin: 7px 0 0;
+}
+
 .list-toolbar {
   align-items: center;
   display: flex;
@@ -725,5 +758,10 @@ input:focus-visible {
   .search-input {
     min-width: 0;
     width: 100%;
+  }
+
+  .manual-block-form__row {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

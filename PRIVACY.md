@@ -1,6 +1,6 @@
 # ChannelFence Privacy Policy
 
-Effective date: August 20, 2026
+Effective date: August 24, 2026
 
 ChannelFence is designed to work without an account, analytics, advertising, or an external server. Its single purpose is to let users hide creators and their content while browsing YouTube.
 
@@ -31,4 +31,4 @@ If ChannelFence’s data practices change, this policy and the Chrome Web Store 
 
 ## Contact
 
-Privacy and support questions can be submitted through the Support link on ChannelFence’s Chrome Web Store listing.
+Privacy and support questions can be submitted through the [ChannelFence issue tracker](https://github.com/boahs/ChannelFence/issues) or the Support link on its Chrome Web Store listing.

@@ -37,6 +37,37 @@ test("rejects unrelated and non-channel links", () => {
   assert.equal(Shared.normalizeChannelRef("javascript:alert(1)"), null);
 });
 
+test("normalizes manual handles and channel URLs without accepting video URLs", () => {
+  assert.equal(Shared.normalizeManualChannelInput("@ExampleCreator").key, "handle:@examplecreator");
+  assert.equal(Shared.normalizeManualChannelInput("ExampleCreator").key, "handle:@examplecreator");
+  assert.equal(
+    Shared.normalizeManualChannelInput("youtube.com/@ExampleCreator/videos").key,
+    "handle:@examplecreator"
+  );
+  assert.equal(
+    Shared.normalizeManualChannelInput("https://www.youtube.com/channel/UCabcDEF123").key,
+    "channel:UCabcDEF123"
+  );
+  assert.equal(Shared.normalizeManualChannelInput("two words"), null);
+  assert.equal(Shared.normalizeManualChannelInput("https:"), null);
+  assert.equal(Shared.normalizeManualChannelInput("https://www.youtube.com/watch?v=abc"), null);
+  assert.equal(Shared.normalizeManualChannelInput("https://example.com/@creator"), null);
+});
+
+test("creates and removes a display-name fallback entry for linkless lockups", () => {
+  const ref = Shared.normalizeCreatorNameRef("Go to channel Right Rail Creator");
+  const entry = Shared.createBlockedEntry([ref], "Right Rail Creator");
+
+  assert.equal(entry.key, "name:right rail creator");
+  assert.deepEqual([...entry.aliases], ["name:right rail creator"]);
+  assert.equal(entry.url, "");
+  assert.equal(
+    Shared.findMatchingEntryByNames([entry], ["Right Rail Creator"]).key,
+    "name:right rail creator"
+  );
+  assert.equal(Shared.removeEntriesMatchingRefs([entry], [ref]).length, 0);
+});
+
 test("creates one entry with stable channel id preferred over handle", () => {
   const entry = Shared.createBlockedEntry([
     Shared.normalizeChannelRef("https://www.youtube.com/@Creator"),

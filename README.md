@@ -1,10 +1,12 @@
 # ChannelFence — Block YouTube Channels and Creators
 
-ChannelFence is a privacy-first Chrome extension that lets you block YouTube channels and creators across Home, search, recommendations, Shorts, comments, channel pages, and supported direct video pages. Block a creator once and their matching content disappears wherever ChannelFence can identify the channel.
+ChannelFence is an open-source, privacy-first Chrome extension that lets you block YouTube channels and creators across Home, search, recommendations, Shorts, comments, channel pages, and supported direct video pages. Block a creator once and their matching content disappears wherever ChannelFence can identify the channel.
 
 ## Install
 
 [Install ChannelFence from the Chrome Web Store](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm)
+
+[Visit the ChannelFence website](https://boahs.github.io/ChannelFence/) or [report a problem](https://github.com/boahs/ChannelFence/issues).
 
 ## How to block a YouTube channel in Chrome
 
@@ -12,6 +14,8 @@ ChannelFence is a privacy-first Chrome extension that lets you block YouTube cha
 2. Open YouTube and find the creator you want to block.
 3. Select **ChannelFence: Block** from the video’s three-dot menu, or use the ⊘ button beside the creator’s name.
 4. The creator’s matching content is hidden across supported YouTube surfaces.
+
+You can also open ChannelFence settings and paste a handle such as `@creator` or a YouTube channel URL into **Block by handle or channel URL**.
 
 You can undo immediately, pause filtering without losing your list, or manage every blocked creator from the extension’s settings. ChannelFence does not block reuploads posted by a different creator.
 
@@ -21,6 +25,7 @@ You can undo immediately, pause filtering without losing your list, or manage ev
 - Runs content scripts only on `www.youtube.com` and `m.youtube.com`.
 - Stores settings and the user’s block list in `chrome.storage.local`.
 - Makes no network requests and contains no analytics, advertising, remote code, or account integration.
+- The complete source is available in this repository under the MIT License.
 
 ## Load locally
 

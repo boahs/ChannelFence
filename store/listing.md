@@ -2,7 +2,7 @@
 
 ## Product name
 
-ChannelFence – Creator Blocker
+ChannelFence – YouTube Channel Blocker
 
 ## Summary
 
@@ -10,26 +10,37 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ## Detailed description
 
-ChannelFence is a privacy-first YouTube channel blocker for Chrome. Block a channel or creator once and ChannelFence hides their content across supported Home feeds, search results, recommendations, Shorts, playlists, comments, and direct pages.
+ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Shorts, playlists, comments, and direct pages.
 
 Features:
 
 - Block creators with one click beside their channel name.
 - Block directly from a video’s three-dot menu with a clearly labeled ChannelFence action.
+- Add a creator manually by pasting their YouTube handle or channel URL.
 - Hide videos, Shorts, recommendations, and comments from blocked creators.
 - Stop direct visits with a clear blocked-page screen.
-- Undo immediately or manage the complete block list at any time.
+- Undo a block immediately or manage your complete block list at any time.
 - Pause blocking without deleting your list.
-- Import and export a private block-list backup.
-- No account, tracking, advertising, or external server.
+- Import or export a private block-list backup.
+- No account, analytics, tracking, advertising, or external server.
 
 Privacy by design:
 
-ChannelFence processes creator names and public channel identifiers only to provide its blocking feature. Your settings and block list are stored locally in Chrome and are not transmitted to the developer or third parties.
+ChannelFence processes public creator names, channel identifiers, and channel URLs only to provide its blocking feature. Your settings and block list remain in Chrome’s local extension storage and are not transmitted to the developer or third parties.
+
+ChannelFence is open-source software released under the MIT License.
+
+Source code: https://github.com/boahs/ChannelFence
 
 ChannelFence is an independent extension and is not affiliated with, endorsed by, or sponsored by Google LLC.
 
-YouTube is a trademark of Google LLC. Use of this trademark is subject to Google Permissions.
+YouTube is a trademark of Google LLC.
+
+## Additional fields
+
+- **Homepage URL:** https://boahs.github.io/ChannelFence/
+- **Support URL:** https://github.com/boahs/ChannelFence/issues
+- **Official URL:** Select the verified `boahs.github.io/ChannelFence` property when it is available in the dashboard.
 
 ## Category
 
@@ -72,7 +83,7 @@ These answers must match the dashboard wording visible at submission time. If Go
 1. Block any creator from the three-dot menu or beside their channel name.
 2. Their videos disappear across Home, search, and recommendations.
 3. Direct visits are stopped too.
-4. Review, search, export, or edit your private block list.
+4. Add by handle, or review, search, export, and edit your private block list.
 5. Local-only storage. No account and no tracking.
 
 ## Promotional copy

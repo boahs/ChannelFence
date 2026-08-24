@@ -66,11 +66,18 @@ test("manifest description fits the store summary limit", () => {
   assert.ok(manifest.description.length <= 132);
 });
 
+test("publishes the project homepage and keeps package versions aligned", () => {
+  const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
+  assert.equal(manifest.homepage_url, "https://boahs.github.io/ChannelFence/");
+  assert.equal(packageJson.version, manifest.version);
+});
+
 test("recognizes membership lockups and watch-page creator menus", () => {
   const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
   assert.match(contentScript, /"\.yt-lockup-view-model"/);
   assert.match(contentScript, /"\.yt-lockup-view-model--wrapper"/);
   assert.match(contentScript, /control\.closest\("ytd-watch-metadata, ytd-video-primary-info-renderer"\)/);
+  assert.match(contentScript, /LINKLESS_LOCKUP_CREATOR_SELECTOR/);
 });
 
 test("creator menu item inherits YouTube's light or dark theme color", () => {

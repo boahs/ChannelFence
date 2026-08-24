@@ -83,6 +83,38 @@ test.describe("extension UI", () => {
     expect(stored.cfBlockedChannels[0].displayName).toBe("Imported Creator");
   });
 
+  test("options validates and manually blocks a YouTube handle", async ({
+    extensionId,
+    extensionPage,
+    extensionStorage
+  }) => {
+    const options = new OptionsPage(extensionPage, extensionId);
+    await options.open();
+
+    const input = extensionPage.getByLabel("Block by handle or channel URL");
+    await input.fill("not a handle");
+    await extensionPage.getByRole("button", { name: "Block creator" }).click();
+    await expect(extensionPage.locator("#toast")).toContainText("Enter a valid YouTube handle");
+    await expect(extensionPage.locator("#blockedCount")).toHaveText("0");
+
+    await input.fill("youtube.com/@ManualCreator/videos");
+    await extensionPage.getByRole("button", { name: "Block creator" }).click();
+    await expect(extensionPage.locator("#blockedCount")).toHaveText("1");
+    await expect(extensionPage.locator("#blockList")).toContainText("@manualcreator");
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ key: string; displayName: string }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([
+      expect.objectContaining({ key: "handle:@manualcreator", displayName: "@manualcreator" })
+    ]);
+
+    await input.fill("@ManualCreator");
+    await extensionPage.getByRole("button", { name: "Block creator" }).click();
+    await expect(extensionPage.locator("#toast")).toContainText("already blocked");
+    await expect(extensionPage.locator("#blockedCount")).toHaveText("1");
+  });
+
   test("exports a valid private block-list backup", async ({
     extensionId,
     extensionPage,

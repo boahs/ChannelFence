@@ -6,6 +6,9 @@ const elements = {
   enabled: document.getElementById("enabledToggle"),
   comments: document.getElementById("commentsToggle"),
   blockedCount: document.getElementById("blockedCount"),
+  manualForm: document.getElementById("manualBlockForm"),
+  manualInput: document.getElementById("manualBlockInput"),
+  manualButton: document.getElementById("manualBlockButton"),
   search: document.getElementById("searchInput"),
   list: document.getElementById("blockList"),
   empty: document.getElementById("emptyState"),
@@ -101,6 +104,42 @@ elements.comments.addEventListener("change", async () => {
 });
 
 elements.search.addEventListener("input", renderList);
+
+elements.manualForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const ref = Shared.normalizeManualChannelInput(elements.manualInput.value);
+  if (!ref) {
+    showToast("Enter a valid YouTube handle or channel URL");
+    elements.manualInput.focus();
+    elements.manualInput.select();
+    return;
+  }
+
+  const existing = Shared.findMatchingEntry(blockedEntries, [ref]);
+  if (existing) {
+    showToast(`${Shared.labelForEntry(existing)} is already blocked`);
+    elements.manualInput.focus();
+    return;
+  }
+
+  const entry = Shared.createBlockedEntry([ref], ref.value);
+  if (!entry) {
+    showToast("That creator could not be added");
+    return;
+  }
+
+  elements.manualButton.disabled = true;
+  try {
+    await persistBlocked(
+      Shared.mergeBlockedEntry(blockedEntries, entry),
+      `Blocked ${Shared.labelForEntry(entry)}`
+    );
+    elements.manualInput.value = "";
+    elements.manualInput.focus();
+  } finally {
+    elements.manualButton.disabled = false;
+  }
+});
 
 elements.exportButton.addEventListener("click", () => {
   const payload = {

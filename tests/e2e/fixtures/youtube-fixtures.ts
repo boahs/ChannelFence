@@ -43,6 +43,48 @@ export function creatorCard({
     </${tag}>`;
 }
 
+export function rightRailLockup({
+  displayName,
+  id,
+  menu = true,
+  title = `A recommendation from ${displayName}`
+}: Omit<CreatorCardOptions, "handle" | "tag">): string {
+  const safeId = escapeHtml(id);
+  const safeName = escapeHtml(displayName);
+  const safeTitle = escapeHtml(title);
+  const menuMarkup = menu
+    ? `<div class="ytLockupViewModelMenuButton">
+        <button-view-model>
+          <button data-testid="${safeId}-menu" aria-label="More actions">More</button>
+        </button-view-model>
+      </div>`
+    : "";
+
+  // Mirrors YouTube's linkless watch-page recommendation lockup. The creator
+  // appears as text/accessibility metadata but the only anchors are video URLs.
+  return `
+    <yt-lockup-view-model class="ytd-item-section-renderer lockup ytLockupViewModelWrapper" data-testid="${safeId}">
+      <a class="thumbnail" href="/watch?v=${safeId}"><span class="duration">16:51</span></a>
+      <div class="ytLockupViewModelMetadata">
+        <yt-lockup-metadata-view-model>
+          <div class="ytLockupMetadataViewModelAvatar">
+            <div role="button" aria-label="Go to channel ${safeName}"></div>
+          </div>
+          <div class="ytLockupMetadataViewModelTextContainer">
+            <h3>${safeTitle}</h3>
+            <div class="ytLockupMetadataViewModelMetadata">
+              <div class="ytContentMetadataViewModelMetadataRow">
+                <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextLastPart" role="text">${safeName}</span>
+              </div>
+              <div class="ytContentMetadataViewModelMetadataRow"><span role="text">274K views · 21 hours ago</span></div>
+            </div>
+          </div>
+          ${menuMarkup}
+        </yt-lockup-metadata-view-model>
+      </div>
+    </yt-lockup-view-model>`;
+}
+
 export function comment({ displayName, handle, id }: Omit<CreatorCardOptions, "tag">): string {
   const safeId = escapeHtml(id);
   const safeName = escapeHtml(displayName);
@@ -102,4 +144,3 @@ export function youtubeDocument(body: string): string {
       <body>${body}</body>
     </html>`;
 }
-

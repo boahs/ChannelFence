@@ -52,6 +52,17 @@
       <h2 id="blockListHeading">Blocked creators <span class="count-pill" id="blockedCount">0</span></h2>
       <p class="settings-intro">Search, unblock, or back up your list. Imported entries are merged with the current list.</p>
 
+      <form class="manual-block-form" id="manualBlockForm">
+        <label class="manual-block-form__label" for="manualBlockInput">Block by handle or channel URL</label>
+        <div class="manual-block-form__row">
+          <input class="search-input manual-block-form__input" id="manualBlockInput" type="text"
+            placeholder="@creator or youtube.com/@creator" autocomplete="off" spellcheck="false"
+            aria-describedby="manualBlockHelp">
+          <button class="button button--primary" id="manualBlockButton" type="submit">Block creator</button>
+        </div>
+        <p class="manual-block-form__help" id="manualBlockHelp">Paste a YouTube handle or channel URL. It is validated and saved only in Chrome's local extension storage.</p>
+      </form>
+
       <div class="list-toolbar">
         <input class="search-input" id="searchInput" type="search" placeholder="Search blocked creators" aria-label="Search blocked creators">
         <div class="toolbar-actions">

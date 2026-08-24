@@ -15,3 +15,23 @@ test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }
     return display;
   })).toBe("none");
 });
+
+test("adds block controls to a live watch-page right-rail lockup", async ({ extensionPage }) => {
+  await extensionPage.goto("https://www.youtube.com/watch?v=dQw4w9WgXcQ", {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+
+  const recommendation = extensionPage.locator(
+    "ytd-watch-next-secondary-results-renderer yt-lockup-view-model"
+  ).filter({
+    has: extensionPage.locator("[aria-label^='Go to channel ']")
+  }).first();
+  await expect(recommendation).toBeVisible({ timeout: 30_000 });
+  await expect(recommendation.locator(".cf-block-button")).toBeVisible({ timeout: 15_000 });
+
+  await recommendation.getByRole("button", { name: "More actions" }).click();
+  await expect(extensionPage.locator(".cf-menu-item")).toContainText("ChannelFence: Block", {
+    timeout: 15_000
+  });
+});

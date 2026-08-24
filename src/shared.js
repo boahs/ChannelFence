@@ -13,7 +13,7 @@
     [STORAGE.hideComments]: true
   });
 
-  const CHANNEL_TYPES = new Set(["channel", "handle", "custom", "user"]);
+  const CHANNEL_TYPES = new Set(["channel", "handle", "custom", "user", "name"]);
 
   function cleanDisplayName(value) {
     return String(value || "")
@@ -39,6 +39,19 @@
       .replace(/^@/, "")
       .trim()
       .toLocaleLowerCase("en-US");
+  }
+
+  function normalizeCreatorNameRef(value) {
+    const name = normalizeCreatorName(value);
+    if (!name || name.length > 120) {
+      return null;
+    }
+    return Object.freeze({
+      type: "name",
+      value: name,
+      key: `name:${name}`,
+      url: ""
+    });
   }
 
   function safeDecode(value) {
@@ -107,6 +120,29 @@
     });
   }
 
+  function normalizeManualChannelInput(input) {
+    const value = String(input || "").normalize("NFKC").trim();
+    if (!value) {
+      return null;
+    }
+
+    if (value.startsWith("@") || value.startsWith("/")) {
+      return normalizeChannelRef(value);
+    }
+
+    if (/^(?:(?:www|m)\.)?youtube\.com\//i.test(value)) {
+      return normalizeChannelRef(`https://${value}`);
+    }
+
+    // YouTube handles may contain localized letters and marks in addition to
+    // numbers, underscores, hyphens, and periods.
+    if (value.length <= 100 && /^[\p{L}\p{M}\p{N}._-]+$/u.test(value)) {
+      return normalizeChannelRef(`/@${value}`);
+    }
+
+    return normalizeChannelRef(value);
+  }
+
   function refFromKey(key) {
     if (!key || typeof key !== "string") {
       return null;
@@ -121,6 +157,10 @@
     const value = key.slice(separator + 1);
     if (!CHANNEL_TYPES.has(type) || !value) {
       return null;
+    }
+
+    if (type === "name") {
+      return normalizeCreatorNameRef(value);
     }
 
     const pathType = type === "custom" ? "c" : type;
@@ -153,7 +193,7 @@
   }
 
   function preferredRef(refs) {
-    const ranking = { channel: 0, handle: 1, custom: 2, user: 3 };
+    const ranking = { channel: 0, handle: 1, custom: 2, user: 3, name: 4 };
     return [...refs].sort((left, right) => {
       return (ranking[left.type] ?? 99) - (ranking[right.type] ?? 99);
     })[0] || null;
@@ -169,13 +209,13 @@
     const handle = cleanRefs.find((ref) => ref.type === "handle");
     const name = cleanCreatorDisplayName(displayName) ||
       handle?.value ||
-      (primary.type === "handle" ? primary.value : "Blocked creator");
+      (primary.type === "handle" || primary.type === "name" ? primary.value : "Blocked creator");
 
     return {
       key: primary.key,
       aliases: cleanRefs.map((ref) => ref.key),
       displayName: name,
-      url: primary.url,
+      url: primary.url || "",
       blockedAt: blockedAt || new Date().toISOString()
     };
   }
@@ -247,7 +287,7 @@
 
     for (const alias of Array.isArray(entry?.aliases) ? entry.aliases : [entry?.key]) {
       const ref = refFromKey(alias);
-      if (ref?.type === "handle") {
+      if (ref?.type === "handle" || ref?.type === "name") {
         const handleName = normalizeCreatorName(ref.value);
         if (handleName) {
           names.add(handleName);
@@ -322,7 +362,9 @@
     cleanDisplayName,
     cleanCreatorDisplayName,
     normalizeCreatorName,
+    normalizeCreatorNameRef,
     normalizeChannelRef,
+    normalizeManualChannelInput,
     refFromKey,
     uniqueRefs,
     createBlockedEntry,
