@@ -175,9 +175,33 @@ h1 {
 .feature-grid h2 { font-size: 20px; margin-bottom: 9px; }
 .feature-grid p,
 .steps li span,
+.why-section p,
 .privacy-section p,
 .faq details p,
 .final-cta p { color: var(--muted); line-height: 1.6; }
+
+.why-section {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 70px;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 76px;
+  padding: 52px 0;
+}
+
+.why-section h2 {
+  font-size: clamp(28px, 3.5vw, 42px);
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+  margin-bottom: 0;
+}
+
+.why-section > p {
+  font-size: 17px;
+  margin-bottom: 0;
+}
 
 .steps-section {
   align-items: center;
@@ -269,11 +293,13 @@ footer {
 
 @media (max-width: 850px) {
   .hero,
-  .steps-section { grid-template-columns: 1fr; }
+  .steps-section,
+  .why-section { grid-template-columns: 1fr; }
   .hero { min-height: 0; padding-top: 50px; }
   .hero__visual { transform: none; }
   .feature-grid { grid-template-columns: 1fr; }
   .steps-section { padding: 90px 0; }
+  .why-section { gap: 12px; }
   .privacy-section { gap: 15px; grid-template-columns: 1fr; padding: 32px; }
 }
 
