@@ -224,6 +224,11 @@ input:focus-visible {
   margin: 0 0 14px;
 }
 
+.status-card__actions {
+  display: grid;
+  gap: 8px;
+}
+
 .status-card .button {
   width: 100%;
 }

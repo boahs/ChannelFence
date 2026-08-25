@@ -8,8 +8,8 @@ The browser suite launches ChannelFence as a real unpacked Manifest V3 extension
 - `fixtures/youtube-fixtures.ts` builds small YouTube-shaped DOM surfaces for stable regression coverage.
 - `pages/` contains page objects for YouTube surfaces and extension pages.
 - `smoke/` covers the primary block, hide, and undo journey.
-- `regression/` covers known bugs and secondary surfaces, including linkless right-rail recommendations and manual handle entry.
-- `live/` verifies injection plus current watch-page right-rail button/menu compatibility against the real YouTube origin; it is not part of the normal local or pull-request run.
+- `regression/` covers known bugs and secondary surfaces, including late-populated and hidden search bylines, description mentions, collaboration owners, linkless right-rail recommendations, and manual handle entry.
+- `live/` verifies injection plus current search-result and watch-page right-rail compatibility against the real YouTube origin; it is not part of the normal local or pull-request run.
 
 The deterministic tests fulfill navigation requests at `https://www.youtube.com/` with local HTML. The real content scripts and styles still load because the document has a manifest-matched YouTube URL, while the test avoids network data, accounts, recommendations, ads, and YouTube A/B experiments.
 

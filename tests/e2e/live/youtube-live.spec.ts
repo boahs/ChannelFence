@@ -35,3 +35,16 @@ test("adds block controls to a live watch-page right-rail lockup", async ({ exte
     timeout: 15_000
   });
 });
+
+test("adds a block control to live YouTube search results", async ({ extensionPage }) => {
+  await extensionPage.goto("https://www.youtube.com/results?search_query=CustomGrow420", {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+
+  const result = extensionPage.locator("ytd-video-renderer").filter({
+    has: extensionPage.locator("ytd-channel-name a[href]")
+  }).first();
+  await expect(result).toBeVisible({ timeout: 30_000 });
+  await expect(result.locator(".cf-block-button")).toBeVisible({ timeout: 15_000 });
+});

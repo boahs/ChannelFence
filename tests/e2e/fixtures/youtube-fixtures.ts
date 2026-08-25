@@ -2,6 +2,7 @@ type CreatorCardOptions = {
   displayName: string;
   handle: string;
   id: string;
+  mentionedHandle?: string;
   menu?: boolean;
   tag?: string;
   title?: string;
@@ -20,6 +21,7 @@ export function creatorCard({
   displayName,
   handle,
   id,
+  mentionedHandle,
   menu = true,
   tag = "ytd-rich-item-renderer",
   title = `A video from ${displayName}`
@@ -28,6 +30,9 @@ export function creatorCard({
   const safeName = escapeHtml(displayName);
   const safeHandle = escapeHtml(handle.startsWith("@") ? handle : `@${handle}`);
   const safeTitle = escapeHtml(title);
+  const safeMentionedHandle = mentionedHandle
+    ? escapeHtml(mentionedHandle.startsWith("@") ? mentionedHandle : `@${mentionedHandle}`)
+    : "";
   const menuMarkup = menu
     ? `<ytd-menu-renderer><button data-testid="${safeId}-menu" aria-label="Action menu">More</button></ytd-menu-renderer>`
     : "";
@@ -39,6 +44,9 @@ export function creatorCard({
       <ytd-channel-name id="channel-name">
         <a href="/${safeHandle}" aria-label="${safeName}">${safeName}</a>
       </ytd-channel-name>
+      ${safeMentionedHandle
+        ? `<p class="description">Featuring <a href="/${safeMentionedHandle}">${safeMentionedHandle}</a></p>`
+        : ""}
       ${menuMarkup}
     </${tag}>`;
 }
@@ -106,6 +114,24 @@ export function watchOwner(displayName: string, handle: string): string {
         <ytd-channel-name id="channel-name">
           <a href="/${safeHandle}">${safeName}</a>
         </ytd-channel-name>
+      </div>
+      <ytd-menu-renderer>
+        <button data-testid="watch-menu" aria-label="More actions">More</button>
+      </ytd-menu-renderer>
+    </ytd-watch-metadata>`;
+}
+
+export function watchOwners(owners: Array<{ displayName: string; handle: string }>): string {
+  const ownerLinks = owners.map(({ displayName, handle }) => {
+    const safeName = escapeHtml(displayName);
+    const safeHandle = escapeHtml(handle.startsWith("@") ? handle : `@${handle}`);
+    return `<a href="/${safeHandle}" aria-label="${safeName}">${safeName}</a>`;
+  }).join(" and ");
+  return `
+    <ytd-watch-metadata>
+      <h1>Fixture collaboration watch page</h1>
+      <div id="owner">
+        <ytd-channel-name id="channel-name">${ownerLinks}</ytd-channel-name>
       </div>
       <ytd-menu-renderer>
         <button data-testid="watch-menu" aria-label="More actions">More</button>

@@ -6,7 +6,7 @@ ChannelFence is an open-source, privacy-first Chrome extension that lets you blo
 
 [Install ChannelFence from the Chrome Web Store](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm)
 
-[Visit the ChannelFence website](https://boahs.github.io/ChannelFence/) or [report a problem](https://github.com/boahs/ChannelFence/issues).
+[Visit the ChannelFence website](https://boahs.github.io/ChannelFence/) or [report a problem](https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml).
 
 ## How to block a YouTube channel in Chrome
 

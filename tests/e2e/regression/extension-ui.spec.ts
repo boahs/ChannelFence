@@ -15,6 +15,10 @@ test.describe("extension UI", () => {
 
     await expect(extensionPage.locator("#blockedCount")).toHaveText("1");
     await expect(extensionPage.locator("#recentList")).toContainText("Alpha Creator");
+    await expect(extensionPage.getByRole("link", { name: "Report a bug" })).toHaveAttribute(
+      "href",
+      "https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml"
+    );
     await extensionPage.getByRole("button", { name: "Unblock Alpha Creator" }).click();
     await expect(extensionPage.locator("#blockedCount")).toHaveText("0");
     expect((await extensionStorage.get<{ cfBlockedChannels: unknown[] }>("cfBlockedChannels"))
