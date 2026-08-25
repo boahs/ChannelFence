@@ -1,5 +1,11 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
-import { comment, creatorCard, rightRailLockup, watchOwner } from "../fixtures/youtube-fixtures";
+import {
+  comment,
+  creatorCard,
+  rightRailLockup,
+  watchOwner,
+  watchOwners
+} from "../fixtures/youtube-fixtures";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
 test.describe("YouTube surfaces and menus", () => {
@@ -32,6 +38,116 @@ test.describe("YouTube surfaces and menus", () => {
 
     const menuItem = await youtube.openCreatorMenu("watch-menu");
     await expect(menuItem).toContainText("ChannelFence: Block");
+  });
+
+  test("adds a search-result block control when YouTube fills the owner link late", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    const delayedCard = creatorCard({
+      displayName: "Late Search Creator",
+      handle: "@late-search",
+      id: "late-search",
+      tag: "ytd-video-renderer"
+    }).replace('href="/@late-search"', "");
+    await youtube.open(delayedCard, "/results?search_query=late");
+
+    await expect(youtube.blockButton("late-search")).toHaveCount(0);
+    await extensionPage.getByTestId("late-search").locator("ytd-channel-name a")
+      .evaluate((anchor) => anchor.setAttribute("href", "/@late-search"));
+    await expect(youtube.blockButton("late-search")).toBeVisible();
+    await youtube.blockButton("late-search").click();
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ aliases: string[]; displayName: string }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      aliases: ["handle:@late-search"],
+      displayName: "Late Search Creator"
+    });
+  });
+
+  test("does not treat a channel mentioned in a search description as the uploader", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(creatorCard({
+      displayName: "Search Uploader",
+      handle: "@search-uploader",
+      id: "search-with-mention",
+      mentionedHandle: "@description-guest",
+      tag: "ytd-video-renderer"
+    }), "/results?search_query=collaboration");
+
+    await youtube.blockButton("search-with-mention").click();
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ aliases: string[] }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels[0].aliases).toEqual(["handle:@search-uploader"]);
+  });
+
+  test("uses the visible search byline instead of YouTube's hidden legacy byline", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(`
+      <ytd-video-renderer data-testid="modern-search-result">
+        <div style="display: none">
+          <ytd-channel-name id="channel-name">
+            <a href="/@modern-search">Modern Search Creator</a>
+          </ytd-channel-name>
+        </div>
+        <div id="channel-info" style="display: none">
+          <a id="channel-thumbnail" href="/@modern-search" aria-label="Go to channel Modern Search Creator"></a>
+          <ytd-channel-name id="channel-name">
+            <a href="/@modern-search">Modern Search Creator</a>
+          </ytd-channel-name>
+        </div>
+      </ytd-video-renderer>
+    `, "/results?search_query=modern");
+
+    const result = youtube.card("modern-search-result");
+    await expect(result.locator(".cf-block-button")).toHaveCount(1);
+    await expect(result.locator(".cf-block-button")).toBeHidden();
+    await result.locator("#channel-info").evaluate((channelInfo) => {
+      channelInfo.removeAttribute("style");
+      document.dispatchEvent(new Event("yt-page-data-updated", { bubbles: true }));
+    });
+    await expect(result.getByRole("button", { name: "Block Modern Search Creator" })).toBeVisible();
+  });
+
+  test("offers independent block controls for every collaboration owner", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(watchOwners([
+      { displayName: "Channel Five", handle: "@channel-five" },
+      { displayName: "All Gas No Brakes", handle: "@all-gas-no-brakes" }
+    ]), "/watch?v=collaboration");
+
+    const owner = extensionPage.locator("ytd-watch-metadata #owner");
+    await expect(owner.locator(".cf-block-button")).toHaveCount(2);
+    await expect(owner.getByRole("button", { name: "Block Channel Five" })).toBeVisible();
+    await expect(owner.getByRole("button", { name: "Block All Gas No Brakes" })).toBeVisible();
+
+    const menuItems = await youtube.openCreatorMenuItems("watch-menu");
+    await expect(menuItems).toHaveCount(2);
+    await expect(menuItems.nth(0)).toContainText("ChannelFence: Block Channel Five");
+    await expect(menuItems.nth(1)).toContainText("ChannelFence: Block All Gas No Brakes");
+    await menuItems.nth(0).click();
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ aliases: string[]; displayName: string }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([
+      expect.objectContaining({
+        aliases: ["handle:@channel-five"],
+        displayName: "Channel Five"
+      })
+    ]);
   });
 
   test("blocks linkless right-rail recommendations with the inline button", async ({

@@ -41,6 +41,13 @@ export class YouTubeSurfacePage {
   }
 
   async openCreatorMenu(triggerTestId: string, nativeColor = "rgb(238, 238, 238)"): Promise<Locator> {
+    return (await this.openCreatorMenuItems(triggerTestId, nativeColor)).first();
+  }
+
+  async openCreatorMenuItems(
+    triggerTestId: string,
+    nativeColor = "rgb(238, 238, 238)"
+  ): Promise<Locator> {
     const trigger = this.page.getByTestId(triggerTestId);
     await trigger.dispatchEvent("pointerdown");
     await trigger.click();
@@ -62,8 +69,8 @@ export class YouTubeSurfacePage {
       document.body.append(popup);
     }, nativeColor);
 
-    const channelFenceItem = this.page.locator(".cf-menu-item");
-    await expect(channelFenceItem).toBeVisible();
-    return channelFenceItem;
+    const channelFenceItems = this.page.locator(".cf-menu-item");
+    await expect(channelFenceItems.first()).toBeVisible();
+    return channelFenceItems;
   }
 }

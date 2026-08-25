@@ -64,6 +64,18 @@
     "[class*='metadata-view-model'] a[href]"
   ].join(",");
 
+  const OWNER_CHANNEL_ANCHOR_SELECTOR = [
+    "a#avatar-link[href]",
+    "ytd-channel-name a[href]",
+    "#channel-name a[href]",
+    "a#author-text[href]",
+    "#owner-name a[href]",
+    "#channel-info a[href]",
+    ".ytLockupMetadataViewModelAvatar a[href]",
+    ".ytContentMetadataViewModelMetadataRow:first-child a[href]",
+    "yt-content-metadata-view-model .ytContentMetadataViewModelMetadataRow:first-child a[href]"
+  ].join(",");
+
   const LINKLESS_LOCKUP_CREATOR_SELECTOR = [
     ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataTextLastPart",
     ".ytContentMetadataViewModelMetadataRow:first-child [role='text']",
@@ -152,6 +164,97 @@
     scheduleScan();
   }
 
+  function channelAnchorsFromElement(root) {
+    if (!root || typeof root.querySelectorAll !== "function") {
+      return [];
+    }
+
+    const normalizedAnchors = (selector) => [...root.querySelectorAll(selector)].filter((anchor) => {
+      if (anchor.closest("#cf-hard-block-overlay, #cf-toast")) {
+        return false;
+      }
+      return Boolean(Shared.normalizeChannelRef(
+        anchor.href || anchor.getAttribute("href"),
+        location.href
+      ));
+    });
+
+    // Prefer links in known uploader/owner containers. The broad fallback is
+    // needed for new YouTube renderers, but can also include @mentions in a
+    // description, which must not become aliases of the uploader.
+    const ownerAnchors = normalizedAnchors(OWNER_CHANNEL_ANCHOR_SELECTOR);
+    return ownerAnchors.length > 0
+      ? ownerAnchors
+      : normalizedAnchors(CHANNEL_ANCHOR_SELECTOR);
+  }
+
+  function displayNameFromAnchor(anchor, ref) {
+    const candidates = [
+      anchor?.textContent,
+      anchor?.getAttribute?.("aria-label"),
+      anchor?.getAttribute?.("title"),
+      ref?.type === "handle" ? ref.value : ""
+    ];
+    for (const candidate of candidates) {
+      const name = Shared.cleanCreatorDisplayName(candidate);
+      if (name) {
+        return name;
+      }
+    }
+    return ref?.value || "creator";
+  }
+
+  function anchorPlacementScore(anchor) {
+    if (!anchor) {
+      return 0;
+    }
+    const hasLayout = anchor.getClientRects().length > 0;
+    const hasText = Boolean(Shared.cleanCreatorDisplayName(anchor.textContent));
+    return (hasLayout ? 10 : 0) + (hasText ? 2 : 0) +
+      (anchor.getAttribute("aria-label") ? 1 : 0);
+  }
+
+  function ownerContextsFromElement(root) {
+    const contexts = new Map();
+    for (const anchor of channelAnchorsFromElement(root)) {
+      const ref = Shared.normalizeChannelRef(
+        anchor.href || anchor.getAttribute("href"),
+        location.href
+      );
+      if (!ref) {
+        continue;
+      }
+
+      const displayName = displayNameFromAnchor(anchor, ref);
+      const normalizedName = Shared.normalizeCreatorName(displayName);
+      const contextKey = normalizedName || ref.key;
+      const existing = contexts.get(contextKey);
+      if (existing) {
+        existing.refs = Shared.uniqueRefs([...existing.refs, ref]);
+        if (anchorPlacementScore(anchor) > anchorPlacementScore(existing.anchor)) {
+          existing.anchor = anchor;
+          existing.displayName = displayName;
+        }
+        continue;
+      }
+      contexts.set(contextKey, {
+        refs: [ref],
+        displayName,
+        anchor
+      });
+    }
+
+    if (contexts.size === 0) {
+      for (const name of linklessLockupCreatorNames(root)) {
+        const ref = Shared.normalizeCreatorNameRef(name);
+        if (ref) {
+          contexts.set(ref.key, { refs: [ref], displayName: name, anchor: null });
+        }
+      }
+    }
+    return [...contexts.values()];
+  }
+
   function refsFromElement(root) {
     if (!root || typeof root.querySelectorAll !== "function") {
       return [];
@@ -165,14 +268,8 @@
       }
     }
 
-    for (const anchor of root.querySelectorAll(CHANNEL_ANCHOR_SELECTOR)) {
-      if (anchor.closest("#cf-hard-block-overlay, #cf-toast")) {
-        continue;
-      }
-      const ref = Shared.normalizeChannelRef(anchor.href || anchor.getAttribute("href"), location.href);
-      if (ref) {
-        refs.push(ref);
-      }
+    for (const context of ownerContextsFromElement(root)) {
+      refs.push(...context.refs);
       if (refs.length >= 8) {
         break;
       }
@@ -186,23 +283,10 @@
     }
 
     const names = new Set();
-    for (const anchor of root.querySelectorAll(CHANNEL_ANCHOR_SELECTOR)) {
-      const ref = Shared.normalizeChannelRef(anchor.href || anchor.getAttribute("href"), location.href);
-      if (!ref) {
-        continue;
-      }
-
-      const candidates = [
-        anchor.textContent,
-        anchor.getAttribute("aria-label"),
-        anchor.getAttribute("title"),
-        ref.type === "handle" ? ref.value : ""
-      ];
-      for (const candidate of candidates) {
-        const normalized = Shared.normalizeCreatorName(candidate);
-        if (normalized) {
-          names.add(normalized);
-        }
+    for (const context of ownerContextsFromElement(root)) {
+      const normalized = Shared.normalizeCreatorName(context.displayName);
+      if (normalized) {
+        names.add(normalized);
       }
     }
 
@@ -288,6 +372,7 @@
     refs.push(...metadataRefs());
 
     const owner = pageOwnerRoot();
+    const owners = owner ? ownerContextsFromElement(owner) : [];
     if (owner) {
       refs.push(...refsFromElement(owner));
     }
@@ -311,7 +396,11 @@
 
     return {
       refs: cleanRefs,
-      displayName: displayName || (cleanRefs[0]?.value ?? "")
+      displayName: displayName || (cleanRefs[0]?.value ?? ""),
+      owners: owners.map((context) => ({
+        refs: context.refs,
+        displayName: context.displayName
+      }))
     };
   }
 
@@ -327,15 +416,7 @@
     if (!root) {
       return null;
     }
-    for (const anchor of root.querySelectorAll(CHANNEL_ANCHOR_SELECTOR)) {
-      if (anchor.closest("#cf-hard-block-overlay, #cf-toast")) {
-        continue;
-      }
-      if (Shared.normalizeChannelRef(anchor.href || anchor.getAttribute("href"), location.href)) {
-        return anchor;
-      }
-    }
-    return null;
+    return channelAnchorsFromElement(root)[0] || null;
   }
 
   function buttonHost(root, pageButton) {
@@ -359,9 +440,7 @@
   }
 
   function displayNameFromRoot(root, refs) {
-    const channelAnchors = [...root.querySelectorAll(CHANNEL_ANCHOR_SELECTOR)].filter((anchor) => {
-      return Shared.normalizeChannelRef(anchor.href || anchor.getAttribute("href"), location.href);
-    });
+    const channelAnchors = channelAnchorsFromElement(root);
     const sources = [
       (anchor) => anchor.textContent,
       (anchor) => anchor.getAttribute("aria-label"),
@@ -415,6 +494,7 @@
     let refs = root ? refsFromElement(root) : [];
     let ownerNames = root ? ownerNamesFromElement(root) : [];
     let displayName = root ? displayNameFromRoot(root, refs) : "";
+    let owners = root ? ownerContextsFromElement(root) : [];
 
     if (!root && control.closest("ytd-watch-metadata, ytd-video-primary-info-renderer")) {
       const pageContext = currentPageContext();
@@ -423,6 +503,7 @@
       refs = pageContext.refs;
       ownerNames = owner ? ownerNamesFromElement(owner) : [];
       displayName = pageContext.displayName;
+      owners = owner ? ownerContextsFromElement(owner) : [];
     }
 
     refs = refsWithNameFallback(refs, displayName);
@@ -435,6 +516,9 @@
       refs,
       ownerNames,
       displayName,
+      owners: owners.length > 0
+        ? owners.map((context) => ({ refs: context.refs, displayName: context.displayName }))
+        : [{ refs, displayName }],
       expiresAt: Date.now() + 5000
     };
     scheduleScan();
@@ -472,7 +556,7 @@
     return "";
   }
 
-  function ensureCreatorMenuItem(popup) {
+  function ensureCreatorMenuItems(popup) {
     if (!state.enabled || !popup || popup.querySelector(".cf-menu-item")) {
       return;
     }
@@ -483,67 +567,100 @@
     }
 
     const host = popup.querySelector("#items, tp-yt-paper-listbox, [role='menu']") || popup;
-    const existingEntry = matchingEntry(context.refs, context.ownerNames);
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "cf-menu-item";
-    button.setAttribute("role", "menuitem");
-    button.setAttribute("aria-label", existingEntry
-      ? "Unblock creator with ChannelFence"
-      : "Block creator with ChannelFence");
     const menuTextColor = nativeMenuTextColor(host);
-    if (menuTextColor) {
-      button.style.setProperty("--cf-menu-text-color", menuTextColor);
-    }
+    const owners = context.owners?.length > 0
+      ? context.owners
+      : [{ refs: context.refs, displayName: context.displayName }];
+    const showOwnerName = owners.length > 1;
 
-    const symbol = document.createElement("span");
-    symbol.className = "cf-menu-item__symbol";
-    symbol.setAttribute("aria-hidden", "true");
-    symbol.textContent = "⊘";
-
-    const label = document.createElement("span");
-    label.className = "cf-menu-item__label";
-    label.textContent = existingEntry
-      ? "ChannelFence: Unblock"
-      : "ChannelFence: Block";
-    button.append(symbol, label);
-
-    button.addEventListener("click", async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      state.pendingMenuContext = null;
-      closeCreatorMenu();
-
-      if (existingEntry) {
-        await unblockCreator(existingEntry.aliases);
-        showToast(`Unblocked ${Shared.labelForEntry(existingEntry)}`);
-        return;
+    for (const owner of owners) {
+      const existingEntry = matchingEntry(owner.refs, [owner.displayName]);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "cf-menu-item";
+      button.setAttribute("role", "menuitem");
+      button.setAttribute("aria-label", existingEntry
+        ? `Unblock ${owner.displayName} with ChannelFence`
+        : `Block ${owner.displayName} with ChannelFence`);
+      if (menuTextColor) {
+        button.style.setProperty("--cf-menu-text-color", menuTextColor);
       }
-      await blockCreator(context.refs, context.displayName);
-    }, true);
 
-    host.append(button);
+      const symbol = document.createElement("span");
+      symbol.className = "cf-menu-item__symbol";
+      symbol.setAttribute("aria-hidden", "true");
+      symbol.textContent = "⊘";
+
+      const label = document.createElement("span");
+      label.className = "cf-menu-item__label";
+      label.textContent = existingEntry
+        ? `ChannelFence: Unblock${showOwnerName ? ` ${owner.displayName}` : ""}`
+        : `ChannelFence: Block${showOwnerName ? ` ${owner.displayName}` : ""}`;
+      button.append(symbol, label);
+
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        state.pendingMenuContext = null;
+        closeCreatorMenu();
+
+        if (existingEntry) {
+          await unblockCreator(existingEntry.aliases);
+          showToast(`Unblocked ${Shared.labelForEntry(existingEntry)}`);
+          return;
+        }
+        await blockCreator(owner.refs, owner.displayName);
+      }, true);
+
+      host.append(button);
+    }
   }
 
   function processCreatorMenus() {
-    document.querySelectorAll(MENU_POPUP_SELECTOR).forEach(ensureCreatorMenuItem);
+    document.querySelectorAll(MENU_POPUP_SELECTOR).forEach(ensureCreatorMenuItems);
   }
 
-  function ensureBlockButton(root, pageButton) {
-    if (!state.enabled || !root || root.querySelector(":scope .cf-block-button")) {
+  function buttonsOwnedByRoot(root) {
+    return [...root.querySelectorAll(".cf-block-button")].filter((button) => {
+      return button.__channelFenceRoot === root;
+    });
+  }
+
+  function identityKey(refs) {
+    return Shared.uniqueRefs(refs).map((ref) => ref.key).sort().join("|");
+  }
+
+  function ensureBlockButton(root, pageButton, ownerContext) {
+    if (!state.enabled || !root) {
       return;
     }
     const pageContext = pageButton ? currentPageContext() : null;
-    const displayName = pageContext?.displayName || displayNameFromRoot(root, []);
-    const refs = refsWithNameFallback([
+    const displayName = ownerContext?.displayName ||
+      pageContext?.displayName ||
+      displayNameFromRoot(root, []);
+    const refs = ownerContext?.refs || refsWithNameFallback([
       ...refsFromElement(root),
       ...(pageContext?.refs || [])
     ], displayName);
     if (refs.length === 0) {
       return;
     }
-    const host = buttonHost(root, pageButton);
+    const key = identityKey(refs);
+    const existingButton = buttonsOwnedByRoot(root)
+      .find((button) => button.dataset.cfIdentity === key);
+    if (existingButton) {
+      existingButton.title = `Block ${displayName} with ChannelFence`;
+      existingButton.setAttribute("aria-label", `Block ${displayName}`);
+      if (ownerContext?.anchor?.isConnected &&
+          existingButton.__channelFenceAnchor !== ownerContext.anchor) {
+        ownerContext.anchor.insertAdjacentElement("afterend", existingButton);
+        existingButton.__channelFenceAnchor = ownerContext.anchor;
+      }
+      return;
+    }
+
+    const host = ownerContext?.anchor?.parentElement || buttonHost(root, pageButton);
     if (!host || host.closest("#cf-hard-block-overlay")) {
       return;
     }
@@ -551,8 +668,11 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className = "cf-block-button";
-    button.title = "Block this creator with ChannelFence";
-    button.setAttribute("aria-label", "Block this creator");
+    button.dataset.cfIdentity = key;
+    button.__channelFenceRoot = root;
+    button.__channelFenceAnchor = ownerContext?.anchor || null;
+    button.title = `Block ${displayName} with ChannelFence`;
+    button.setAttribute("aria-label", `Block ${displayName}`);
 
     const symbol = document.createElement("span");
     symbol.className = "cf-block-button__symbol";
@@ -565,10 +685,17 @@
       event.stopPropagation();
       event.stopImmediatePropagation();
 
-      const freshPageContext = pageButton ? currentPageContext() : null;
-      const freshDisplayName = freshPageContext?.displayName || displayNameFromRoot(root, refs);
-      const freshRefs = refsWithNameFallback([
-        ...refs,
+      const freshOwners = ownerContextsFromElement(root);
+      const freshOwner = ownerContext
+        ? freshOwners.find((candidate) => candidate.anchor === ownerContext.anchor) ||
+          freshOwners.find((candidate) => candidate.refs.some((ref) =>
+            ownerContext.refs.some((previousRef) => previousRef.key === ref.key)))
+        : null;
+      const freshPageContext = pageButton && !ownerContext ? currentPageContext() : null;
+      const freshDisplayName = freshOwner?.displayName ||
+        freshPageContext?.displayName ||
+        displayNameFromRoot(root, refs);
+      const freshRefs = freshOwner?.refs || refsWithNameFallback([
         ...refsFromElement(root),
         ...(freshPageContext?.refs || [])
       ], freshDisplayName);
@@ -578,7 +705,38 @@
       );
     }, true);
 
-    host.append(button);
+    if (ownerContext?.anchor?.isConnected) {
+      ownerContext.anchor.insertAdjacentElement("afterend", button);
+    } else {
+      host.append(button);
+    }
+  }
+
+  function ensureOwnerButtons(root, pageButton) {
+    const discoveredOwners = ownerContextsFromElement(root);
+    const owners = discoveredOwners.filter((context) => {
+      if (pageButton || !context.anchor) {
+        return true;
+      }
+      return context.anchor.closest(`${CONTENT_SELECTOR},${COMMENT_SELECTOR}`) === root;
+    });
+    if (discoveredOwners.length > 0 && owners.length === 0) {
+      buttonsOwnedByRoot(root).forEach((button) => button.remove());
+      return;
+    }
+    const contexts = owners.length > 0 ? owners : [null];
+    const expectedKeys = new Set(
+      contexts.filter(Boolean).map((context) => identityKey(context.refs))
+    );
+
+    for (const button of buttonsOwnedByRoot(root)) {
+      if (expectedKeys.size > 0 && !expectedKeys.has(button.dataset.cfIdentity)) {
+        button.remove();
+      }
+    }
+    for (const context of contexts) {
+      ensureBlockButton(root, pageButton, context);
+    }
   }
 
   function processItem(item, isComment) {
@@ -592,7 +750,7 @@
       item.querySelectorAll(".cf-block-button").forEach((button) => button.remove());
       return;
     }
-    ensureBlockButton(item, false);
+    ensureOwnerButtons(item, false);
   }
 
   function pauseVisibleVideos() {
@@ -699,7 +857,7 @@
 
     const owner = pageOwnerRoot();
     if (owner) {
-      ensureBlockButton(owner, true);
+      ensureOwnerButtons(owner, true);
     }
   }
 
@@ -817,17 +975,24 @@
       ok: context.refs.length > 0,
       refs: context.refs,
       displayName: context.displayName,
+      owners: context.owners,
       blocked: Boolean(matchingEntry(context.refs))
     });
     return false;
   });
 
   const observer = new MutationObserver((mutations) => {
-    if (mutations.some((mutation) => mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)) {
+    if (mutations.some((mutation) => mutation.type === "attributes" ||
+        mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)) {
       scheduleScan();
     }
   });
-  observer.observe(document.documentElement, { childList: true, subtree: true });
+  observer.observe(document.documentElement, {
+    attributeFilter: ["href"],
+    attributes: true,
+    childList: true,
+    subtree: true
+  });
 
   document.addEventListener("pointerdown", rememberMenuContext, true);
   document.addEventListener("click", rememberMenuContext, true);
@@ -842,6 +1007,8 @@
     state.navigationInProgress = false;
     scheduleScan();
   }, true);
+  document.addEventListener("yt-page-data-updated", scheduleScan, true);
+  document.addEventListener("yt-rendererstamper-finished", scheduleScan, true);
   window.addEventListener("popstate", scheduleScan, true);
 
   initializeState();

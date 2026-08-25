@@ -28,7 +28,9 @@
       <div class="status-card__eyebrow">Current page</div>
       <h1 class="status-card__title" id="pageTitle">Checking this page…</h1>
       <p class="status-card__copy" id="pageCopy">Open a creator, video, or Short to block its creator.</p>
-      <button class="button button--primary" id="pageAction" type="button" disabled>Block creator</button>
+      <div class="status-card__actions" id="pageActions">
+        <button class="button button--primary" type="button" disabled>Block creator</button>
+      </div>
     </section>
 
     <section class="popup-section" aria-labelledby="recentHeading">
@@ -43,6 +45,7 @@
 
   <footer class="popup__footer">
     <button class="link-button" id="openOptions" type="button">Manage block list</button>
+    <a class="link-button" href="https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml" target="_blank" rel="noreferrer">Report a bug</a>
     <a class="link-button" href="privacy.html" target="_blank">Privacy</a>
   </footer>
 </body>

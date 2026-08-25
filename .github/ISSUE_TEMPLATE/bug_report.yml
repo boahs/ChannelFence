@@ -1,0 +1,72 @@
+name: Bug report
+description: Tell us where ChannelFence failed to block or identify a creator.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve ChannelFence. Do not include private account information, cookies, or private video links.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe what ChannelFence did and what you saw instead.
+      placeholder: The creator stayed visible after I blocked them...
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did it happen?
+      options:
+        - Home feed
+        - Search results
+        - Watch page or recommendations
+        - Shorts
+        - Playlist
+        - Comments
+        - Channel page or direct visit
+        - Extension popup or settings
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open...
+        2. Block...
+        3. Scroll or refresh...
+    validations:
+      required: true
+  - type: input
+    id: extension-version
+    attributes:
+      label: ChannelFence version
+      description: Find this on chrome://extensions or at the bottom of ChannelFence settings.
+      placeholder: 0.1.9
+    validations:
+      required: true
+  - type: input
+    id: chrome-version
+    attributes:
+      label: Chrome version
+      description: Find this on chrome://settings/help.
+      placeholder: 140.0.0.0
+  - type: textarea
+    id: public-example
+    attributes:
+      label: Public example or screenshot
+      description: A public YouTube URL or screenshot is useful. Remove anything private before submitting.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I reloaded ChannelFence and refreshed the affected YouTube tab.
+          required: true
+        - label: I checked that this problem has not already been reported.
+          required: true
