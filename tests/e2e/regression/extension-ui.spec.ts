@@ -64,6 +64,9 @@ test.describe("extension UI", () => {
     await extensionPage.getByRole("checkbox", { name: "Hide comments from blocked creators" })
       .locator("..")
       .click();
+    await extensionPage.getByRole("checkbox", { name: "Hide Shorts in YouTube feeds" })
+      .locator("..")
+      .click();
     await extensionPage.locator("#importFile").setInputFiles({
       name: "channelfence-backup.json",
       mimeType: "application/json",
@@ -79,12 +82,60 @@ test.describe("extension UI", () => {
       cfBlockedChannels: Array<{ displayName: string }>;
       cfEnabled: boolean;
       cfHideComments: boolean;
-    }>(["cfBlockedChannels", "cfEnabled", "cfHideComments"]);
+      cfHideHomeShorts: boolean;
+    }>(["cfBlockedChannels", "cfEnabled", "cfHideComments", "cfHideHomeShorts"]);
     expect(stored).toMatchObject({
       cfEnabled: false,
-      cfHideComments: false
+      cfHideComments: false,
+      cfHideHomeShorts: true
     });
     expect(stored.cfBlockedChannels[0].displayName).toBe("Imported Creator");
+  });
+
+  test("popup toggles the Hide Shorts in feeds preference", async ({
+    extensionId,
+    extensionPage,
+    extensionStorage
+  }) => {
+    const popup = new PopupPage(extensionPage, extensionId);
+    await popup.open();
+
+    const toggle = extensionPage.getByRole("checkbox", { name: "Hide Shorts in YouTube feeds" });
+    await expect(toggle).not.toBeChecked();
+    await toggle.locator("..").click();
+    await expect(toggle).toBeChecked();
+
+    const stored = await extensionStorage.get<{ cfHideHomeShorts: boolean }>("cfHideHomeShorts");
+    expect(stored.cfHideHomeShorts).toBe(true);
+  });
+
+  test("keeps an open options tab and popup synchronized", async ({
+    extensionContext,
+    extensionId,
+    extensionPage
+  }) => {
+    const options = new OptionsPage(extensionPage, extensionId);
+    await options.open();
+    const optionsToggle = extensionPage.getByRole("checkbox", {
+      name: "Hide Shorts in YouTube feeds"
+    });
+    await expect(optionsToggle).not.toBeChecked();
+
+    const popupPage = await extensionContext.newPage();
+    const popup = new PopupPage(popupPage, extensionId);
+    await popup.open();
+    const popupToggle = popupPage.getByRole("checkbox", {
+      name: "Hide Shorts in YouTube feeds"
+    });
+    await popupToggle.locator("..").click();
+
+    await expect(popupToggle).toBeChecked();
+    await expect(optionsToggle).toBeChecked();
+
+    await optionsToggle.locator("..").click();
+    await expect(optionsToggle).not.toBeChecked();
+    await expect(popupToggle).not.toBeChecked();
+    await popupPage.close();
   });
 
   test("options validates and manually blocks a YouTube handle", async ({

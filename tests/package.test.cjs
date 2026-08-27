@@ -26,11 +26,22 @@ test("manifest runtime files exist", () => {
     ...manifest.content_scripts[0].css,
     ...manifest.content_scripts[0].js,
     ...Object.values(manifest.icons),
-    ...Object.values(manifest.action.default_icon)
+    ...Object.values(manifest.action.default_icon),
+    ...manifest.web_accessible_resources.flatMap((entry) => entry.resources)
   ];
   for (const relative of paths) {
     assert.ok(fs.existsSync(path.join(root, relative)), `Missing ${relative}`);
   }
+});
+
+test("exposes only the branded Shorts action icon to YouTube pages", () => {
+  assert.deepEqual(manifest.web_accessible_resources, [{
+    resources: ["assets/icons/channelfence-48.png"],
+    matches: [
+      "https://www.youtube.com/*",
+      "https://m.youtube.com/*"
+    ]
+  }]);
 });
 
 test("extension pages do not use inline scripts or remote scripts", () => {
@@ -90,6 +101,15 @@ test("creator menu item inherits YouTube's light or dark theme color", () => {
   assert.match(contentScript, /button\.style\.setProperty\("--cf-menu-text-color", menuTextColor\)/);
 });
 
+test("compact Shorts metadata stays on YouTube and excludes account credentials", () => {
+  const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
+  const privacyPolicy = fs.readFileSync(path.join(root, "PRIVACY.md"), "utf8");
+  assert.match(contentScript, /new URL\("\/oembed", location\.origin\)/);
+  assert.match(contentScript, /credentials: "omit"/);
+  assert.match(contentScript, /cache: "force-cache"/);
+  assert.match(privacyPolicy, /YouTube's oEmbed endpoint/);
+});
+
 test("scopes the blocked-count badge to YouTube tabs", () => {
   const worker = fs.readFileSync(path.join(root, "src", "service-worker.js"), "utf8");
   const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
@@ -99,4 +119,21 @@ test("scopes the blocked-count badge to YouTube tabs", () => {
   assert.match(worker, /chrome\.tabs\.onUpdated\.addListener/);
   assert.match(worker, /changeInfo\.status !== "loading"/);
   assert.match(contentScript, /sendMessage\(\{ type: "CF_SYNC_ACTION" \}\)/);
+});
+
+test("processes YouTube renderer churn incrementally", () => {
+  const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
+  const observerBody = contentScript.match(
+    /const observer = new MutationObserver\(\(mutations\) => \{([\s\S]*?)\n  \}\);/
+  )?.[1] || "";
+  const menuContextBody = contentScript.match(
+    /function rememberMenuContext\(event\) \{([\s\S]*?)function closeCreatorMenu/
+  )?.[1] || "";
+
+  assert.match(contentScript, /function flushMutationScan\(\)/);
+  assert.match(observerBody, /scheduleMutationElement\(target\)/);
+  assert.doesNotMatch(observerBody, /scheduleScan\(\)/);
+  assert.match(menuContextBody, /scheduleMenuScan\(\)/);
+  assert.doesNotMatch(menuContextBody, /scheduleScan\(\)/);
+  assert.doesNotMatch(contentScript, /addEventListener\("yt-rendererstamper-finished"/);
 });

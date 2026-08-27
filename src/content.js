@@ -16,6 +16,8 @@
     "ytd-playlist-panel-video-renderer",
     "ytd-reel-item-renderer",
     "ytd-reel-video-renderer",
+    "ytm-shorts-lockup-view-model",
+    "ytm-shorts-lockup-view-model-v2",
     "ytd-channel-renderer",
     "ytd-radio-renderer",
     "yt-lockup-view-model",
@@ -34,6 +36,36 @@
   const MENU_POPUP_SELECTOR = [
     "ytd-menu-popup-renderer",
     "yt-sheet-view-model"
+  ].join(",");
+
+  const PROMOTED_CONTENT_SELECTOR = [
+    "ytd-ad-slot-renderer",
+    "ytd-in-feed-ad-layout-renderer",
+    "ytd-promoted-video-renderer",
+    "ytd-display-ad-renderer",
+    "ytd-banner-promo-renderer"
+  ].join(",");
+
+  const SHORTS_SHELF_SELECTOR = [
+    "ytd-reel-shelf-renderer",
+    "ytd-rich-shelf-renderer[is-shorts]",
+    "yt-horizontal-list-renderer[is-shorts]",
+    "grid-shelf-view-model"
+  ].join(",");
+
+  const SHORTS_CARD_SELECTOR = [
+    "ytd-reel-item-renderer",
+    "ytm-shorts-lockup-view-model",
+    "ytm-shorts-lockup-view-model-v2",
+    "ytd-rich-item-renderer",
+    "ytd-video-renderer",
+    "ytd-grid-video-renderer",
+    "ytd-compact-video-renderer",
+    "yt-lockup-view-model",
+    ".yt-lockup-view-model",
+    ".yt-lockup-view-model--wrapper",
+    "ytm-video-with-context-renderer",
+    "ytm-compact-video-renderer"
   ].join(",");
 
   const CHANNEL_ANCHOR_SELECTOR = [
@@ -77,15 +109,24 @@
   ].join(",");
 
   const LINKLESS_LOCKUP_CREATOR_SELECTOR = [
+    ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataTextFirstPart",
     ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataTextLastPart",
-    ".ytContentMetadataViewModelMetadataRow:first-child [role='text']",
-    "yt-content-metadata-view-model .ytContentMetadataViewModelMetadataTextLastPart"
+    ".ytContentMetadataViewModelMetadataRow:first-child [role='text']"
   ].join(",");
+
+  const LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR =
+    ".ytContentMetadataViewModelMetadataRow:first-child";
 
   const LINKLESS_LOCKUP_AVATAR_SELECTOR =
     ".ytLockupMetadataViewModelAvatar [aria-label^='Go to channel ']";
 
+  const COMPACT_SHORTS_SELECTOR =
+    "ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2";
+
   const PAGE_OWNER_SELECTORS = [
+    "ytd-shorts ytd-reel-video-renderer",
+    "ytd-shorts yt-reel-channel-bar-view-model",
+    "yt-reel-channel-bar-view-model",
     "yt-page-header-renderer",
     "ytd-c4-tabbed-header-renderer #channel-header-container",
     "ytd-watch-metadata #owner",
@@ -95,28 +136,58 @@
     "ytm-slim-owner-renderer"
   ];
 
+  const PAGE_OWNER_SELECTOR = PAGE_OWNER_SELECTORS.join(",");
+  const MUTATION_ROOT_SELECTOR = [
+    CONTENT_SELECTOR,
+    COMMENT_SELECTOR,
+    MENU_POPUP_SELECTOR
+  ].join(",");
+  const SHORTS_VISIBILITY_SELECTOR = [
+    SHORTS_SHELF_SELECTOR,
+    SHORTS_CARD_SELECTOR,
+    "ytd-rich-section-renderer",
+    ".cf-hidden-shorts-by-channelfence"
+  ].join(",");
+
   const state = {
     enabled: true,
     hideComments: true,
+    hideHomeShorts: false,
     blocked: [],
     blockedKeys: new Set(),
     currentUrl: location.href,
     scanScheduled: false,
+    mutationScanScheduled: false,
+    mutationRoots: new Set(),
+    mutationShortsRoots: new Set(),
+    mutationRouteDirty: false,
+    menuScanScheduled: false,
     navigationInProgress: false,
     pendingMenuContext: null,
     pendingTimer: null,
+    blockedShortSkipKey: "",
+    blockedShortSkipTimer: null,
+    compactShortContexts: new Map(),
+    compactShortLookups: new Map(),
+    compactShortFailures: new Map(),
     toastTimer: null
   };
 
-  markWatchPending();
+  function isShortsRoute() {
+    return location.pathname === "/shorts" || location.pathname.startsWith("/shorts/");
+  }
 
   function isWatchLikeRoute() {
-    return location.pathname === "/watch" || location.pathname.startsWith("/shorts/");
+    return location.pathname === "/watch" || isShortsRoute();
+  }
+
+  function routeHasCurrentCreator() {
+    return isWatchLikeRoute() || Boolean(Shared.normalizeChannelRef(location.href));
   }
 
   function markWatchPending() {
     clearTimeout(state.pendingTimer);
-    if (!isWatchLikeRoute()) {
+    if (!state.enabled || state.blocked.length === 0 || !isWatchLikeRoute()) {
       document.documentElement.classList.remove("cf-watch-pending");
       return;
     }
@@ -144,6 +215,7 @@
     const values = await chrome.storage.local.get(Object.keys(Shared.DEFAULTS));
     state.enabled = values[Shared.STORAGE.enabled] !== false;
     state.hideComments = values[Shared.STORAGE.hideComments] !== false;
+    state.hideHomeShorts = values[Shared.STORAGE.hideHomeShorts] === true;
     state.blocked = values[Shared.STORAGE.blocked] || [];
     rebuildBlockedKeys();
   }
@@ -152,6 +224,7 @@
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         await loadState();
+        markWatchPending();
         requestActionUpdate();
         scheduleScan();
         return;
@@ -296,7 +369,35 @@
         names.add(normalized);
       }
     }
+
+    for (const name of collaborationNamesFromElement(root)) {
+      const normalized = Shared.normalizeCreatorName(name);
+      if (normalized) {
+        names.add(normalized);
+      }
+    }
     return [...names];
+  }
+
+  function collaborationNamesFromElement(root) {
+    if (!root?.querySelector?.(
+      "yt-avatar-stack-view-model[aria-label*='Collaboration' i]"
+    )) {
+      return [];
+    }
+
+    const label = [...root.querySelectorAll("#attributed-channel-name")]
+      .map((element) => Shared.cleanCreatorDisplayName(element.textContent))
+      .find((name) => /\s(?:and|&)\s|,/.test(name));
+    if (!label) {
+      return [];
+    }
+
+    return label
+      .split(/\s+(?:and|&)\s+|,\s*/i)
+      .map((name) => Shared.cleanCreatorDisplayName(name))
+      .filter(Boolean)
+      .slice(0, 8);
   }
 
   function isLockupRoot(root) {
@@ -309,18 +410,38 @@
     if (!isLockupRoot(root) || typeof root.querySelectorAll !== "function") {
       return [];
     }
-    const metadata = root.querySelector(LINKLESS_LOCKUP_CREATOR_SELECTOR);
+    const metadata = [...root.querySelectorAll(LINKLESS_LOCKUP_CREATOR_SELECTOR)];
+    const row = root.querySelector(LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR);
     const avatar = root.querySelector(LINKLESS_LOCKUP_AVATAR_SELECTOR);
-    return [metadata, avatar].filter(Boolean);
+    return [...metadata, row, avatar].filter(Boolean);
+  }
+
+  function cleanLinklessLockupCreatorName(value) {
+    const name = Shared.cleanCreatorDisplayName(value)
+      .replace(/\s+[·•]\s*(?:course|playlist|podcast)\s*$/i, "")
+      .trim();
+    if (!name || /^(?:course|playlist|podcast|view full course|\d+\s+lessons?)$/i.test(name)) {
+      return "";
+    }
+    return name;
+  }
+
+  function linklessLockupCreatorLabel(element) {
+    const accessibilityLabel = element.getAttribute("aria-label") || element.getAttribute("title");
+    if (accessibilityLabel) {
+      return accessibilityLabel;
+    }
+    const copy = element.cloneNode(true);
+    copy.querySelectorAll?.(".cf-block-button, .cf-shorts-action, .cf-menu-item")
+      .forEach((control) => control.remove());
+    return copy.textContent || "";
   }
 
   function linklessLockupCreatorNames(root) {
     const names = [];
     const seen = new Set();
     for (const element of linklessLockupCreatorElements(root)) {
-      const name = Shared.cleanCreatorDisplayName(
-        element.textContent || element.getAttribute("aria-label") || element.getAttribute("title")
-      );
+      const name = cleanLinklessLockupCreatorName(linklessLockupCreatorLabel(element));
       const normalized = Shared.normalizeCreatorName(name);
       if (normalized && !seen.has(normalized)) {
         seen.add(normalized);
@@ -350,20 +471,48 @@
     return refs;
   }
 
+  function elementVisibilityScore(element) {
+    if (!element || typeof element.getBoundingClientRect !== "function") {
+      return 0;
+    }
+    const style = getComputedStyle(element);
+    if (style.display === "none" || style.visibility === "hidden") {
+      return -1;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const hasArea = rect.width > 0 && rect.height > 0;
+    const inViewport = hasArea && rect.bottom > 0 && rect.right > 0 &&
+      rect.top < innerHeight && rect.left < innerWidth;
+    return (hasArea ? 10 : 0) + (inViewport ? 20 : 0) +
+      (element.hasAttribute("is-active") ? 8 : 0);
+  }
+
   function pageOwnerRoot() {
-    for (const selector of PAGE_OWNER_SELECTORS) {
+    let best = null;
+    let bestScore = -Infinity;
+    PAGE_OWNER_SELECTORS.forEach((selector, selectorIndex) => {
       for (const candidate of document.querySelectorAll(selector)) {
         const hasIdentity = refsFromElement(candidate).length > 0 ||
           Boolean(Shared.cleanCreatorDisplayName(candidate.textContent));
-        if (hasIdentity) {
-          return candidate;
+        if (!hasIdentity) {
+          continue;
+        }
+        const score = (elementVisibilityScore(candidate) * 100) - selectorIndex;
+        if (score > bestScore) {
+          best = candidate;
+          bestScore = score;
         }
       }
-    }
-    return null;
+    });
+    return best;
   }
 
   function currentPageContext() {
+    if (!routeHasCurrentCreator()) {
+      return { refs: [], displayName: "", owners: [] };
+    }
+
     const refs = [];
     const pathRef = Shared.normalizeChannelRef(location.href);
     if (pathRef) {
@@ -386,8 +535,11 @@
       "ytd-reel-video-renderer[is-active] #channel-name",
       "ytd-reel-video-renderer[is-active] a[href^='/@']"
     ];
-    let displayName = "";
+    let displayName = owners[0]?.displayName || "";
     for (const selector of nameSelectors) {
+      if (displayName) {
+        break;
+      }
       displayName = Shared.cleanDisplayName(document.querySelector(selector)?.textContent);
       if (displayName) {
         break;
@@ -475,8 +627,204 @@
       control.getAttribute("title"),
       control.querySelector("button")?.getAttribute("aria-label")
     ].filter(Boolean).join(" ");
+    const isShortsControl = Boolean(control.closest(
+      "ytd-reel-video-renderer, yt-reel-player-overlay-view-model, reel-action-bar-view-model"
+    ));
     return Boolean(control.closest("ytd-menu-renderer, yt-menu-renderer")) ||
-      /action menu|more actions/i.test(label);
+      /action menu|more actions/i.test(label) ||
+      (isShortsControl && /^more$/i.test(label.trim()));
+  }
+
+  function isPromotedContentRoot(root) {
+    if (!root) {
+      return false;
+    }
+    return Boolean(
+      root.matches?.(PROMOTED_CONTENT_SELECTOR) ||
+      root.closest?.(PROMOTED_CONTENT_SELECTOR) ||
+      root.querySelector?.(PROMOTED_CONTENT_SELECTOR)
+    );
+  }
+
+  function compactShortPath(root) {
+    const value = root?.querySelector?.("a[href^='/shorts/']")?.getAttribute("href") || "";
+    try {
+      const path = new URL(value, location.href).pathname;
+      return path.startsWith("/shorts/") ? path : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function compactShortLayoutItem(root) {
+    return root?.closest?.(".ytGridShelfViewModelGridShelfItem") || root;
+  }
+
+  function reflowCompactShortShelf(root) {
+    const shelf = root?.closest?.("grid-shelf-view-model");
+    if (!shelf) {
+      return;
+    }
+    const rows = [...shelf.querySelectorAll(".ytGridShelfViewModelGridShelfRow")];
+    const items = rows.flatMap((row) => [...row.children].filter((child) =>
+      child.classList.contains("ytGridShelfViewModelGridShelfItem")));
+    if (rows.length === 0 || items.length === 0) {
+      return;
+    }
+
+    if (!Number.isInteger(shelf.__channelFenceRowCapacity)) {
+      shelf.__channelFenceRowCapacity = Math.max(...rows.map((row) => row.children.length), 1);
+      shelf.__channelFenceNextOrder = 0;
+    }
+    for (const item of items) {
+      if (!Number.isInteger(item.__channelFenceGridOrder)) {
+        item.__channelFenceGridOrder = shelf.__channelFenceNextOrder;
+        shelf.__channelFenceNextOrder += 1;
+      }
+    }
+
+    const byOriginalOrder = (left, right) =>
+      left.__channelFenceGridOrder - right.__channelFenceGridOrder;
+    const visible = items.filter((item) =>
+      !item.classList.contains("cf-hidden-by-channelfence")).sort(byOriginalOrder);
+    const hidden = items.filter((item) =>
+      item.classList.contains("cf-hidden-by-channelfence")).sort(byOriginalOrder);
+    const ordered = [...visible, ...hidden];
+    const capacity = shelf.__channelFenceRowCapacity;
+
+    rows.forEach((row) => {
+      row.classList.toggle("cf-compact-short-row-reflow", hidden.length > 0);
+    });
+
+    rows.forEach((row, rowIndex) => {
+      const start = rowIndex * capacity;
+      const end = rowIndex === rows.length - 1 ? ordered.length : start + capacity;
+      const desired = ordered.slice(start, end);
+      const current = [...row.children].filter((child) =>
+        child.classList.contains("ytGridShelfViewModelGridShelfItem"));
+      if (current.length === desired.length &&
+        current.every((item, index) => item === desired[index])) {
+        return;
+      }
+      desired.forEach((item) => row.append(item));
+    });
+  }
+
+  function setCompactShortPending(root, pending) {
+    compactShortLayoutItem(root)?.classList.toggle("cf-compact-short-pending", pending);
+  }
+
+  function setCompactShortHidden(root, hidden) {
+    const target = compactShortLayoutItem(root);
+    if (!target) {
+      return;
+    }
+    root.classList.remove("cf-hidden-by-channelfence");
+    target.classList.toggle("cf-hidden-by-channelfence", hidden);
+    target.classList.remove("cf-compact-short-pending");
+    reflowCompactShortShelf(target);
+  }
+
+  async function resolveCompactShortContext(path) {
+    const cached = state.compactShortContexts.get(path);
+    if (cached) {
+      return cached;
+    }
+    const failedAt = state.compactShortFailures.get(path);
+    if (failedAt && Date.now() - failedAt < 300000) {
+      return null;
+    }
+    const activeLookup = state.compactShortLookups.get(path);
+    if (activeLookup) {
+      return activeLookup;
+    }
+
+    const lookup = (async () => {
+      try {
+        const endpoint = new URL("/oembed", location.origin);
+        endpoint.searchParams.set("url", new URL(path, location.origin).href);
+        endpoint.searchParams.set("format", "json");
+        const response = await fetch(endpoint, {
+          cache: "force-cache",
+          credentials: "omit"
+        });
+        if (!response.ok) {
+          throw new Error(`YouTube metadata request failed with ${response.status}`);
+        }
+        const metadata = await response.json();
+        const displayName = Shared.cleanCreatorDisplayName(metadata?.author_name);
+        const channelRef = Shared.normalizeChannelRef(metadata?.author_url);
+        const refs = refsWithNameFallback(channelRef ? [channelRef] : [], displayName);
+        if (!displayName || refs.length === 0) {
+          throw new Error("YouTube metadata did not include a creator");
+        }
+        const context = { refs, displayName };
+        state.compactShortContexts.set(path, context);
+        state.compactShortFailures.delete(path);
+        return context;
+      } catch {
+        state.compactShortFailures.set(path, Date.now());
+        return null;
+      } finally {
+        state.compactShortLookups.delete(path);
+      }
+    })();
+    state.compactShortLookups.set(path, lookup);
+    return lookup;
+  }
+
+  function inspectCompactShortCreator(root) {
+    const path = compactShortPath(root);
+    if (!path || state.blocked.length === 0 || state.compactShortContexts.has(path)) {
+      return;
+    }
+    const failedAt = state.compactShortFailures.get(path);
+    if (failedAt && Date.now() - failedAt < 300000) {
+      setCompactShortPending(root, false);
+      return;
+    }
+    if (root.querySelector(COMPACT_SHORTS_SELECTOR)) {
+      return;
+    }
+    setCompactShortPending(root, true);
+    resolveCompactShortContext(path).finally(() => {
+      setCompactShortPending(root, false);
+      scheduleMutationElement(root);
+    });
+  }
+
+  async function blockCompactShortCreator(root) {
+    const path = compactShortPath(root);
+    if (!path) {
+      showToast("ChannelFence couldn't identify this Short.");
+      return;
+    }
+    const buttons = buttonsOwnedByRoot(root);
+    buttons.forEach((button) => {
+      button.disabled = true;
+      button.setAttribute("aria-busy", "true");
+    });
+
+    try {
+      state.compactShortFailures.delete(path);
+      const context = await resolveCompactShortContext(path);
+      if (!context) {
+        throw new Error("YouTube metadata did not include a creator");
+      }
+
+      if (!await blockCreator(context.refs, context.displayName, path)) {
+        state.compactShortContexts.delete(path);
+      }
+    } catch {
+      showToast("ChannelFence couldn't identify this creator. Try opening the Short first.");
+    } finally {
+      buttons.forEach((button) => {
+        if (button.isConnected) {
+          button.disabled = false;
+          button.removeAttribute("aria-busy");
+        }
+      });
+    }
   }
 
   function rememberMenuContext(event) {
@@ -491,6 +839,11 @@
     }
 
     let root = event.target.closest(CONTENT_SELECTOR);
+    if (isPromotedContentRoot(root)) {
+      state.pendingMenuContext = null;
+      scheduleMenuScan();
+      return;
+    }
     let refs = root ? refsFromElement(root) : [];
     let ownerNames = root ? ownerNamesFromElement(root) : [];
     let displayName = root ? displayNameFromRoot(root, refs) : "";
@@ -504,6 +857,23 @@
       ownerNames = owner ? ownerNamesFromElement(owner) : [];
       displayName = pageContext.displayName;
       owners = owner ? ownerContextsFromElement(owner) : [];
+    }
+
+    const deferredShort = Boolean(root?.matches?.(COMPACT_SHORTS_SELECTOR) &&
+      compactShortPath(root) && refs.length === 0);
+    if (deferredShort) {
+      state.pendingMenuContext = {
+        root,
+        trigger: control,
+        refs: [],
+        ownerNames: [],
+        displayName: "Shorts creator",
+        owners: [],
+        deferredShort: true,
+        expiresAt: Date.now() + 5000
+      };
+      scheduleMenuScan();
+      return;
     }
 
     refs = refsWithNameFallback(refs, displayName);
@@ -521,7 +891,7 @@
         : [{ refs, displayName }],
       expiresAt: Date.now() + 5000
     };
-    scheduleScan();
+    scheduleMenuScan();
   }
 
   function closeCreatorMenu() {
@@ -556,18 +926,72 @@
     return "";
   }
 
+  function creatorMenuContextKey(context) {
+    if (context.deferredShort) {
+      return `short:${compactShortPath(context.root)}`;
+    }
+    const owners = context.owners?.length > 0
+      ? context.owners
+      : [{ refs: context.refs, displayName: context.displayName }];
+    return owners.map((owner) => {
+      const blocked = matchingEntry(owner.refs, [owner.displayName]) ? "blocked" : "open";
+      return `${identityKey(owner.refs)}:${blocked}`;
+    }).join("|");
+  }
+
   function ensureCreatorMenuItems(popup) {
-    if (!state.enabled || !popup || popup.querySelector(".cf-menu-item")) {
+    if (!popup) {
       return;
     }
     const context = state.pendingMenuContext;
-    if (!context || context.expiresAt < Date.now()) {
+    if (!state.enabled || !context || context.expiresAt < Date.now()) {
+      popup.querySelectorAll(".cf-menu-item").forEach((item) => item.remove());
+      delete popup.dataset.cfMenuContextKey;
       state.pendingMenuContext = null;
       return;
     }
 
+    const contextKey = creatorMenuContextKey(context);
+    const existingItems = popup.querySelectorAll(".cf-menu-item");
+    if (existingItems.length > 0 && popup.dataset.cfMenuContextKey === contextKey) {
+      return;
+    }
+    existingItems.forEach((item) => item.remove());
+    popup.dataset.cfMenuContextKey = contextKey;
+
     const host = popup.querySelector("#items, tp-yt-paper-listbox, [role='menu']") || popup;
     const menuTextColor = nativeMenuTextColor(host);
+    if (context.deferredShort) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "cf-menu-item";
+      button.setAttribute("role", "menuitem");
+      button.setAttribute("aria-label", "Block this Short's creator with ChannelFence");
+      if (menuTextColor) {
+        button.style.setProperty("--cf-menu-text-color", menuTextColor);
+      }
+
+      const symbol = document.createElement("span");
+      symbol.className = "cf-menu-item__symbol";
+      symbol.setAttribute("aria-hidden", "true");
+      symbol.textContent = "\u2298";
+
+      const label = document.createElement("span");
+      label.className = "cf-menu-item__label";
+      label.textContent = "ChannelFence: Block creator";
+      button.append(symbol, label);
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        state.pendingMenuContext = null;
+        closeCreatorMenu();
+        await blockCompactShortCreator(context.root);
+      }, true);
+      host.append(button);
+      return;
+    }
+
     const owners = context.owners?.length > 0
       ? context.owners
       : [{ refs: context.refs, displayName: context.displayName }];
@@ -621,14 +1045,37 @@
     document.querySelectorAll(MENU_POPUP_SELECTOR).forEach(ensureCreatorMenuItems);
   }
 
+  function scheduleMenuScan() {
+    if (state.menuScanScheduled) {
+      return;
+    }
+    state.menuScanScheduled = true;
+    requestAnimationFrame(() => {
+      state.menuScanScheduled = false;
+      processCreatorMenus();
+    });
+  }
+
   function buttonsOwnedByRoot(root) {
     return [...root.querySelectorAll(".cf-block-button")].filter((button) => {
       return button.__channelFenceRoot === root;
     });
   }
 
+  function shortsActionsOwnedByRoot(root) {
+    return [...root.querySelectorAll(".cf-shorts-action")].filter((action) => {
+      return action.__channelFenceRoot === root;
+    });
+  }
+
   function identityKey(refs) {
     return Shared.uniqueRefs(refs).map((ref) => ref.key).sort().join("|");
+  }
+
+  function setAttributeIfChanged(element, name, value) {
+    if (element.getAttribute(name) !== value) {
+      element.setAttribute(name, value);
+    }
   }
 
   function ensureBlockButton(root, pageButton, ownerContext) {
@@ -651,7 +1098,7 @@
       .find((button) => button.dataset.cfIdentity === key);
     if (existingButton) {
       existingButton.title = `Block ${displayName} with ChannelFence`;
-      existingButton.setAttribute("aria-label", `Block ${displayName}`);
+      setAttributeIfChanged(existingButton, "aria-label", `Block ${displayName}`);
       if (ownerContext?.anchor?.isConnected &&
           existingButton.__channelFenceAnchor !== ownerContext.anchor) {
         ownerContext.anchor.insertAdjacentElement("afterend", existingButton);
@@ -712,6 +1159,127 @@
     }
   }
 
+  function ensureCompactShortButton(root) {
+    if (root.querySelector(COMPACT_SHORTS_SELECTOR)) {
+      return;
+    }
+    const path = compactShortPath(root);
+    const host = root.querySelector(
+      ".shortsLockupViewModelHostOutsideMetadataMenu, [class*='MetadataMenu']"
+    );
+    if (!path || !host) {
+      return;
+    }
+
+    const key = `short:${path}`;
+    const existingButton = buttonsOwnedByRoot(root)
+      .find((button) => button.dataset.cfIdentity === key);
+    if (existingButton) {
+      return;
+    }
+
+    buttonsOwnedByRoot(root).forEach((button) => button.remove());
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "cf-block-button cf-compact-shorts-block";
+    button.dataset.cfIdentity = key;
+    button.__channelFenceRoot = root;
+    button.title = "Block this Short's creator with ChannelFence";
+    button.setAttribute("aria-label", "Block this Short's creator with ChannelFence");
+
+    const symbol = document.createElement("span");
+    symbol.className = "cf-block-button__symbol";
+    symbol.setAttribute("aria-hidden", "true");
+    symbol.textContent = "\u2298";
+    button.append(symbol);
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      await blockCompactShortCreator(root);
+    }, true);
+    host.before(button);
+  }
+
+  function ensureShortsAction(root, ownerContext) {
+    if (!state.enabled || !root || !ownerContext) {
+      return;
+    }
+
+    const actionBar = root.querySelector("reel-action-bar-view-model");
+    const refs = refsWithNameFallback(ownerContext.refs, ownerContext.displayName);
+    if (!actionBar || refs.length === 0) {
+      return;
+    }
+
+    const displayName = ownerContext.displayName || displayNameFromRoot(root, refs);
+    const key = identityKey(refs);
+    const ownedActions = shortsActionsOwnedByRoot(root);
+    for (const action of ownedActions) {
+      if (action.dataset.cfIdentity !== key) {
+        action.remove();
+      }
+    }
+
+    const existingAction = ownedActions.find((action) => action.dataset.cfIdentity === key);
+    if (existingAction) {
+      const existingButton = existingAction.querySelector(".cf-shorts-action__button");
+      existingButton.title = `Block ${displayName} with ChannelFence`;
+      setAttributeIfChanged(
+        existingButton,
+        "aria-label",
+        `Block ${displayName} with ChannelFence`
+      );
+      if (existingAction.parentElement !== actionBar ||
+          actionBar.firstElementChild !== existingAction) {
+        actionBar.prepend(existingAction);
+      }
+      return;
+    }
+
+    const action = document.createElement("div");
+    action.className = "cf-shorts-action";
+    action.dataset.cfIdentity = key;
+    action.__channelFenceRoot = root;
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "cf-shorts-action__button";
+    button.title = `Block ${displayName} with ChannelFence`;
+    button.setAttribute("aria-label", `Block ${displayName} with ChannelFence`);
+
+    const icon = document.createElement("img");
+    icon.className = "cf-shorts-action__icon";
+    icon.src = chrome.runtime.getURL("assets/icons/channelfence-48.png");
+    icon.alt = "";
+    icon.setAttribute("aria-hidden", "true");
+
+    const label = document.createElement("span");
+    label.className = "cf-shorts-action__label";
+    label.setAttribute("aria-hidden", "true");
+    label.textContent = "Block";
+
+    button.append(icon);
+    action.append(button, label);
+
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      const freshOwners = ownerContextsFromElement(root);
+      const freshOwner = freshOwners.find((candidate) => candidate.refs.some((ref) =>
+        ownerContext.refs.some((previousRef) => previousRef.key === ref.key))) ||
+        freshOwners[0] || ownerContext;
+      await blockCreator(
+        refsWithNameFallback(freshOwner.refs, freshOwner.displayName),
+        freshOwner.displayName
+      );
+    }, true);
+
+    actionBar.prepend(action);
+  }
+
   function ensureOwnerButtons(root, pageButton) {
     const discoveredOwners = ownerContextsFromElement(root);
     const owners = discoveredOwners.filter((context) => {
@@ -720,10 +1288,26 @@
       }
       return context.anchor.closest(`${CONTENT_SELECTOR},${COMMENT_SELECTOR}`) === root;
     });
-    if (discoveredOwners.length > 0 && owners.length === 0) {
-      buttonsOwnedByRoot(root).forEach((button) => button.remove());
+    if (root.matches?.(COMPACT_SHORTS_SELECTOR)) {
+      shortsActionsOwnedByRoot(root).forEach((action) => action.remove());
+      ensureCompactShortButton(root);
       return;
     }
+    if (discoveredOwners.length > 0 && owners.length === 0) {
+      buttonsOwnedByRoot(root).forEach((button) => button.remove());
+      shortsActionsOwnedByRoot(root).forEach((action) => action.remove());
+      return;
+    }
+
+    const isCurrentShortsViewer = isShortsRoute() &&
+      root.matches?.("ytd-reel-video-renderer");
+    if (isCurrentShortsViewer) {
+      buttonsOwnedByRoot(root).forEach((button) => button.remove());
+      ensureShortsAction(root, owners[0] || null);
+      return;
+    }
+
+    shortsActionsOwnedByRoot(root).forEach((action) => action.remove());
     const contexts = owners.length > 0 ? owners : [null];
     const expectedKeys = new Set(
       contexts.filter(Boolean).map((context) => identityKey(context.refs))
@@ -740,14 +1324,42 @@
   }
 
   function processItem(item, isComment) {
-    const refs = refsFromElement(item);
-    const ownerNames = ownerNamesFromElement(item);
-    const blocked = Boolean(matchingEntry(refs, ownerNames));
-    const shouldHide = state.enabled && blocked && (!isComment || state.hideComments);
-    item.classList.toggle("cf-hidden-by-channelfence", shouldHide);
+    if (!isComment && isPromotedContentRoot(item)) {
+      item.classList.remove("cf-hidden-by-channelfence");
+      item.querySelectorAll(".cf-block-button, .cf-shorts-action")
+        .forEach((control) => control.remove());
+      return;
+    }
+    const isCompactShort = Boolean(item.matches?.(COMPACT_SHORTS_SELECTOR));
+    const compactPath = isCompactShort ? compactShortPath(item) : "";
+    const compactContext = compactPath
+      ? state.compactShortContexts.get(compactPath)
+      : null;
+    const exactShortEntry = compactPath
+      ? state.blocked.find((entry) => entry.shortPaths?.includes(compactPath))
+      : null;
+    if (isCompactShort && !compactContext && !exactShortEntry) {
+      inspectCompactShortCreator(item);
+    }
+    const refs = compactContext?.refs || refsFromElement(item);
+    const ownerNames = compactContext?.displayName
+      ? [compactContext.displayName]
+      : ownerNamesFromElement(item);
+    const blocked = Boolean(exactShortEntry || matchingEntry(refs, ownerNames));
+    const isShortsViewer = isShortsRoute() && item.matches("ytd-reel-video-renderer");
+    const shouldHide = state.enabled && blocked && (!isComment || state.hideComments) &&
+      !isShortsViewer;
+    if (isCompactShort) {
+      if (!state.compactShortLookups.has(compactPath)) {
+        setCompactShortHidden(item, shouldHide);
+      }
+    } else {
+      item.classList.toggle("cf-hidden-by-channelfence", shouldHide);
+    }
 
     if (!state.enabled || blocked) {
-      item.querySelectorAll(".cf-block-button").forEach((button) => button.remove());
+      item.querySelectorAll(".cf-block-button, .cf-shorts-action")
+        .forEach((button) => button.remove());
       return;
     }
     ensureOwnerButtons(item, false);
@@ -772,13 +1384,14 @@
     pauseVisibleVideos();
 
     const existing = document.getElementById("cf-hard-block-overlay");
-    if (existing?.dataset.entryKey === entry.key) {
+    if (existing?.dataset.mode === "creator" && existing.dataset.entryKey === entry.key) {
       return;
     }
     existing?.remove();
 
     const overlay = document.createElement("section");
     overlay.id = "cf-hard-block-overlay";
+    overlay.dataset.mode = "creator";
     overlay.dataset.entryKey = entry.key;
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
@@ -823,6 +1436,39 @@
     home.focus();
   }
 
+  function clearBlockedShortSkip() {
+    clearTimeout(state.blockedShortSkipTimer);
+    state.blockedShortSkipTimer = null;
+    state.blockedShortSkipKey = "";
+  }
+
+  function advancePastBlockedShort(entry) {
+    const sourceUrl = location.href;
+    const skipKey = `${sourceUrl}|${entry.key}`;
+    clearWatchPending();
+    removeOverlay();
+
+    if (state.blockedShortSkipKey === skipKey) {
+      return;
+    }
+    clearBlockedShortSkip();
+    state.blockedShortSkipKey = skipKey;
+
+    const scroller = document.querySelector("ytd-shorts #shorts-container");
+    if (scroller) {
+      scroller.scrollBy({
+        top: Math.max(scroller.clientHeight, 640),
+        behavior: "smooth"
+      });
+    }
+
+    state.blockedShortSkipTimer = setTimeout(() => {
+      if (location.href === sourceUrl) {
+        location.assign("/");
+      }
+    }, 2500);
+  }
+
   function applyRouteGuard() {
     if (state.navigationInProgress) {
       removeOverlay();
@@ -830,6 +1476,7 @@
     }
 
     if (!state.enabled) {
+      clearBlockedShortSkip();
       clearWatchPending();
       removeOverlay();
       return;
@@ -846,8 +1493,16 @@
 
     const entry = matchingEntry(context.refs);
     if (entry) {
+      if (isShortsRoute()) {
+        advancePastBlockedShort(entry);
+        return;
+      }
       showOverlay(entry, context.refs);
       return;
+    }
+
+    if (state.blockedShortSkipKey) {
+      clearBlockedShortSkip();
     }
 
     removeOverlay();
@@ -861,11 +1516,82 @@
     }
   }
 
+  function pathFromElement(element) {
+    if (!element) {
+      return "";
+    }
+    const anchor = element.matches?.("a") ? element : element.querySelector?.("a");
+    const value = anchor?.href || anchor?.getAttribute?.("href") || "";
+    try {
+      return new URL(value, location.href).pathname;
+    } catch {
+      return "";
+    }
+  }
+
+  function hasDirectShortsLink(root) {
+    if (!root) {
+      return false;
+    }
+    const anchors = root.matches?.("a") ? [root] : [...root.querySelectorAll("a")];
+    return anchors.some((anchor) => pathFromElement(anchor).startsWith("/shorts/"));
+  }
+
+  function clearHiddenShorts(root = document) {
+    const items = [];
+    if (root instanceof Element && root.matches(".cf-hidden-shorts-by-channelfence")) {
+      items.push(root);
+    }
+    root.querySelectorAll?.(".cf-hidden-shorts-by-channelfence").forEach((item) => {
+      items.push(item);
+    });
+    items.forEach((item) => item.classList.remove("cf-hidden-shorts-by-channelfence"));
+  }
+
+  function shouldHideShortsItem(item) {
+    if (!state.enabled || !state.hideHomeShorts || isShortsRoute()) {
+      return false;
+    }
+    if (item.matches("ytd-rich-section-renderer")) {
+      return Boolean(item.querySelector(SHORTS_SHELF_SELECTOR)) || hasDirectShortsLink(item);
+    }
+    if (item.matches(SHORTS_SHELF_SELECTOR)) {
+      const knownShortsShelf = item.matches(
+        "ytd-reel-shelf-renderer, ytd-rich-shelf-renderer[is-shorts], " +
+        "yt-horizontal-list-renderer[is-shorts]"
+      );
+      return knownShortsShelf || hasDirectShortsLink(item);
+    }
+    return item.matches(SHORTS_CARD_SELECTOR) && hasDirectShortsLink(item);
+  }
+
+  function processShortsVisibilityWithin(root) {
+    const items = new Set();
+    if (root instanceof Element && root.matches(SHORTS_VISIBILITY_SELECTOR)) {
+      items.add(root);
+    }
+    root.querySelectorAll?.(SHORTS_VISIBILITY_SELECTOR).forEach((item) => items.add(item));
+    for (const item of items) {
+      item.classList.toggle(
+        "cf-hidden-shorts-by-channelfence",
+        shouldHideShortsItem(item)
+      );
+    }
+  }
+
+  function processShortsVisibility() {
+    processShortsVisibilityWithin(document);
+  }
+
   function scan() {
     state.scanScheduled = false;
+    state.mutationRoots.clear();
+    state.mutationShortsRoots.clear();
+    state.mutationRouteDirty = false;
 
     if (location.href !== state.currentUrl) {
       state.currentUrl = location.href;
+      clearBlockedShortSkip();
       removeOverlay();
       markWatchPending();
     }
@@ -874,13 +1600,20 @@
       document.querySelectorAll(".cf-hidden-by-channelfence").forEach((item) => {
         item.classList.remove("cf-hidden-by-channelfence");
       });
+      document.querySelectorAll(".cf-compact-short-pending").forEach((item) => {
+        item.classList.remove("cf-compact-short-pending");
+      });
+      document.querySelectorAll("grid-shelf-view-model").forEach(reflowCompactShortShelf);
       document.querySelectorAll(".cf-block-button").forEach((button) => button.remove());
+      document.querySelectorAll(".cf-shorts-action").forEach((action) => action.remove());
       document.querySelectorAll(".cf-menu-item").forEach((button) => button.remove());
+      clearHiddenShorts();
       state.pendingMenuContext = null;
       applyRouteGuard();
       return;
     }
 
+    processShortsVisibility();
     document.querySelectorAll(CONTENT_SELECTOR).forEach((item) => processItem(item, false));
     document.querySelectorAll(COMMENT_SELECTOR).forEach((item) => processItem(item, true));
     processCreatorMenus();
@@ -895,8 +1628,110 @@
     requestAnimationFrame(scan);
   }
 
-  async function blockCreator(refs, displayName) {
-    const entry = Shared.createBlockedEntry(refs, displayName);
+  const CHANNELFENCE_ELEMENT_SELECTOR = [
+    ".cf-block-button",
+    ".cf-shorts-action",
+    ".cf-menu-item",
+    "#cf-toast",
+    "#cf-hard-block-overlay"
+  ].join(",");
+
+  function isChannelFenceNode(node) {
+    const element = node instanceof Element ? node : node?.parentElement;
+    return Boolean(element?.closest?.(CHANNELFENCE_ELEMENT_SELECTOR));
+  }
+
+  function addMutationRoots(element, selector, collection, includeDescendants) {
+    const closest = element.closest?.(selector);
+    if (closest) {
+      collection.add(closest);
+    }
+    if (element.matches?.(selector)) {
+      collection.add(element);
+    }
+    if (includeDescendants) {
+      element.querySelectorAll?.(selector).forEach((root) => collection.add(root));
+    }
+  }
+
+  function scheduleMutationFlush() {
+    if (state.mutationScanScheduled || state.scanScheduled) {
+      return;
+    }
+    state.mutationScanScheduled = true;
+    requestAnimationFrame(flushMutationScan);
+  }
+
+  function scheduleMutationElement(element, includeDescendants = false) {
+    if (!(element instanceof Element) || isChannelFenceNode(element)) {
+      return;
+    }
+
+    addMutationRoots(
+      element,
+      MUTATION_ROOT_SELECTOR,
+      state.mutationRoots,
+      includeDescendants
+    );
+    addMutationRoots(
+      element,
+      SHORTS_VISIBILITY_SELECTOR,
+      state.mutationShortsRoots,
+      includeDescendants
+    );
+
+    const pageOwnerChanged = routeHasCurrentCreator() && Boolean(
+      element.closest?.(PAGE_OWNER_SELECTOR) ||
+      element.matches?.(PAGE_OWNER_SELECTOR) ||
+      (includeDescendants && element.querySelector?.(PAGE_OWNER_SELECTOR)) ||
+      element.matches?.("meta[itemprop='channelId']") ||
+      (includeDescendants && element.querySelector?.("meta[itemprop='channelId']"))
+    );
+    if (pageOwnerChanged) {
+      state.mutationRouteDirty = true;
+    }
+    scheduleMutationFlush();
+  }
+
+  function flushMutationScan() {
+    state.mutationScanScheduled = false;
+    if (state.scanScheduled) {
+      return;
+    }
+
+    const roots = [...state.mutationRoots];
+    const shortsRoots = [...state.mutationShortsRoots];
+    const routeDirty = state.mutationRouteDirty;
+    state.mutationRoots.clear();
+    state.mutationShortsRoots.clear();
+    state.mutationRouteDirty = false;
+
+    shortsRoots.filter((root) => root.isConnected)
+      .forEach((root) => processShortsVisibilityWithin(root));
+    for (const root of roots) {
+      if (!root.isConnected) {
+        continue;
+      }
+      if (root.matches(MENU_POPUP_SELECTOR)) {
+        ensureCreatorMenuItems(root);
+      } else if (root.matches(COMMENT_SELECTOR)) {
+        processItem(root, true);
+      } else if (root.matches(CONTENT_SELECTOR)) {
+        processItem(root, false);
+      }
+    }
+    if (routeDirty) {
+      applyRouteGuard();
+    }
+  }
+
+  async function blockCreator(refs, displayName, shortPath) {
+    const entry = Shared.createBlockedEntry(
+      refs,
+      displayName,
+      undefined,
+      shortPath ? [shortPath] : []
+    );
     if (!entry) {
       showToast("ChannelFence couldn't identify this creator yet.");
       return false;
@@ -956,6 +1791,9 @@
     if (changes[Shared.STORAGE.hideComments]) {
       state.hideComments = changes[Shared.STORAGE.hideComments].newValue !== false;
     }
+    if (changes[Shared.STORAGE.hideHomeShorts]) {
+      state.hideHomeShorts = changes[Shared.STORAGE.hideHomeShorts].newValue === true;
+    }
     if (changes[Shared.STORAGE.blocked]) {
       state.blocked = changes[Shared.STORAGE.blocked].newValue || [];
       rebuildBlockedKeys();
@@ -982,13 +1820,34 @@
   });
 
   const observer = new MutationObserver((mutations) => {
-    if (mutations.some((mutation) => mutation.type === "attributes" ||
-        mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)) {
-      scheduleScan();
+    for (const mutation of mutations) {
+      const target = mutation.target instanceof Element
+        ? mutation.target
+        : mutation.target.parentElement;
+      if (!target || isChannelFenceNode(target)) {
+        continue;
+      }
+
+      if (mutation.type === "attributes") {
+        scheduleMutationElement(target);
+        continue;
+      }
+
+      const changedNodes = [...mutation.addedNodes, ...mutation.removedNodes]
+        .filter((node) => !isChannelFenceNode(node));
+      if (changedNodes.length === 0) {
+        continue;
+      }
+      scheduleMutationElement(target);
+      changedNodes.forEach((node) => {
+        if (node instanceof Element) {
+          scheduleMutationElement(node, true);
+        }
+      });
     }
   });
   observer.observe(document.documentElement, {
-    attributeFilter: ["href"],
+    attributeFilter: ["href", "aria-label", "title", "is-active"],
     attributes: true,
     childList: true,
     subtree: true
@@ -1007,8 +1866,15 @@
     state.navigationInProgress = false;
     scheduleScan();
   }, true);
-  document.addEventListener("yt-page-data-updated", scheduleScan, true);
-  document.addEventListener("yt-rendererstamper-finished", scheduleScan, true);
+  document.addEventListener("yt-page-data-updated", (event) => {
+    if (event.target instanceof Element && event.target !== document.documentElement) {
+      scheduleMutationElement(event.target);
+      state.mutationRouteDirty = true;
+      scheduleMutationFlush();
+      return;
+    }
+    scheduleScan();
+  }, true);
   window.addEventListener("popstate", scheduleScan, true);
 
   initializeState();

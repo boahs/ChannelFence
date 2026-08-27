@@ -233,6 +233,30 @@ input:focus-visible {
   width: 100%;
 }
 
+.popup-quick-setting {
+  align-items: center;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 12px 13px;
+}
+
+.popup-quick-setting h2 {
+  font-size: 13px;
+  margin: 0;
+}
+
+.popup-quick-setting p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+  margin: 3px 0 0;
+}
+
 .popup-section {
   margin-top: 17px;
 }

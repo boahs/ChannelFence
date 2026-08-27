@@ -1,7 +1,9 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 import {
   comment,
+  courseLockup,
   creatorCard,
+  promotedHomeCard,
   rightRailLockup,
   watchOwner,
   watchOwners
@@ -9,6 +11,50 @@ import {
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
 test.describe("YouTube surfaces and menus", () => {
+  test("does not report a search result as the current page creator", async ({
+    extensionPage,
+    serviceWorker
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(creatorCard({
+      displayName: "First Search Creator",
+      handle: "@first-search-creator",
+      id: "first-search-result",
+      tag: "ytd-video-renderer"
+    }), "/results?search_query=fixture");
+
+    const response = await serviceWorker.evaluate(async () => {
+      const extensionChrome = (globalThis as unknown as {
+        chrome: {
+          tabs: {
+            query(query: Record<string, never>): Promise<Array<{ id?: number }>>;
+            sendMessage(tabId: number, message: { type: string }): Promise<{
+              ok: boolean;
+              refs: unknown[];
+            }>;
+          };
+        };
+      }).chrome;
+      const tabs = await extensionChrome.tabs.query({});
+      for (const tab of tabs) {
+        if (!tab.id) {
+          continue;
+        }
+        try {
+          return await extensionChrome.tabs.sendMessage(tab.id, {
+            type: "CF_GET_PAGE_CONTEXT"
+          });
+        } catch {
+          // Non-YouTube tabs do not have the ChannelFence content script.
+        }
+      }
+      throw new Error("Could not find the YouTube fixture tab");
+    });
+
+    expect(response.ok).toBe(false);
+    expect(response.refs).toEqual([]);
+  });
+
   test("adds a themed ChannelFence action to a feed three-dot menu", async ({
     extensionPage,
     extensionStorage
@@ -38,6 +84,87 @@ test.describe("YouTube surfaces and menus", () => {
 
     const menuItem = await youtube.openCreatorMenu("watch-menu");
     await expect(menuItem).toContainText("ChannelFence: Block");
+  });
+
+  test("rebinds a reused YouTube menu to the newly selected card", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      creatorCard({
+        displayName: "First Menu Creator",
+        handle: "@first-menu-creator",
+        id: "first-reused-menu"
+      }),
+      creatorCard({
+        displayName: "Second Menu Creator",
+        handle: "@second-menu-creator",
+        id: "second-reused-menu"
+      })
+    ].join(""));
+
+    await youtube.openCreatorMenu("first-reused-menu-menu");
+    await expect(extensionPage.locator(".cf-menu-item"))
+      .toHaveAttribute("aria-label", "Block First Menu Creator with ChannelFence");
+
+    const secondTrigger = extensionPage.getByTestId("second-reused-menu-menu");
+    await secondTrigger.dispatchEvent("pointerdown");
+    await secondTrigger.click();
+    const reboundAction = extensionPage.locator(".cf-menu-item");
+    await expect(reboundAction)
+      .toHaveAttribute("aria-label", "Block Second Menu Creator with ChannelFence");
+    await reboundAction.click();
+
+    await expect(youtube.card("first-reused-menu")).toBeVisible();
+    await expect(youtube.card("second-reused-menu")).toBeHidden();
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ displayName: string }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels[0].displayName).toBe("Second Menu Creator");
+  });
+
+  test("ignores sponsored Home cells between creator recommendations", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      creatorCard({
+        displayName: "Creator Above Shorts",
+        handle: "@creator-above-shorts",
+        id: "creator-above-shorts"
+      }),
+      promotedHomeCard("Fixture Advertiser", "home-promotion"),
+      creatorCard({
+        displayName: "Creator Below Shorts",
+        handle: "@creator-below-shorts",
+        id: "creator-below-shorts"
+      })
+    ].join(""));
+
+    await expect(youtube.blockButton("creator-above-shorts")).toBeVisible();
+    await expect(youtube.blockButton("creator-below-shorts")).toBeVisible();
+    const promotion = youtube.card("home-promotion");
+    await expect(promotion).toBeVisible();
+    await expect(promotion.locator(".cf-block-button")).toHaveCount(0);
+
+    await youtube.openCreatorMenu("creator-above-shorts-menu");
+    await expect(extensionPage.locator(".cf-menu-item")).toHaveCount(1);
+    const promotionMenu = extensionPage.getByTestId("home-promotion-menu");
+    await promotionMenu.dispatchEvent("pointerdown");
+    await promotionMenu.click();
+    await expect(extensionPage.locator(".cf-menu-item")).toHaveCount(0);
+
+    await youtube.blockButton("creator-below-shorts").click();
+    await expect(youtube.card("creator-below-shorts")).toBeHidden();
+    await expect(promotion).toBeVisible();
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ displayName: string }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([
+      expect.objectContaining({ displayName: "Creator Below Shorts" })
+    ]);
   });
 
   test("adds a search-result block control when YouTube fills the owner link late", async ({
@@ -150,6 +277,52 @@ test.describe("YouTube surfaces and menus", () => {
     ]);
   });
 
+  test("adds a linkless block control when YouTube fills the creator label late", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    const delayedLockup = rightRailLockup({
+      displayName: "Late Label Creator",
+      id: "late-label"
+    }).replace(
+      'aria-label="Go to channel Late Label Creator"',
+      'aria-label=""'
+    ).replace(
+      '>Late Label Creator</span>',
+      '></span>'
+    );
+    await youtube.open(delayedLockup, "/watch?v=late-label-fixture");
+
+    const card = youtube.card("late-label");
+    await expect(card.locator(".cf-block-button")).toHaveCount(0);
+    await card.locator("[role='button'][aria-label='']").evaluate((avatar) => {
+      avatar.setAttribute("aria-label", "Go to channel Late Label Creator");
+    });
+    await expect(card.getByRole("button", { name: "Block Late Label Creator" }))
+      .toBeVisible();
+  });
+
+  test("hides a live-style collaboration when a linkless collaborator is blocked", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@mrbeast", "MrBeast")]
+    });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(`
+      <ytd-video-renderer data-testid="live-collaboration">
+        <div id="channel-info">
+          <a id="channel-thumbnail" href="/@MrBeast2" aria-label="Go to channel MrBeast 2"></a>
+          <yt-avatar-stack-view-model aria-label="Collaboration channels"></yt-avatar-stack-view-model>
+          <div id="attributed-channel-name">MrBeast 2 and MrBeast</div>
+        </div>
+      </ytd-video-renderer>
+    `, "/results?search_query=mrbeast");
+
+    await expect(youtube.card("live-collaboration")).toBeHidden();
+  });
+
   test("blocks linkless right-rail recommendations with the inline button", async ({
     extensionPage,
     extensionStorage
@@ -171,6 +344,32 @@ test.describe("YouTube surfaces and menus", () => {
     expect(stored.cfBlockedChannels[0]).toMatchObject({
       aliases: ["name:right rail creator"],
       displayName: "Right Rail Creator"
+    });
+  });
+
+  test("identifies and blocks the creator of a YouTube Course card", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      courseLockup("Course Creator", "course-one"),
+      courseLockup("Course Creator", "course-two")
+    ].join(""));
+
+    const firstCourse = youtube.card("course-one");
+    const button = firstCourse.getByRole("button", { name: "Block Course Creator" });
+    await expect(button).toBeVisible();
+    await button.click();
+    await expect(firstCourse).toBeHidden();
+    await expect(youtube.card("course-two")).toBeHidden();
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ aliases: string[]; displayName: string }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      aliases: ["name:course creator"],
+      displayName: "Course Creator"
     });
   });
 

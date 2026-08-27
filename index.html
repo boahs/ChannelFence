@@ -25,7 +25,7 @@
     "description": "A free, open-source Chrome extension that blocks YouTube channels and hides their content across supported YouTube surfaces.",
     "applicationCategory": "BrowserApplication",
     "operatingSystem": "Chrome",
-    "softwareVersion": "0.1.9",
+    "softwareVersion": "0.2.0",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "installUrl": "https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm",
     "codeRepository": "https://github.com/boahs/ChannelFence",
@@ -83,7 +83,12 @@
           <span class="surface-grid"><i></i><i></i><i></i><i></i></span>
         </span>
         <h2>Hide creators across YouTube</h2>
-        <p>Filter supported Home, search, Watch Next, Shorts, playlists, comments, and direct pages.</p>
+        <p>Filter supported Home, search, Watch Next, Shorts, playlists, comments, and direct pages. Blocking in Shorts advances to the next Short.</p>
+      </article>
+      <article>
+        <span class="feature-icon" aria-hidden="true">S</span>
+        <h2>Hide Shorts in feeds</h2>
+        <p>Remove Shorts shelves and cards from Home, search, and other feeds while keeping the Shorts viewer available.</p>
       </article>
     </section>
 
@@ -129,6 +134,10 @@
       <details>
         <summary>Does ChannelFence send or sell my block list?</summary>
         <p>No. The list and settings remain in Chrome's local extension storage and are not sent to the developer or third parties.</p>
+      </details>
+      <details>
+        <summary>Can ChannelFence remove Shorts from my feeds?</summary>
+        <p>Yes. Turn on Hide Shorts in feeds in the extension popup or settings. This removes Shorts shelves from Home, search, and other feeds while keeping the Shorts tab and direct viewer available.</p>
       </details>
       <details>
         <summary>Is ChannelFence affiliated with YouTube or Google?</summary>

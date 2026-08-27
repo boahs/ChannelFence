@@ -95,7 +95,8 @@ export const test = base.extend<ExtensionFixtures>({
     await storage.set({
       cfEnabled: true,
       cfBlockedChannels: [],
-      cfHideComments: true
+      cfHideComments: true,
+      cfHideHomeShorts: false
     });
     await use(storage);
   },

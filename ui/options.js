@@ -4,6 +4,7 @@ const Shared = globalThis.ChannelFenceShared;
 const elements = {
   version: document.getElementById("version"),
   enabled: document.getElementById("enabledToggle"),
+  shorts: document.getElementById("shortsToggle"),
   comments: document.getElementById("commentsToggle"),
   blockedCount: document.getElementById("blockedCount"),
   manualForm: document.getElementById("manualBlockForm"),
@@ -103,6 +104,11 @@ elements.comments.addEventListener("change", async () => {
   showToast(elements.comments.checked ? "Blocked comments will be hidden" : "Comments will remain visible");
 });
 
+elements.shorts.addEventListener("change", async () => {
+  await chrome.storage.local.set({ [Shared.STORAGE.hideHomeShorts]: elements.shorts.checked });
+  showToast(elements.shorts.checked ? "Shorts will be hidden in feeds" : "Shorts will remain in feeds");
+});
+
 elements.search.addEventListener("input", renderList);
 
 elements.manualForm.addEventListener("submit", async (event) => {
@@ -198,9 +204,31 @@ async function initialize() {
   const values = await chrome.storage.local.get(Object.keys(Shared.DEFAULTS));
   blockedEntries = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]);
   elements.enabled.checked = values[Shared.STORAGE.enabled] !== false;
+  elements.shorts.checked = values[Shared.STORAGE.hideHomeShorts] === true;
   elements.comments.checked = values[Shared.STORAGE.hideComments] !== false;
   elements.version.textContent = `Version ${chrome.runtime.getManifest().version}`;
   renderList();
 }
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "local") {
+    return;
+  }
+  if (changes[Shared.STORAGE.enabled]) {
+    elements.enabled.checked = changes[Shared.STORAGE.enabled].newValue !== false;
+  }
+  if (changes[Shared.STORAGE.hideHomeShorts]) {
+    elements.shorts.checked = changes[Shared.STORAGE.hideHomeShorts].newValue === true;
+  }
+  if (changes[Shared.STORAGE.hideComments]) {
+    elements.comments.checked = changes[Shared.STORAGE.hideComments].newValue !== false;
+  }
+  if (changes[Shared.STORAGE.blocked]) {
+    blockedEntries = Shared.sanitizeBlockedEntries(
+      changes[Shared.STORAGE.blocked].newValue
+    );
+    renderList();
+  }
+});
 
 initialize().catch(() => showToast("Settings could not be loaded"));

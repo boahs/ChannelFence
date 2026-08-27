@@ -2,7 +2,18 @@
   display: none !important;
 }
 
+.cf-compact-short-row-reflow {
+  column-gap: 16px !important;
+  justify-content: flex-start !important;
+}
+
+.cf-hidden-shorts-by-channelfence {
+  display: none !important;
+}
+
 html.cf-watch-pending ytd-watch-flexy #movie_player,
+html.cf-watch-pending ytd-shorts ytd-reel-video-renderer video,
+html.cf-watch-pending ytd-shorts ytd-reel-video-renderer #player,
 html.cf-watch-pending ytd-reel-video-renderer[is-active] video,
 html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
   visibility: hidden !important;
@@ -44,6 +55,73 @@ html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
   font-size: 18px !important;
   line-height: 1 !important;
   transform: translateY(-0.5px) !important;
+}
+
+.cf-compact-shorts-block {
+  color: var(--yt-spec-text-secondary, #aaa) !important;
+  height: 32px !important;
+  margin: 0 2px 0 0 !important;
+  min-width: 32px !important;
+  padding: 0 4px !important;
+}
+
+.cf-shorts-action {
+  align-items: center !important;
+  box-sizing: border-box !important;
+  color: var(--yt-spec-text-primary, #f1f1f1) !important;
+  display: flex !important;
+  flex: 0 0 78px !important;
+  flex-direction: column !important;
+  font-family: Roboto, Arial, sans-serif !important;
+  height: 78px !important;
+  justify-content: flex-start !important;
+  width: 48px !important;
+}
+
+.cf-shorts-action__button {
+  align-items: center !important;
+  appearance: none !important;
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1)) !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex: 0 0 48px !important;
+  height: 48px !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 48px !important;
+}
+
+.cf-shorts-action__button:hover {
+  background: var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.2)) !important;
+}
+
+.cf-shorts-action__button:focus-visible {
+  box-shadow: 0 0 0 2px #18d9d2 !important;
+  outline: none !important;
+}
+
+.cf-shorts-action__icon {
+  display: block !important;
+  height: 32px !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+  width: 32px !important;
+}
+
+.cf-shorts-action__label {
+  color: inherit !important;
+  display: block !important;
+  font: 500 12px/18px Roboto, Arial, sans-serif !important;
+  margin-top: 4px !important;
+  max-width: 48px !important;
+  overflow: hidden !important;
+  text-align: center !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .cf-menu-item {

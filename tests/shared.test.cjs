@@ -82,15 +82,31 @@ test("creates one entry with stable channel id preferred over handle", () => {
 test("merges aliases into an existing block without duplication", () => {
   const first = Shared.createBlockedEntry([
     Shared.normalizeChannelRef("/@creator")
-  ], "Creator");
+  ], "Creator", undefined, ["/shorts/firstVideo"]);
   const second = Shared.createBlockedEntry([
     Shared.normalizeChannelRef("/@creator"),
     Shared.normalizeChannelRef("/channel/UCstable")
-  ], "Creator");
+  ], "Creator", undefined, [
+    "https://www.youtube.com/shorts/secondVideo?feature=share",
+    "https://example.com/shorts/notYouTube"
+  ]);
 
   const merged = Shared.mergeBlockedEntry([first], second);
   assert.equal(merged.length, 1);
   assert.deepEqual([...merged[0].aliases].sort(), ["channel:UCstable", "handle:@creator"]);
+  assert.deepEqual(
+    [...merged[0].shortPaths].sort(),
+    ["/shorts/firstVideo", "/shorts/secondVideo"]
+  );
+});
+
+test("keeps only valid user-selected Shorts paths", () => {
+  assert.equal(
+    Shared.normalizeShortPath("https://www.youtube.com/shorts/abc_DEF-123?feature=share"),
+    "/shorts/abc_DEF-123"
+  );
+  assert.equal(Shared.normalizeShortPath("https://example.com/shorts/abc_DEF-123"), "");
+  assert.equal(Shared.normalizeShortPath("/watch?v=abc_DEF-123"), "");
 });
 
 test("removes entries by any known alias", () => {
