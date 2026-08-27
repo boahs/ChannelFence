@@ -168,11 +168,16 @@ test("advances after blocking the current live Shorts creator", async ({
   await blockButton.click();
   await expect(extensionPage).not.toHaveURL(blockedUrl, { timeout: 10_000 });
   await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
-  const nextReel = extensionPage.locator("ytd-reel-video-renderer").filter({
-    has: extensionPage.locator("reel-action-bar-view-model")
-  }).first();
-  await expect(nextReel.locator("reel-action-bar-view-model")).toBeVisible({ timeout: 15_000 });
-  await expect(nextReel.locator(".cf-shorts-action__button")).toBeVisible({ timeout: 15_000 });
+  // YouTube keeps many preloaded Shorts renderers in the DOM and no longer
+  // consistently marks the current one with `is-active`. Anchor the assertion
+  // on ChannelFence's visible control, then inspect its owning reel.
+  const nextBlockButton = extensionPage.locator(
+    ".cf-shorts-action__button:visible"
+  ).first();
+  await expect(nextBlockButton).toBeVisible({ timeout: 15_000 });
+  const nextReel = nextBlockButton.locator(
+    "xpath=ancestor::ytd-reel-video-renderer[1]"
+  );
   await expect.poll(async () => nextReel.locator("video").evaluate((video) =>
     !(video as HTMLVideoElement).paused
   ), { timeout: 15_000 }).toBe(true);
