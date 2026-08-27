@@ -67,11 +67,15 @@ chrome.runtime.onStartup.addListener(async () => {
   await clearGlobalActionState();
 });
 
-chrome.runtime.onMessage.addListener((message, sender) => {
-  if (!message || message.type !== "CF_SYNC_ACTION" || !Number.isInteger(sender.tab?.id)) {
-    return;
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (!message) {
+    return false;
   }
-  updateBadgeForTab(sender.tab.id).catch(() => undefined);
+  if (message.type === "CF_SYNC_ACTION" && Number.isInteger(sender.tab?.id)) {
+    updateBadgeForTab(sender.tab.id).catch(() => undefined);
+    return false;
+  }
+  return false;
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {

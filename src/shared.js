@@ -4,13 +4,15 @@
   const STORAGE = Object.freeze({
     enabled: "cfEnabled",
     blocked: "cfBlockedChannels",
-    hideComments: "cfHideComments"
+    hideComments: "cfHideComments",
+    hideHomeShorts: "cfHideHomeShorts"
   });
 
   const DEFAULTS = Object.freeze({
     [STORAGE.enabled]: true,
     [STORAGE.blocked]: [],
-    [STORAGE.hideComments]: true
+    [STORAGE.hideComments]: true,
+    [STORAGE.hideHomeShorts]: false
   });
 
   const CHANNEL_TYPES = new Set(["channel", "handle", "custom", "user", "name"]);
@@ -199,7 +201,32 @@
     })[0] || null;
   }
 
-  function createBlockedEntry(refs, displayName, blockedAt) {
+  function normalizeShortPath(input) {
+    if (!input || typeof input !== "string") {
+      return "";
+    }
+    try {
+      const parsed = new URL(input, "https://www.youtube.com/");
+      if (!["youtube.com", "www.youtube.com", "m.youtube.com"].includes(
+        parsed.hostname.toLowerCase()
+      )) {
+        return "";
+      }
+      return /^\/shorts\/[A-Za-z0-9_-]{3,128}$/.test(parsed.pathname)
+        ? parsed.pathname
+        : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function sanitizeShortPaths(values) {
+    return [...new Set((Array.isArray(values) ? values : [])
+      .map(normalizeShortPath)
+      .filter(Boolean))].slice(0, 50);
+  }
+
+  function createBlockedEntry(refs, displayName, blockedAt, shortPaths) {
     const cleanRefs = uniqueRefs(refs);
     if (cleanRefs.length === 0) {
       return null;
@@ -216,7 +243,8 @@
       aliases: cleanRefs.map((ref) => ref.key),
       displayName: name,
       url: primary.url || "",
-      blockedAt: blockedAt || new Date().toISOString()
+      blockedAt: blockedAt || new Date().toISOString(),
+      shortPaths: sanitizeShortPaths(shortPaths)
     };
   }
 
@@ -249,7 +277,8 @@
       const entry = createBlockedEntry(
         unclaimed,
         raw.displayName,
-        typeof raw.blockedAt === "string" ? raw.blockedAt : undefined
+        typeof raw.blockedAt === "string" ? raw.blockedAt : undefined,
+        raw.shortPaths
       );
 
       if (!entry) {
@@ -316,7 +345,8 @@
     const normalizedIncoming = incoming && createBlockedEntry(
       incoming.aliases || [incoming.key, incoming.url],
       incoming.displayName,
-      incoming.blockedAt
+      incoming.blockedAt,
+      incoming.shortPaths
     );
 
     if (!normalizedIncoming) {
@@ -333,7 +363,8 @@
     const merged = createBlockedEntry(
       mergedRefs,
       existing.displayName === "Blocked creator" ? normalizedIncoming.displayName : existing.displayName,
-      existing.blockedAt
+      existing.blockedAt,
+      [...existing.shortPaths, ...normalizedIncoming.shortPaths]
     );
     const rest = clean.filter((_, index) => index !== matchIndex);
     return [merged, ...rest];
@@ -365,6 +396,8 @@
     normalizeCreatorNameRef,
     normalizeChannelRef,
     normalizeManualChannelInput,
+    normalizeShortPath,
+    sanitizeShortPaths,
     refFromKey,
     uniqueRefs,
     createBlockedEntry,

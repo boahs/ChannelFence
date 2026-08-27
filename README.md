@@ -17,6 +17,8 @@ ChannelFence is an open-source, privacy-first Chrome extension that lets you blo
 
 You can also open ChannelFence settings and paste a handle such as `@creator` or a YouTube channel URL into **Block by handle or channel URL**.
 
+ChannelFence also works inside the Shorts viewer. Use the branded ChannelFence action beside the current Short or the ChannelFence action in its menu. After blocking the current creator, ChannelFence moves to the next Short instead of showing the blocked-page screen. Because compact Shorts cards omit their creators, ChannelFence requests their public creator metadata from YouTube while your block list is not empty. This lets ChannelFence keep matching Shorts hidden and block from a compact card without opening it or leaving the feed. These lookups are cached only in memory. When you explicitly block from a compact Short, its public `/shorts/...` path is stored locally with the creator record so that exact card stays hidden after a refresh. To remove intrusive Shorts shelves and cards from Home, search, and other feeds, turn on **Hide Shorts in feeds** in the popup or settings. The Shorts navigation and direct viewer remain available when you choose to open them.
+
 You can undo immediately, pause filtering without losing your list, or manage every blocked creator from the extension’s settings. ChannelFence does not block reuploads posted by a different creator.
 
 ## Privacy and permissions
@@ -24,7 +26,7 @@ You can undo immediately, pause filtering without losing your list, or manage ev
 - Uses only the `storage` extension permission.
 - Runs content scripts only on `www.youtube.com` and `m.youtube.com`.
 - Stores settings and the user’s block list in `chrome.storage.local`.
-- Makes no network requests and contains no analytics, advertising, remote code, or account integration.
+- Makes no requests outside youtube.com and contains no analytics, advertising, remote code, or account integration.
 - The complete source is available in this repository under the MIT License.
 
 ## Load locally
@@ -61,7 +63,7 @@ npm run test:e2e:headed
 npm run test:e2e:ui
 ```
 
-The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, membership lockups, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
+The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, membership lockups, Shorts controls, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
 
 GitHub Actions runs the complete deterministic suite on every push and pull request. A separate scheduled workflow runs the intentionally small live YouTube smoke check. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
 

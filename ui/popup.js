@@ -3,6 +3,7 @@
 const Shared = globalThis.ChannelFenceShared;
 const elements = {
   enabled: document.getElementById("enabledToggle"),
+  shorts: document.getElementById("shortsToggle"),
   status: document.getElementById("statusText"),
   pageTitle: document.getElementById("pageTitle"),
   pageCopy: document.getElementById("pageCopy"),
@@ -127,16 +128,43 @@ elements.enabled.addEventListener("change", async () => {
   elements.status.textContent = elements.enabled.checked ? `${blockedEntries.length} blocked` : "Paused";
 });
 
+elements.shorts.addEventListener("change", async () => {
+  await chrome.storage.local.set({ [Shared.STORAGE.hideHomeShorts]: elements.shorts.checked });
+});
+
 elements.openOptions.addEventListener("click", () => chrome.runtime.openOptionsPage());
 
 async function initialize() {
   const values = await chrome.storage.local.get(Object.keys(Shared.DEFAULTS));
   blockedEntries = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]);
   elements.enabled.checked = values[Shared.STORAGE.enabled] !== false;
+  elements.shorts.checked = values[Shared.STORAGE.hideHomeShorts] === true;
   elements.status.textContent = elements.enabled.checked ? `${blockedEntries.length} blocked` : "Paused";
   renderBlockedList();
   await loadPageContext();
 }
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "local") {
+    return;
+  }
+  if (changes[Shared.STORAGE.enabled]) {
+    elements.enabled.checked = changes[Shared.STORAGE.enabled].newValue !== false;
+  }
+  if (changes[Shared.STORAGE.hideHomeShorts]) {
+    elements.shorts.checked = changes[Shared.STORAGE.hideHomeShorts].newValue === true;
+  }
+  if (changes[Shared.STORAGE.blocked]) {
+    blockedEntries = Shared.sanitizeBlockedEntries(
+      changes[Shared.STORAGE.blocked].newValue
+    );
+    elements.status.textContent = elements.enabled.checked
+      ? `${blockedEntries.length} blocked`
+      : "Paused";
+    renderBlockedList();
+    renderPageContext();
+  }
+});
 
 initialize().catch(() => {
   elements.status.textContent = "Unavailable";

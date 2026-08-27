@@ -1,4 +1,4 @@
-name: Live YouTube smoke test
+name: Live YouTube Playwright tests
 
 on:
   schedule:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   live-smoke:
-    name: Live-origin injection
+    name: All live YouTube tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -30,7 +30,7 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run live YouTube smoke test
+      - name: Run all live YouTube Playwright tests
         run: npm run test:e2e:live
 
       - name: Upload Playwright diagnostics
