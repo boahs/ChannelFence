@@ -165,17 +165,25 @@ test("advances after blocking the current live Shorts creator", async ({
   const blockButton = currentReel.locator(".cf-shorts-action__button");
   await expect(blockButton).toBeVisible({ timeout: 15_000 });
   const blockedUrl = extensionPage.url();
+  const blockedPath = new URL(blockedUrl).pathname;
   await blockButton.click();
   await expect(extensionPage).not.toHaveURL(blockedUrl, { timeout: 10_000 });
+  await expect.poll(
+    () => new URL(extensionPage.url()).pathname,
+    { timeout: 10_000 }
+  ).not.toBe(blockedPath);
+  await expect.poll(
+    () => new URL(extensionPage.url()).pathname,
+    { timeout: 10_000 }
+  ).toMatch(/^\/shorts\/[^/?#]+$/);
   await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
-  // In headless browsers YouTube may advance and play the next Short before it
-  // renders its own right-side action bar. Validate the behavior ChannelFence
-  // controls here; deterministic fixtures cover reinjection when that bar exists.
-  const nextVideo = extensionPage.locator(
-    "ytd-reel-video-renderer video:visible"
-  ).first();
-  await expect(nextVideo).toBeVisible({ timeout: 15_000 });
-  await expect.poll(async () => nextVideo.evaluate((video) =>
-    !(video as HTMLVideoElement).paused
-  ), { timeout: 15_000 }).toBe(true);
+  // The URL transition, persisted block, and lack of an overlay are the
+  // ChannelFence-controlled outcomes. YouTube's Linux/headless player does
+  // not consistently render or autoplay the next visible <video> element.
+  await expect.poll(async () => {
+    const values = await extensionStorage.get<{
+      cfBlockedChannels?: Array<{ aliases?: string[] }>;
+    }>("cfBlockedChannels");
+    return values.cfBlockedChannels?.length ?? 0;
+  }).toBe(1);
 });
