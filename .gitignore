@@ -4,3 +4,14 @@ node_modules/
 playwright-report/
 test-results/
 blob-report/
+
+# Local environment variables and credentials
+.env
+.env.*
+!.env.example
+
+# Local Chrome Web Store analytics snapshots
+.analytics/
+
+# Private local notes and credentials
+.local-notes/
