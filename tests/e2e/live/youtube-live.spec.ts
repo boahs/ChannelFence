@@ -16,6 +16,52 @@ test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }
   })).toBe("none");
 });
 
+test("keeps live channel-card controls singular and ignores video statistics", async ({
+  extensionPage
+}) => {
+  const assertNoDuplicateOrStatisticControls = async (url: string) => {
+    await extensionPage.goto(url, {
+      waitUntil: "domcontentloaded",
+      timeout: 30_000
+    });
+    const cards = extensionPage.locator("yt-lockup-view-model").filter({
+      has: extensionPage.locator("a[href^='/watch']")
+    });
+    await expect(cards.first()).toBeVisible({ timeout: 30_000 });
+    await expect.poll(async () => cards.evaluateAll((elements) => {
+      const visibleCards = elements.filter((card) => {
+        const style = getComputedStyle(card);
+        return style.display !== "none" && style.visibility !== "hidden";
+      }).slice(0, 12);
+      if (visibleCards.length === 0) return false;
+      return visibleCards.every((card) => {
+        const buttons = [...card.querySelectorAll(".cf-block-button")];
+        return buttons.length <= 1 && buttons.every((button) => {
+          const label = button.getAttribute("aria-label") || "";
+          return !/\b(?:views?|ago|streamed|premiered)\b/i.test(label);
+        });
+      });
+    }), { timeout: 15_000 }).toBe(true);
+    await expect(extensionPage.locator(
+      "yt-page-header-renderer .cf-block-button, " +
+      "ytd-c4-tabbed-header-renderer #channel-header-container .cf-block-button"
+    ).first()).toBeVisible({ timeout: 15_000 });
+    return cards;
+  };
+
+  await assertNoDuplicateOrStatisticControls("https://www.youtube.com/@BoahsLoL/videos");
+  const homeCards = await assertNoDuplicateOrStatisticControls(
+    "https://www.youtube.com/@fubgun"
+  );
+  const cardWithCreatorAvatar = homeCards.filter({
+    has: extensionPage.locator("[aria-label^='Go to channel ']")
+  }).first();
+  await expect(cardWithCreatorAvatar).toBeVisible({ timeout: 30_000 });
+  await expect(cardWithCreatorAvatar.locator(".cf-block-button")).toHaveCount(0, {
+    timeout: 15_000
+  });
+});
+
 test("adds block controls to a live watch-page right-rail lockup", async ({ extensionPage }) => {
   await extensionPage.goto("https://www.youtube.com/watch?v=dQw4w9WgXcQ", {
     waitUntil: "domcontentloaded",
@@ -133,15 +179,24 @@ test("blocks a compact live Short from its three-dot menu without leaving search
   }).toContain(shortHref);
 
   await extensionPage.reload({ waitUntil: "domcontentloaded" });
+  const refreshedShorts = extensionPage.locator(
+    "ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2"
+  ).filter({
+    has: extensionPage.locator("a[href^='/shorts/']")
+  });
+  await expect(refreshedShorts.first()).toBeAttached({ timeout: 30_000 });
   const repeatedCard = extensionPage.locator(
     "ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2"
   ).filter({
     has: extensionPage.locator(`a[href='${shortHref}']`)
   }).first();
-  await expect(repeatedCard).toBeAttached({ timeout: 30_000 });
-  await expect(repeatedCard.locator(
-    "xpath=ancestor::div[contains(@class, 'ytGridShelfViewModelGridShelfItem')][1]"
-  )).toHaveClass(/cf-hidden-by-channelfence/, { timeout: 15_000 });
+  // YouTube randomizes live search shelves between reloads. When it returns the
+  // selected Short again, verify that the stored path hides it immediately.
+  if (await repeatedCard.count()) {
+    await expect(repeatedCard.locator(
+      "xpath=ancestor::div[contains(@class, 'ytGridShelfViewModelGridShelfItem')][1]"
+    )).toHaveClass(/cf-hidden-by-channelfence/, { timeout: 15_000 });
+  }
 });
 
 test("advances after blocking the current live Shorts creator", async ({

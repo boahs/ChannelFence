@@ -550,6 +550,20 @@ input:focus-visible {
   white-space: nowrap;
 }
 
+.list-pagination {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  font-size: 12px;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px 0 4px;
+}
+
+.list-pagination[hidden] {
+  display: none;
+}
+
 .privacy-note {
   background: #edfdfc;
   border: 1px solid #bcebe8;

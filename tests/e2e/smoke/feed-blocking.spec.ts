@@ -68,6 +68,51 @@ test.describe("feed blocking", () => {
     await expect(youtube.blockButton("membership")).toBeVisible();
   });
 
+  test("keeps a busy feed responsive with 1,000 blocked creators", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const blockedEntries = Array.from({ length: 1_000 }, (_, index) => {
+      return blockedCreator(`@large-block-${index}`, `Large Block ${index}`);
+    });
+    await extensionStorage.set({ cfBlockedChannels: blockedEntries });
+
+    const cards = Array.from({ length: 60 }, (_, index) => {
+      const isBlocked = index % 2 === 0;
+      return creatorCard({
+        displayName: isBlocked ? `Large Block ${900 + index}` : `Allowed ${index}`,
+        handle: isBlocked ? `@large-block-${900 + index}` : `@allowed-${index}`,
+        id: `${isBlocked ? "large-blocked" : "large-allowed"}-${index}`
+      });
+    });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(cards.join(""));
+
+    await expect(extensionPage.locator(
+      'ytd-rich-item-renderer[data-testid^="large-blocked-"]' +
+      '[class~="cf-hidden-by-channelfence"]'
+    )).toHaveCount(30);
+    await expect(extensionPage.locator(
+      'ytd-rich-item-renderer[data-testid^="large-allowed-"]' +
+      ':not(.cf-hidden-by-channelfence)'
+    )).toHaveCount(30);
+    await expect(extensionPage.locator(
+      '[data-testid^="large-allowed-"] .cf-block-button'
+    )).toHaveCount(30);
+
+    await extensionStorage.set({
+      cfBlockedChannels: [
+        ...blockedEntries,
+        blockedCreator("@allowed-1", "Allowed 1")
+      ]
+    });
+    await expect(youtube.card("large-allowed-1")).toBeHidden();
+
+    await extensionStorage.set({ cfBlockedChannels: blockedEntries });
+    await expect(youtube.card("large-allowed-1")).toBeVisible();
+    await expect(youtube.blockButton("large-allowed-1")).toHaveCount(1);
+  });
+
   test("paused mode restores blocked cards and resumes without losing the list", async ({
     extensionPage,
     extensionStorage
@@ -90,4 +135,3 @@ test.describe("feed blocking", () => {
     await expect(youtube.card("alpha")).toBeHidden();
   });
 });
-

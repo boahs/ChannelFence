@@ -152,6 +152,146 @@ test("normalizes owner labels and matches an entry by exact creator name", () =>
   );
 });
 
+test("bulk-merges imported block lists with the same ordering and aliases", () => {
+  const existing = [
+    Shared.createBlockedEntry([Shared.normalizeChannelRef("/@alpha")], "Alpha"),
+    Shared.createBlockedEntry([Shared.normalizeChannelRef("/@beta")], "Beta")
+  ];
+  const incoming = [
+    Shared.createBlockedEntry([
+      Shared.normalizeChannelRef("/@alpha"),
+      Shared.normalizeChannelRef("/channel/UCalpha")
+    ], "Alpha"),
+    Shared.createBlockedEntry([Shared.normalizeChannelRef("/@gamma")], "Gamma")
+  ];
+  const legacy = incoming.reduce((entries, entry) => {
+    return Shared.mergeBlockedEntry(entries, entry);
+  }, existing);
+  const bulk = Shared.mergeBlockedEntries(existing, incoming);
+
+  assert.deepEqual(JSON.parse(JSON.stringify(bulk)), JSON.parse(JSON.stringify(legacy)));
+  assert.deepEqual(
+    [...bulk.find((entry) => entry.displayName === "Alpha").aliases].sort(),
+    ["channel:UCalpha", "handle:@alpha"]
+  );
+});
+
+test("bulk import preserves legacy behavior when aliases bridge old records", () => {
+  const blockedAt = "2026-08-20T12:00:00.000Z";
+  const entry = (paths, displayName, shortPath = "/shorts/abc123") => {
+    return Shared.createBlockedEntry(
+      paths.map((path) => Shared.normalizeChannelRef(path)),
+      displayName,
+      blockedAt,
+      [shortPath]
+    );
+  };
+  const existing = [
+    entry(["/c/custom", "/@alpha"], "Blocked creator"),
+    entry(["/user/legacy", "/@gamma", "/channel/UCalpha"], "Blocked creator"),
+    entry(["/user/legacy"], "Alpha", "/shorts/def456")
+  ];
+  const incoming = [
+    entry(["/channel/UCbeta", "/@beta"], "Beta", "/shorts/def456"),
+    entry(["/@alpha", "/channel/UCalpha"], "Beta"),
+    entry(["/@beta"], "Blocked creator"),
+    entry(["/@alpha"], "Blocked creator"),
+    null,
+    entry(["/c/custom", "/user/legacy", "/@beta"], "Beta")
+  ];
+  const legacy = incoming.reduce((entries, candidate) => {
+    return Shared.mergeBlockedEntry(entries, candidate);
+  }, existing);
+
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(Shared.mergeBlockedEntries(existing, incoming))),
+    JSON.parse(JSON.stringify(legacy))
+  );
+});
+
+test("indexes large block lists for constant-time feed matching", () => {
+  const entries = Array.from({ length: 1_000 }, (_, index) => {
+    return Shared.createBlockedEntry(
+      [Shared.normalizeChannelRef(`/@creator-${index}`)],
+      `Creator ${index}`,
+      "2026-08-20T12:00:00.000Z",
+      [`/shorts/clip_${String(index).padStart(4, "0")}`]
+    );
+  });
+  const lookup = Shared.createBlockedLookup(entries);
+
+  assert.equal(lookup.entries.length, 1_000);
+  assert.equal(lookup.byAlias.size, 1_000);
+  assert.equal(lookup.byName.size, 2_000);
+  assert.equal(lookup.byShortPath.size, 1_000);
+  assert.equal(
+    Shared.findMatchingEntryInLookup(
+      lookup,
+      [Shared.normalizeChannelRef("/@creator-999")]
+    ).displayName,
+    "Creator 999"
+  );
+  assert.equal(
+    Shared.findMatchingEntryInLookup(lookup, [], ["Creator 999"]).key,
+    "handle:@creator-999"
+  );
+  assert.equal(
+    lookup.byShortPath.get("/shorts/clip_0999").key,
+    "handle:@creator-999"
+  );
+
+  let aliasProbes = 0;
+  let nameProbes = 0;
+  const trackedLookup = {
+    ...lookup,
+    byAlias: {
+      get(key) {
+        aliasProbes += 1;
+        return lookup.byAlias.get(key);
+      }
+    },
+    byName: {
+      get(key) {
+        nameProbes += 1;
+        return lookup.byName.get(key);
+      }
+    }
+  };
+  assert.equal(
+    Shared.findMatchingEntryInLookup(
+      trackedLookup,
+      [Shared.normalizeChannelRef("/@creator-999")]
+    ).key,
+    "handle:@creator-999"
+  );
+  assert.equal(aliasProbes, 1);
+  assert.equal(nameProbes, 0);
+});
+
+test("indexed matching preserves block-list precedence for collaborations", () => {
+  const alpha = Shared.createBlockedEntry(
+    [Shared.normalizeChannelRef("/@alpha")],
+    "Alpha"
+  );
+  const beta = Shared.createBlockedEntry(
+    [Shared.normalizeChannelRef("/@beta")],
+    "Beta"
+  );
+  const lookup = Shared.createBlockedLookup([alpha, beta]);
+
+  assert.equal(
+    Shared.findMatchingEntryInLookup(lookup, [
+      Shared.normalizeChannelRef("/@beta"),
+      Shared.normalizeChannelRef("/@alpha")
+    ]).displayName,
+    "Alpha"
+  );
+  assert.equal(
+    Shared.findMatchingEntryInLookup(lookup, [], ["Beta", "Alpha"]).displayName,
+    "Alpha"
+  );
+});
+
 test("rejects video durations as creator labels and recovers the channel handle", () => {
   assert.equal(Shared.cleanCreatorDisplayName("8:41"), "");
   assert.equal(Shared.cleanCreatorDisplayName("1:40:36"), "");

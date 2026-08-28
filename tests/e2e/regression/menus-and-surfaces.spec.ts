@@ -1,10 +1,13 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 import {
+  channelHeader,
+  channelTabLockup,
   comment,
   courseLockup,
   creatorCard,
   promotedHomeCard,
   rightRailLockup,
+  shortsShelf,
   watchOwner,
   watchOwners
 } from "../fixtures/youtube-fixtures";
@@ -245,6 +248,234 @@ test.describe("YouTube surfaces and menus", () => {
     await expect(result.getByRole("button", { name: "Block Modern Search Creator" })).toBeVisible();
   });
 
+  test("keeps one header control and suppresses redundant channel Home controls", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      channelTabLockup({
+        displayName: "Fixture Creator",
+        id: "channel-home-one",
+        includeAvatar: true
+      }),
+      channelTabLockup({
+        displayName: "Fixture Creator",
+        id: "channel-home-two",
+        includeAvatar: true
+      }),
+      channelTabLockup({
+        avatarHidden: true,
+        displayName: "Fixture Creator",
+        id: "channel-home-hidden-avatar",
+        includeAvatar: true
+      }),
+      channelTabLockup({
+        displayName: "Guest Creator",
+        id: "channel-home-guest",
+        includeAvatar: true
+      })
+    ].join(""), "/@fixturecreator");
+
+    await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    for (const id of [
+      "channel-home-one",
+      "channel-home-two",
+      "channel-home-hidden-avatar"
+    ]) {
+      await expect(youtube.blockButton(id)).toHaveCount(0);
+    }
+    await expect(youtube.blockButton("channel-home-guest")).toHaveCount(1);
+    await expect(youtube.blockButton("channel-home-guest"))
+      .toHaveAttribute("aria-label", "Block Guest Creator");
+    const labels = await extensionPage.locator(".cf-block-button")
+      .evaluateAll((buttons) => buttons.map((button) => button.getAttribute("aria-label") || ""));
+    expect(labels.filter((label) => /\b(?:views?|ago)\b/i.test(label))).toEqual([]);
+
+    for (let iteration = 1; iteration <= 4; iteration += 1) {
+      await extensionPage.evaluate((value) => {
+        const card = document.querySelector('[data-testid="channel-home-one"]');
+        const views = card?.querySelector('[data-testid="channel-home-one-views"]');
+        const age = card?.querySelector('[data-testid="channel-home-one-age"]');
+        if (views) views.textContent = `${value * 10}K views`;
+        if (age) age.textContent = `${value} days ago`;
+        document.dispatchEvent(new Event("yt-page-data-updated", { bubbles: true }));
+      }, iteration);
+      await expect(youtube.blockButton("channel-home-one")).toHaveCount(0);
+      await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    }
+  });
+
+  test("retains a different stable creator even when its display name matches the page", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      creatorCard({
+        displayName: "Fixture Creator",
+        handle: "@different-fixture-creator",
+        id: "same-name-different-channel"
+      })
+    ].join(""), "/@fixturecreator");
+
+    await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    await expect(youtube.blockButton("same-name-different-channel")).toHaveCount(1);
+    await expect(youtube.blockButton("same-name-different-channel"))
+      .toHaveAttribute("aria-label", "Block Fixture Creator");
+  });
+
+  test("reconciles a reused channel card when its creator changes", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      creatorCard({
+        displayName: "Guest Creator",
+        handle: "@guestcreator",
+        id: "reused-channel-card"
+      })
+    ].join(""), "/@fixturecreator");
+
+    await expect(youtube.blockButton("reused-channel-card")).toHaveCount(1);
+    await extensionPage.evaluate(() => {
+      const anchor = document.querySelector(
+        '[data-testid="reused-channel-card"] ytd-channel-name a'
+      );
+      anchor?.setAttribute("href", "/@fixturecreator");
+      anchor?.setAttribute("aria-label", "Fixture Creator");
+      if (anchor) anchor.textContent = "Fixture Creator";
+      document.dispatchEvent(new Event("yt-page-data-updated", { bubbles: true }));
+    });
+    await expect(youtube.blockButton("reused-channel-card")).toHaveCount(0);
+
+    await extensionPage.evaluate(() => {
+      const anchor = document.querySelector(
+        '[data-testid="reused-channel-card"] ytd-channel-name a'
+      );
+      anchor?.setAttribute("href", "/@guestcreator");
+      anchor?.setAttribute("aria-label", "Guest Creator");
+      if (anchor) anchor.textContent = "Guest Creator";
+      document.dispatchEvent(new Event("yt-page-data-updated", { bubbles: true }));
+    });
+    await expect(youtube.blockButton("reused-channel-card")).toHaveCount(1);
+    await expect(youtube.blockButton("reused-channel-card"))
+      .toHaveAttribute("aria-label", "Block Guest Creator");
+  });
+
+  test("keeps only the other creator control on a channel-page collaboration", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      `<ytd-rich-item-renderer data-testid="channel-collaboration">
+        <a href="/watch?v=channel-collaboration">Collaboration video</a>
+        <ytd-channel-name id="channel-name">
+          <a href="/@fixturecreator">Fixture Creator</a>
+          <a href="/@guestcreator">Guest Creator</a>
+        </ytd-channel-name>
+      </ytd-rich-item-renderer>`,
+      comment({
+        displayName: "Fixture Creator",
+        handle: "@fixturecreator",
+        id: "same-channel-comment"
+      })
+    ].join(""), "/@fixturecreator");
+
+    const collaboration = youtube.card("channel-collaboration");
+    await expect(collaboration.locator(".cf-block-button")).toHaveCount(1);
+    await expect(collaboration.getByRole("button", { name: "Block Guest Creator" }))
+      .toBeVisible();
+    await expect(youtube.blockButton("same-channel-comment")).toHaveCount(1);
+  });
+
+  test("keeps own compact Shorts header-only while retaining guest controls", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      shortsShelf(),
+      `<ytm-shorts-lockup-view-model-v2 data-testid="guest-compact-short">
+        <a id="avatar-link" href="/@guestcreator">Guest Creator</a>
+        <a href="/shorts/guest-compact-one">Guest compact Short</a>
+        <div class="shortsLockupViewModelHostOutsideMetadataMenu">
+          <button aria-label="More actions">More</button>
+        </div>
+      </ytm-shorts-lockup-view-model-v2>`
+    ].join(""), "/@fixturecreator/shorts");
+
+    await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    await expect(youtube.blockButton("compact-short")).toHaveCount(0);
+    await expect(youtube.blockButton("guest-compact-short")).toHaveCount(1);
+  });
+
+  test("refreshes channel identity during client-side channel navigation", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      creatorCard({
+        displayName: "Fixture Creator",
+        handle: "@fixturecreator",
+        id: "previous-channel-card"
+      })
+    ].join(""), "/@fixturecreator");
+
+    await expect(youtube.blockButton("previous-channel-card")).toHaveCount(0);
+    await extensionPage.evaluate(() => {
+      document.dispatchEvent(new Event("yt-navigate-start", { bubbles: true }));
+      history.pushState({}, "", "/@guestcreator");
+      const header = document.querySelector('[data-testid="channel-header"]');
+      const title = header?.querySelector("h1");
+      const anchor = header?.querySelector("a");
+      if (title) title.textContent = "Guest Creator";
+      anchor?.setAttribute("href", "/@guestcreator");
+      if (anchor) anchor.textContent = "@guestcreator";
+      document.dispatchEvent(new Event("yt-navigate-finish", { bubbles: true }));
+    });
+
+    await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    await expect(youtube.card("channel-header").locator(".cf-block-button"))
+      .toHaveAttribute("data-cf-identity", "handle:@guestcreator");
+    await expect(youtube.blockButton("previous-channel-card")).toHaveCount(1);
+    await expect(youtube.blockButton("previous-channel-card"))
+      .toHaveAttribute("aria-label", "Block Fixture Creator");
+  });
+
+  test("does not mistake channel Videos statistics for creator identities", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      channelTabLockup({
+        displayName: "Fixture Creator",
+        id: "channel-videos-card",
+        includeAvatar: false
+      })
+    ].join(""), "/@fixturecreator/videos");
+
+    await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    await expect(youtube.blockButton("channel-videos-card")).toHaveCount(0);
+
+    for (let iteration = 1; iteration <= 4; iteration += 1) {
+      await extensionPage.evaluate((value) => {
+        const card = document.querySelector('[data-testid="channel-videos-card"]');
+        const views = card?.querySelector('[data-testid="channel-videos-card-views"]');
+        const age = card?.querySelector('[data-testid="channel-videos-card-age"]');
+        if (views) views.textContent = `${value},001 views`;
+        if (age) age.textContent = `${value} hours ago`;
+        document.dispatchEvent(new Event("yt-page-data-updated", { bubbles: true }));
+      }, iteration);
+      await expect(youtube.blockButton("channel-videos-card")).toHaveCount(0);
+      await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    }
+  });
+
   test("offers independent block controls for every collaboration owner", async ({
     extensionPage,
     extensionStorage
@@ -333,6 +564,8 @@ test.describe("YouTube surfaces and menus", () => {
       rightRailLockup({ displayName: "Right Rail Creator", id: "rail-two" })
     ].join(""), "/watch?v=fixture-video");
 
+    await expect(youtube.blockButton("rail-one")).toHaveCount(1);
+    await expect(youtube.blockButton("rail-two")).toHaveCount(1);
     await expect(youtube.blockButton("rail-one")).toBeVisible();
     await youtube.blockButton("rail-one").click();
     await expect(youtube.card("rail-one")).toBeHidden();
@@ -359,6 +592,8 @@ test.describe("YouTube surfaces and menus", () => {
 
     const firstCourse = youtube.card("course-one");
     const button = firstCourse.getByRole("button", { name: "Block Course Creator" });
+    await expect(firstCourse.locator(".cf-block-button")).toHaveCount(1);
+    await expect(youtube.card("course-two").locator(".cf-block-button")).toHaveCount(1);
     await expect(button).toBeVisible();
     await button.click();
     await expect(firstCourse).toBeHidden();

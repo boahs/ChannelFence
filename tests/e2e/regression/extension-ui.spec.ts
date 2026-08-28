@@ -52,6 +52,33 @@ test.describe("extension UI", () => {
     expect(stored.cfBlockedChannels.map((entry) => entry.displayName)).toEqual(["Alpha Creator"]);
   });
 
+  test("options pages a 500-creator list while keeping every entry searchable", async ({
+    extensionId,
+    extensionPage,
+    extensionStorage
+  }) => {
+    await extensionStorage.set({
+      cfBlockedChannels: Array.from({ length: 500 }, (_, index) =>
+        blockedCreator(`@creator-${index}`, `Creator ${index}`))
+    });
+    const options = new OptionsPage(extensionPage, extensionId);
+    await options.open();
+
+    await expect(extensionPage.locator("#blockedCount")).toHaveText("500");
+    await expect(extensionPage.locator("#blockList > li")).toHaveCount(200);
+    await expect(extensionPage.locator("#listStatus"))
+      .toHaveText("Showing 200 of 500 matching creators.");
+
+    await extensionPage.getByRole("button", { name: "Show 200 more" }).click();
+    await expect(extensionPage.locator("#blockList > li")).toHaveCount(400);
+
+    await extensionPage.getByRole("searchbox", { name: "Search blocked creators" })
+      .fill("Creator 499");
+    await expect(extensionPage.locator("#blockList > li")).toHaveCount(1);
+    await expect(extensionPage.locator("#blockList")).toContainText("Creator 499");
+    await expect(extensionPage.locator("#listPagination")).toBeHidden();
+  });
+
   test("options toggles settings and imports a ChannelFence backup", async ({
     extensionId,
     extensionPage,

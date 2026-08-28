@@ -340,6 +340,64 @@
     }) || null;
   }
 
+  function createBlockedLookup(entries) {
+    const cleanEntries = sanitizeBlockedEntries(entries);
+    const byAlias = new Map();
+    const byName = new Map();
+    const byShortPath = new Map();
+    const rankByEntry = new Map();
+
+    cleanEntries.forEach((entry, index) => {
+      rankByEntry.set(entry, index);
+      for (const alias of Array.isArray(entry.aliases) ? entry.aliases : [entry.key]) {
+        if (alias && !byAlias.has(alias)) {
+          byAlias.set(alias, entry);
+        }
+      }
+      for (const name of entryNameKeys(entry)) {
+        if (!byName.has(name)) {
+          byName.set(name, entry);
+        }
+      }
+      for (const shortPath of Array.isArray(entry.shortPaths) ? entry.shortPaths : []) {
+        if (!byShortPath.has(shortPath)) {
+          byShortPath.set(shortPath, entry);
+        }
+      }
+    });
+
+    return { entries: cleanEntries, byAlias, byName, byShortPath, rankByEntry };
+  }
+
+  function findMatchingEntryInLookup(lookup, refs, names) {
+    if (!lookup) {
+      return null;
+    }
+    let match = null;
+    let matchRank = Number.POSITIVE_INFINITY;
+    for (const ref of uniqueRefs(refs)) {
+      const entry = lookup.byAlias?.get(ref.key);
+      const rank = entry ? (lookup.rankByEntry?.get(entry) ?? 0) : undefined;
+      if (entry && rank < matchRank) {
+        match = entry;
+        matchRank = rank;
+      }
+    }
+    if (match) {
+      return match;
+    }
+    for (const value of Array.isArray(names) ? names : []) {
+      const name = normalizeCreatorName(value);
+      const entry = name ? lookup.byName?.get(name) : null;
+      const rank = entry ? (lookup.rankByEntry?.get(entry) ?? 0) : undefined;
+      if (entry && rank < matchRank) {
+        match = entry;
+        matchRank = rank;
+      }
+    }
+    return match;
+  }
+
   function mergeBlockedEntry(entries, incoming) {
     const clean = sanitizeBlockedEntries(entries);
     const normalizedIncoming = incoming && createBlockedEntry(
@@ -368,6 +426,189 @@
     );
     const rest = clean.filter((_, index) => index !== matchIndex);
     return [merged, ...rest];
+  }
+
+  function mergeBlockedEntries(entries, incomingEntries) {
+    const incomingList = Array.isArray(incomingEntries) ? incomingEntries : [];
+    if (incomingList.length === 0) {
+      return Array.isArray(entries) ? entries : [];
+    }
+    const existing = sanitizeBlockedEntries(entries);
+    const activeNodes = new Set();
+    const aliasToNodes = new Map();
+    const pendingCanonicalNodes = new Set();
+    let dirtyHead = null;
+
+    function registerNode(node) {
+      for (const alias of node.entry.aliases) {
+        let nodes = aliasToNodes.get(alias);
+        if (!nodes) {
+          nodes = new Set();
+          aliasToNodes.set(alias, nodes);
+        }
+        nodes.add(node);
+      }
+    }
+
+    function unregisterNode(node) {
+      for (const alias of node.entry.aliases) {
+        const nodes = aliasToNodes.get(alias);
+        if (!nodes) {
+          continue;
+        }
+        nodes.delete(node);
+        if (nodes.size === 0) {
+          aliasToNodes.delete(alias);
+        }
+      }
+    }
+
+    function sanitizeDirtyHead() {
+      if (!dirtyHead) {
+        return;
+      }
+
+      unregisterNode(dirtyHead);
+      const cleanHead = createBlockedEntry(
+        [dirtyHead.entry.key, ...dirtyHead.entry.aliases, dirtyHead.entry.url],
+        dirtyHead.entry.displayName,
+        dirtyHead.entry.blockedAt,
+        dirtyHead.entry.shortPaths
+      );
+      if (!cleanHead) {
+        activeNodes.delete(dirtyHead);
+        dirtyHead = null;
+        return;
+      }
+      dirtyHead.entry = cleanHead;
+      registerNode(dirtyHead);
+
+      const claimed = new Set(cleanHead.aliases);
+      const affectedNodes = new Set();
+      for (const alias of claimed) {
+        for (const node of aliasToNodes.get(alias) || []) {
+          if (node !== dirtyHead) {
+            affectedNodes.add(node);
+          }
+        }
+      }
+
+      for (const node of affectedNodes) {
+        unregisterNode(node);
+        const remainingRefs = uniqueRefs([
+          node.entry.key,
+          ...node.entry.aliases,
+          node.entry.url
+        ]).filter((ref) => !claimed.has(ref.key));
+        const cleanEntry = createBlockedEntry(
+          remainingRefs,
+          node.entry.displayName,
+          node.entry.blockedAt,
+          node.entry.shortPaths
+        );
+        if (!cleanEntry) {
+          activeNodes.delete(node);
+          pendingCanonicalNodes.delete(node);
+          continue;
+        }
+        node.entry = cleanEntry;
+        registerNode(node);
+        pendingCanonicalNodes.add(node);
+      }
+
+      dirtyHead = null;
+    }
+
+    function sanitizeCurrentEntries() {
+      for (const node of pendingCanonicalNodes) {
+        if (!activeNodes.has(node)) {
+          continue;
+        }
+        unregisterNode(node);
+        const cleanEntry = createBlockedEntry(
+          [node.entry.key, ...node.entry.aliases, node.entry.url],
+          node.entry.displayName,
+          node.entry.blockedAt,
+          node.entry.shortPaths
+        );
+        if (!cleanEntry) {
+          activeNodes.delete(node);
+          continue;
+        }
+        node.entry = cleanEntry;
+        registerNode(node);
+      }
+      pendingCanonicalNodes.clear();
+      sanitizeDirtyHead();
+    }
+
+    existing.forEach((entry, index) => {
+      const node = { entry, rank: index };
+      activeNodes.add(node);
+      registerNode(node);
+      if (entry.aliases[0] !== entry.key) {
+        pendingCanonicalNodes.add(node);
+      }
+    });
+
+    incomingList.forEach((incoming, index) => {
+      if (index > 0) {
+        sanitizeCurrentEntries();
+      }
+      if (!incoming || typeof incoming !== "object") {
+        return;
+      }
+      const normalized = createBlockedEntry(
+        incoming.aliases || [incoming.key, incoming.url],
+        incoming.displayName,
+        incoming.blockedAt,
+        incoming.shortPaths
+      );
+      if (!normalized) {
+        return;
+      }
+
+      const matches = new Set();
+      for (const alias of normalized.aliases) {
+        for (const node of aliasToNodes.get(alias) || []) {
+          matches.add(node);
+        }
+      }
+      const preferredExisting = [...matches]
+        .sort((left, right) => left.rank - right.rank)[0];
+      const refs = uniqueRefs([
+        ...(preferredExisting?.entry.aliases || []),
+        ...normalized.aliases
+      ]);
+      const merged = createBlockedEntry(
+        refs,
+        preferredExisting?.entry.displayName === "Blocked creator"
+          ? normalized.displayName
+          : preferredExisting?.entry.displayName || normalized.displayName,
+        preferredExisting?.entry.blockedAt || normalized.blockedAt,
+        [
+          ...(preferredExisting?.entry.shortPaths || []),
+          ...normalized.shortPaths
+        ]
+      );
+      if (!merged) {
+        return;
+      }
+
+      if (preferredExisting) {
+        unregisterNode(preferredExisting);
+        activeNodes.delete(preferredExisting);
+        pendingCanonicalNodes.delete(preferredExisting);
+      }
+      const node = { entry: merged, rank: -(index + 1) };
+      activeNodes.add(node);
+      registerNode(node);
+      dirtyHead = node;
+    });
+
+    return [...activeNodes]
+      .sort((left, right) => left.rank - right.rank)
+      .map((node) => node.entry);
   }
 
   function removeEntriesMatchingRefs(entries, refs) {
@@ -406,7 +647,10 @@
     findMatchingEntry,
     entryNameKeys,
     findMatchingEntryByNames,
+    createBlockedLookup,
+    findMatchingEntryInLookup,
     mergeBlockedEntry,
+    mergeBlockedEntries,
     removeEntriesMatchingRefs,
     labelForEntry
   });

@@ -117,6 +117,60 @@ export function courseLockup(displayName: string, id = "course-lockup"): string 
     </yt-lockup-view-model>`;
 }
 
+export function channelTabLockup({
+  avatarHidden = false,
+  displayName,
+  id,
+  includeAvatar
+}: {
+  avatarHidden?: boolean;
+  displayName: string;
+  id: string;
+  includeAvatar: boolean;
+}): string {
+  const safeId = escapeHtml(id);
+  const safeName = escapeHtml(displayName);
+  const avatar = includeAvatar
+    ? `${avatarHidden ? "" : `<div class="ytLockupMetadataViewModelAvatar" style="display: none">
+        <div role="button" aria-label="Go to channel Stale Hidden Creator"></div>
+      </div>`}
+      <div class="ytLockupMetadataViewModelAvatar"${avatarHidden ? ' style="display: none"' : ""}>
+        <div role="button" aria-label="Go to channel ${safeName}"></div>
+      </div>`
+    : "";
+  return `
+    <ytd-rich-item-renderer data-testid="${safeId}">
+      <yt-lockup-view-model class="yt-lockup-view-model yt-lockup-view-model--wrapper">
+        <a class="thumbnail" href="/watch?v=${safeId}">Fixture video</a>
+        <div class="ytLockupViewModelMetadata">
+          <yt-lockup-metadata-view-model>
+            ${avatar}
+            <div class="ytLockupMetadataViewModelTextContainer" style="display: none">
+              <div class="ytLockupMetadataViewModelMetadata">
+                <div class="ytContentMetadataViewModelMetadataRow">
+                  <span role="text">Stale Hidden Creator</span>
+                </div>
+              </div>
+            </div>
+            <div class="ytLockupMetadataViewModelTextContainer">
+              <h3>A channel-tab video</h3>
+              <div class="ytLockupMetadataViewModelMetadata">
+                <div class="ytContentMetadataViewModelMetadataRow">
+                  <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextFirstPart"
+                        role="text" data-testid="${safeId}-views">58K views</span>
+                  <span aria-hidden="true"> &middot; </span>
+                  <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextLastPart"
+                        role="text" data-testid="${safeId}-age">2 weeks ago</span>
+                </div>
+              </div>
+            </div>
+            <button data-testid="${safeId}-menu" aria-label="More actions">More</button>
+          </yt-lockup-metadata-view-model>
+        </div>
+      </yt-lockup-view-model>
+    </ytd-rich-item-renderer>`;
+}
+
 export function promotedHomeCard(advertiser: string, id = "promoted-home-card"): string {
   const safeId = escapeHtml(id);
   const safeAdvertiser = escapeHtml(advertiser);

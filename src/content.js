@@ -108,12 +108,6 @@
     "yt-content-metadata-view-model .ytContentMetadataViewModelMetadataRow:first-child a[href]"
   ].join(",");
 
-  const LINKLESS_LOCKUP_CREATOR_SELECTOR = [
-    ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataTextFirstPart",
-    ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataTextLastPart",
-    ".ytContentMetadataViewModelMetadataRow:first-child [role='text']"
-  ].join(",");
-
   const LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR =
     ".ytContentMetadataViewModelMetadataRow:first-child";
 
@@ -137,6 +131,10 @@
   ];
 
   const PAGE_OWNER_SELECTOR = PAGE_OWNER_SELECTORS.join(",");
+  const CHANNEL_PAGE_HEADER_SELECTOR = [
+    "yt-page-header-renderer",
+    "ytd-c4-tabbed-header-renderer #channel-header-container"
+  ].join(",");
   const MUTATION_ROOT_SELECTOR = [
     CONTENT_SELECTOR,
     COMMENT_SELECTOR,
@@ -154,9 +152,11 @@
     hideComments: true,
     hideHomeShorts: false,
     blocked: [],
-    blockedKeys: new Set(),
+    blockedLookup: Shared.createBlockedLookup([]),
+    channelPageIdentity: null,
     currentUrl: location.href,
     scanScheduled: false,
+    scanWhenVisible: false,
     mutationScanScheduled: false,
     mutationRoots: new Set(),
     mutationShortsRoots: new Set(),
@@ -202,9 +202,31 @@
     document.documentElement.classList.remove("cf-watch-pending");
   }
 
-  function rebuildBlockedKeys() {
-    state.blocked = Shared.sanitizeBlockedEntries(state.blocked);
-    state.blockedKeys = new Set(state.blocked.flatMap((entry) => entry.aliases));
+  function rebuildBlockedLookup() {
+    state.blockedLookup = Shared.createBlockedLookup(state.blocked);
+    state.blocked = state.blockedLookup.entries;
+  }
+
+  function blockedListsEqual(left, right) {
+    if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) {
+      return false;
+    }
+    const arraysEqual = (first, second) => {
+      if (!Array.isArray(first) || !Array.isArray(second) || first.length !== second.length) {
+        return false;
+      }
+      return first.every((value, index) => value === second[index]);
+    };
+    return left.every((entry, index) => {
+      const candidate = right[index];
+      return Boolean(candidate &&
+        entry.key === candidate.key &&
+        entry.displayName === candidate.displayName &&
+        entry.url === candidate.url &&
+        entry.blockedAt === candidate.blockedAt &&
+        arraysEqual(entry.aliases, candidate.aliases) &&
+        arraysEqual(entry.shortPaths, candidate.shortPaths));
+    });
   }
 
   function requestActionUpdate() {
@@ -217,7 +239,7 @@
     state.hideComments = values[Shared.STORAGE.hideComments] !== false;
     state.hideHomeShorts = values[Shared.STORAGE.hideHomeShorts] === true;
     state.blocked = values[Shared.STORAGE.blocked] || [];
-    rebuildBlockedKeys();
+    rebuildBlockedLookup();
   }
 
   async function initializeState() {
@@ -328,7 +350,7 @@
     return [...contexts.values()];
   }
 
-  function refsFromElement(root) {
+  function refsFromElement(root, knownOwnerContexts) {
     if (!root || typeof root.querySelectorAll !== "function") {
       return [];
     }
@@ -341,7 +363,8 @@
       }
     }
 
-    for (const context of ownerContextsFromElement(root)) {
+    const ownerContexts = knownOwnerContexts ?? ownerContextsFromElement(root);
+    for (const context of ownerContexts) {
       refs.push(...context.refs);
       if (refs.length >= 8) {
         break;
@@ -350,13 +373,14 @@
     return Shared.uniqueRefs(refs);
   }
 
-  function ownerNamesFromElement(root) {
+  function ownerNamesFromElement(root, knownOwnerContexts) {
     if (!root || typeof root.querySelectorAll !== "function") {
       return [];
     }
 
     const names = new Set();
-    for (const context of ownerContextsFromElement(root)) {
+    const ownerContexts = knownOwnerContexts ?? ownerContextsFromElement(root);
+    for (const context of ownerContexts) {
       const normalized = Shared.normalizeCreatorName(context.displayName);
       if (normalized) {
         names.add(normalized);
@@ -406,14 +430,49 @@
     ));
   }
 
+  function isHiddenWithin(root, element) {
+    for (let current = element; current && current !== root; current = current.parentElement) {
+      const style = getComputedStyle(current);
+      if (style.display === "none" || style.visibility === "hidden") {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function linklessLockupCreatorElements(root) {
     if (!isLockupRoot(root) || typeof root.querySelectorAll !== "function") {
       return [];
     }
-    const metadata = [...root.querySelectorAll(LINKLESS_LOCKUP_CREATOR_SELECTOR)];
-    const row = root.querySelector(LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR);
-    const avatar = root.querySelector(LINKLESS_LOCKUP_AVATAR_SELECTOR);
-    return [...metadata, row, avatar].filter(Boolean);
+    const placementScore = (element) => Math.max(
+      elementVisibilityScore(element),
+      elementVisibilityScore(element.closest(
+        ".ytLockupMetadataViewModelAvatar, .ytContentMetadataViewModelMetadataRow"
+      ))
+    );
+    const avatar = [...root.querySelectorAll(LINKLESS_LOCKUP_AVATAR_SELECTOR)]
+      .filter((candidate) =>
+        cleanLinklessLockupCreatorName(linklessLockupCreatorLabel(candidate)))
+      .sort((left, right) => {
+        const hiddenDifference = Number(isHiddenWithin(root, left)) -
+          Number(isHiddenWithin(root, right));
+        return hiddenDifference || placementScore(right) - placementScore(left);
+      })[0];
+    if (avatar) {
+      // Modern lockups expose the creator through an accessibility-only avatar.
+      // That signal is authoritative. Parsing the metadata row as well would turn
+      // its view count and upload age into additional, bogus creators.
+      return [avatar];
+    }
+
+    // Treat a metadata row atomically. YouTube splits one row into FirstPart,
+    // LastPart, and role=text fragments; reading every fragment independently is
+    // what previously produced three controls from "11 views · 16 hours ago".
+    const rows = [...root.querySelectorAll(LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR)]
+      .filter((row) => !isHiddenWithin(root, row) &&
+        cleanLinklessLockupCreatorName(linklessLockupCreatorLabel(row)))
+      .sort((left, right) => placementScore(right) - placementScore(left));
+    return rows.slice(0, 1);
   }
 
   function cleanLinklessLockupCreatorName(value) {
@@ -421,6 +480,17 @@
       .replace(/\s+[·•]\s*(?:course|playlist|podcast)\s*$/i, "")
       .trim();
     if (!name || /^(?:course|playlist|podcast|view full course|\d+\s+lessons?)$/i.test(name)) {
+      return "";
+    }
+    const metadataOnly = [
+      /(?:^|\s)(?:no|\d[\d,.]*\s*[KMBT]?)\s+views?\b/i,
+      /\b\d+\s+(?:seconds?|minutes?|hours?|days?|weeks?|months?|years?)\s+ago\b/i,
+      /^(?:streamed|premiered|scheduled)\b/i,
+      /(?:^|\s)\d[\d,.]*\s*[KMBT]?\s+subscribers?\b/i,
+      /^(?:new|live|members only|4k|8k|cc)$/i,
+      /^(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+\d{1,2},?\s+\d{4}$/i
+    ].some((pattern) => pattern.test(name));
+    if (metadataOnly) {
       return "";
     }
     return name;
@@ -557,11 +627,64 @@
   }
 
   function matchingEntry(refs, ownerNames) {
-    const wanted = Shared.uniqueRefs(refs).map((ref) => ref.key);
-    if (wanted.some((key) => state.blockedKeys.has(key))) {
-      return Shared.findMatchingEntry(state.blocked, refs);
+    return Shared.findMatchingEntryInLookup(state.blockedLookup, refs, ownerNames);
+  }
+
+  function refreshChannelPageIdentity() {
+    const routeRef = Shared.normalizeChannelRef(location.href);
+    if (!routeRef) {
+      state.channelPageIdentity = null;
+      return;
     }
-    return Shared.findMatchingEntryByNames(state.blocked, ownerNames);
+
+    const headers = [...document.querySelectorAll(CHANNEL_PAGE_HEADER_SELECTOR)]
+      .filter((header) => header.isConnected)
+      .sort((left, right) => elementVisibilityScore(right) - elementVisibilityScore(left));
+    const matchingHeader = headers.find((header) => {
+      return refsFromElement(header).some((ref) => ref.key === routeRef.key);
+    });
+    const header = matchingHeader || headers[0] || null;
+    const headerContexts = header ? ownerContextsFromElement(header) : [];
+    const headerRefs = header ? refsFromElement(header, headerContexts) : [];
+    const refs = Shared.uniqueRefs([
+      routeRef,
+      ...metadataRefs(),
+      ...headerRefs
+    ]);
+    const names = new Set();
+    const addName = (value) => {
+      const normalized = Shared.normalizeCreatorName(value);
+      if (normalized) {
+        names.add(normalized);
+      }
+    };
+    if (header) {
+      header.querySelectorAll(
+        "h1, #channel-name, [class*='page-header-title']"
+      ).forEach((element) => addName(element.textContent));
+    }
+    headerContexts.forEach((context) => addName(context.displayName));
+
+    state.channelPageIdentity = {
+      stableKeys: new Set(refs
+        .filter((ref) => ref.type !== "name")
+        .map((ref) => ref.key)),
+      names
+    };
+  }
+
+  function ownerBelongsToCurrentChannel(ownerContext) {
+    const pageIdentity = state.channelPageIdentity;
+    if (!pageIdentity || !ownerContext) {
+      return false;
+    }
+    const refs = Shared.uniqueRefs(ownerContext.refs);
+    const stableRefs = refs.filter((ref) => ref.type !== "name");
+    if (stableRefs.length > 0) {
+      return stableRefs.every((ref) => pageIdentity.stableKeys.has(ref.key));
+    }
+    const ownerName = Shared.normalizeCreatorName(ownerContext.displayName);
+    return Boolean(ownerName && pageIdentity.names.has(ownerName));
   }
 
   function bestAnchor(root) {
@@ -582,8 +705,22 @@
       ));
     });
     if (linklessCreator) {
-      return linklessCreator.closest(".ytContentMetadataViewModelMetadataRow") ||
-        linklessCreator.parentElement;
+      const identityHost = linklessCreator.closest(
+        ".ytContentMetadataViewModelMetadataRow, .ytLockupMetadataViewModelAvatar"
+      ) || linklessCreator.parentElement;
+      if (identityHost && !isHiddenWithin(root, identityHost)) {
+        return identityHost;
+      }
+
+      // Accessibility-only creator avatars can live in a hidden legacy copy.
+      // Keep their identity, but place the control in the visible metadata row.
+      const visibleRow = [...root.querySelectorAll(LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR)]
+        .filter((row) => !isHiddenWithin(root, row))
+        .sort((left, right) => elementVisibilityScore(right) - elementVisibilityScore(left))[0];
+      if (visibleRow) {
+        return visibleRow;
+      }
+      return null;
     }
     if (!pageButton) {
       return null;
@@ -1094,6 +1231,10 @@
       return;
     }
     const key = identityKey(refs);
+    const host = ownerContext?.anchor?.parentElement || buttonHost(root, pageButton);
+    if (!host || host.closest("#cf-hard-block-overlay")) {
+      return;
+    }
     const existingButton = buttonsOwnedByRoot(root)
       .find((button) => button.dataset.cfIdentity === key);
     if (existingButton) {
@@ -1103,12 +1244,11 @@
           existingButton.__channelFenceAnchor !== ownerContext.anchor) {
         ownerContext.anchor.insertAdjacentElement("afterend", existingButton);
         existingButton.__channelFenceAnchor = ownerContext.anchor;
+      } else if (!ownerContext?.anchor && existingButton.parentElement !== host) {
+        // YouTube swaps hidden and visible metadata containers while hydrating
+        // cards. Keep a retained control attached to the current visible host.
+        host.append(existingButton);
       }
-      return;
-    }
-
-    const host = ownerContext?.anchor?.parentElement || buttonHost(root, pageButton);
-    if (!host || host.closest("#cf-hard-block-overlay")) {
       return;
     }
 
@@ -1280,16 +1420,23 @@
     actionBar.prepend(action);
   }
 
-  function ensureOwnerButtons(root, pageButton) {
-    const discoveredOwners = ownerContextsFromElement(root);
+  function ensureOwnerButtons(root, pageButton, knownOwnerContexts) {
+    const discoveredOwners = knownOwnerContexts ?? ownerContextsFromElement(root);
     const owners = discoveredOwners.filter((context) => {
       if (pageButton || !context.anchor) {
         return true;
       }
       return context.anchor.closest(`${CONTENT_SELECTOR},${COMMENT_SELECTOR}`) === root;
+    }).filter((context) => {
+      return pageButton || !root.matches?.(CONTENT_SELECTOR) ||
+        !ownerBelongsToCurrentChannel(context);
     });
     if (root.matches?.(COMPACT_SHORTS_SELECTOR)) {
       shortsActionsOwnedByRoot(root).forEach((action) => action.remove());
+      if (!pageButton && state.channelPageIdentity && owners.length === 0) {
+        buttonsOwnedByRoot(root).forEach((button) => button.remove());
+        return;
+      }
       ensureCompactShortButton(root);
       return;
     }
@@ -1308,7 +1455,12 @@
     }
 
     shortsActionsOwnedByRoot(root).forEach((action) => action.remove());
-    const contexts = owners.length > 0 ? owners : [null];
+    const contexts = owners.length > 0 ? owners : (pageButton ? [null] : []);
+    if (contexts.length === 0) {
+      buttonsOwnedByRoot(root).forEach((button) => button.remove());
+      shortsActionsOwnedByRoot(root).forEach((action) => action.remove());
+      return;
+    }
     const expectedKeys = new Set(
       contexts.filter(Boolean).map((context) => identityKey(context.refs))
     );
@@ -1336,15 +1488,16 @@
       ? state.compactShortContexts.get(compactPath)
       : null;
     const exactShortEntry = compactPath
-      ? state.blocked.find((entry) => entry.shortPaths?.includes(compactPath))
+      ? state.blockedLookup.byShortPath.get(compactPath) || null
       : null;
     if (isCompactShort && !compactContext && !exactShortEntry) {
       inspectCompactShortCreator(item);
     }
-    const refs = compactContext?.refs || refsFromElement(item);
+    const discoveredOwners = compactContext ? [] : ownerContextsFromElement(item);
+    const refs = compactContext?.refs || refsFromElement(item, discoveredOwners);
     const ownerNames = compactContext?.displayName
       ? [compactContext.displayName]
-      : ownerNamesFromElement(item);
+      : ownerNamesFromElement(item, discoveredOwners);
     const blocked = Boolean(exactShortEntry || matchingEntry(refs, ownerNames));
     const isShortsViewer = isShortsRoute() && item.matches("ytd-reel-video-renderer");
     const shouldHide = state.enabled && blocked && (!isComment || state.hideComments) &&
@@ -1362,7 +1515,7 @@
         .forEach((button) => button.remove());
       return;
     }
-    ensureOwnerButtons(item, false);
+    ensureOwnerButtons(item, false, discoveredOwners);
   }
 
   function pauseVisibleVideos() {
@@ -1591,6 +1744,7 @@
 
     if (location.href !== state.currentUrl) {
       state.currentUrl = location.href;
+      state.channelPageIdentity = null;
       clearBlockedShortSkip();
       removeOverlay();
       markWatchPending();
@@ -1613,6 +1767,7 @@
       return;
     }
 
+    refreshChannelPageIdentity();
     processShortsVisibility();
     document.querySelectorAll(CONTENT_SELECTOR).forEach((item) => processItem(item, false));
     document.querySelectorAll(COMMENT_SELECTOR).forEach((item) => processItem(item, true));
@@ -1680,10 +1835,13 @@
       includeDescendants
     );
 
+    const ownerSelector = Shared.normalizeChannelRef(location.href)
+      ? CHANNEL_PAGE_HEADER_SELECTOR
+      : PAGE_OWNER_SELECTOR;
     const pageOwnerChanged = routeHasCurrentCreator() && Boolean(
-      element.closest?.(PAGE_OWNER_SELECTOR) ||
-      element.matches?.(PAGE_OWNER_SELECTOR) ||
-      (includeDescendants && element.querySelector?.(PAGE_OWNER_SELECTOR)) ||
+      element.closest?.(ownerSelector) ||
+      element.matches?.(ownerSelector) ||
+      (includeDescendants && element.querySelector?.(ownerSelector)) ||
       element.matches?.("meta[itemprop='channelId']") ||
       (includeDescendants && element.querySelector?.("meta[itemprop='channelId']"))
     );
@@ -1705,6 +1863,10 @@
     state.mutationRoots.clear();
     state.mutationShortsRoots.clear();
     state.mutationRouteDirty = false;
+
+    if (routeDirty) {
+      refreshChannelPageIdentity();
+    }
 
     shortsRoots.filter((root) => root.isConnected)
       .forEach((root) => processShortsVisibilityWithin(root));
@@ -1737,7 +1899,7 @@
       return false;
     }
     state.blocked = Shared.mergeBlockedEntry(state.blocked, entry);
-    rebuildBlockedKeys();
+    rebuildBlockedLookup();
     await chrome.storage.local.set({ [Shared.STORAGE.blocked]: state.blocked });
     showToast(`Blocked ${Shared.labelForEntry(entry)}`, {
       label: "Undo",
@@ -1749,7 +1911,7 @@
 
   async function unblockCreator(refs) {
     state.blocked = Shared.removeEntriesMatchingRefs(state.blocked, refs);
-    rebuildBlockedKeys();
+    rebuildBlockedLookup();
     await chrome.storage.local.set({ [Shared.STORAGE.blocked]: state.blocked });
     scheduleScan();
   }
@@ -1781,6 +1943,15 @@
     state.toastTimer = setTimeout(() => toast.remove(), 6000);
   }
 
+  function scheduleStorageScan() {
+    if (document.visibilityState === "hidden") {
+      state.scanWhenVisible = true;
+      return;
+    }
+    state.scanWhenVisible = false;
+    scheduleScan();
+  }
+
   chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName !== "local") {
       return;
@@ -1795,13 +1966,23 @@
       state.hideHomeShorts = changes[Shared.STORAGE.hideHomeShorts].newValue === true;
     }
     if (changes[Shared.STORAGE.blocked]) {
-      state.blocked = changes[Shared.STORAGE.blocked].newValue || [];
-      rebuildBlockedKeys();
+      const nextBlocked = changes[Shared.STORAGE.blocked].newValue || [];
+      if (!blockedListsEqual(state.blocked, nextBlocked)) {
+        state.blocked = nextBlocked;
+        rebuildBlockedLookup();
+      }
     }
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked]) {
       requestActionUpdate();
     }
-    scheduleScan();
+    scheduleStorageScan();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && state.scanWhenVisible) {
+      state.scanWhenVisible = false;
+      scheduleScan();
+    }
   });
 
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
@@ -1858,6 +2039,7 @@
 
   document.addEventListener("yt-navigate-start", () => {
     state.navigationInProgress = true;
+    state.channelPageIdentity = null;
     state.pendingMenuContext = null;
     removeOverlay();
     markWatchPending();

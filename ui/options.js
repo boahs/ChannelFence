@@ -13,6 +13,9 @@ const elements = {
   search: document.getElementById("searchInput"),
   list: document.getElementById("blockList"),
   empty: document.getElementById("emptyState"),
+  pagination: document.getElementById("listPagination"),
+  listStatus: document.getElementById("listStatus"),
+  loadMoreButton: document.getElementById("loadMoreButton"),
   exportButton: document.getElementById("exportButton"),
   importButton: document.getElementById("importButton"),
   clearButton: document.getElementById("clearButton"),
@@ -22,6 +25,9 @@ const elements = {
 
 let blockedEntries = [];
 let toastTimer;
+let visibleLimit = 200;
+let renderScheduled = false;
+const LIST_PAGE_SIZE = 200;
 
 function showToast(message) {
   clearTimeout(toastTimer);
@@ -42,7 +48,6 @@ function formatDate(value) {
 async function persistBlocked(entries, message) {
   blockedEntries = Shared.sanitizeBlockedEntries(entries);
   await chrome.storage.local.set({ [Shared.STORAGE.blocked]: blockedEntries });
-  renderList();
   if (message) {
     showToast(message);
   }
@@ -53,6 +58,7 @@ function renderList() {
   const filtered = blockedEntries.filter((entry) => {
     return `${Shared.labelForEntry(entry)} ${entry.key}`.toLowerCase().includes(query);
   });
+  const visibleEntries = filtered.slice(0, visibleLimit);
 
   elements.list.replaceChildren();
   elements.blockedCount.textContent = String(blockedEntries.length);
@@ -60,8 +66,13 @@ function renderList() {
   elements.empty.textContent = blockedEntries.length === 0
     ? "Your block list is empty."
     : "No blocked creators match this search.";
+  elements.pagination.hidden = visibleEntries.length >= filtered.length;
+  elements.listStatus.textContent = visibleEntries.length < filtered.length
+    ? `Showing ${visibleEntries.length} of ${filtered.length} matching creators.`
+    : "";
+  const fragment = document.createDocumentFragment();
 
-  for (const entry of filtered) {
+  for (const entry of visibleEntries) {
     const item = document.createElement("li");
     item.className = "block-list__item";
 
@@ -90,8 +101,20 @@ function renderList() {
     });
 
     item.append(avatar, details, unblock);
-    elements.list.append(item);
+    fragment.append(item);
   }
+  elements.list.append(fragment);
+}
+
+function scheduleRenderList() {
+  if (renderScheduled) {
+    return;
+  }
+  renderScheduled = true;
+  requestAnimationFrame(() => {
+    renderScheduled = false;
+    renderList();
+  });
 }
 
 elements.enabled.addEventListener("change", async () => {
@@ -109,7 +132,15 @@ elements.shorts.addEventListener("change", async () => {
   showToast(elements.shorts.checked ? "Shorts will be hidden in feeds" : "Shorts will remain in feeds");
 });
 
-elements.search.addEventListener("input", renderList);
+elements.search.addEventListener("input", () => {
+  visibleLimit = LIST_PAGE_SIZE;
+  scheduleRenderList();
+});
+
+elements.loadMoreButton.addEventListener("click", () => {
+  visibleLimit += LIST_PAGE_SIZE;
+  renderList();
+});
 
 elements.manualForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -181,10 +212,7 @@ elements.importFile.addEventListener("change", async () => {
     if (incoming.length === 0) {
       throw new Error("No valid channels");
     }
-    let merged = blockedEntries;
-    for (const entry of incoming) {
-      merged = Shared.mergeBlockedEntry(merged, entry);
-    }
+    const merged = Shared.mergeBlockedEntries(blockedEntries, incoming);
     await persistBlocked(merged, `Imported ${incoming.length} creator${incoming.length === 1 ? "" : "s"}`);
   } catch {
     showToast("That file is not a valid ChannelFence export");

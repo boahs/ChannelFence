@@ -88,7 +88,8 @@ test("recognizes membership lockups and watch-page creator menus", () => {
   assert.match(contentScript, /"\.yt-lockup-view-model"/);
   assert.match(contentScript, /"\.yt-lockup-view-model--wrapper"/);
   assert.match(contentScript, /control\.closest\("ytd-watch-metadata, ytd-video-primary-info-renderer"\)/);
-  assert.match(contentScript, /LINKLESS_LOCKUP_CREATOR_SELECTOR/);
+  assert.match(contentScript, /LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR/);
+  assert.match(contentScript, /LINKLESS_LOCKUP_AVATAR_SELECTOR/);
 });
 
 test("creator menu item inherits YouTube's light or dark theme color", () => {
