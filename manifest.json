@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ChannelFence – YouTube Channel Blocker",
   "short_name": "ChannelFence",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Block YouTube channels and creators across Home, search, recommendations, Shorts, comments, and direct visits.",
   "homepage_url": "https://boahs.github.io/ChannelFence/",
   "permissions": [
