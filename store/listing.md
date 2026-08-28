@@ -10,12 +10,12 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ## Detailed description
 
-ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Shorts, playlists, comments, and direct pages.
+ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
 Features:
 
 - Block creators with one click beside their channel name.
-- Block directly from a video’s three-dot menu with a clearly labeled ChannelFence action.
+- Block directly from supported video and compact Shorts three-dot menus with a clearly labeled ChannelFence action.
 - Add a creator manually by pasting their YouTube handle or channel URL.
 - Block the current creator directly from the YouTube Shorts viewer and move to the next Short.
 - Block a creator from a compact Shorts card without opening the Short or leaving the feed.
@@ -25,7 +25,7 @@ Features:
 - Undo a block immediately or manage your complete block list at any time.
 - Pause blocking without deleting your list.
 - Import or export a private block-list backup.
-- No account, analytics, tracking, advertising, or external server.
+- No account, analytics, tracking, advertising, remote code, or developer-controlled server.
 
 Privacy by design:
 
@@ -65,7 +65,7 @@ Required to save the user's enabled state, comment and feed-level Shorts prefere
 
 ### www.youtube.com and m.youtube.com site access
 
-Required to read public creator identifiers from the page, retrieve public creator metadata from YouTube when a user blocks a compact Short, add user-facing block buttons, hide matching content, and display the direct-navigation block screen. The extension does not request access to other websites.
+Required to read public creator identifiers from the page, retrieve public creator metadata from YouTube when compact Shorts omit that identity and the block list is not empty, add user-facing block buttons, hide matching content, and display the direct-navigation block screen. The extension does not request access to other websites.
 
 ## Privacy practices answers
 

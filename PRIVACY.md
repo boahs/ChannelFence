@@ -2,7 +2,7 @@
 
 Effective date: August 27, 2026
 
-ChannelFence is designed to work without an account, analytics, advertising, or an external server. Its single purpose is to give users local controls for hiding selected creators and optional Shorts shelves in YouTube feeds.
+ChannelFence is designed to work without an account, analytics, advertising, or a developer-controlled server. Its single purpose is to give users local controls for hiding selected creators and optional Shorts shelves in YouTube feeds.
 
 ## Information ChannelFence processes
 
