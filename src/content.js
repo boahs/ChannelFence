@@ -250,6 +250,7 @@
         entry.url === candidate.url &&
         entry.blockedAt === candidate.blockedAt &&
         arraysEqual(entry.aliases, candidate.aliases) &&
+        arraysEqual(entry.nameAliases, candidate.nameAliases) &&
         arraysEqual(entry.shortPaths, candidate.shortPaths));
     });
   }
@@ -263,8 +264,12 @@
     state.enabled = values[Shared.STORAGE.enabled] !== false;
     state.hideComments = values[Shared.STORAGE.hideComments] !== false;
     state.hideHomeShorts = values[Shared.STORAGE.hideHomeShorts] === true;
-    state.blocked = values[Shared.STORAGE.blocked] || [];
+    const storedBlocked = values[Shared.STORAGE.blocked] || [];
+    state.blocked = storedBlocked;
     rebuildBlockedLookup();
+    if (!blockedListsEqual(storedBlocked, state.blocked)) {
+      await chrome.storage.local.set({ [Shared.STORAGE.blocked]: state.blocked });
+    }
   }
 
   async function initializeState() {
@@ -957,8 +962,8 @@
   }
 
   function repairCanonicalChannelEntryLabel(entry, context) {
-    const displayName = Shared.cleanCreatorDisplayName(context?.displayName);
-    if (!entry || !displayName || entry.displayName === displayName) {
+    const detectedTitle = Shared.cleanCreatorDisplayName(context?.displayName);
+    if (!entry || !detectedTitle) {
       return entry;
     }
     const index = state.blocked.findIndex((candidate) => candidate.key === entry.key);
@@ -967,11 +972,12 @@
     }
     const repaired = Shared.createBlockedEntry(
       state.blocked[index].aliases,
-      displayName,
+      detectedTitle,
       state.blocked[index].blockedAt,
-      state.blocked[index].shortPaths
+      state.blocked[index].shortPaths,
+      []
     );
-    if (!repaired) {
+    if (!repaired || blockedListsEqual([state.blocked[index]], [repaired])) {
       return entry;
     }
 

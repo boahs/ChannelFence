@@ -28,7 +28,7 @@ test.describe("feed blocking", () => {
     expect(values.cfBlockedChannels).toHaveLength(1);
     expect(values.cfBlockedChannels[0]).toMatchObject({
       aliases: ["handle:@alpha"],
-      displayName: "Alpha Creator"
+      displayName: "alpha"
     });
     expect(values.cfBlockedChannels[0].displayName).not.toBe("8:41");
 

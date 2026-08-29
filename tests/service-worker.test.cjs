@@ -17,7 +17,7 @@ function eventSlot() {
   };
 }
 
-function loadWorker() {
+function loadWorker(options = {}) {
   const calls = [];
   const events = {
     installed: eventSlot(),
@@ -25,7 +25,7 @@ function loadWorker() {
     message: eventSlot(),
     tabUpdated: eventSlot()
   };
-  const values = {
+  const values = options.values || {
     cfEnabled: true,
     cfBlockedChannels: [{ aliases: ["handle:example"] }],
     cfHideComments: true
@@ -45,7 +45,7 @@ function loadWorker() {
     storage: {
       local: {
         get: async () => values,
-        set: async () => undefined
+        set: async (details) => calls.push(["storage", details])
       }
     },
     tabs: {
@@ -60,7 +60,7 @@ function loadWorker() {
         enabled: "cfEnabled",
         blocked: "cfBlockedChannels"
       },
-      sanitizeBlockedEntries: (entries) => entries || []
+      sanitizeBlockedEntries: options.sanitizeBlockedEntries || ((entries) => entries || [])
     },
     chrome,
     importScripts: () => undefined
@@ -91,4 +91,31 @@ test("uses a blank global badge and a count only for a YouTube sender tab", asyn
   await new Promise((resolve) => setImmediate(resolve));
   assert.ok(calls.some(([type, details]) =>
     type === "badge" && details.text === "" && details.tabId === 42));
+});
+
+test("migrates canonical blocked-entry labels when the extension updates", async () => {
+  const values = {
+    cfEnabled: true,
+    cfBlockedChannels: [{
+      aliases: ["handle:@rokujones"],
+      displayName: "Roku Jones",
+      key: "handle:@rokujones"
+    }],
+    cfHideComments: true
+  };
+  const migrated = [{
+    aliases: ["handle:@rokujones"],
+    displayName: "rokujones",
+    key: "handle:@rokujones",
+    nameAliases: []
+  }];
+  const { calls, events } = loadWorker({
+    values,
+    sanitizeBlockedEntries: () => migrated
+  });
+
+  await events.installed.listener({ reason: "update" });
+
+  assert.ok(calls.some(([type, details]) =>
+    type === "storage" && details.cfBlockedChannels === migrated));
 });

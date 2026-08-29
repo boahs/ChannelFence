@@ -56,7 +56,10 @@ async function persistBlocked(entries, message) {
 function renderList() {
   const query = elements.search.value.trim().toLowerCase();
   const filtered = blockedEntries.filter((entry) => {
-    return `${Shared.labelForEntry(entry)} ${entry.key}`.toLowerCase().includes(query);
+    const nameAliases = Array.isArray(entry.nameAliases) ? entry.nameAliases.join(" ") : "";
+    return `${Shared.labelForEntry(entry)} ${entry.key} ${nameAliases}`
+      .toLowerCase()
+      .includes(query);
   });
   const visibleEntries = filtered.slice(0, visibleLimit);
 

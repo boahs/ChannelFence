@@ -8,9 +8,9 @@
 - Prevented stale creator metadata from blocking or advancing the wrong Short during YouTube's client-side navigation.
 - Prevented native Next controls and scroll fallback from advancing twice for one blocked Short.
 - Kept unresolved or unavailable Shorts routes stable instead of entering repeated navigation loops.
-- Used the canonical channel-route handle for profile-page blocks instead of unrelated hidden header links such as "Community".
+- Stored and displayed handle-backed creators by their stable YouTube handle without the leading `@`, instead of a mutable channel title or unrelated hidden header label such as "Community".
 - Prevented matching display names from overriding a different stable channel handle, including collaboration cards.
-- Repaired older correct-handle entries with an incorrect profile label when their canonical channel page is visited.
+- Migrated older handle-backed entries with title-based labels during extension startup or update, and retained current public titles only as non-visible fallbacks for linkless cards.
 
 ### Changed
 
@@ -21,7 +21,7 @@
 
 - Added deterministic coverage for slow Shorts controls, stale renderers, unresolved owners, canonical route changes, and double-advance races.
 - Added live YouTube coverage for opening a pre-blocked Short without returning Home.
-- Added deterministic and live coverage for canonical profile identity, legacy-label repair, and safe linked/linkless collaboration matching.
+- Added deterministic and live coverage for canonical handle labels, legacy-label migration, and safe linked/linkless collaboration matching, including the real `@rokujones` profile.
 
 There are no new permissions, no remote code, and no analytics in this release.
 

@@ -37,6 +37,36 @@ test("uses the live channel route as the canonical header identity", async ({
   await expect(controls).not.toHaveAttribute("aria-label", /Community/i);
 });
 
+test("stores a live channel block with the canonical handle label", async ({
+  extensionPage,
+  extensionStorage
+}) => {
+  await extensionPage.goto("https://www.youtube.com/@rokujones", {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+
+  const control = extensionPage.locator(
+    "yt-page-header-renderer .cf-channel-header-block, " +
+    "ytd-c4-tabbed-header-renderer #channel-header-container .cf-channel-header-block"
+  ).first();
+  await expect(control).toBeVisible({ timeout: 30_000 });
+  await expect(control).toHaveAttribute("data-cf-identity", "handle:@rokujones");
+  await control.click();
+
+  await expect(extensionPage.locator("#cf-hard-block-overlay"))
+    .toContainText("rokujones is on your ChannelFence block list.", { timeout: 15_000 });
+  await expect.poll(async () => {
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ displayName: string; key: string }>;
+    }>("cfBlockedChannels");
+    return stored.cfBlockedChannels[0];
+  }, { timeout: 15_000 }).toMatchObject({
+    displayName: "rokujones",
+    key: "handle:@rokujones"
+  });
+});
+
 test("keeps live channel-card controls singular and ignores video statistics", async ({
   extensionId,
   extensionPage

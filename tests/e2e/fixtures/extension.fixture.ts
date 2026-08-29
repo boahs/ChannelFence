@@ -115,6 +115,24 @@ export { expect } from "@playwright/test";
 
 export function blockedCreator(handle: string, displayName: string) {
   const normalizedHandle = handle.startsWith("@") ? handle.toLowerCase() : `@${handle.toLowerCase()}`;
+  const canonicalDisplayName = normalizedHandle.slice(1);
+  const cleanDisplayName = displayName.trim();
+  const nameAliases = cleanDisplayName &&
+    cleanDisplayName.replace(/^@/, "").toLowerCase() !== canonicalDisplayName
+    ? [cleanDisplayName]
+    : [];
+  return {
+    key: `handle:${normalizedHandle}`,
+    aliases: [`handle:${normalizedHandle}`],
+    displayName: canonicalDisplayName,
+    nameAliases,
+    url: `https://www.youtube.com/${normalizedHandle}`,
+    blockedAt: "2026-08-20T12:00:00.000Z"
+  };
+}
+
+export function legacyBlockedCreator(handle: string, displayName: string) {
+  const normalizedHandle = handle.startsWith("@") ? handle.toLowerCase() : `@${handle.toLowerCase()}`;
   return {
     key: `handle:${normalizedHandle}`,
     aliases: [`handle:${normalizedHandle}`],

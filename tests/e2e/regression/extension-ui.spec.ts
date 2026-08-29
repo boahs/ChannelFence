@@ -14,12 +14,12 @@ test.describe("extension UI", () => {
     await popup.open();
 
     await expect(extensionPage.locator("#blockedCount")).toHaveText("1");
-    await expect(extensionPage.locator("#recentList")).toContainText("Alpha Creator");
+    await expect(extensionPage.locator("#recentList")).toContainText("alpha");
     await expect(extensionPage.getByRole("link", { name: "Report a bug" })).toHaveAttribute(
       "href",
       "https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml"
     );
-    await extensionPage.getByRole("button", { name: "Unblock Alpha Creator" }).click();
+    await extensionPage.getByRole("button", { name: "Unblock alpha" }).click();
     await expect(extensionPage.locator("#blockedCount")).toHaveText("0");
     expect((await extensionStorage.get<{ cfBlockedChannels: unknown[] }>("cfBlockedChannels"))
       .cfBlockedChannels).toEqual([]);
@@ -41,15 +41,15 @@ test.describe("extension UI", () => {
 
     await expect(extensionPage.locator("#blockedCount")).toHaveText("2");
     await extensionPage.getByRole("searchbox", { name: "Search blocked creators" }).fill("beta");
-    await expect(extensionPage.locator("#blockList")).toContainText("Beta Creator");
-    await expect(extensionPage.locator("#blockList")).not.toContainText("Alpha Creator");
+    await expect(extensionPage.locator("#blockList")).toContainText("beta");
+    await expect(extensionPage.locator("#blockList")).not.toContainText("alpha");
 
     await extensionPage.locator("#blockList").getByRole("button", { name: "Unblock" }).click();
     await expect(extensionPage.locator("#blockedCount")).toHaveText("1");
     const stored = await extensionStorage.get<{ cfBlockedChannels: Array<{ displayName: string }> }>(
       "cfBlockedChannels"
     );
-    expect(stored.cfBlockedChannels.map((entry) => entry.displayName)).toEqual(["Alpha Creator"]);
+    expect(stored.cfBlockedChannels.map((entry) => entry.displayName)).toEqual(["alpha"]);
   });
 
   test("options pages a 500-creator list while keeping every entry searchable", async ({
@@ -75,7 +75,7 @@ test.describe("extension UI", () => {
     await extensionPage.getByRole("searchbox", { name: "Search blocked creators" })
       .fill("Creator 499");
     await expect(extensionPage.locator("#blockList > li")).toHaveCount(1);
-    await expect(extensionPage.locator("#blockList")).toContainText("Creator 499");
+    await expect(extensionPage.locator("#blockList")).toContainText("creator-499");
     await expect(extensionPage.locator("#listPagination")).toBeHidden();
   });
 
@@ -116,7 +116,7 @@ test.describe("extension UI", () => {
       cfHideComments: false,
       cfHideHomeShorts: true
     });
-    expect(stored.cfBlockedChannels[0].displayName).toBe("Imported Creator");
+    expect(stored.cfBlockedChannels[0].displayName).toBe("imported");
   });
 
   test("popup toggles the Hide Shorts in feeds preference", async ({
@@ -182,13 +182,14 @@ test.describe("extension UI", () => {
     await input.fill("youtube.com/@ManualCreator/videos");
     await extensionPage.getByRole("button", { name: "Block creator" }).click();
     await expect(extensionPage.locator("#blockedCount")).toHaveText("1");
-    await expect(extensionPage.locator("#blockList")).toContainText("@manualcreator");
+    await expect(extensionPage.locator("#blockList .block-list__name"))
+      .toHaveText("manualcreator");
 
     const stored = await extensionStorage.get<{
       cfBlockedChannels: Array<{ key: string; displayName: string }>;
     }>("cfBlockedChannels");
     expect(stored.cfBlockedChannels).toEqual([
-      expect.objectContaining({ key: "handle:@manualcreator", displayName: "@manualcreator" })
+      expect.objectContaining({ key: "handle:@manualcreator", displayName: "manualcreator" })
     ]);
 
     await input.fill("@ManualCreator");
@@ -219,6 +220,6 @@ test.describe("extension UI", () => {
     }
     const payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
     expect(payload).toMatchObject({ product: "ChannelFence", formatVersion: 1 });
-    expect(payload.blockedChannels[0].displayName).toBe("Alpha Creator");
+    expect(payload.blockedChannels[0].displayName).toBe("alpha");
   });
 });

@@ -226,22 +226,68 @@
       .filter(Boolean))].slice(0, 50);
   }
 
-  function createBlockedEntry(refs, displayName, blockedAt, shortPaths) {
+  function canonicalCreatorLabel(refs, displayName) {
+    const cleanRefs = uniqueRefs(refs);
+    const handle = cleanRefs.find((ref) => ref.type === "handle");
+    if (handle) {
+      return cleanCreatorDisplayName(handle.value.replace(/^@/, ""));
+    }
+    const primary = preferredRef(cleanRefs);
+    return cleanCreatorDisplayName(displayName) ||
+      (primary?.type === "name" ? cleanCreatorDisplayName(primary.value) : "") ||
+      "Blocked creator";
+  }
+
+  function sanitizeNameAliases(values, displayName, canonicalLabel, includeDisplayName) {
+    const canonicalName = normalizeCreatorName(canonicalLabel);
+    const seen = new Set();
+    const aliases = [];
+    const candidates = [
+      ...(includeDisplayName === false ? [] : [displayName]),
+      ...(Array.isArray(values) ? values : [])
+    ];
+    for (const candidate of candidates) {
+      const clean = cleanCreatorDisplayName(candidate);
+      const normalized = normalizeCreatorName(clean);
+      if (!normalized || normalized === "blocked creator" ||
+        normalized === canonicalName || seen.has(normalized)) {
+        continue;
+      }
+      seen.add(normalized);
+      aliases.push(clean);
+      if (aliases.length >= 20) {
+        break;
+      }
+    }
+    return aliases;
+  }
+
+  function createBlockedEntry(
+    refs,
+    displayName,
+    blockedAt,
+    shortPaths,
+    nameAliases,
+    includeDisplayNameAlias
+  ) {
     const cleanRefs = uniqueRefs(refs);
     if (cleanRefs.length === 0) {
       return null;
     }
 
     const primary = preferredRef(cleanRefs);
-    const handle = cleanRefs.find((ref) => ref.type === "handle");
-    const name = cleanCreatorDisplayName(displayName) ||
-      handle?.value ||
-      (primary.type === "handle" || primary.type === "name" ? primary.value : "Blocked creator");
+    const name = canonicalCreatorLabel(cleanRefs, displayName);
 
     return {
       key: primary.key,
       aliases: cleanRefs.map((ref) => ref.key),
       displayName: name,
+      nameAliases: sanitizeNameAliases(
+        nameAliases,
+        displayName,
+        name,
+        includeDisplayNameAlias
+      ),
       url: primary.url || "",
       blockedAt: blockedAt || new Date().toISOString(),
       shortPaths: sanitizeShortPaths(shortPaths)
@@ -278,7 +324,9 @@
         unclaimed,
         raw.displayName,
         typeof raw.blockedAt === "string" ? raw.blockedAt : undefined,
-        raw.shortPaths
+        raw.shortPaths,
+        raw.nameAliases,
+        false
       );
 
       if (!entry) {
@@ -312,6 +360,13 @@
     const displayName = normalizeCreatorName(entry?.displayName);
     if (displayName && displayName !== "blocked creator") {
       names.add(displayName);
+    }
+
+    for (const alias of Array.isArray(entry?.nameAliases) ? entry.nameAliases : []) {
+      const normalizedAlias = normalizeCreatorName(alias);
+      if (normalizedAlias && normalizedAlias !== "blocked creator") {
+        names.add(normalizedAlias);
+      }
     }
 
     for (const alias of Array.isArray(entry?.aliases) ? entry.aliases : [entry?.key]) {
@@ -413,7 +468,8 @@
       incoming.aliases || [incoming.key, incoming.url],
       incoming.displayName,
       incoming.blockedAt,
-      incoming.shortPaths
+      incoming.shortPaths,
+      incoming.nameAliases
     );
 
     if (!normalizedIncoming) {
@@ -431,7 +487,8 @@
       mergedRefs,
       existing.displayName === "Blocked creator" ? normalizedIncoming.displayName : existing.displayName,
       existing.blockedAt,
-      [...existing.shortPaths, ...normalizedIncoming.shortPaths]
+      [...existing.shortPaths, ...normalizedIncoming.shortPaths],
+      [...existing.nameAliases, ...normalizedIncoming.nameAliases]
     );
     const rest = clean.filter((_, index) => index !== matchIndex);
     return [merged, ...rest];
@@ -482,7 +539,8 @@
         [dirtyHead.entry.key, ...dirtyHead.entry.aliases, dirtyHead.entry.url],
         dirtyHead.entry.displayName,
         dirtyHead.entry.blockedAt,
-        dirtyHead.entry.shortPaths
+        dirtyHead.entry.shortPaths,
+        dirtyHead.entry.nameAliases
       );
       if (!cleanHead) {
         activeNodes.delete(dirtyHead);
@@ -513,7 +571,8 @@
           remainingRefs,
           node.entry.displayName,
           node.entry.blockedAt,
-          node.entry.shortPaths
+          node.entry.shortPaths,
+          node.entry.nameAliases
         );
         if (!cleanEntry) {
           activeNodes.delete(node);
@@ -538,7 +597,8 @@
           [node.entry.key, ...node.entry.aliases, node.entry.url],
           node.entry.displayName,
           node.entry.blockedAt,
-          node.entry.shortPaths
+          node.entry.shortPaths,
+          node.entry.nameAliases
         );
         if (!cleanEntry) {
           activeNodes.delete(node);
@@ -571,7 +631,9 @@
         incoming.aliases || [incoming.key, incoming.url],
         incoming.displayName,
         incoming.blockedAt,
-        incoming.shortPaths
+        incoming.shortPaths,
+        incoming.nameAliases,
+        false
       );
       if (!normalized) {
         return;
@@ -598,6 +660,10 @@
         [
           ...(preferredExisting?.entry.shortPaths || []),
           ...normalized.shortPaths
+        ],
+        [
+          ...(preferredExisting?.entry.nameAliases || []),
+          ...normalized.nameAliases
         ]
       );
       if (!merged) {
@@ -625,16 +691,23 @@
   }
 
   function labelForEntry(entry) {
+    const refs = uniqueRefs([...(entry?.aliases || []), entry?.key]);
+    const handleLabel = canonicalCreatorLabel(
+      refs.filter((candidate) => candidate.type === "handle"),
+      ""
+    );
+    if (handleLabel !== "Blocked creator") {
+      return handleLabel;
+    }
     const displayName = cleanCreatorDisplayName(entry?.displayName);
     if (displayName && displayName !== "Blocked creator") {
       return displayName;
     }
-    const refs = uniqueRefs([...(entry?.aliases || []), entry?.key]);
-    const ref = refs.find((candidate) => candidate.type === "handle") || refs[0];
+    const ref = refs[0];
     if (!ref) {
       return "Blocked creator";
     }
-    return ref.type === "handle" ? ref.value : ref.value;
+    return ref.value;
   }
 
   globalScope.ChannelFenceShared = Object.freeze({
@@ -650,6 +723,7 @@
     sanitizeShortPaths,
     refFromKey,
     uniqueRefs,
+    canonicalCreatorLabel,
     createBlockedEntry,
     sanitizeBlockedEntries,
     entryMatchesRefs,

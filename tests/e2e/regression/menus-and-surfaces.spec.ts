@@ -1,4 +1,9 @@
-import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
+import {
+  blockedCreator,
+  expect,
+  legacyBlockedCreator,
+  test
+} from "../fixtures/extension.fixture";
 import {
   channelHeader,
   channelTabLockup,
@@ -79,7 +84,7 @@ test.describe("YouTube surfaces and menus", () => {
       "cfBlockedChannels"
     );
     expect(stored.cfBlockedChannels).toHaveLength(1);
-    expect(stored.cfBlockedChannels[0].displayName).toBe("Menu Creator");
+    expect(stored.cfBlockedChannels[0].displayName).toBe("menucreator");
   });
 
   test("adds the ChannelFence action to the watch-page three-dot menu", async ({ extensionPage }) => {
@@ -125,7 +130,7 @@ test.describe("YouTube surfaces and menus", () => {
     const stored = await extensionStorage.get<{
       cfBlockedChannels: Array<{ displayName: string }>;
     }>("cfBlockedChannels");
-    expect(stored.cfBlockedChannels[0].displayName).toBe("Second Menu Creator");
+    expect(stored.cfBlockedChannels[0].displayName).toBe("second-menu-creator");
   });
 
   test("ignores sponsored Home cells between creator recommendations", async ({
@@ -167,7 +172,7 @@ test.describe("YouTube surfaces and menus", () => {
       cfBlockedChannels: Array<{ displayName: string }>;
     }>("cfBlockedChannels");
     expect(stored.cfBlockedChannels).toEqual([
-      expect.objectContaining({ displayName: "Creator Below Shorts" })
+      expect.objectContaining({ displayName: "creator-below-shorts" })
     ]);
   });
 
@@ -195,7 +200,7 @@ test.describe("YouTube surfaces and menus", () => {
     }>("cfBlockedChannels");
     expect(stored.cfBlockedChannels[0]).toMatchObject({
       aliases: ["handle:@late-search"],
-      displayName: "Late Search Creator"
+      displayName: "late-search"
     });
   });
 
@@ -373,7 +378,7 @@ test.describe("YouTube surfaces and menus", () => {
 
     await button.click();
     await expect(extensionPage.locator("#cf-hard-block-overlay"))
-      .toContainText("Mylo the Cat is on your ChannelFence block list.");
+      .toContainText("hiddentracktv2 is on your ChannelFence block list.");
     await expect(extensionPage.locator("#cf-hard-block-overlay"))
       .not.toContainText("Community is on your ChannelFence block list.");
 
@@ -388,7 +393,7 @@ test.describe("YouTube surfaces and menus", () => {
     expect(stored.cfBlockedChannels).toHaveLength(1);
     expect(stored.cfBlockedChannels[0]).toMatchObject({
       aliases: ["handle:@hiddentracktv2"],
-      displayName: "Mylo the Cat",
+      displayName: "hiddentracktv2",
       key: "handle:@hiddentracktv2",
       url: "https://www.youtube.com/@hiddentracktv2"
     });
@@ -411,12 +416,46 @@ test.describe("YouTube surfaces and menus", () => {
       .toHaveAttribute("data-cf-identity", "handle:@hiddentracktv2");
   });
 
-  test("repairs a legacy channel label from the canonical route and title", async ({
+  test("stores and displays the route handle instead of the mutable channel title", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(
+      modernChannelHeaderWithCommunityLink("Roku Jones", "@rokujones"),
+      "/@rokujones"
+    );
+
+    await youtube.card("modern-channel-header").locator(".cf-channel-header-block").click();
+    await expect(extensionPage.locator("#cf-hard-block-overlay"))
+      .toContainText("rokujones is on your ChannelFence block list.");
+    await expect(extensionPage.locator("#cf-hard-block-overlay"))
+      .not.toContainText("Roku Jones is on your ChannelFence block list.");
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{
+        aliases: string[];
+        displayName: string;
+        key: string;
+        nameAliases: string[];
+      }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([
+      expect.objectContaining({
+        aliases: ["handle:@rokujones"],
+        displayName: "rokujones",
+        key: "handle:@rokujones",
+        nameAliases: ["Roku Jones"]
+      })
+    ]);
+  });
+
+  test("repairs a legacy channel title to the canonical handle label", async ({
     extensionPage,
     extensionStorage
   }) => {
     await extensionStorage.set({
-      cfBlockedChannels: [blockedCreator("@hiddentracktv2", "Community")]
+      cfBlockedChannels: [legacyBlockedCreator("@hiddentracktv2", "Community")]
     });
     const youtube = new YouTubeSurfacePage(extensionPage);
     await youtube.open(
@@ -425,16 +464,17 @@ test.describe("YouTube surfaces and menus", () => {
     );
 
     await expect(extensionPage.locator("#cf-hard-block-overlay"))
-      .toContainText("Mylo the Cat is on your ChannelFence block list.");
+      .toContainText("hiddentracktv2 is on your ChannelFence block list.");
     await expect(extensionPage.locator("#cf-hard-block-overlay"))
       .not.toContainText("Community is on your ChannelFence block list.");
     await expect.poll(async () => {
       const stored = await extensionStorage.get<{
-        cfBlockedChannels: Array<{ displayName: string; key: string }>;
+        cfBlockedChannels: Array<{ displayName: string; key: string; nameAliases: string[] }>;
       }>("cfBlockedChannels");
       return stored.cfBlockedChannels[0];
     }).toMatchObject({
-      displayName: "Mylo the Cat",
+      displayName: "hiddentracktv2",
+      nameAliases: ["Mylo the Cat"],
       key: "handle:@hiddentracktv2"
     });
   });
@@ -636,7 +676,7 @@ test.describe("YouTube surfaces and menus", () => {
     expect(stored.cfBlockedChannels).toEqual([
       expect.objectContaining({
         aliases: ["handle:@channel-five"],
-        displayName: "Channel Five"
+        displayName: "channel-five"
       })
     ]);
   });

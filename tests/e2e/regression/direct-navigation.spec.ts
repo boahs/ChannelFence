@@ -15,7 +15,7 @@ test.describe("direct navigation guard", () => {
 
     const overlay = extensionPage.locator("#cf-hard-block-overlay");
     await expect(overlay).toBeVisible();
-    await expect(overlay).toContainText("Alpha Creator is on your ChannelFence block list.");
+    await expect(overlay).toContainText("alpha is on your ChannelFence block list.");
 
     await overlay.getByRole("button", { name: "Unblock and continue" }).click();
     await expect(overlay).toHaveCount(0);
@@ -37,4 +37,3 @@ test.describe("direct navigation guard", () => {
     await expect(extensionPage.getByRole("heading", { name: "Creator blocked" })).toBeVisible();
   });
 });
-

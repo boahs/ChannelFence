@@ -344,7 +344,7 @@ test.describe("YouTube Shorts controls", () => {
       }>("cfBlockedChannels");
       return stored.cfBlockedChannels[0];
     }).toMatchObject({
-      displayName: "Compact Shorts Creator",
+      displayName: "compactshortscreator",
       shortPaths: ["/shorts/compact-one"]
     });
     await expect(youtube.card("compact-short")).toBeHidden();
@@ -381,7 +381,7 @@ test.describe("YouTube Shorts controls", () => {
     expect(stored.cfBlockedChannels).toEqual([
       expect.objectContaining({
         aliases: ["handle:@shortscreator"],
-        displayName: "Shorts Creator"
+        displayName: "shortscreator"
       })
     ]);
     await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/fixture-next");

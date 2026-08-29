@@ -68,15 +68,42 @@ test("creates and removes a display-name fallback entry for linkless lockups", (
   assert.equal(Shared.removeEntriesMatchingRefs([entry], [ref]).length, 0);
 });
 
-test("creates one entry with stable channel id preferred over handle", () => {
+test("uses a stable handle without @ as the visible label while preferring a channel id key", () => {
   const entry = Shared.createBlockedEntry([
     Shared.normalizeChannelRef("https://www.youtube.com/@Creator"),
     Shared.normalizeChannelRef("https://www.youtube.com/channel/UC123")
   ], "  Example   Creator  ", "2026-08-20T00:00:00.000Z");
 
   assert.equal(entry.key, "channel:UC123");
-  assert.equal(entry.displayName, "Example Creator");
+  assert.equal(entry.displayName, "creator");
+  assert.deepEqual([...entry.nameAliases], ["Example Creator"]);
   assert.deepEqual([...entry.aliases].sort(), ["channel:UC123", "handle:@creator"]);
+});
+
+test("migrates a legacy mutable title to a handle without retaining unsafe name matching", () => {
+  const [entry] = Shared.sanitizeBlockedEntries([{
+    key: "handle:@rokujones",
+    aliases: ["handle:@rokujones"],
+    displayName: "Roku Jones"
+  }]);
+
+  assert.equal(entry.displayName, "rokujones");
+  assert.equal(Shared.labelForEntry(entry), "rokujones");
+  assert.deepEqual([...entry.nameAliases], []);
+  assert.equal(Shared.findMatchingEntryByNames([entry], ["Roku Jones"]), null);
+});
+
+test("new handle blocks retain a detected title only as a linkless fallback", () => {
+  const entry = Shared.createBlockedEntry([
+    Shared.normalizeChannelRef("/@rokujones")
+  ], "Roku Jones");
+
+  assert.equal(entry.displayName, "rokujones");
+  assert.deepEqual([...entry.nameAliases], ["Roku Jones"]);
+  assert.equal(
+    Shared.findMatchingEntryByNames([entry], ["Roku Jones"]).key,
+    "handle:@rokujones"
+  );
 });
 
 test("merges aliases into an existing block without duplication", () => {
@@ -171,7 +198,7 @@ test("bulk-merges imported block lists with the same ordering and aliases", () =
 
   assert.deepEqual(JSON.parse(JSON.stringify(bulk)), JSON.parse(JSON.stringify(legacy)));
   assert.deepEqual(
-    [...bulk.find((entry) => entry.displayName === "Alpha").aliases].sort(),
+    [...bulk.find((entry) => entry.displayName === "alpha").aliases].sort(),
     ["channel:UCalpha", "handle:@alpha"]
   );
 });
@@ -229,7 +256,7 @@ test("indexes large block lists for constant-time feed matching", () => {
       lookup,
       [Shared.normalizeChannelRef("/@creator-999")]
     ).displayName,
-    "Creator 999"
+    "creator-999"
   );
   assert.equal(
     Shared.findMatchingEntryInLookup(lookup, [], ["Creator 999"]).key,
@@ -271,7 +298,7 @@ test("indexes large block lists for constant-time feed matching", () => {
 test("indexed matching preserves block-list precedence for collaborations", () => {
   const alpha = Shared.createBlockedEntry(
     [Shared.normalizeChannelRef("/@alpha")],
-    "Alpha"
+    "alpha"
   );
   const beta = Shared.createBlockedEntry(
     [Shared.normalizeChannelRef("/@beta")],
@@ -284,11 +311,11 @@ test("indexed matching preserves block-list precedence for collaborations", () =
       Shared.normalizeChannelRef("/@beta"),
       Shared.normalizeChannelRef("/@alpha")
     ]).displayName,
-    "Alpha"
+    "alpha"
   );
   assert.equal(
     Shared.findMatchingEntryInLookup(lookup, [], ["Beta", "Alpha"]).displayName,
-    "Alpha"
+    "alpha"
   );
 });
 
@@ -334,10 +361,10 @@ test("rejects video durations as creator labels and recovers the channel handle"
     Shared.normalizeChannelRef("/@SailorMoon4Life")
   ], "40:36");
 
-  assert.equal(entry.displayName, "@sailormoon4life");
+  assert.equal(entry.displayName, "sailormoon4life");
   assert.equal(Shared.labelForEntry({
     key: "channel:UCstable",
     aliases: ["channel:UCstable", "handle:@sailormoon4life"],
     displayName: "40:36"
-  }), "@sailormoon4life");
+  }), "sailormoon4life");
 });

@@ -14,6 +14,14 @@ async function ensureDefaults() {
     }
   }
 
+  const storedBlocked = current[Shared.STORAGE.blocked];
+  if (typeof storedBlocked !== "undefined") {
+    const sanitizedBlocked = Shared.sanitizeBlockedEntries(storedBlocked);
+    if (JSON.stringify(storedBlocked) !== JSON.stringify(sanitizedBlocked)) {
+      patch[Shared.STORAGE.blocked] = sanitizedBlocked;
+    }
+  }
+
   if (Object.keys(patch).length > 0) {
     await chrome.storage.local.set(patch);
   }
