@@ -57,6 +57,21 @@ html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
   transform: translateY(-0.5px) !important;
 }
 
+.cf-channel-header-block {
+  height: 38px !important;
+  margin-inline-start: 8px !important;
+  min-width: 38px !important;
+  padding: 3px !important;
+}
+
+.cf-channel-header-block__icon {
+  display: block !important;
+  height: 32px !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+  width: 32px !important;
+}
+
 .cf-compact-shorts-block {
   color: var(--yt-spec-text-secondary, #aaa) !important;
   height: 32px !important;

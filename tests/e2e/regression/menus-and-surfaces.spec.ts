@@ -249,6 +249,7 @@ test.describe("YouTube surfaces and menus", () => {
   });
 
   test("keeps one header control and suppresses redundant channel Home controls", async ({
+    extensionId,
     extensionPage
   }) => {
     const youtube = new YouTubeSurfacePage(extensionPage);
@@ -277,7 +278,14 @@ test.describe("YouTube surfaces and menus", () => {
       })
     ].join(""), "/@fixturecreator");
 
-    await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    const headerButton = youtube.card("channel-header").locator(".cf-block-button");
+    await expect(headerButton).toHaveCount(1);
+    await expect(headerButton).toHaveClass(/\bcf-channel-header-block\b/);
+    await expect(headerButton.locator(".cf-channel-header-block__icon")).toHaveAttribute(
+      "src",
+      `chrome-extension://${extensionId}/assets/icons/channelfence-48.png`
+    );
+    await expect(headerButton.locator(".cf-block-button__symbol")).toHaveCount(0);
     for (const id of [
       "channel-home-one",
       "channel-home-two",

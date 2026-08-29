@@ -15,3 +15,11 @@ blob-report/
 
 # Private local notes and credentials
 .local-notes/
+
+# Raw and rendered local promo-video workspace
+/promo_videos/
+
+# Temporary marketing-frame extractions (final source selections stay tracked)
+marketing/assets/source/hide-shorts-*.png
+marketing/assets/source/home-*-frame.png
+marketing/assets/source/menu-frame.png

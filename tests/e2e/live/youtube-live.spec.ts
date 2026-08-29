@@ -1,4 +1,4 @@
-import { expect, test } from "../fixtures/extension.fixture";
+import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 
 test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }) => {
   await extensionPage.goto("https://www.youtube.com/@YouTube", {
@@ -17,6 +17,7 @@ test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }
 });
 
 test("keeps live channel-card controls singular and ignores video statistics", async ({
+  extensionId,
   extensionPage
 }) => {
   const assertNoDuplicateOrStatisticControls = async (url: string) => {
@@ -42,10 +43,16 @@ test("keeps live channel-card controls singular and ignores video statistics", a
         });
       });
     }), { timeout: 15_000 }).toBe(true);
-    await expect(extensionPage.locator(
+    const headerButton = extensionPage.locator(
       "yt-page-header-renderer .cf-block-button, " +
       "ytd-c4-tabbed-header-renderer #channel-header-container .cf-block-button"
-    ).first()).toBeVisible({ timeout: 15_000 });
+    ).first();
+    await expect(headerButton).toBeVisible({ timeout: 15_000 });
+    await expect(headerButton).toHaveClass(/\bcf-channel-header-block\b/);
+    await expect(headerButton.locator(".cf-channel-header-block__icon")).toHaveAttribute(
+      "src",
+      `chrome-extension://${extensionId}/assets/icons/channelfence-48.png`
+    );
     return cards;
   };
 
@@ -241,4 +248,47 @@ test("advances after blocking the current live Shorts creator", async ({
     }>("cfBlockedChannels");
     return values.cfBlockedChannels?.length ?? 0;
   }).toBe(1);
+});
+
+test("advances instead of returning Home when a live Short opens pre-blocked", async ({
+  extensionPage,
+  extensionStorage
+}) => {
+  const blockedUrl = "https://www.youtube.com/shorts/E4PB_V8yZso";
+  await extensionPage.goto(blockedUrl, {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+
+  const ownerAnchor = extensionPage.locator(
+    "ytd-shorts yt-reel-channel-bar-view-model a[href*='/@']"
+  ).first();
+  await expect(ownerAnchor).toBeVisible({ timeout: 30_000 });
+  const ownerHref = await ownerAnchor.getAttribute("href");
+  const displayName = (await ownerAnchor.textContent())?.trim() || "Blocked Shorts Creator";
+  const ownerHandle = new URL(ownerHref || "", blockedUrl).pathname.split("/")[1];
+  expect(ownerHandle).toMatch(/^@/);
+
+  await extensionPage.goto("about:blank");
+  await extensionStorage.set({
+    cfBlockedChannels: [blockedCreator(ownerHandle, displayName)]
+  });
+  await extensionPage.goto(blockedUrl, {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+
+  await expect(extensionPage).not.toHaveURL(blockedUrl, { timeout: 10_000 });
+  await expect.poll(
+    () => new URL(extensionPage.url()).pathname,
+    { timeout: 10_000 }
+  ).toMatch(/^\/shorts\/[^/?#]+$/);
+  await expect.poll(
+    () => new URL(extensionPage.url()).pathname,
+    { timeout: 10_000 }
+  ).not.toBe("/");
+  await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+  await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/, {
+    timeout: 10_000
+  });
 });

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://boahs.github.io/ChannelFence/sitemap.xml
+Sitemap: https://channelfence.app/sitemap.xml

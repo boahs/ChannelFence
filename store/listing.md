@@ -35,15 +35,19 @@ ChannelFence is open-source software released under the MIT License.
 
 Source code: https://github.com/boahs/ChannelFence
 
+Website: https://channelfence.app/
+
+Support and bug reports: https://channelfence.app/support/
+
 ChannelFence is an independent extension and is not affiliated with, endorsed by, or sponsored by Google LLC.
 
 YouTube is a trademark of Google LLC.
 
 ## Additional fields
 
-- **Homepage URL:** https://boahs.github.io/ChannelFence/
-- **Support URL:** https://github.com/boahs/ChannelFence/issues
-- **Official URL:** Select the verified `boahs.github.io/ChannelFence` property when it is available in the dashboard.
+- **Homepage URL:** https://channelfence.app/
+- **Support URL:** https://channelfence.app/support/
+- **Official URL:** Select the verified `channelfence.app` property after the custom domain is live and verified in Search Console.
 
 ## Category
 
@@ -83,11 +87,11 @@ These answers must match the dashboard wording visible at submission time. If Go
 
 ## Suggested screenshot captions
 
-1. Block any creator from the three-dot menu or beside their channel name.
-2. Their videos disappear across Home, search, and recommendations.
-3. Direct visits are stopped too.
-4. Add by handle, or review, search, export, and edit your private block list.
-5. Local-only storage. No account and no tracking.
+1. Block from a video's menu without opening the creator's channel.
+2. One block follows the creator across supported YouTube surfaces.
+3. Block a creator while viewing Shorts and continue to the next Short.
+4. Hide Shorts in feeds while keeping the Shorts tab available.
+5. Search, edit, import, or export your private block list.
 
 ## Promotional copy
 

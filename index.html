@@ -3,37 +3,93 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Block YouTube Channels and Creators | ChannelFence for Chrome</title>
-  <meta name="description" content="ChannelFence is a free, open-source Chrome extension that hard-blocks YouTube channels and hides their videos, Shorts, recommendations, and comments.">
-  <link rel="canonical" href="https://boahs.github.io/ChannelFence/">
+  <title>Block YouTube Channels and Creators | ChannelFence</title>
+  <meta name="description" content="ChannelFence gives Chrome users a persistent block list for YouTube creators. Block once across supported feeds, search, Watch Next, Shorts, comments, and direct visits.">
+  <link rel="canonical" href="https://channelfence.app/">
   <link rel="icon" href="assets/icons/channelfence-32.png" sizes="32x32">
   <link rel="stylesheet" href="site/styles.css">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ChannelFence">
-  <meta property="og:title" content="ChannelFence: Block YouTube Channels and Creators">
-  <meta property="og:description" content="Hard-block YouTube creators across Home, search, recommendations, Shorts, comments, and direct visits.">
-  <meta property="og:url" content="https://boahs.github.io/ChannelFence/">
-  <meta property="og:image" content="https://boahs.github.io/ChannelFence/store/assets/marquee-1400x560.png">
+  <meta property="og:title" content="ChannelFence: A Persistent Block List for YouTube Creators">
+  <meta property="og:description" content="Block a creator once across supported Home feeds, search, Watch Next, Shorts, comments, and direct visits.">
+  <meta property="og:url" content="https://channelfence.app/">
+  <meta property="og:image" content="https://channelfence.app/marketing/assets/youtube-thumbnail-1280x720-v2.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+  <meta property="og:image:alt" content="ChannelFence: A real YouTube block list">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@GetChannelFence">
+  <meta name="twitter:title" content="ChannelFence: A Persistent Block List for YouTube Creators">
+  <meta name="twitter:description" content="Free, open source, and local-only. Block YouTube creators across supported surfaces.">
+  <meta name="twitter:image" content="https://channelfence.app/marketing/assets/youtube-thumbnail-1280x720-v2.png">
+  <meta name="twitter:image:alt" content="ChannelFence: A real YouTube block list">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "ChannelFence",
-    "alternateName": "ChannelFence YouTube Channel Blocker",
-    "description": "A free, open-source Chrome extension that blocks YouTube channels and hides their content across supported YouTube surfaces.",
-    "applicationCategory": "BrowserApplication",
-    "operatingSystem": "Chrome",
-    "softwareVersion": "0.2.0",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "installUrl": "https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm",
-    "codeRepository": "https://github.com/boahs/ChannelFence",
-    "sameAs": [
-      "https://github.com/boahs/ChannelFence",
-      "https://x.com/GetChannelFence"
-    ],
-    "license": "https://opensource.org/license/mit"
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://channelfence.app/#software",
+        "name": "ChannelFence",
+        "alternateName": "ChannelFence YouTube Channel Blocker",
+        "url": "https://channelfence.app/",
+        "description": "A free, open-source Chrome extension that maintains a persistent block list for YouTube creators across supported YouTube surfaces.",
+        "applicationCategory": "BrowserApplication",
+        "operatingSystem": "Any operating system with Google Chrome",
+        "softwareVersion": "0.2.1",
+        "dateModified": "2026-08-29",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "installUrl": "https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&utm_medium=organic&utm_campaign=30day_growth&utm_content=structured_data",
+        "codeRepository": "https://github.com/boahs/ChannelFence",
+        "sameAs": [
+          "https://github.com/boahs/ChannelFence",
+          "https://x.com/GetChannelFence"
+        ],
+        "license": "https://opensource.org/license/mit"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://channelfence.app/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I block a YouTube channel in Chrome?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Install ChannelFence, then use its block button beside a creator, choose ChannelFence: Block from a supported video menu, or enter the creator's handle or channel URL in settings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does ChannelFence send or sell my block list?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Your list and settings remain in Chrome's local extension storage and are not sent to the developer or third parties."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can ChannelFence remove Shorts from my feeds?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The optional Hide Shorts in feeds setting removes supported Shorts shelves and cards from feeds while keeping the Shorts tab and direct viewer available."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is ChannelFence affiliated with YouTube or Google?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. ChannelFence is independent open-source software and is not affiliated with, endorsed by, or sponsored by Google LLC."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 </head>
@@ -46,6 +102,7 @@
     <nav aria-label="Main navigation">
       <a href="#how-it-works">How it works</a>
       <a href="#privacy">Privacy</a>
+      <a href="#guides">Guides</a>
       <a href="https://github.com/boahs/ChannelFence">GitHub</a>
     </nav>
   </header>
@@ -53,25 +110,25 @@
   <main>
     <section class="hero">
       <div class="hero__copy">
-        <p class="eyebrow">Free, open source, and private</p>
-        <h1>Block YouTube channels and stop seeing their content.</h1>
-        <p class="hero__lead">ChannelFence adds a real creator block list to Chrome. Block once to hide matching videos, Shorts, recommendations, comments, and supported direct visits.</p>
+        <p class="eyebrow">Free, open source, and local-only</p>
+        <h1>A persistent block list for YouTube creators.</h1>
+        <p class="hero__lead">Block a creator once across supported Home feeds, search, Watch Next, Shorts, comments, and direct visits.</p>
         <div class="actions">
-          <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm">Add to Chrome for free</a>
+          <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=homepage_hero">Add to Chrome for free</a>
           <a class="button button--secondary" href="https://github.com/boahs/ChannelFence">View source on GitHub</a>
         </div>
-        <p class="trust-line">No account. No analytics. No ads. Your block list stays in Chrome.</p>
+        <p class="trust-line">No account. No extension analytics. No ads. Your block list stays in Chrome.</p>
       </div>
       <div class="hero__visual">
-        <img src="store/assets/screenshot-menu-1280x800.png" alt="ChannelFence Block action inside a YouTube video menu" width="1280" height="800">
+        <img src="store/assets/store-01-menu-v2.png" alt="ChannelFence block action inside a YouTube video's three-dot menu" width="1280" height="800">
       </div>
     </section>
 
     <section class="feature-grid" aria-label="ChannelFence features">
       <article>
-        <span class="feature-icon" aria-hidden="true">⊘</span>
+        <span class="feature-icon" aria-hidden="true">&#8856;</span>
         <h2>Block in one click</h2>
-        <p>Use the button beside a creator or the ChannelFence action in a video's three-dot menu.</p>
+        <p>Use the button beside a creator or the ChannelFence action in a supported video's three-dot menu.</p>
       </article>
       <article>
         <span class="feature-icon" aria-hidden="true">@</span>
@@ -83,34 +140,34 @@
           <span class="surface-grid"><i></i><i></i><i></i><i></i></span>
         </span>
         <h2>Hide creators across YouTube</h2>
-        <p>Filter supported Home, search, Watch Next, Shorts, playlists, comments, and direct pages. Blocking in Shorts advances to the next Short.</p>
+        <p>Filter supported Home, search, Watch Next, Shorts, playlists, comments, and direct pages. Blocking in the Shorts viewer advances to the next Short.</p>
       </article>
       <article>
         <span class="feature-icon" aria-hidden="true">S</span>
         <h2>Hide Shorts in feeds</h2>
-        <p>Remove Shorts shelves and cards from Home, search, and other feeds while keeping the Shorts viewer available.</p>
+        <p>Remove supported Shorts shelves and cards from feeds while keeping the Shorts tab and viewer available.</p>
       </article>
     </section>
 
     <section class="why-section" aria-labelledby="why-heading">
       <div>
         <p class="eyebrow">Why ChannelFence?</p>
-        <h2 id="why-heading">A persistent block list, not a recommendation preference.</h2>
+        <h2 id="why-heading">A block list, not a recommendation preference.</h2>
       </div>
-      <p>YouTube's "Don't recommend channel" option is a recommendation preference. ChannelFence is for people who want an explicit block list they can view, edit, back up, and apply across supported YouTube surfaces.</p>
+      <p>YouTube's "Don't recommend channel" changes recommendations. It is not a persistent site-wide creator block list. ChannelFence gives you an explicit list you can view, edit, back up, and apply across supported YouTube surfaces.</p>
     </section>
 
     <section class="steps-section" id="how-it-works">
       <div>
         <p class="eyebrow">How it works</p>
-        <h2>A YouTube channel blocker that stays simple.</h2>
+        <h2>Creator blocking that stays simple.</h2>
         <ol class="steps">
           <li><strong>Install ChannelFence</strong><span>Add the extension from the official Chrome Web Store.</span></li>
-          <li><strong>Choose a creator</strong><span>Click ⊘, use the three-dot menu, or paste their handle in settings.</span></li>
-          <li><strong>Browse without them</strong><span>Matching content disappears while your private list remains easy to undo or edit.</span></li>
+          <li><strong>Choose a creator</strong><span>Click &#8856;, use a supported three-dot menu, or paste a handle in settings.</span></li>
+          <li><strong>Browse without them</strong><span>Matching content is hidden while your private list remains easy to undo or edit.</span></li>
         </ol>
       </div>
-      <img src="store/assets/screenshot-settings-1280x800.png" alt="ChannelFence settings and private creator block list" width="1280" height="800" loading="lazy">
+      <img src="store/assets/store-05-block-list-v2.png" alt="ChannelFence settings and private creator block list" width="1280" height="800" loading="lazy">
     </section>
 
     <section class="privacy-section" id="privacy">
@@ -119,8 +176,35 @@
         <h2>Your block list is yours.</h2>
       </div>
       <div>
-        <p>ChannelFence uses only Chrome's local storage permission. It has no account system, analytics, advertising, remote code, or external server. Its source and automated tests are public.</p>
-        <p><a href="PRIVACY.html">Read the privacy policy</a> | <a href="https://github.com/boahs/ChannelFence/issues">Get support or report a bug</a></p>
+        <p>ChannelFence stores your settings and block list locally in Chrome. It has no account system, extension analytics, advertising, remote code, or developer-controlled server. Its source and automated tests are public.</p>
+        <p><a href="PRIVACY.html">Read the privacy policy</a> | <a href="support/">Get support or report a bug</a></p>
+      </div>
+    </section>
+
+    <section class="guide-section" id="guides" aria-labelledby="guides-heading">
+      <p class="eyebrow">Guides and comparisons</p>
+      <h2 id="guides-heading">Make YouTube behave more like you expect.</h2>
+      <div class="guide-grid">
+        <a href="how-to-block-youtube-channels-in-chrome/">
+          <span>Guide</span>
+          <strong>How to block YouTube channels in Chrome</strong>
+          <small>Three ways to add a creator to your persistent block list.</small>
+        </a>
+        <a href="youtube-dont-recommend-channel-vs-block/">
+          <span>Explainer</span>
+          <strong>"Don't recommend channel" vs. a creator block</strong>
+          <small>Understand the practical difference between the two controls.</small>
+        </a>
+        <a href="how-to-hide-youtube-shorts-in-chrome/">
+          <span>Guide</span>
+          <strong>How to hide YouTube Shorts in Chrome</strong>
+          <small>Remove Shorts from feeds without deleting the Shorts tab.</small>
+        </a>
+        <a href="channelfence-vs-blocktube/">
+          <span>Comparison</span>
+          <strong>ChannelFence vs. BlockTube</strong>
+          <small>Choose between a focused creator list and advanced content filters.</small>
+        </a>
       </div>
     </section>
 
@@ -129,7 +213,7 @@
       <h2 id="faq-heading">Frequently asked questions</h2>
       <details>
         <summary>How do I block a YouTube channel in Chrome?</summary>
-        <p>Install ChannelFence, then click its ⊘ button beside the creator or choose <strong>ChannelFence: Block</strong> from a video's three-dot menu. You can also paste the creator's handle or channel URL in settings.</p>
+        <p>Install ChannelFence, then click its &#8856; button beside the creator or choose <strong>ChannelFence: Block</strong> from a supported video's three-dot menu. You can also paste the creator's handle or channel URL in settings.</p>
       </details>
       <details>
         <summary>Does ChannelFence send or sell my block list?</summary>
@@ -137,21 +221,21 @@
       </details>
       <details>
         <summary>Can ChannelFence remove Shorts from my feeds?</summary>
-        <p>Yes. Turn on Hide Shorts in feeds in the extension popup or settings. This removes Shorts shelves from Home, search, and other feeds while keeping the Shorts tab and direct viewer available.</p>
+        <p>Yes. Turn on Hide Shorts in feeds in the extension popup or settings. This removes supported Shorts shelves and cards from feeds while keeping the Shorts tab and direct viewer available.</p>
       </details>
       <details>
         <summary>Is ChannelFence affiliated with YouTube or Google?</summary>
-        <p>No. ChannelFence is an independent open-source extension and is not affiliated with, endorsed by, or sponsored by Google LLC.</p>
+        <p>No. ChannelFence is independent open-source software and is not affiliated with, endorsed by, or sponsored by Google LLC.</p>
       </details>
     </section>
 
     <section class="final-cta">
       <img src="assets/icons/channelfence-128.png" width="88" height="88" alt="ChannelFence icon">
       <div>
-        <h2>Take control of your YouTube feed.</h2>
+        <h2>Take control of what appears on YouTube.</h2>
         <p>Install ChannelFence for free, or inspect every line on GitHub.</p>
       </div>
-      <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm">Add to Chrome</a>
+      <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=homepage_final">Add to Chrome</a>
     </section>
   </main>
 

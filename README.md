@@ -1,12 +1,20 @@
 # ChannelFence — Block YouTube Channels and Creators
 
+[![ChannelFence CI](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml/badge.svg)](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=github&utm_medium=organic&utm_campaign=30day_growth&utm_content=readme_badge)
+[![License: MIT](https://img.shields.io/badge/License-MIT-2ce2d8.svg)](LICENSE)
+
 ChannelFence is an open-source, privacy-first Chrome extension that lets you block YouTube channels and creators across Home, search, recommendations, Shorts, comments, channel pages, and supported direct video pages. Block a creator once and their matching content disappears wherever ChannelFence can identify the channel.
 
 ## Install
 
-[Install ChannelFence from the Chrome Web Store](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-creator-bl/koeingndpmmgabfoihkcoikiopgkjenm)
+[Install ChannelFence from the Chrome Web Store](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=github&utm_medium=organic&utm_campaign=30day_growth&utm_content=readme_install)
 
-[Visit the ChannelFence website](https://boahs.github.io/ChannelFence/) or [report a problem](https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml).
+[Visit the ChannelFence website](https://channelfence.app/) or [report a problem](https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml).
+
+## Why ChannelFence?
+
+YouTube's "Don't recommend channel" control changes recommendations. It is not a persistent creator block list across Home, search, Watch Next, Shorts, comments, and direct visits. ChannelFence is for people who want an explicit list they can view, edit, back up, and apply across supported YouTube surfaces.
 
 ## How to block a YouTube channel in Chrome
 
@@ -84,6 +92,7 @@ The uploadable archive is written to `dist/`. Store listing materials and tests 
 - `ui/` — popup, options, onboarding, and bundled privacy policy.
 - `assets/icons/` — extension icon assets.
 - `store/` — listing copy and submission guidance.
+- `marketing/` — local campaign checklists, attributed links, and reproducible launch artwork.
 - `tests/` — Node-based data-model checks and Playwright extension tests.
 
 ## License

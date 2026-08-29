@@ -79,7 +79,7 @@ test("manifest description fits the store summary limit", () => {
 
 test("publishes the project homepage and keeps package versions aligned", () => {
   const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
-  assert.equal(manifest.homepage_url, "https://boahs.github.io/ChannelFence/");
+  assert.equal(manifest.homepage_url, "https://channelfence.app/");
   assert.equal(packageJson.version, manifest.version);
 });
 

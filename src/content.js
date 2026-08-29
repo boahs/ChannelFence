@@ -7,6 +7,11 @@
   }
   globalThis.__channelFenceLoaded = true;
 
+  const SHORTS_IDENTITY_MAX_SETTLE_MS = 4500;
+  const BLOCKED_SHORT_CONTROL_WAIT_MS = 3000;
+  const BLOCKED_SHORT_RETRY_MS = 250;
+  const BLOCKED_SHORT_MAX_WAIT_MS = 10000;
+
   const CONTENT_SELECTOR = [
     "ytd-rich-item-renderer",
     "ytd-video-renderer",
@@ -167,6 +172,19 @@
     pendingTimer: null,
     blockedShortSkipKey: "",
     blockedShortSkipTimer: null,
+    blockedShortAdvanceAttempted: false,
+    blockedShortScrollAttempted: false,
+    blockedShortFailedOpenKey: "",
+    shortsRouteSettleUntil: 0,
+    shortsRouteSettleTimer: null,
+    shortsRoutePreviousOwnerKeys: [],
+    shortsStableOwnerKeys: [],
+    shortsStableRenderer: null,
+    shortsRouteRenderer: null,
+    shortsOwnerMutationVersions: new WeakMap(),
+    shortsRouteOwnerMutationVersion: 0,
+    shortsUnresolvedRouteIdentity: "",
+    shortsUnresolvedOwnerKeys: [],
     compactShortContexts: new Map(),
     compactShortLookups: new Map(),
     compactShortFailures: new Map(),
@@ -199,7 +217,14 @@
 
   function clearWatchPending() {
     clearTimeout(state.pendingTimer);
+    state.pendingTimer = null;
     document.documentElement.classList.remove("cf-watch-pending");
+  }
+
+  function holdWatchPending() {
+    clearTimeout(state.pendingTimer);
+    state.pendingTimer = null;
+    document.documentElement.classList.add("cf-watch-pending");
   }
 
   function rebuildBlockedLookup() {
@@ -558,7 +583,147 @@
       (element.hasAttribute("is-active") ? 8 : 0);
   }
 
+  function shortsVideoIdFromPath(pathname) {
+    const match = String(pathname || "").match(/^\/shorts\/([^/?#]+)/);
+    return match ? match[1] : "";
+  }
+
+  function shortsVideoIdFromUrl(value) {
+    if (!value) {
+      return "";
+    }
+    try {
+      return shortsVideoIdFromPath(new URL(value, location.href).pathname);
+    } catch {
+      return "";
+    }
+  }
+
+  function shortsRouteIdentityFromUrl(value) {
+    if (!value) {
+      return "";
+    }
+    try {
+      const pathname = new URL(value, location.href).pathname;
+      const videoId = shortsVideoIdFromPath(pathname);
+      if (videoId) {
+        return `short:${videoId}`;
+      }
+      return pathname === "/shorts" || pathname === "/shorts/"
+        ? "shorts:index"
+        : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function currentShortsRouteIdentity() {
+    return shortsRouteIdentityFromUrl(location.href);
+  }
+
+  function shortsRendererVideoId(renderer) {
+    for (const anchor of renderer?.querySelectorAll?.("a[href]") || []) {
+      const videoId = shortsVideoIdFromUrl(anchor.href || anchor.getAttribute("href"));
+      if (videoId) {
+        return videoId;
+      }
+    }
+    return "";
+  }
+
+  function shortsRendererMatchesRoute(renderer = currentShortsRenderer()) {
+    if (!renderer) {
+      return false;
+    }
+    const routeVideoId = shortsVideoIdFromPath(location.pathname);
+    return !routeVideoId || shortsRendererVideoId(renderer) === routeVideoId;
+  }
+
+  function currentShortsRenderer() {
+    if (!isShortsRoute()) {
+      return null;
+    }
+
+    const scroller = document.querySelector("ytd-shorts #shorts-container");
+    const scrollerRect = scroller?.getBoundingClientRect();
+    const viewportCenter = scrollerRect && scrollerRect.height > 0
+      ? scrollerRect.top + (scrollerRect.height / 2)
+      : innerHeight / 2;
+    const renderers = [...document.querySelectorAll(
+      "ytd-shorts ytd-reel-video-renderer"
+    )].filter((renderer) => {
+      const style = getComputedStyle(renderer);
+      return style.display !== "none" && style.visibility !== "hidden";
+    });
+    const viewportTop = scrollerRect?.top ?? 0;
+    const viewportBottom = scrollerRect?.bottom ?? innerHeight;
+    const visibleRenderers = renderers.filter((renderer) => {
+      const rect = renderer.getBoundingClientRect();
+      return rect.width > 0 && Math.min(rect.bottom, viewportBottom) >
+        Math.max(rect.top, viewportTop);
+    });
+    const candidates = visibleRenderers.length > 0 ? visibleRenderers : renderers;
+    const routeVideoId = shortsVideoIdFromPath(location.pathname);
+    let best = null;
+    let bestScore = -Infinity;
+
+    for (const renderer of candidates) {
+      const rect = renderer.getBoundingClientRect();
+      const visibleHeight = Math.max(
+        0,
+        Math.min(rect.bottom, viewportBottom) - Math.max(rect.top, viewportTop)
+      );
+      const centerDistance = Math.abs(((rect.top + rect.bottom) / 2) - viewportCenter);
+      const routeMatches = routeVideoId && shortsRendererVideoId(renderer) === routeVideoId;
+      const score = (routeMatches ? 1_000_000_000 : 0) +
+        (visibleHeight * 100) - centerDistance +
+        (renderer.hasAttribute("is-active") ? 10 : 0);
+      if (score > bestScore) {
+        best = renderer;
+        bestScore = score;
+      }
+    }
+
+    return best;
+  }
+
+  function currentShortsDomOwnerKeys(renderer = currentShortsRenderer()) {
+    if (!renderer) {
+      return [];
+    }
+    return refsFromElement(renderer)
+      .map((ref) => ref.key)
+      .sort();
+  }
+
+  function shortsOwnerMutationVersion(renderer) {
+    return renderer ? (state.shortsOwnerMutationVersions.get(renderer) || 0) : 0;
+  }
+
+  function sameStringKeys(left, right) {
+    return left.length === right.length && left.every((key, index) => key === right[index]);
+  }
+
+  function rememberCurrentShortsOwner() {
+    if (!isShortsRoute()) {
+      state.shortsStableOwnerKeys = [];
+      state.shortsStableRenderer = null;
+      return;
+    }
+    const renderer = currentShortsRenderer();
+    const keys = currentShortsDomOwnerKeys(renderer);
+    if (keys.length > 0) {
+      state.shortsStableOwnerKeys = keys;
+      state.shortsStableRenderer = renderer;
+    }
+  }
+
   function pageOwnerRoot() {
+    const shortsRenderer = currentShortsRenderer();
+    if (shortsRenderer) {
+      return shortsRenderer;
+    }
+
     let best = null;
     let bestScore = -Infinity;
     PAGE_OWNER_SELECTORS.forEach((selector, selectorIndex) => {
@@ -583,17 +748,46 @@
       return { refs: [], displayName: "", owners: [] };
     }
 
+    const owner = pageOwnerRoot();
+    let owners = owner ? ownerContextsFromElement(owner) : [];
+    let ownerRefs = owner ? refsFromElement(owner, owners) : [];
+    const shortsRouteIdentity = currentShortsRouteIdentity();
+    if (isShortsRoute() &&
+      state.shortsUnresolvedRouteIdentity === shortsRouteIdentity) {
+      const ownerKeys = ownerRefs.map((ref) => ref.key).sort();
+      const ownerChanged = ownerKeys.length > 0 && (
+        state.shortsUnresolvedOwnerKeys.length === 0 ||
+        !sameStringKeys(ownerKeys, state.shortsUnresolvedOwnerKeys)
+      );
+      const rendererChanged = Boolean(owner && state.shortsStableRenderer &&
+        owner !== state.shortsStableRenderer);
+      const ownerRerendered = owner === state.shortsRouteRenderer &&
+        shortsOwnerMutationVersion(owner) > state.shortsRouteOwnerMutationVersion;
+      if (shortsRendererMatchesRoute(owner) &&
+        (ownerChanged || rendererChanged || ownerRerendered)) {
+        state.shortsUnresolvedRouteIdentity = "";
+        state.shortsUnresolvedOwnerKeys = [];
+      } else {
+        owners = [];
+        ownerRefs = [];
+      }
+    }
     const refs = [];
     const pathRef = Shared.normalizeChannelRef(location.href);
     if (pathRef) {
       refs.push(pathRef);
     }
-    refs.push(...metadataRefs());
-
-    const owner = pageOwnerRoot();
-    const owners = owner ? ownerContextsFromElement(owner) : [];
-    if (owner) {
-      refs.push(...refsFromElement(owner));
+    if (isShortsRoute()) {
+      // Shorts reuses renderers while navigating. Once a current renderer exists,
+      // its owner is authoritative; page metadata can still belong to the prior Short.
+      if (ownerRefs.length > 0) {
+        refs.push(...ownerRefs);
+      } else if (!owner &&
+        state.shortsUnresolvedRouteIdentity !== shortsRouteIdentity) {
+        refs.push(...metadataRefs());
+      }
+    } else {
+      refs.push(...metadataRefs(), ...ownerRefs);
     }
 
     const cleanRefs = Shared.uniqueRefs(refs);
@@ -606,13 +800,15 @@
       "ytd-reel-video-renderer[is-active] a[href^='/@']"
     ];
     let displayName = owners[0]?.displayName || "";
-    for (const selector of nameSelectors) {
-      if (displayName) {
-        break;
-      }
-      displayName = Shared.cleanDisplayName(document.querySelector(selector)?.textContent);
-      if (displayName) {
-        break;
+    if (!isShortsRoute()) {
+      for (const selector of nameSelectors) {
+        if (displayName) {
+          break;
+        }
+        displayName = Shared.cleanDisplayName(document.querySelector(selector)?.textContent);
+        if (displayName) {
+          break;
+        }
       }
     }
 
@@ -1254,18 +1450,29 @@
 
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "cf-block-button";
+    button.className = pageButton
+      ? "cf-block-button cf-channel-header-block"
+      : "cf-block-button";
     button.dataset.cfIdentity = key;
     button.__channelFenceRoot = root;
     button.__channelFenceAnchor = ownerContext?.anchor || null;
     button.title = `Block ${displayName} with ChannelFence`;
     button.setAttribute("aria-label", `Block ${displayName}`);
 
-    const symbol = document.createElement("span");
-    symbol.className = "cf-block-button__symbol";
-    symbol.setAttribute("aria-hidden", "true");
-    symbol.textContent = "⊘";
-    button.append(symbol);
+    if (pageButton) {
+      const icon = document.createElement("img");
+      icon.className = "cf-channel-header-block__icon";
+      icon.src = chrome.runtime.getURL("assets/icons/channelfence-48.png");
+      icon.alt = "";
+      icon.setAttribute("aria-hidden", "true");
+      button.append(icon);
+    } else {
+      const symbol = document.createElement("span");
+      symbol.className = "cf-block-button__symbol";
+      symbol.setAttribute("aria-hidden", "true");
+      symbol.textContent = "⊘";
+      button.append(symbol);
+    }
 
     button.addEventListener("click", async (event) => {
       event.preventDefault();
@@ -1593,12 +1800,201 @@
     clearTimeout(state.blockedShortSkipTimer);
     state.blockedShortSkipTimer = null;
     state.blockedShortSkipKey = "";
+    state.blockedShortAdvanceAttempted = false;
+    state.blockedShortScrollAttempted = false;
+  }
+
+  function clearBlockedShortFailedOpen() {
+    state.blockedShortFailedOpenKey = "";
+  }
+
+  function clearShortsRouteSettle() {
+    clearTimeout(state.shortsRouteSettleTimer);
+    state.shortsRouteSettleTimer = null;
+    state.shortsRouteSettleUntil = 0;
+    state.shortsRoutePreviousOwnerKeys = [];
+  }
+
+  function clearUnresolvedShortsIdentity() {
+    state.shortsUnresolvedRouteIdentity = "";
+    state.shortsUnresolvedOwnerKeys = [];
+  }
+
+  function markShortsRouteSettling() {
+    clearShortsRouteSettle();
+    clearUnresolvedShortsIdentity();
+    if (!state.enabled || state.blocked.length === 0 || !isShortsRoute()) {
+      clearWatchPending();
+      return;
+    }
+    holdWatchPending();
+    state.shortsRoutePreviousOwnerKeys = [...state.shortsStableOwnerKeys];
+    state.shortsRouteRenderer = currentShortsRenderer();
+    state.shortsRouteOwnerMutationVersion = shortsOwnerMutationVersion(
+      state.shortsRouteRenderer
+    );
+    state.shortsRouteSettleUntil = Date.now() + SHORTS_IDENTITY_MAX_SETTLE_MS;
+    state.shortsRouteSettleTimer = setTimeout(() => {
+      state.shortsRouteSettleTimer = null;
+      scheduleScan();
+    }, SHORTS_IDENTITY_MAX_SETTLE_MS);
+  }
+
+  function shortsRouteIsSettling() {
+    if (!state.shortsRouteSettleUntil) {
+      return false;
+    }
+    if (!state.enabled || state.blocked.length === 0 || !isShortsRoute()) {
+      clearShortsRouteSettle();
+      clearUnresolvedShortsIdentity();
+      return false;
+    }
+
+    const renderer = currentShortsRenderer();
+    const currentOwnerKeys = currentShortsDomOwnerKeys(renderer);
+    const ownerChanged = currentOwnerKeys.length > 0 && (
+      state.shortsRoutePreviousOwnerKeys.length === 0 ||
+      !sameStringKeys(currentOwnerKeys, state.shortsRoutePreviousOwnerKeys)
+    );
+    const rendererChanged = Boolean(renderer && state.shortsStableRenderer &&
+      renderer !== state.shortsStableRenderer);
+    const ownerRerendered = renderer === state.shortsRouteRenderer &&
+      shortsOwnerMutationVersion(renderer) > state.shortsRouteOwnerMutationVersion;
+    if (currentOwnerKeys.length > 0 && shortsRendererMatchesRoute(renderer) &&
+      (ownerChanged || rendererChanged || ownerRerendered)) {
+      state.shortsStableOwnerKeys = currentOwnerKeys;
+      state.shortsStableRenderer = renderer;
+      clearUnresolvedShortsIdentity();
+      clearShortsRouteSettle();
+      return false;
+    }
+    if (Date.now() >= state.shortsRouteSettleUntil) {
+      // Without an owner signal tied to this Short, fail open instead of using
+      // the previous renderer's creator and potentially skipping allowed content.
+      state.shortsUnresolvedRouteIdentity = currentShortsRouteIdentity();
+      state.shortsUnresolvedOwnerKeys = [...state.shortsRoutePreviousOwnerKeys];
+      state.shortsRouteRenderer = renderer;
+      state.shortsRouteOwnerMutationVersion = shortsOwnerMutationVersion(renderer);
+      clearShortsRouteSettle();
+      clearWatchPending();
+      return false;
+    }
+    return true;
+  }
+
+  function syncCurrentRoute() {
+    if (location.href === state.currentUrl) {
+      return false;
+    }
+    const previousShortsIdentity = shortsRouteIdentityFromUrl(state.currentUrl);
+    const nextShortsIdentity = currentShortsRouteIdentity();
+    const sameShortsRoute = Boolean(previousShortsIdentity && nextShortsIdentity &&
+      previousShortsIdentity === nextShortsIdentity);
+    state.currentUrl = location.href;
+    if (sameShortsRoute) {
+      return true;
+    }
+    state.channelPageIdentity = null;
+    clearBlockedShortSkip();
+    clearBlockedShortFailedOpen();
+    removeOverlay();
+    markWatchPending();
+    if (isShortsRoute()) {
+      markShortsRouteSettling();
+    } else {
+      clearShortsRouteSettle();
+      clearUnresolvedShortsIdentity();
+      state.shortsStableOwnerKeys = [];
+      state.shortsStableRenderer = null;
+      state.shortsRouteRenderer = null;
+    }
+    return true;
+  }
+
+  function scrollTowardNextShort() {
+    const scroller = document.querySelector("ytd-shorts #shorts-container");
+    if (!scroller) {
+      return false;
+    }
+
+    const renderers = [...document.querySelectorAll("ytd-shorts ytd-reel-video-renderer")];
+    const current = currentShortsRenderer();
+    const currentIndex = renderers.indexOf(current);
+    const next = currentIndex >= 0 ? renderers[currentIndex + 1] : null;
+    if (next) {
+      next.scrollIntoView({ behavior: "auto", block: "center" });
+    } else {
+      scroller.scrollBy({
+        top: Math.max(scroller.clientHeight, 640),
+        behavior: "auto"
+      });
+    }
+    return true;
+  }
+
+  function attemptBlockedShortAdvance(sourceRouteIdentity, skipKey, startedAt) {
+    if (state.blockedShortSkipKey !== skipKey || !isShortsRoute()) {
+      return;
+    }
+    if (currentShortsRouteIdentity() !== sourceRouteIdentity) {
+      syncCurrentRoute();
+      scheduleScan();
+      return;
+    }
+    if (location.href !== state.currentUrl) {
+      syncCurrentRoute();
+    }
+    if (Date.now() - startedAt >= BLOCKED_SHORT_MAX_WAIT_MS) {
+      const failedOpenKey = state.blockedShortSkipKey;
+      clearBlockedShortSkip();
+      state.blockedShortFailedOpenKey = failedOpenKey;
+      clearWatchPending();
+      // YouTube may not have another Short ready. Stay on the current route
+      // rather than unexpectedly ejecting the user to Home.
+      return;
+    }
+
+    if (state.navigationInProgress) {
+      state.blockedShortSkipTimer = setTimeout(() => {
+        state.blockedShortSkipTimer = null;
+        attemptBlockedShortAdvance(sourceRouteIdentity, skipKey, startedAt);
+      }, BLOCKED_SHORT_RETRY_MS);
+      return;
+    }
+
+    const nextButton = document.querySelector(
+      "ytd-shorts #navigation-button-down button"
+    );
+    const nextButtonEnabled = nextButton && !nextButton.disabled &&
+      nextButton.getAttribute("aria-disabled") !== "true";
+    const waitedForControls = Date.now() - startedAt >= BLOCKED_SHORT_CONTROL_WAIT_MS;
+    const advanceAlreadyAttempted = state.blockedShortAdvanceAttempted ||
+      state.blockedShortScrollAttempted;
+    if (!advanceAlreadyAttempted && nextButtonEnabled) {
+      state.blockedShortAdvanceAttempted = true;
+      nextButton.click();
+    } else if (!advanceAlreadyAttempted && waitedForControls &&
+      scrollTowardNextShort()) {
+      state.blockedShortScrollAttempted = true;
+    }
+
+    state.blockedShortSkipTimer = setTimeout(() => {
+      state.blockedShortSkipTimer = null;
+      attemptBlockedShortAdvance(sourceRouteIdentity, skipKey, startedAt);
+    }, BLOCKED_SHORT_RETRY_MS);
   }
 
   function advancePastBlockedShort(entry) {
-    const sourceUrl = location.href;
-    const skipKey = `${sourceUrl}|${entry.key}`;
-    clearWatchPending();
+    const sourceRouteIdentity = currentShortsRouteIdentity();
+    const skipKey = `${sourceRouteIdentity}|${entry.key}`;
+
+    if (state.blockedShortFailedOpenKey === skipKey) {
+      clearWatchPending();
+      removeOverlay();
+      return;
+    }
+
+    holdWatchPending();
     removeOverlay();
 
     if (state.blockedShortSkipKey === skipKey) {
@@ -1606,23 +2002,11 @@
     }
     clearBlockedShortSkip();
     state.blockedShortSkipKey = skipKey;
-
-    const scroller = document.querySelector("ytd-shorts #shorts-container");
-    if (scroller) {
-      scroller.scrollBy({
-        top: Math.max(scroller.clientHeight, 640),
-        behavior: "smooth"
-      });
-    }
-
-    state.blockedShortSkipTimer = setTimeout(() => {
-      if (location.href === sourceUrl) {
-        location.assign("/");
-      }
-    }, 2500);
+    attemptBlockedShortAdvance(sourceRouteIdentity, skipKey, Date.now());
   }
 
   function applyRouteGuard() {
+    syncCurrentRoute();
     if (state.navigationInProgress) {
       removeOverlay();
       return;
@@ -1630,12 +2014,36 @@
 
     if (!state.enabled) {
       clearBlockedShortSkip();
+      clearShortsRouteSettle();
+      clearUnresolvedShortsIdentity();
       clearWatchPending();
       removeOverlay();
       return;
     }
 
+    if (state.blocked.length === 0) {
+      clearShortsRouteSettle();
+      clearUnresolvedShortsIdentity();
+      clearWatchPending();
+    }
+
+    if (isShortsRoute() && shortsRouteIsSettling()) {
+      holdWatchPending();
+      removeOverlay();
+      return;
+    }
+
     const context = currentPageContext();
+    if (isShortsRoute() &&
+      state.shortsUnresolvedRouteIdentity === currentShortsRouteIdentity() &&
+      context.refs.length === 0) {
+      clearWatchPending();
+      removeOverlay();
+      return;
+    }
+    if (isShortsRoute()) {
+      rememberCurrentShortsOwner();
+    }
     const pathIsChannel = Boolean(Shared.normalizeChannelRef(location.href));
     const routeNeedsIdentity = pathIsChannel || isWatchLikeRoute();
     if (!routeNeedsIdentity) {
@@ -1742,13 +2150,7 @@
     state.mutationShortsRoots.clear();
     state.mutationRouteDirty = false;
 
-    if (location.href !== state.currentUrl) {
-      state.currentUrl = location.href;
-      state.channelPageIdentity = null;
-      clearBlockedShortSkip();
-      removeOverlay();
-      markWatchPending();
-    }
+    syncCurrentRoute();
 
     if (!state.enabled) {
       document.querySelectorAll(".cf-hidden-by-channelfence").forEach((item) => {
@@ -1796,6 +2198,72 @@
     return Boolean(element?.closest?.(CHANNELFENCE_ELEMENT_SELECTOR));
   }
 
+  function elementContainsShortsOwnerIdentity(element) {
+    if (!(element instanceof Element)) {
+      return false;
+    }
+    if (element.matches("yt-reel-channel-bar-view-model")) {
+      return true;
+    }
+    const anchors = element.matches("a")
+      ? [element]
+      : [...element.querySelectorAll("a")];
+    return anchors.some((anchor) => Boolean(Shared.normalizeChannelRef(
+      anchor.href || anchor.getAttribute("href"),
+      location.href
+    )));
+  }
+
+  function mutationTouchesShortsOwner(mutation) {
+    const ownerSelector = "ytd-shorts yt-reel-channel-bar-view-model";
+    const target = mutation.target instanceof Element
+      ? mutation.target
+      : mutation.target.parentElement;
+    const ownerBar = target?.closest?.(ownerSelector);
+    if (mutation.type === "attributes") {
+      return Boolean(ownerBar && target?.matches?.("a") &&
+        elementContainsShortsOwnerIdentity(target));
+    }
+    if (ownerBar && target?.matches?.("a") &&
+      elementContainsShortsOwnerIdentity(target)) {
+      // Text replacement inside the creator link is reported as child-list churn.
+      return true;
+    }
+    return [...mutation.addedNodes, ...mutation.removedNodes].some((node) => {
+      if (!(node instanceof Element)) {
+        return false;
+      }
+      if (node.matches?.("yt-reel-channel-bar-view-model") ||
+        node.querySelector?.("yt-reel-channel-bar-view-model")) {
+        return true;
+      }
+      return Boolean(ownerBar && elementContainsShortsOwnerIdentity(node));
+    });
+  }
+
+  function shortsOwnerRendererForMutation(mutation) {
+    const target = mutation.target instanceof Element
+      ? mutation.target
+      : mutation.target.parentElement;
+    const targetRenderer = target?.closest?.("ytd-reel-video-renderer");
+    if (targetRenderer) {
+      return targetRenderer;
+    }
+    for (const node of [...mutation.addedNodes, ...mutation.removedNodes]) {
+      if (!(node instanceof Element)) {
+        continue;
+      }
+      if (node.matches?.("ytd-reel-video-renderer")) {
+        return node;
+      }
+      const nestedRenderer = node.querySelector?.("ytd-reel-video-renderer");
+      if (nestedRenderer) {
+        return nestedRenderer;
+      }
+    }
+    return null;
+  }
+
   function addMutationRoots(element, selector, collection, includeDescendants) {
     const closest = element.closest?.(selector);
     if (closest) {
@@ -1835,16 +2303,24 @@
       includeDescendants
     );
 
-    const ownerSelector = Shared.normalizeChannelRef(location.href)
-      ? CHANNEL_PAGE_HEADER_SELECTOR
-      : PAGE_OWNER_SELECTOR;
-    const pageOwnerChanged = routeHasCurrentCreator() && Boolean(
-      element.closest?.(ownerSelector) ||
-      element.matches?.(ownerSelector) ||
-      (includeDescendants && element.querySelector?.(ownerSelector)) ||
-      element.matches?.("meta[itemprop='channelId']") ||
-      (includeDescendants && element.querySelector?.("meta[itemprop='channelId']"))
-    );
+    const pageOwnerChanged = isShortsRoute()
+      ? routeHasCurrentCreator() && Boolean(
+        element.closest?.("yt-reel-channel-bar-view-model") ||
+        element.matches?.("yt-reel-channel-bar-view-model") ||
+        (includeDescendants && element.querySelector?.("yt-reel-channel-bar-view-model"))
+      )
+      : (() => {
+        const ownerSelector = Shared.normalizeChannelRef(location.href)
+          ? CHANNEL_PAGE_HEADER_SELECTOR
+          : PAGE_OWNER_SELECTOR;
+        return routeHasCurrentCreator() && Boolean(
+          element.closest?.(ownerSelector) ||
+          element.matches?.(ownerSelector) ||
+          (includeDescendants && element.querySelector?.(ownerSelector)) ||
+          element.matches?.("meta[itemprop='channelId']") ||
+          (includeDescendants && element.querySelector?.("meta[itemprop='channelId']"))
+        );
+      })();
     if (pageOwnerChanged) {
       state.mutationRouteDirty = true;
     }
@@ -1898,7 +2374,11 @@
       showToast("ChannelFence couldn't identify this creator yet.");
       return false;
     }
-    state.blocked = Shared.mergeBlockedEntry(state.blocked, entry);
+    const nextBlocked = Shared.mergeBlockedEntry(state.blocked, entry);
+    if (!blockedListsEqual(state.blocked, nextBlocked)) {
+      clearBlockedShortFailedOpen();
+    }
+    state.blocked = nextBlocked;
     rebuildBlockedLookup();
     await chrome.storage.local.set({ [Shared.STORAGE.blocked]: state.blocked });
     showToast(`Blocked ${Shared.labelForEntry(entry)}`, {
@@ -1910,7 +2390,11 @@
   }
 
   async function unblockCreator(refs) {
-    state.blocked = Shared.removeEntriesMatchingRefs(state.blocked, refs);
+    const nextBlocked = Shared.removeEntriesMatchingRefs(state.blocked, refs);
+    if (!blockedListsEqual(state.blocked, nextBlocked)) {
+      clearBlockedShortFailedOpen();
+    }
+    state.blocked = nextBlocked;
     rebuildBlockedLookup();
     await chrome.storage.local.set({ [Shared.STORAGE.blocked]: state.blocked });
     scheduleScan();
@@ -1948,6 +2432,12 @@
       state.scanWhenVisible = true;
       return;
     }
+
+    if (isShortsRoute() && shortsRouteIsSettling()) {
+      holdWatchPending();
+      removeOverlay();
+      return;
+    }
     state.scanWhenVisible = false;
     scheduleScan();
   }
@@ -1957,7 +2447,11 @@
       return;
     }
     if (changes[Shared.STORAGE.enabled]) {
-      state.enabled = changes[Shared.STORAGE.enabled].newValue !== false;
+      const nextEnabled = changes[Shared.STORAGE.enabled].newValue !== false;
+      if (state.enabled !== nextEnabled) {
+        clearBlockedShortFailedOpen();
+      }
+      state.enabled = nextEnabled;
     }
     if (changes[Shared.STORAGE.hideComments]) {
       state.hideComments = changes[Shared.STORAGE.hideComments].newValue !== false;
@@ -1970,6 +2464,7 @@
       if (!blockedListsEqual(state.blocked, nextBlocked)) {
         state.blocked = nextBlocked;
         rebuildBlockedLookup();
+        clearBlockedShortFailedOpen();
       }
     }
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked]) {
@@ -2009,7 +2504,21 @@
         continue;
       }
 
+      if (isShortsRoute() && mutationTouchesShortsOwner(mutation)) {
+        const renderer = shortsOwnerRendererForMutation(mutation);
+        if (renderer) {
+          state.shortsOwnerMutationVersions.set(
+            renderer,
+            shortsOwnerMutationVersion(renderer) + 1
+          );
+        }
+      }
+
       if (mutation.type === "attributes") {
+        if (isShortsRoute() && mutation.attributeName === "is-active" &&
+          target.matches("ytd-reel-video-renderer")) {
+          state.mutationRouteDirty = true;
+        }
         scheduleMutationElement(target);
         continue;
       }
