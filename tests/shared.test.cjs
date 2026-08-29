@@ -292,6 +292,38 @@ test("indexed matching preserves block-list precedence for collaborations", () =
   );
 });
 
+test("does not let a display name override a different stable creator identity", () => {
+  const alpha = Shared.createBlockedEntry(
+    [Shared.normalizeChannelRef("/@alpha")],
+    "Same Name"
+  );
+  const lookup = Shared.createBlockedLookup([alpha]);
+
+  assert.equal(
+    Shared.findMatchingEntryInLookup(
+      lookup,
+      [Shared.normalizeChannelRef("/@beta")],
+      ["Same Name"]
+    ),
+    null
+  );
+  assert.equal(
+    Shared.findMatchingEntryInLookup(
+      lookup,
+      [
+        Shared.normalizeChannelRef("/@beta"),
+        Shared.normalizeCreatorNameRef("Same Name")
+      ],
+      ["Same Name"]
+    ),
+    null
+  );
+  assert.equal(
+    Shared.findMatchingEntryInLookup(lookup, [], ["Same Name"]).key,
+    "handle:@alpha"
+  );
+});
+
 test("rejects video durations as creator labels and recovers the channel handle", () => {
   assert.equal(Shared.cleanCreatorDisplayName("8:41"), "");
   assert.equal(Shared.cleanCreatorDisplayName("1:40:36"), "");

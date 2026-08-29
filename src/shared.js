@@ -375,7 +375,10 @@
     }
     let match = null;
     let matchRank = Number.POSITIVE_INFINITY;
-    for (const ref of uniqueRefs(refs)) {
+    const cleanRefs = uniqueRefs(refs);
+    const stableRefs = cleanRefs.filter((ref) => ref.type !== "name");
+    const refsToMatch = stableRefs.length > 0 ? stableRefs : cleanRefs;
+    for (const ref of refsToMatch) {
       const entry = lookup.byAlias?.get(ref.key);
       const rank = entry ? (lookup.rankByEntry?.get(entry) ?? 0) : undefined;
       if (entry && rank < matchRank) {
@@ -385,6 +388,12 @@
     }
     if (match) {
       return match;
+    }
+    // A stable but different handle/channel ID disproves a display-name match.
+    // Name matching exists only for YouTube surfaces that expose no stable
+    // creator link at all.
+    if (stableRefs.length > 0) {
+      return null;
     }
     for (const value of Array.isArray(names) ? names : []) {
       const name = normalizeCreatorName(value);

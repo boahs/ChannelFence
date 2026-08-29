@@ -16,6 +16,27 @@ test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }
   })).toBe("none");
 });
 
+test("uses the live channel route as the canonical header identity", async ({
+  extensionPage
+}) => {
+  await extensionPage.goto("https://www.youtube.com/@hiddentracktv2", {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+
+  const header = extensionPage.locator(
+    "yt-page-header-renderer, ytd-c4-tabbed-header-renderer #channel-header-container"
+  ).filter({ has: extensionPage.locator("h1") }).first();
+  await expect(header).toBeVisible({ timeout: 30_000 });
+  const controls = header.locator(".cf-channel-header-block");
+  await expect(controls).toHaveCount(1, { timeout: 15_000 });
+  await expect(controls).toHaveAttribute(
+    "data-cf-identity",
+    "handle:@hiddentracktv2"
+  );
+  await expect(controls).not.toHaveAttribute("aria-label", /Community/i);
+});
+
 test("keeps live channel-card controls singular and ignores video statistics", async ({
   extensionId,
   extensionPage

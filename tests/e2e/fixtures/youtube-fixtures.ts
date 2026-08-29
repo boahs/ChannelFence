@@ -249,6 +249,29 @@ export function channelHeader(displayName: string, handle: string): string {
     </yt-page-header-renderer>`;
 }
 
+export function modernChannelHeaderWithCommunityLink(
+  displayName: string,
+  handle: string,
+  includeOwnerAnchor = true
+): string {
+  const safeName = escapeHtml(displayName);
+  const safeHandle = escapeHtml(handle.startsWith("@") ? handle : `@${handle}`);
+  return `
+    <yt-page-header-renderer data-testid="modern-channel-header">
+      <div class="ytPageHeaderViewModelTitleAndMetadata">
+        <h1 class="dynamicTextViewModelH1">${safeName}</h1>
+        ${includeOwnerAnchor
+          ? `<a data-testid="channel-route-anchor" href="/${safeHandle}">${safeHandle}</a>`
+          : ""}
+      </div>
+      <div id="channel-info">
+        <div style="display: none">
+          <a href="/@YouTubeCreators" aria-label="Community" tabindex="-1">Community</a>
+        </div>
+      </div>
+    </yt-page-header-renderer>`;
+}
+
 export function shortsShelf(): string {
   return `
     <ytd-guide-entry-renderer data-testid="shorts-guide" title="Shorts">

@@ -6,6 +6,7 @@ import {
   courseLockup,
   creatorCard,
   promotedHomeCard,
+  modernChannelHeaderWithCommunityLink,
   rightRailLockup,
   shortsShelf,
   watchOwner,
@@ -314,6 +315,130 @@ test.describe("YouTube surfaces and menus", () => {
     }
   });
 
+  test("uses the route handle and channel title instead of unrelated header links", async ({
+    extensionPage,
+    extensionStorage,
+    serviceWorker
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(
+      modernChannelHeaderWithCommunityLink("Mylo the Cat", "@hiddentracktv2"),
+      "/@hiddentracktv2"
+    );
+
+    const header = youtube.card("modern-channel-header");
+    const button = header.locator(".cf-channel-header-block");
+    await expect(button).toHaveCount(1);
+    await expect(button).toHaveAttribute("aria-label", "Block Mylo the Cat");
+    await expect(button).toHaveAttribute("data-cf-identity", "handle:@hiddentracktv2");
+    await expect(header.getByRole("button", { name: /Community/ })).toHaveCount(0);
+
+    const response = await serviceWorker.evaluate(async () => {
+      const extensionChrome = (globalThis as unknown as {
+        chrome: {
+          tabs: {
+            query(query: Record<string, never>): Promise<Array<{ id?: number }>>;
+            sendMessage(tabId: number, message: { type: string }): Promise<{
+              displayName: string;
+              owners: Array<{ displayName: string; refs: Array<{ key: string }> }>;
+              refs: Array<{ key: string }>;
+            }>;
+          };
+        };
+      }).chrome;
+      const tabs = await extensionChrome.tabs.query({});
+      for (const tab of tabs) {
+        if (!tab.id) continue;
+        try {
+          return await extensionChrome.tabs.sendMessage(tab.id, {
+            type: "CF_GET_PAGE_CONTEXT"
+          });
+        } catch {
+          // Ignore extension pages without a YouTube content script.
+        }
+      }
+      throw new Error("Could not find the YouTube fixture tab");
+    });
+    expect(response.displayName).toBe("Mylo the Cat");
+    expect(response.refs.map((ref) => ref.key)).toEqual(["handle:@hiddentracktv2"]);
+    expect(response.owners).toEqual([{
+      displayName: "Mylo the Cat",
+      refs: [{
+        key: "handle:@hiddentracktv2",
+        type: "handle",
+        url: "https://www.youtube.com/@hiddentracktv2",
+        value: "@hiddentracktv2"
+      }]
+    }]);
+
+    await button.click();
+    await expect(extensionPage.locator("#cf-hard-block-overlay"))
+      .toContainText("Mylo the Cat is on your ChannelFence block list.");
+    await expect(extensionPage.locator("#cf-hard-block-overlay"))
+      .not.toContainText("Community is on your ChannelFence block list.");
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{
+        aliases: string[];
+        displayName: string;
+        key: string;
+        url: string;
+      }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(1);
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      aliases: ["handle:@hiddentracktv2"],
+      displayName: "Mylo the Cat",
+      key: "handle:@hiddentracktv2",
+      url: "https://www.youtube.com/@hiddentracktv2"
+    });
+  });
+
+  test("synthesizes a channel identity when the header has no owner anchor", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(
+      modernChannelHeaderWithCommunityLink("Mylo the Cat", "@hiddentracktv2", false),
+      "/@hiddentracktv2"
+    );
+
+    const header = youtube.card("modern-channel-header");
+    await expect(header.locator(".cf-channel-header-block")).toHaveCount(1);
+    await expect(header.locator(".cf-channel-header-block"))
+      .toHaveAttribute("aria-label", "Block Mylo the Cat");
+    await expect(header.locator(".cf-channel-header-block"))
+      .toHaveAttribute("data-cf-identity", "handle:@hiddentracktv2");
+  });
+
+  test("repairs a legacy channel label from the canonical route and title", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@hiddentracktv2", "Community")]
+    });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(
+      modernChannelHeaderWithCommunityLink("Mylo the Cat", "@hiddentracktv2"),
+      "/@hiddentracktv2"
+    );
+
+    await expect(extensionPage.locator("#cf-hard-block-overlay"))
+      .toContainText("Mylo the Cat is on your ChannelFence block list.");
+    await expect(extensionPage.locator("#cf-hard-block-overlay"))
+      .not.toContainText("Community is on your ChannelFence block list.");
+    await expect.poll(async () => {
+      const stored = await extensionStorage.get<{
+        cfBlockedChannels: Array<{ displayName: string; key: string }>;
+      }>("cfBlockedChannels");
+      return stored.cfBlockedChannels[0];
+    }).toMatchObject({
+      displayName: "Mylo the Cat",
+      key: "handle:@hiddentracktv2"
+    });
+  });
+
   test("retains a different stable creator even when its display name matches the page", async ({
     extensionPage
   }) => {
@@ -560,6 +685,34 @@ test.describe("YouTube surfaces and menus", () => {
     `, "/results?search_query=mrbeast");
 
     await expect(youtube.card("live-collaboration")).toBeHidden();
+  });
+
+  test("does not name-match a linked collaboration owner with a different handle", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@alpha", "Same Name")]
+    });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    const collaborationCard = (id: string, handle: string) => `
+      <ytd-video-renderer data-testid="${id}">
+        <div id="channel-info">
+          <a id="channel-thumbnail" href="/${handle}" aria-label="Go to channel Same Name">
+            Same Name
+          </a>
+          <yt-avatar-stack-view-model aria-label="Collaboration channels">
+          </yt-avatar-stack-view-model>
+          <div id="attributed-channel-name">Same Name and Guest Creator</div>
+        </div>
+      </ytd-video-renderer>`;
+    await youtube.open([
+      collaborationCard("different-linked-collaborator", "@beta"),
+      collaborationCard("blocked-linked-collaborator", "@alpha")
+    ].join(""), "/results?search_query=collaborations");
+
+    await expect(youtube.card("different-linked-collaborator")).toBeVisible();
+    await expect(youtube.card("blocked-linked-collaborator")).toBeHidden();
   });
 
   test("blocks linkless right-rail recommendations with the inline button", async ({

@@ -8,8 +8,8 @@ Use this file after Chrome Web Store version `0.2.2` is publicly available. Crea
 - Target: `main`
 - Title: `ChannelFence v0.2.2`
 - Attachment: `dist/ChannelFence-0.2.2.zip`
-- Package size: 329,008 bytes.
-- SHA-256: `EE84FDEFF229285608A723D9906E733757FBB2384918EE9C8D1592A789DAB9FB`
+- Package size: 330,441 bytes.
+- SHA-256: `150564D09271AD97E0F4096978EDA0395D5EDD3CD189F04B76E6105A89E3FFEB`
 
 Recalculate the hash immediately before publishing. If it differs, confirm why before uploading the ZIP.
 
@@ -23,6 +23,9 @@ ChannelFence 0.2.2 improves Shorts navigation and makes the block control on cha
 - Prevented stale creator metadata from blocking or advancing the wrong Short.
 - Prevented native Next controls and scroll fallback from advancing twice.
 - Avoided repeated navigation loops when YouTube does not expose a usable next Short.
+- Used the canonical channel-route handle for profile-page blocks instead of unrelated hidden header links such as "Community".
+- Prevented same-named channels with different stable handles from being treated as the same creator.
+- Repaired older correct-handle entries with an incorrect profile label when their canonical channel page is visited.
 
 ### Changed
 
@@ -33,6 +36,7 @@ ChannelFence 0.2.2 improves Shorts navigation and makes the block control on cha
 
 - Added deterministic coverage for slow controls, stale renderers, unresolved owners, route changes, sequential blocks, and double-advance races.
 - Added live YouTube coverage for opening a pre-blocked Short without returning Home.
+- Added deterministic and live coverage for canonical profile identity and safe collaboration matching.
 
 There are no new permissions, no remote code, and no analytics in this release.
 

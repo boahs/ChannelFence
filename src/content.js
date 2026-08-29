@@ -449,6 +449,33 @@
       .slice(0, 8);
   }
 
+  function linklessCollaborationNames(root, ownerContexts) {
+    const remaining = collaborationNamesFromElement(root).map((displayName) => ({
+      displayName,
+      normalizedName: Shared.normalizeCreatorName(displayName)
+    }));
+    if (remaining.length === 0) {
+      return [];
+    }
+
+    const stableOwners = (Array.isArray(ownerContexts) ? ownerContexts : [])
+      .filter((owner) => owner.refs?.some((ref) => ref.type !== "name"));
+    for (const owner of stableOwners) {
+      const normalizedOwnerName = Shared.normalizeCreatorName(owner.displayName);
+      const matchIndex = remaining.findIndex(
+        (candidate) => candidate.normalizedName === normalizedOwnerName
+      );
+      if (!normalizedOwnerName || matchIndex === -1) {
+        // If the linked owners cannot be reconciled with the explicit
+        // collaboration label, guessing could block an unrelated same-named
+        // channel. Stable identity wins, so fail open for name-only owners.
+        return [];
+      }
+      remaining.splice(matchIndex, 1);
+    }
+    return remaining.map((candidate) => candidate.displayName);
+  }
+
   function isLockupRoot(root) {
     return Boolean(root?.matches?.(
       "yt-lockup-view-model, .yt-lockup-view-model, .yt-lockup-view-model--wrapper"
@@ -743,9 +770,116 @@
     return best;
   }
 
+  function channelPageHeaderForRoute(routeRef) {
+    const headers = [...document.querySelectorAll(CHANNEL_PAGE_HEADER_SELECTOR)]
+      .filter((header) => header.isConnected)
+      .sort((left, right) => elementVisibilityScore(right) - elementVisibilityScore(left));
+    if (!routeRef) {
+      return headers[0] || null;
+    }
+    return headers.find((header) => channelPageAnchorForRoute(header, routeRef)) ||
+      headers[0] ||
+      null;
+  }
+
+  function channelPageAnchorForRoute(root, routeRef) {
+    if (!root || !routeRef) {
+      return null;
+    }
+    return [...root.querySelectorAll("a[href]")]
+      .filter((anchor) => {
+        const ref = Shared.normalizeChannelRef(
+          anchor.href || anchor.getAttribute("href"),
+          location.href
+        );
+        return ref?.key === routeRef.key && !isHiddenWithin(root, anchor);
+      })
+      .sort((left, right) => anchorPlacementScore(right) - anchorPlacementScore(left))[0] ||
+      null;
+  }
+
+  function channelPageTitleElement(root) {
+    if (!root) {
+      return null;
+    }
+    const selectors = [
+      "h1.dynamicTextViewModelH1",
+      ".ytPageHeaderViewModelTitle",
+      "h1",
+      "#channel-name",
+      "[class*='page-header-title']"
+    ];
+    for (const selector of selectors) {
+      const candidates = [...root.querySelectorAll(selector)]
+        .filter((element) => !isHiddenWithin(root, element))
+        .sort((left, right) => elementVisibilityScore(right) - elementVisibilityScore(left));
+      const title = candidates.find((element) =>
+        Shared.cleanCreatorDisplayName(element.textContent));
+      if (title) {
+        return title;
+      }
+    }
+    return null;
+  }
+
+  function channelMetadataMatchesRoute(routeRef) {
+    if (!routeRef) {
+      return false;
+    }
+    const identityUrls = [
+      document.querySelector("link[rel='canonical'][href]")?.getAttribute("href"),
+      document.querySelector("meta[property='og:url'][content]")?.getAttribute("content")
+    ];
+    return identityUrls.some((value) => {
+      const ref = Shared.normalizeChannelRef(value || "", location.href);
+      return ref?.key === routeRef.key;
+    });
+  }
+
+  function channelPageDisplayName(routeRef, header) {
+    const title = channelPageTitleElement(header);
+    if (title) {
+      return Shared.cleanCreatorDisplayName(title.textContent);
+    }
+    if (channelMetadataMatchesRoute(routeRef)) {
+      const metadataTitle = [
+        document.querySelector("meta[property='og:title'][content]")?.getAttribute("content"),
+        document.querySelector("meta[name='twitter:title'][content]")?.getAttribute("content"),
+        document.querySelector("meta[itemprop='name'][content]")?.getAttribute("content")
+      ].map((value) => Shared.cleanCreatorDisplayName(value)).find(Boolean);
+      if (metadataTitle) {
+        return metadataTitle;
+      }
+    }
+    return routeRef?.value || "creator";
+  }
+
+  function channelPageContext(routeRef) {
+    const header = channelPageHeaderForRoute(routeRef);
+    const refs = Shared.uniqueRefs([
+      routeRef,
+      ...(channelMetadataMatchesRoute(routeRef) ? metadataRefs() : [])
+    ]);
+    const displayName = channelPageDisplayName(routeRef, header);
+    const owner = { refs, displayName };
+    return {
+      refs,
+      displayName,
+      owners: [owner]
+    };
+  }
+
   function currentPageContext() {
     if (!routeHasCurrentCreator()) {
       return { refs: [], displayName: "", owners: [] };
+    }
+
+    const channelRouteRef = Shared.normalizeChannelRef(location.href);
+    if (channelRouteRef) {
+      // A direct channel URL is the authoritative identity. Modern YouTube
+      // headers can contain unrelated, hidden channel links (for example its
+      // "Community" product link), so never merge every header anchor here.
+      return channelPageContext(channelRouteRef);
     }
 
     const owner = pageOwnerRoot();
@@ -773,10 +907,6 @@
       }
     }
     const refs = [];
-    const pathRef = Shared.normalizeChannelRef(location.href);
-    if (pathRef) {
-      refs.push(pathRef);
-    }
     if (isShortsRoute()) {
       // Shorts reuses renderers while navigating. Once a current renderer exists,
       // its owner is authoritative; page metadata can still belong to the prior Short.
@@ -826,6 +956,33 @@
     return Shared.findMatchingEntryInLookup(state.blockedLookup, refs, ownerNames);
   }
 
+  function repairCanonicalChannelEntryLabel(entry, context) {
+    const displayName = Shared.cleanCreatorDisplayName(context?.displayName);
+    if (!entry || !displayName || entry.displayName === displayName) {
+      return entry;
+    }
+    const index = state.blocked.findIndex((candidate) => candidate.key === entry.key);
+    if (index === -1) {
+      return entry;
+    }
+    const repaired = Shared.createBlockedEntry(
+      state.blocked[index].aliases,
+      displayName,
+      state.blocked[index].blockedAt,
+      state.blocked[index].shortPaths
+    );
+    if (!repaired) {
+      return entry;
+    }
+
+    state.blocked = state.blocked.map((candidate, candidateIndex) =>
+      candidateIndex === index ? repaired : candidate);
+    rebuildBlockedLookup();
+    chrome.storage.local.set({ [Shared.STORAGE.blocked]: state.blocked })
+      .catch(() => undefined);
+    return matchingEntry(context.refs) || repaired;
+  }
+
   function refreshChannelPageIdentity() {
     const routeRef = Shared.normalizeChannelRef(location.href);
     if (!routeRef) {
@@ -833,39 +990,14 @@
       return;
     }
 
-    const headers = [...document.querySelectorAll(CHANNEL_PAGE_HEADER_SELECTOR)]
-      .filter((header) => header.isConnected)
-      .sort((left, right) => elementVisibilityScore(right) - elementVisibilityScore(left));
-    const matchingHeader = headers.find((header) => {
-      return refsFromElement(header).some((ref) => ref.key === routeRef.key);
-    });
-    const header = matchingHeader || headers[0] || null;
-    const headerContexts = header ? ownerContextsFromElement(header) : [];
-    const headerRefs = header ? refsFromElement(header, headerContexts) : [];
-    const refs = Shared.uniqueRefs([
-      routeRef,
-      ...metadataRefs(),
-      ...headerRefs
-    ]);
-    const names = new Set();
-    const addName = (value) => {
-      const normalized = Shared.normalizeCreatorName(value);
-      if (normalized) {
-        names.add(normalized);
-      }
-    };
-    if (header) {
-      header.querySelectorAll(
-        "h1, #channel-name, [class*='page-header-title']"
-      ).forEach((element) => addName(element.textContent));
-    }
-    headerContexts.forEach((context) => addName(context.displayName));
+    const context = channelPageContext(routeRef);
+    const name = Shared.normalizeCreatorName(context.displayName);
 
     state.channelPageIdentity = {
-      stableKeys: new Set(refs
+      stableKeys: new Set(context.refs
         .filter((ref) => ref.type !== "name")
         .map((ref) => ref.key)),
-      names
+      names: new Set(name ? [name] : [])
     };
   }
 
@@ -891,6 +1023,10 @@
   }
 
   function buttonHost(root, pageButton) {
+    if (pageButton && Shared.normalizeChannelRef(location.href)) {
+      const title = channelPageTitleElement(root);
+      return title?.parentElement || title || root;
+    }
     const anchor = bestAnchor(root);
     if (anchor) {
       return anchor.closest("ytd-channel-name, #channel-name, #owner-name, #author-text") || anchor.parentElement;
@@ -1479,6 +1615,15 @@
       event.stopPropagation();
       event.stopImmediatePropagation();
 
+      const channelRouteRef = pageButton
+        ? Shared.normalizeChannelRef(location.href)
+        : null;
+      if (channelRouteRef) {
+        const freshPageContext = channelPageContext(channelRouteRef);
+        await blockCreator(freshPageContext.refs, freshPageContext.displayName);
+        return;
+      }
+
       const freshOwners = ownerContextsFromElement(root);
       const freshOwner = ownerContext
         ? freshOwners.find((candidate) => candidate.anchor === ownerContext.anchor) ||
@@ -1629,7 +1774,17 @@
 
   function ensureOwnerButtons(root, pageButton, knownOwnerContexts) {
     const discoveredOwners = knownOwnerContexts ?? ownerContextsFromElement(root);
-    const owners = discoveredOwners.filter((context) => {
+    const channelRouteRef = pageButton
+      ? Shared.normalizeChannelRef(location.href)
+      : null;
+    const owners = channelRouteRef ? (() => {
+      const context = channelPageContext(channelRouteRef);
+      return [{
+        refs: context.refs,
+        displayName: context.displayName,
+        anchor: channelPageAnchorForRoute(root, channelRouteRef)
+      }];
+    })() : discoveredOwners.filter((context) => {
       if (pageButton || !context.anchor) {
         return true;
       }
@@ -1705,7 +1860,20 @@
     const ownerNames = compactContext?.displayName
       ? [compactContext.displayName]
       : ownerNamesFromElement(item, discoveredOwners);
-    const blocked = Boolean(exactShortEntry || matchingEntry(refs, ownerNames));
+    const collaborationNames = compactContext
+      ? []
+      : linklessCollaborationNames(item, discoveredOwners);
+    const hasStableRef = refs.some((ref) => ref.type !== "name");
+    const blocked = Boolean(
+      exactShortEntry ||
+      matchingEntry(refs, hasStableRef ? [] : ownerNames) ||
+      // YouTube collaboration cards can expose a stable link for only one
+      // creator while listing the remaining creators as attributed text. The
+      // explicit collaboration marker makes name fallback safe for those
+      // linkless collaborators without letting a same-named, different handle
+      // match on ordinary cards.
+      (collaborationNames.length > 0 && matchingEntry([], collaborationNames))
+    );
     const isShortsViewer = isShortsRoute() && item.matches("ytd-reel-video-renderer");
     const shouldHide = state.enabled && blocked && (!isComment || state.hideComments) &&
       !isShortsViewer;
@@ -2052,7 +2220,13 @@
       return;
     }
 
-    const entry = matchingEntry(context.refs);
+    let entry = matchingEntry(context.refs);
+    if (entry && pathIsChannel) {
+      // A canonical channel page is authoritative for the friendly label. This
+      // also repairs entries created by older builds that accidentally saved a
+      // tab or product-link label such as "Community" for the correct handle.
+      entry = repairCanonicalChannelEntryLabel(entry, context);
+    }
     if (entry) {
       if (isShortsRoute()) {
         advancePastBlockedShort(entry);
