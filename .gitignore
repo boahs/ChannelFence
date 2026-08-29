@@ -19,7 +19,10 @@ blob-report/
 # Raw and rendered local promo-video workspace
 /promo_videos/
 
-# Temporary marketing-frame extractions (final source selections stay tracked)
-marketing/assets/source/hide-shorts-*.png
-marketing/assets/source/home-*-frame.png
-marketing/assets/source/menu-frame.png
+# Private local campaign plans
+/marketing/
+
+# Temporary website-artwork frame extractions (final source selections stay tracked)
+site/assets/source/hide-shorts-*.png
+site/assets/source/home-*-frame.png
+site/assets/source/menu-frame.png

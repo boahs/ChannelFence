@@ -6,7 +6,7 @@ import { chromium } from "@playwright/test";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const workspace = path.resolve(scriptDirectory, "..");
-const outputDirectory = path.join(workspace, "marketing", "assets", "source");
+const outputDirectory = path.join(workspace, "site", "assets", "source");
 const userDataDirectory = await mkdtemp(path.join(tmpdir(), "channelfence-growth-assets-"));
 
 await mkdir(outputDirectory, { recursive: true });

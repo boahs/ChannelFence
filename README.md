@@ -92,7 +92,7 @@ The uploadable archive is written to `dist/`. Store listing materials and tests 
 - `ui/` — popup, options, onboarding, and bundled privacy policy.
 - `assets/icons/` — extension icon assets.
 - `store/` — listing copy and submission guidance.
-- `marketing/` — local campaign checklists, attributed links, and reproducible launch artwork.
+- `site/` — public website styles and social-preview assets.
 - `tests/` — Node-based data-model checks and Playwright extension tests.
 
 ## License

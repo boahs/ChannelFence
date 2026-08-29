@@ -1,6 +1,6 @@
-# Marketing asset provenance
+# Website and Store asset provenance
 
-These files are working and final assets for ChannelFence's 30-day growth campaign. They are not included in the Chrome extension package.
+These files are reproducible website and Store artwork for ChannelFence. They are not included in the Chrome extension package.
 
 ## Final assets
 
@@ -31,7 +31,7 @@ Capture the deterministic popup and options sources:
 node scripts/capture-growth-assets.mjs
 ```
 
-Rebuild every final marketing image:
+Rebuild every final website and Store image:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/create-growth-assets.ps1

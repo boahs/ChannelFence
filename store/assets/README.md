@@ -22,4 +22,4 @@ node scripts/capture-growth-assets.mjs
 powershell -ExecutionPolicy Bypass -File scripts/create-growth-assets.ps1
 ```
 
-The YouTube thumbnail is generated separately at `marketing/assets/youtube-thumbnail-1280x720-v2.png`.
+The YouTube thumbnail is generated separately at `site/assets/youtube-thumbnail-1280x720-v2.png`.

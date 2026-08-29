@@ -2,12 +2,12 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
 
 $workspace = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
-$sourceDirectory = Join-Path $workspace "marketing\assets\source"
-$marketingDirectory = Join-Path $workspace "marketing\assets"
+$sourceDirectory = Join-Path $workspace "site\assets\source"
+$siteAssetDirectory = Join-Path $workspace "site\assets"
 $storeDirectory = Join-Path $workspace "store\assets"
 $iconPath = Join-Path $workspace "assets\icons\channelfence-512.png"
 
-New-Item -ItemType Directory -Path $marketingDirectory -Force | Out-Null
+New-Item -ItemType Directory -Path $siteAssetDirectory -Force | Out-Null
 New-Item -ItemType Directory -Path $storeDirectory -Force | Out-Null
 
 function New-Canvas([int]$width, [int]$height) {
@@ -196,7 +196,7 @@ function Save-YouTubeThumbnail {
     ([System.Drawing.RectangleF]::new(660, 190, 800, 703)) `
     18
 
-  $outputPath = Join-Path $marketingDirectory "youtube-thumbnail-1280x720-v2.png"
+  $outputPath = Join-Path $siteAssetDirectory "youtube-thumbnail-1280x720-v2.png"
   Save-Png24 $bitmap $outputPath
 
   $card.Dispose(); $coral.Dispose(); $teal.Dispose(); $white.Dispose()

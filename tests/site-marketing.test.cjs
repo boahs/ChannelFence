@@ -97,7 +97,7 @@ test("publishes canonical URLs for every public HTML page", () => {
 });
 
 test("public pages expose a complete large social-card image", () => {
-  const expectedImage = `${siteOrigin}/marketing/assets/youtube-thumbnail-1280x720-v2.png`;
+  const expectedImage = `${siteOrigin}/site/assets/youtube-thumbnail-1280x720-v2.png`;
 
   for (const page of publicPages) {
     const html = read(page.file);
