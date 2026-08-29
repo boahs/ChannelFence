@@ -1,4 +1,5 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
+import type { Frame, Request } from "@playwright/test";
 
 test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }) => {
   await extensionPage.goto("https://www.youtube.com/@YouTube", {
@@ -342,4 +343,212 @@ test("advances instead of returning Home when a live Short opens pre-blocked", a
   await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/, {
     timeout: 10_000
   });
+});
+
+test("quickly skips the requested live Short with a 50-entry block list after Home and reload", async ({
+  extensionPage,
+  extensionStorage
+}) => {
+  test.slow();
+  const blockedUrl = "https://www.youtube.com/shorts/bUam9LKFIv4";
+  const blockedPath = new URL(blockedUrl).pathname;
+  await extensionPage.goto(blockedUrl, {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+
+  const ownerAnchor = extensionPage.locator(
+    "ytd-shorts yt-reel-channel-bar-view-model a[href*='/@']"
+  ).first();
+  await expect(ownerAnchor).toBeVisible({ timeout: 30_000 });
+  const ownerHref = await ownerAnchor.getAttribute("href");
+  const displayName = (await ownerAnchor.textContent())?.trim() || "Blocked Shorts Creator";
+  const ownerHandle = new URL(ownerHref || "", blockedUrl).pathname.split("/")[1];
+  expect(ownerHandle).toMatch(/^@/);
+
+  const syntheticEntries = Array.from({ length: 49 }, (_, index) => {
+    const number = String(index + 1).padStart(2, "0");
+    return blockedCreator(`@cfstress${number}`, `ChannelFence Stress ${number}`);
+  });
+  await extensionPage.goto("https://www.youtube.com/", {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+  await expect.poll(() => new URL(extensionPage.url()).pathname).toBe("/");
+  await extensionStorage.set({
+    cfBlockedChannels: [...syntheticEntries, blockedCreator(ownerHandle, displayName)]
+  });
+  await expect.poll(async () => {
+    const values = await extensionStorage.get<{ cfBlockedChannels: unknown[] }>(
+      "cfBlockedChannels"
+    );
+    return values.cfBlockedChannels.length;
+  }).toBe(50);
+
+  const skipBlockedShort = async (reloadBlockedUrl = false): Promise<{
+    afterDomContentLoadedMs: number;
+    totalNavigationMs: number;
+    allowedPath: string;
+    observedPaths: string[];
+    navigationPaths: string[];
+  }> => {
+    const observedPaths: string[] = [];
+    const navigationPaths: string[] = [];
+    let targetSeen = false;
+    const recordPath = (rawUrl: string) => {
+      try {
+        const url = new URL(rawUrl);
+        if (url.hostname !== "www.youtube.com") {
+          return;
+        }
+        if (url.pathname === blockedPath) {
+          targetSeen = true;
+        }
+        if (targetSeen && observedPaths.at(-1) !== url.pathname) {
+          observedPaths.push(url.pathname);
+        }
+      } catch {
+        // Ignore transient non-URL values while Chromium replaces documents.
+      }
+    };
+    const onFrameNavigated = (frame: Frame) => {
+      if (frame === extensionPage.mainFrame()) {
+        recordPath(frame.url());
+      }
+    };
+    const onNavigationRequest = (request: Request) => {
+      if (!request.isNavigationRequest() || request.frame() !== extensionPage.mainFrame()) {
+        return;
+      }
+      const path = new URL(request.url()).pathname;
+      navigationPaths.push(path);
+    };
+    extensionPage.on("framenavigated", onFrameNavigated);
+    extensionPage.on("request", onNavigationRequest);
+    const pathSampler = setInterval(() => recordPath(extensionPage.url()), 10);
+    const navigationStartedAt = Date.now();
+    let domContentLoadedAt = navigationStartedAt;
+    let completedAt = navigationStartedAt;
+    let allowedPath = "";
+    try {
+      if (reloadBlockedUrl) {
+        // Record both main-document requests so the test proves reload() was
+        // issued against the blocked URL, not against an already-advanced one.
+        await extensionPage.goto(blockedUrl, {
+          waitUntil: "commit",
+          timeout: 30_000
+        });
+        expect(new URL(extensionPage.url()).pathname).toBe(blockedPath);
+        await extensionPage.reload({ waitUntil: "domcontentloaded", timeout: 30_000 });
+      } else {
+        await extensionPage.goto(blockedUrl, {
+          waitUntil: "domcontentloaded",
+          timeout: 30_000
+        });
+      }
+      domContentLoadedAt = Date.now();
+      await expect.poll(() => {
+        const path = new URL(extensionPage.url()).pathname;
+        recordPath(extensionPage.url());
+        return path !== blockedPath && /^\/shorts\/[^/?#]+$/.test(path) ? path : "";
+      }, { timeout: 10_000 }).toMatch(/^\/shorts\/[^/?#]+$/);
+      completedAt = Date.now();
+      allowedPath = new URL(extensionPage.url()).pathname;
+    } finally {
+      clearInterval(pathSampler);
+      extensionPage.off("framenavigated", onFrameNavigated);
+      extensionPage.off("request", onNavigationRequest);
+    }
+
+    expect(observedPaths).not.toContain("/");
+    if (reloadBlockedUrl) {
+      expect(navigationPaths.filter((path) => path === blockedPath)).toHaveLength(2);
+    }
+    await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+    await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/, {
+      timeout: 10_000
+    });
+    const timing = {
+      afterDomContentLoadedMs: completedAt - domContentLoadedAt,
+      totalNavigationMs: completedAt - navigationStartedAt,
+      allowedPath,
+      observedPaths,
+      navigationPaths
+    };
+    expect(timing.afterDomContentLoadedMs).toBeLessThan(5_000);
+    expect(timing.totalNavigationMs).toBeLessThan(20_000);
+    return timing;
+  };
+
+  const firstResult = await skipBlockedShort();
+  const firstAllowedPath = firstResult.allowedPath;
+  await extensionPage.reload({ waitUntil: "domcontentloaded", timeout: 30_000 });
+  await expect.poll(() => new URL(extensionPage.url()).pathname)
+    .toMatch(/^\/shorts\/[^/?#]+$/);
+  await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+  await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/, {
+    timeout: 10_000
+  });
+
+  await extensionPage.goto("https://www.youtube.com/", {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000
+  });
+  await expect.poll(() => new URL(extensionPage.url()).pathname).toBe("/");
+  const reloadResult = await skipBlockedShort(true);
+  const secondAllowedPath = reloadResult.allowedPath;
+
+  await expect.poll(async () => {
+    const values = await extensionStorage.get<{ cfBlockedChannels: unknown[] }>(
+      "cfBlockedChannels"
+    );
+    return values.cfBlockedChannels.length;
+  }).toBe(50);
+  // Hold beyond the product's full retry window to catch a late fallback,
+  // duplicate advance, or page-unhide after the apparent successful skip.
+  const stablePaths = [secondAllowedPath];
+  const recordStablePath = (rawUrl: string) => {
+    try {
+      const path = new URL(rawUrl).pathname;
+      if (stablePaths.at(-1) !== path) {
+        stablePaths.push(path);
+      }
+    } catch {
+      // Ignore transient non-URL values while Chromium replaces documents.
+    }
+  };
+  const onStableFrame = (frame: Frame) => {
+    if (frame === extensionPage.mainFrame()) {
+      recordStablePath(frame.url());
+    }
+  };
+  extensionPage.on("framenavigated", onStableFrame);
+  const stableSampler = setInterval(() => recordStablePath(extensionPage.url()), 10);
+  try {
+    await extensionPage.waitForTimeout(10_500);
+  } finally {
+    clearInterval(stableSampler);
+    extensionPage.off("framenavigated", onStableFrame);
+  }
+  expect(stablePaths).toEqual([secondAllowedPath]);
+  await expect(extensionPage).toHaveURL(`https://www.youtube.com${secondAllowedPath}`);
+  await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+  await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+  console.log(JSON.stringify({
+    blockedPath,
+    ownerHandle,
+    firstAllowedPath,
+    firstTiming: {
+      afterDomContentLoadedMs: firstResult.afterDomContentLoadedMs,
+      totalNavigationMs: firstResult.totalNavigationMs
+    },
+    firstObservedPaths: firstResult.observedPaths,
+    secondAllowedPath,
+    reloadTiming: {
+      afterDomContentLoadedMs: reloadResult.afterDomContentLoadedMs,
+      totalNavigationMs: reloadResult.totalNavigationMs
+    },
+    reloadObservedPaths: reloadResult.observedPaths,
+    reloadNavigationPaths: reloadResult.navigationPaths
+  }));
 });

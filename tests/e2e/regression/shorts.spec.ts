@@ -1129,6 +1129,82 @@ test.describe("YouTube Shorts controls", () => {
     await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/sequence-d");
   });
 
+  test("skips 50 previously blocked Shorts creators without freezing or falling Home", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const blockedCount = 50;
+    const blockedCreators = Array.from({ length: blockedCount }, (_, index) => {
+      const number = String(index + 1).padStart(2, "0");
+      return blockedCreator(`@stressblocked${number}`, `Stress Blocked Creator ${number}`);
+    });
+    await extensionStorage.set({ cfBlockedChannels: blockedCreators });
+
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(
+      shortsViewer("Stress Bootstrap Creator", "@stressbootstrap"),
+      "/shorts/stress-bootstrap"
+    );
+    const blockedQueue = blockedCreators.map((_, index) => {
+      const number = String(index + 1).padStart(2, "0");
+      return {
+        path: `/shorts/stress-blocked-${number}`,
+        displayName: `Stress Blocked Creator ${number}`,
+        handle: `@stressblocked${number}`
+      };
+    });
+    await installShortsAdvanceQueue(extensionPage, [
+      ...blockedQueue,
+      {
+        path: "/shorts/stress-allowed-final",
+        displayName: "Stress Allowed Final Creator",
+        handle: "@stressallowedfinal"
+      }
+    ], { ownerDelayMs: 10 });
+
+    const startedAt = Date.now();
+    await extensionPage.locator("#navigation-button-down button").click();
+    await expect(extensionPage).toHaveURL(
+      "https://www.youtube.com/shorts/stress-allowed-final",
+      { timeout: 15_000 }
+    );
+    const elapsedMs = Date.now() - startedAt;
+
+    const advance = await shortsAdvanceState(extensionPage);
+    expect(advance.clickCount).toBe(blockedCount + 1);
+    expect(advance.paths).toEqual([
+      "/shorts/stress-bootstrap",
+      ...blockedQueue.map((item) => item.path),
+      "/shorts/stress-allowed-final"
+    ]);
+    expect(advance.paths).not.toContain("/");
+    expect(elapsedMs).toBeLessThan(10_000);
+    await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+    await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+    await expect(youtube.card("shorts-action-bar").getByRole("button", {
+      name: "Block Stress Allowed Final Creator with ChannelFence"
+    })).toBeVisible();
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ aliases: string[] }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(blockedCount);
+    expect(new Set(stored.cfBlockedChannels.flatMap((entry) => entry.aliases)).size)
+      .toBe(blockedCount);
+
+    // Hold beyond the 10-second blocked-Short retry window so a stale timer
+    // cannot late-advance, reveal the blocked route, or eject the user Home.
+    await extensionPage.waitForTimeout(10_500);
+    await expect(extensionPage).toHaveURL(
+      "https://www.youtube.com/shorts/stress-allowed-final"
+    );
+    await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+    await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+    await expect(youtube.card("shorts-action-bar").getByRole("button", {
+      name: "Block Stress Allowed Final Creator with ChannelFence"
+    })).toBeVisible();
+  });
+
   test("adds a ChannelFence action to the current Shorts menu", async ({
     extensionPage,
     extensionStorage
