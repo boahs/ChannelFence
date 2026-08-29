@@ -83,6 +83,27 @@ test("publishes the project homepage and keeps package versions aligned", () => 
   assert.equal(packageJson.version, manifest.version);
 });
 
+test("growth asset captures follow the manifest version", () => {
+  const captureScript = fs.readFileSync(
+    path.join(root, "scripts", "capture-growth-assets.mjs"),
+    "utf8"
+  );
+  const assetScript = fs.readFileSync(
+    path.join(root, "scripts", "create-growth-assets.ps1"),
+    "utf8"
+  );
+
+  assert.match(captureScript, /const version = manifest\.version/);
+  assert.match(captureScript, /`Version \$\{expectedVersion\}`/);
+  assert.match(captureScript, /`options-\$\{version\}-1280x800\.png`/);
+  assert.match(captureScript, /`popup-hide-shorts-\$\{version\}\.png`/);
+  assert.match(assetScript, /\$packageVersion = \$manifest\.version/);
+  assert.match(assetScript, /"options-\$packageVersion-1280x800\.png"/);
+  assert.match(assetScript, /"popup-hide-shorts-\$packageVersion\.png"/);
+  assert.doesNotMatch(captureScript, /0\.2\.1/);
+  assert.doesNotMatch(assetScript, /0\.2\.1/);
+});
+
 test("recognizes membership lockups and watch-page creator menus", () => {
   const contentScript = fs.readFileSync(path.join(root, "src", "content.js"), "utf8");
   assert.match(contentScript, /"\.yt-lockup-view-model"/);

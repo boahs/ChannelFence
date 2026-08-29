@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,6 +8,8 @@ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const workspace = path.resolve(scriptDirectory, "..");
 const outputDirectory = path.join(workspace, "site", "assets", "source");
 const userDataDirectory = await mkdtemp(path.join(tmpdir(), "channelfence-growth-assets-"));
+const manifest = JSON.parse(await readFile(path.join(workspace, "manifest.json"), "utf8"));
+const version = manifest.version;
 
 await mkdir(outputDirectory, { recursive: true });
 
@@ -54,16 +56,16 @@ try {
   const page = await context.newPage();
   await page.goto(`chrome-extension://${extensionId}/ui/options.html`);
   await page.waitForLoadState("domcontentloaded");
-  await page.waitForFunction(() => {
+  await page.waitForFunction((expectedVersion) => {
     return document.querySelector("#blockedCount")?.textContent?.trim() === "2" &&
-      document.querySelector("#version")?.textContent?.trim() === "Version 0.2.1" &&
+      document.querySelector("#version")?.textContent?.trim() === `Version ${expectedVersion}` &&
       document.querySelector("#shortsToggle")?.checked === true &&
-      document.body.textContent?.includes("Noisy Daily") &&
-      document.body.textContent?.includes("Spoiler Channel");
-  });
+      document.body.textContent?.includes("noisydaily") &&
+      document.body.textContent?.includes("spoilerchannel");
+  }, version);
   await page.evaluate(async () => document.fonts?.ready);
   await page.screenshot({
-    path: path.join(outputDirectory, "options-0.2.1-1280x800.png"),
+    path: path.join(outputDirectory, `options-${version}-1280x800.png`),
     animations: "disabled"
   });
 
@@ -73,12 +75,12 @@ try {
   await page.waitForFunction(() => {
     return document.querySelector("#blockedCount")?.textContent?.trim() === "2" &&
       document.querySelector("#shortsToggle")?.checked === true &&
-      document.body.textContent?.includes("Noisy Daily") &&
-      document.body.textContent?.includes("Spoiler Channel");
+      document.body.textContent?.includes("noisydaily") &&
+      document.body.textContent?.includes("spoilerchannel");
   });
   await page.evaluate(async () => document.fonts?.ready);
   await page.screenshot({
-    path: path.join(outputDirectory, "popup-hide-shorts-0.2.1.png"),
+    path: path.join(outputDirectory, `popup-hide-shorts-${version}.png`),
     animations: "disabled",
     fullPage: true
   });

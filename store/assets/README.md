@@ -6,7 +6,7 @@ Upload the current `v2` gallery files in this exact order:
 2. `store-02-across-youtube-v2.png` - the direct creator block screen.
 3. `store-03-shorts-v2.png` - the ChannelFence action in the Shorts viewer.
 4. `store-04-hide-shorts-v2.png` - the Hide Shorts in feeds setting.
-5. `store-05-block-list-v2.png` - version 0.2.1 settings and private block-list management.
+5. `store-05-block-list-v2.png` - current-version settings and private block-list management.
 
 Also available:
 

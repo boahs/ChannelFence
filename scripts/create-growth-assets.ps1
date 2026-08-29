@@ -6,6 +6,10 @@ $sourceDirectory = Join-Path $workspace "site\assets\source"
 $siteAssetDirectory = Join-Path $workspace "site\assets"
 $storeDirectory = Join-Path $workspace "store\assets"
 $iconPath = Join-Path $workspace "assets\icons\channelfence-512.png"
+$manifest = Get-Content -Raw -LiteralPath (Join-Path $workspace "manifest.json") | ConvertFrom-Json
+$packageVersion = $manifest.version
+$optionsSource = "options-$packageVersion-1280x800.png"
+$popupSource = "popup-hide-shorts-$packageVersion.png"
 
 New-Item -ItemType Directory -Path $siteAssetDirectory -Force | Out-Null
 New-Item -ItemType Directory -Path $storeDirectory -Force | Out-Null
@@ -231,7 +235,7 @@ Save-StoreScreenshot `
   $true
 
 Save-StoreScreenshot `
-  "popup-hide-shorts-0.2.1.png" `
+  $popupSource `
   ([System.Drawing.RectangleF]::new(0, 0, 360, 560)) `
   "04" `
   "HIDE SHORTS`nIN FEEDS" `
@@ -240,7 +244,7 @@ Save-StoreScreenshot `
   $true
 
 Save-StoreScreenshot `
-  "options-0.2.1-1280x800.png" `
+  $optionsSource `
   ([System.Drawing.RectangleF]::new(170, 0, 940, 795)) `
   "05" `
   "YOUR PRIVATE`nBLOCK LIST" `
