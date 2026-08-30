@@ -314,6 +314,10 @@ h1 {
   transform: translateY(-2px);
 }
 
+.guide-grid a.guide-grid__featured {
+  grid-column: 1 / -1;
+}
+
 .guide-grid span {
   color: var(--teal);
   font-size: 11px;

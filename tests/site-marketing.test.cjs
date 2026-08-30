@@ -27,6 +27,10 @@ const publicPages = [
     canonical: `${siteOrigin}/channelfence-vs-blocktube/`
   },
   {
+    file: "blog/the-tests-passed-the-extension-was-still-broken/index.html",
+    canonical: `${siteOrigin}/blog/the-tests-passed-the-extension-was-still-broken/`
+  },
+  {
     file: "support/index.html",
     canonical: `${siteOrigin}/support/`
   }
@@ -131,6 +135,17 @@ test("support page publishes contact routes and current software schema", () => 
   assert.match(html, /mailto:support@channelfence\.app/i);
   assert.match(html, /https:\/\/github\.com\/boahs\/ChannelFence\/issues/i);
   assert.match(read("index.html"), /href=["']support\/["']/i);
+});
+
+test("QA article publishes its source, date, and approved closing voice", () => {
+  const html = read("blog/the-tests-passed-the-extension-was-still-broken/index.html");
+  const article = schemaNodes(jsonLdDocuments(html))
+    .find((node) => node?.["@type"] === "Article");
+
+  assert.ok(article, "QA article is missing Article JSON-LD");
+  assert.equal(article.author?.name, "ChannelFence");
+  assert.equal(article.datePublished, "2026-08-30");
+  assert.match(html, /Maybe somebody just stopped asking annoying questions\./);
 });
 
 test("every public ChannelFence Store link carries complete campaign attribution", () => {

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Tests Passed. The Extension Was Still Broken. | ChannelFence</title>
+  <meta name="description" content="A senior QA engineer shares the real ChannelFence bugs that passed automated tests, and why manual QA still matters.">
+  <link rel="canonical" href="https://channelfence.app/blog/the-tests-passed-the-extension-was-still-broken/">
+  <link rel="icon" href="../../assets/icons/channelfence-32.png" sizes="32x32">
+  <link rel="stylesheet" href="../../site/styles.css">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ChannelFence">
+  <meta property="og:title" content="The Tests Passed. The Extension Was Still Broken.">
+  <meta property="og:description" content="Real bugs from building ChannelFence, what the green tests missed, and why manual QA still matters.">
+  <meta property="og:url" content="https://channelfence.app/blog/the-tests-passed-the-extension-was-still-broken/">
+  <meta property="og:image" content="https://channelfence.app/site/assets/youtube-thumbnail-1280x720-v2.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+  <meta property="og:image:alt" content="ChannelFence: A real YouTube block list">
+  <meta property="article:published_time" content="2026-08-30">
+  <meta property="article:modified_time" content="2026-08-30">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@GetChannelFence">
+  <meta name="twitter:title" content="The Tests Passed. The Extension Was Still Broken.">
+  <meta name="twitter:description" content="Real bugs from building ChannelFence, what the green tests missed, and why manual QA still matters.">
+  <meta name="twitter:image" content="https://channelfence.app/site/assets/youtube-thumbnail-1280x720-v2.png">
+  <meta name="twitter:image:alt" content="ChannelFence: A real YouTube block list">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Tests Passed. The Extension Was Still Broken.",
+    "description": "A senior QA engineer shares the real ChannelFence bugs that passed automated tests, and why manual QA still matters.",
+    "datePublished": "2026-08-30",
+    "dateModified": "2026-08-30",
+    "mainEntityOfPage": "https://channelfence.app/blog/the-tests-passed-the-extension-was-still-broken/",
+    "author": { "@type": "Organization", "name": "ChannelFence" },
+    "publisher": { "@type": "Organization", "name": "ChannelFence", "url": "https://channelfence.app/" }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../../" aria-label="ChannelFence home">
+      <img src="../../assets/icons/channelfence-48.png" width="40" height="40" alt="">
+      <span>ChannelFence</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="../../#how-it-works">How it works</a>
+      <a href="../../#privacy">Privacy</a>
+      <a href="../../#guides">Guides</a>
+      <a href="https://github.com/boahs/ChannelFence">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="article-main">
+    <p class="breadcrumbs"><a href="../../">ChannelFence</a> / Writing / QA</p>
+    <article class="article-card">
+      <header>
+        <p class="eyebrow">From the developer</p>
+        <h1>The tests passed. The extension was still broken.</h1>
+        <p class="article-meta">From the ChannelFence developer | <time datetime="2026-08-30">August 30, 2026</time> | Testing details reflect ChannelFence 0.2.2</p>
+        <p class="article-lead">I work in software QA and have for awhile now. I also maintain ChannelFence, a chrome extension that lets people block youtube creators across feeds, search, Shorts, comments, and channel pages.</p>
+      </header>
+
+      <p>Building it reminded me of something I already knew from doing QA professionally. A green test run feels great, especially after you just spent hours fixing something annoying. But it can also give you a completely false sense that everything is fine.</p>
+
+      <p>The tests aren't really lying. They proved exactly what you told them to prove. You just forgot half the questions.</p>
+
+      <h2>passing tests dont mean the product works</h2>
+
+      <p>The first version of ChannelFence had a simple job. Find the creator attached to a video, add a block button, and hide that creator afterward. Pretty simple, at least on paper.</p>
+
+      <p>Then it has to work on the actual YouTube website.</p>
+
+      <p>Youtube is not one page with one reusable video card. It has the Home feed, search layouts, recommrndation rails, channel tabs, playlists, comments, compact Shorts cards, the Shorts viewer, promotional shelves, collaboration cards, and random experiments that not every user even gets. It also acts like an app instead of a normal website. Elements load late, get removed, get reused, and change without the page doing a real refresh.</p>
+
+      <p>I could write a test for one video card, watch it pass, then open youtube and find a completely different card where the button never showed up.</p>
+
+      <p>The test wasnt useless. It was just a very incomplete version of the product.</p>
+
+      <h2>you start avoiding your own bugs</h2>
+
+      <p>People who use the same software every day build habits around it. Developers do this really fast because we already know how the feature is supposed to work.</p>
+
+      <p>You click the part of the card you know is reliable. You wait an extra second because you know the page loads slowly. You refresh after changing the extension because thats normal during development. You avoid the layout that broke last week without even realizing your avoiding it.</p>
+
+      <p>Eventually the workaround doesnt look like a workaround anymore.</p>
+
+      <p>A new user has none of that context. They click the obvious button. If it does nothing they click it again. If it still doesn't work, most people are not going to write a nice detailed bug report for you. They uninstall it and move on.</p>
+
+      <p>So from my side there might be no reported bug. From their side the extension just didnt work.</p>
+
+      <h2>stuff our first tests completely missed</h2>
+
+      <p>One bug put three or four ChannelFence block buttons on the same channel page. The extension saw several nested youtube containers and treated every one of them like a seperate place that needed a button.</p>
+
+      <p>The feature technically worked. The page looked stupid.</p>
+
+      <p>Another bug was a lot worse. On some channel pages ChannelFence picked up unrelated text like "Community" instead of the creator. On other pages it saved the channels current display title instead of the stable youtube handle. So the user clicked Block beside one creator, but the extension saved the wrong label or saved a name the creator could change later.</p>
+
+      <p>Collaboration cards were another fun one. A video can have two real creators attached to it, which means grabbing the first name you find is not good enough. Both controls need to point at the right stable handle without one creator getting mixed up with the other.</p>
+
+      <p>Then there were Shorts.</p>
+
+      <p>Blocking one creator in the Shorts viewer worked in a basic test. Blocking several in a row was where it got buggy as hell. The same Short could stay on screen, the viewer could lose its controls, navigation could happen twice, or the user could randomly get sent back to Home. Sometimes a blocked Short would show up again after reopening or refreshing the Shorts page.</p>
+
+      <p>Those were all slightly different timing and state problems. None of them showed up in a test that opened one Short, clicked once, and checked that a block record existed.</p>
+
+      <p>Performance was another blind spot. Scanning a small feed with ten blocked creators felt fine. That tells you basically nothing about a person who has blocked 500 or 1,000 of them. Rebuilding the same matching data or rescanning the whole page too often can make ChannelFence slow, and worse, make youtube's own buttons load late too.</p>
+
+      <p>The extension didnt just need more happy path tests. It needed tests that were rude to it.</p>
+
+      <h2>what changed after finding all of that</h2>
+
+      <p>Every embarrassing bug should turn into a regression test. Otherwise you fixed the bug but didnt really keep the lesson.</p>
+
+      <p>The duplicate button bug became coverage for nested channel layouts, client-side navigation, and actual separate collaborators.</p>
+
+      <p>The identity bug became coverage for stable youtube handles, hidden header labels, display names that can change, and old saved entries that still need to work after an update.</p>
+
+      <p>The Shorts problems became tests for stale creator data, controls that load slowly, unavailable creators, double navigation, reloads, and a bunch of blocked creators in a row. One deterministic test uses a simulated queue of 50 consecutive blocked creators and makes sure the viewer eventually reaches an allowed creator without freezing or falling back to Home. A separate live test uses a real YouTube Short with a 50-entry block list, because a perfect local fixture can still be wrong about the real site.</p>
+
+      <p>Large block lists now get tested too. There is coverage with hundreds of entries in the settings page and 1,000 blocked creators while matching feed cards. The extension indexes the values it matches against, doesnt rebuild the same unchanged list for no reason, and tries not to do work inside a tab you cant even see.</p>
+
+      <p>This is probably my favorite part of automation. A bug teaches you something once, then the test keeps bothering the code about it forever. I don't have to remember every weird youtube layout manually for every release.</p>
+
+      <h2>manual QA and automation aren't enemies</h2>
+
+      <p>People frame this as manual testing versus automation alot and i don't think its a useful argument.</p>
+
+      <p>Automation is great at repeating things we already know about. It can cover dozens of layouts, data combinations, and state changes every time the code changes. It can catch an old bug coming back before i even load the extension myself.</p>
+
+      <p>Exploratory testing is how a lot of those scenarios get found in the first place.</p>
+
+      <p>A person notices that a button is technically there but almost impossible to see. They ask why blocking from one menu behaves different from blocking beside a creator name. They scroll, reload, go backward, open another tab, use a stupidly large block list, or click before the page is ready. They can see that an assertion passed while the actual experience still sucks.</p>
+
+      <p>You need both. Manual QA expands the idea of what could go wrong. Automation stops that idea from shrinking again six months later.</p>
+
+      <h2>developers should own quality, but that doesnt replace QA</h2>
+
+      <p>Developers should test their own work. Obviously. Having a QA person shouldnt be an excuse to hand over unfinished garbage and call it ready.</p>
+
+      <p>But "developers own quality" sometimes turns into "developers repeated the same checks they already did while building it." Those aren't the same thing.</p>
+
+      <p>The value of QA isn't that a tester knows how to click a button better. Its that their job is to question every assumption around the button.</p>
+
+      <p>What happens before it appears? What if it appears four times? Which creator identity does it save? Does it still work after navigating without a refresh? What if there are two creators? What if the page is translated? What if the person already blocked 500 channels? What if youtube changes the container but the page still looks almost the same?</p>
+
+      <p>Those questions take product knowledge, technical knowledge, and time. If nobody is actually responsible for asking them, saying everybody owns quality doesnt magically make it happen.</p>
+
+      <h2>building and testing the same product is weird</h2>
+
+      <p>ChannelFence is a small project, so im both the developer and the QA engineer. That makes this problem pretty obvious.</p>
+
+      <p>When I'm writing the code, I know what I meant. When i test it properly, I have to stop giving the code credit for my intentions.</p>
+
+      <p>I have to treat it like something a stranger found in the Chrome Web Store. They don't know which youtube layouts are difficult. They dont care that a race condition only happens during client-side navigation. They dont care that the creators handle was missing for half a second while the page loaded.</p>
+
+      <p>They care if clicking Block made that creator go away.</p>
+
+      <p>Thats the standard the product has to meet. Not whether the implementation was clever, whether the demo worked one time, or whether every test we happened to write was green.</p>
+
+      <p>The tests can pass and the product can still be broken. QA is the work of finding the distance between those two things, and sometmes that distance is huge.</p>
+
+      <p>Well, I'm just a senior QA engineer writing apps for fun after work, so maybe im overthinking all of this. But if one tiny extension can find this many ways to be broken while every test is green, I dont think the giant products we use every day are magically safer. Maybe somebody just stopped asking annoying questions.</p>
+
+      <div class="article-cta">
+        <p><strong>ChannelFence is free, open source, and local-only.</strong><br>See the extension and the tests this article is talking about.</p>
+        <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=qa_article">Add to Chrome</a>
+      </div>
+
+      <section class="related-guides" aria-labelledby="related-heading">
+        <h2 id="related-heading">Related reading</h2>
+        <ul>
+          <li><a href="../../how-to-block-youtube-channels-in-chrome/">How to block YouTube channels in Chrome</a></li>
+          <li><a href="../../youtube-dont-recommend-channel-vs-block/">"Don't recommend channel" vs. blocking a creator</a></li>
+          <li><a href="https://github.com/boahs/ChannelFence/tree/main/tests">ChannelFence's automated tests on GitHub</a></li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <span>ChannelFence is released under the MIT License.</span>
+    <a href="../../PRIVACY.html">Privacy</a>
+    <span>YouTube is a trademark of Google LLC.</span>
+  </footer>
+</body>
+</html>
