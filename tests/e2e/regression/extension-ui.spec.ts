@@ -40,6 +40,10 @@ test.describe("extension UI", () => {
     await options.open();
 
     await expect(extensionPage.locator("#blockedCount")).toHaveText("2");
+    await expect(extensionPage.getByRole("link", { name: "Leave a review" })).toHaveAttribute(
+      "href",
+      "https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm/reviews"
+    );
     await extensionPage.getByRole("searchbox", { name: "Search blocked creators" }).fill("beta");
     await expect(extensionPage.locator("#blockList")).toContainText("beta");
     await expect(extensionPage.locator("#blockList")).not.toContainText("alpha");

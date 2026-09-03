@@ -8,6 +8,8 @@
   --line: #dfe5f5;
   --indigo: #111c56;
   --indigo-2: #1d2d78;
+  --footer-link: #33458f;
+  --footer-link-hover: #c8402d;
   --teal: #12cfc8;
   --coral: #ff5f46;
   --danger: #d73a28;
@@ -363,7 +365,7 @@ input:focus-visible {
   appearance: none;
   background: transparent;
   border: 0;
-  color: var(--indigo-2);
+  color: var(--footer-link);
   cursor: pointer;
   font-size: 12px;
   font-weight: 700;
@@ -372,7 +374,7 @@ input:focus-visible {
 }
 
 .link-button:hover {
-  color: var(--coral);
+  color: var(--footer-link-hover);
 }
 
 .page-shell {
@@ -575,6 +577,34 @@ input:focus-visible {
   padding: 13px 15px;
 }
 
+.review-note {
+  align-items: center;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 13px 15px;
+}
+
+.review-note__title {
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.review-note__copy {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  margin-top: 3px;
+}
+
+.review-note .button {
+  flex: 0 0 auto;
+}
+
 .toast {
   background: var(--indigo);
   border-radius: 10px;
@@ -734,6 +764,8 @@ input:focus-visible {
     --panel: #11183c;
     --soft: #090f2a;
     --line: #2a345f;
+    --footer-link: #c6d0ff;
+    --footer-link-hover: #64e1dc;
   }
 
   .button--secondary,
@@ -795,6 +827,11 @@ input:focus-visible {
 
   .list-toolbar {
     align-items: stretch;
+    flex-direction: column;
+  }
+
+  .review-note {
+    align-items: flex-start;
     flex-direction: column;
   }
 

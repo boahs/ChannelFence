@@ -1,6 +1,19 @@
 # Changelog
 
-## 0.2.2 - Unreleased
+## 0.2.3 - 2026-09-03
+
+### Changed
+
+- Improved the popup footer-link contrast in both light and dark themes.
+- Added an optional link in settings for users who want to leave an honest Chrome Web Store review.
+
+### Tests
+
+- Added extension UI coverage for the Chrome Web Store review link.
+
+There are no new permissions, no remote code, and no analytics in this release.
+
+## 0.2.2 - 2026-08-29
 
 ### Fixed
 
