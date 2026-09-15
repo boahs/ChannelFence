@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://channelfence.app/</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -44,7 +44,13 @@
   </url>
   <url>
     <loc>https://channelfence.app/blog/the-tests-passed-the-extension-was-still-broken/</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://channelfence.app/blog/a-dollar-sign-broke-my-gitlab-ci-login/</loc>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Dollar Sign Broke My GitLab CI Login | ChannelFence</title>
+  <meta name="description" content="My Playwright login took six seconds locally and timed out in GitLab CI. The saved passwords matched. Variable expansion had other ideas.">
+  <link rel="canonical" href="https://channelfence.app/blog/a-dollar-sign-broke-my-gitlab-ci-login/">
+  <link rel="icon" href="../../assets/icons/channelfence-32.png" sizes="32x32">
+  <link rel="stylesheet" href="../../site/styles.css">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ChannelFence">
+  <meta property="og:title" content="A dollar sign broke my GitLab CI login">
+  <meta property="og:description" content="Six seconds locally. Five minutes and locked accounts in CI. Same saved password, different password reaching the test.">
+  <meta property="og:url" content="https://channelfence.app/blog/a-dollar-sign-broke-my-gitlab-ci-login/">
+  <meta property="og:image" content="https://channelfence.app/site/assets/youtube-thumbnail-1280x720-v2.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+  <meta property="og:image:alt" content="ChannelFence: A real YouTube block list">
+  <meta property="article:published_time" content="2026-09-15">
+  <meta property="article:modified_time" content="2026-09-15">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@GetChannelFence">
+  <meta name="twitter:title" content="A dollar sign broke my GitLab CI login">
+  <meta name="twitter:description" content="Six seconds locally. Five minutes and locked accounts in CI. Same saved password, different password reaching the test.">
+  <meta name="twitter:image" content="https://channelfence.app/site/assets/youtube-thumbnail-1280x720-v2.png">
+  <meta name="twitter:image:alt" content="ChannelFence: A real YouTube block list">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "A dollar sign broke my GitLab CI login",
+    "description": "My Playwright login took six seconds locally and timed out in GitLab CI. The saved passwords matched. Variable expansion had other ideas.",
+    "datePublished": "2026-09-15",
+    "dateModified": "2026-09-15",
+    "mainEntityOfPage": "https://channelfence.app/blog/a-dollar-sign-broke-my-gitlab-ci-login/",
+    "author": { "@type": "Organization", "name": "ChannelFence" },
+    "publisher": { "@type": "Organization", "name": "ChannelFence", "url": "https://channelfence.app/" }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../../" aria-label="ChannelFence home">
+      <img src="../../assets/icons/channelfence-48.png" width="40" height="40" alt="">
+      <span>ChannelFence</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="../../#how-it-works">How it works</a>
+      <a href="../../#privacy">Privacy</a>
+      <a href="../../#guides">Guides</a>
+      <a href="https://github.com/boahs/ChannelFence">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="article-main">
+    <p class="breadcrumbs"><a href="../../">ChannelFence</a> / Writing / QA</p>
+    <article class="article-card">
+      <header>
+        <p class="eyebrow">From the developer</p>
+        <h1>A dollar sign broke my GitLab CI login</h1>
+        <p class="article-meta">From the ChannelFence developer | <time datetime="2026-09-15">September 15, 2026</time></p>
+        <p class="article-lead">My Playwright login worked locally in about six seconds. In GitLab CI, it waited five minutes for a redirect that never came. Then it retried.</p>
+      </header>
+
+      <p>Then we had locked fucking accounts, because everyone loves security on testing environments.</p>
+
+      <p>I had copied every variable from the pipeline schedule into my local run. Same values, side by side. I wanted to rule out something being misconfigured before I started pulling apart the login flow.</p>
+
+      <p>Local login still worked. CI still sat there.</p>
+
+      <h2>I thought I'd reproduced the environment</h2>
+
+      <p>Once the variables looked identical, I started looking elsewhere. The login code. The URL handling. Whether we'd set up the test pipelines wrong. Something about running this in CI had to explain why the redirect never happened.</p>
+
+      <p>A five-minute wait gives you plenty of time to come up with theories. The retries give you time to become emotionally attached to them.</p>
+
+      <p>I kept coming back to the fact that the same login worked on my machine. I'd checked the configuration. I'd copied the values. What else was I supposed to reproduce?</p>
+
+      <p>Apparently, the part where GitLab changed one of them.</p>
+
+      <h2>The password had a dollar sign in it</h2>
+
+      <p>A couple of weeks earlier, I'd changed my password and put a <code>$</code> in it.</p>
+
+      <p>Variable expansion was enabled for the password variable in the scheduled pipeline. The <code>$</code> followed by letters was being interpreted as a reference to another variable.</p>
+
+      <p>Locally, my setup passed the password literally. In CI, it went through expansion before the test received it.</p>
+
+      <p>GitLab documents this behavior: its runner can expand values from pipeline schedules, recognizing references written as <code>$variable</code> or <code>${variable}</code>. That means a saved value can be different from the value the job actually gets. <a href="https://docs.gitlab.com/ci/variables/where_variables_can_be_used/#expansion-mechanisms">GitLab's explanation of variable expansion</a> covers the stages involved.</p>
+
+      <div class="article-note">
+        <p><strong>A made-up example</strong>Suppose the saved password is <code>demo$SUFFIX</code>, and <code>SUFFIX</code> is another variable containing <code>hello</code>. Expansion can turn the value into <code>demohello</code>. The settings page can still show <code>demo$SUFFIX</code>.</p>
+      </div>
+
+      <p>So checking the saved passwords side by side had told me exactly what was saved. It hadn't told me what Playwright was typing.</p>
+
+      <h2>The fix was embarrassingly small</h2>
+
+      <p>I removed the <code>$</code> from my password and updated the pipeline schedules to match. The login worked again.</p>
+
+      <p>After all that digging into the login flow and CI setup, the difference was how one character in the password was being handled.</p>
+
+      <p>Removing it was my workaround. The configuration fix to aim for is passing credentials literally, with expansion disabled where the variable is defined. GitLab documents an <strong>Expand variable reference</strong> setting for project and group variables. The controls depend on where you define the variable, so check the configuration feeding your scheduled job. <a href="https://docs.gitlab.com/ci/variables/#allow-cicd-variable-expansion">GitLab's variable expansion settings</a> explain that option.</p>
+
+      <p>I wouldn't take this as a reason to avoid dollar signs in passwords. I would take it as a reason to check what happens to a secret between saving it and using it.</p>
+
+      <h2>The bit I missed</h2>
+
+      <p>I had reproduced the saved configuration locally. I hadn't reproduced what GitLab did to it before the test received it.</p>
+
+      <p>That's the part I'm going to remember the next time something works locally and fails in CI. Before I get too deep into the application code, check which values get expanded, substituted, or otherwise changed on the way in. Use a dummy value to investigate that behavior; real passwords don't need another home in the job logs.</p>
+
+      <p>And maybe don't let a login test spend five minutes waiting for success when the useful information is that authentication already failed.</p>
+
+      <p>Felt like a genius and an idiot at the same time.</p>
+
+      <section class="related-guides" aria-labelledby="related-heading">
+        <h2 id="related-heading">More from the developer</h2>
+        <ul>
+          <li><a href="../the-tests-passed-the-extension-was-still-broken/">The tests passed. The extension was still broken.</a></li>
+          <li><a href="../../">ChannelFence, the free, open-source YouTube channel blocker I maintain</a></li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <span>ChannelFence is released under the MIT License.</span>
+    <a href="../../PRIVACY.html">Privacy</a>
+    <span>YouTube is a trademark of Google LLC.</span>
+  </footer>
+</body>
+</html>
