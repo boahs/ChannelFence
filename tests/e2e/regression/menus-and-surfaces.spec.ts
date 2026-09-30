@@ -649,6 +649,77 @@ test.describe("YouTube surfaces and menus", () => {
     }
   });
 
+  test("does not mistake abbreviated channel Videos statistics for creator identities", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    const statistics = [
+      { views: "8", age: "16h ago", ageLabel: "16 hours ago" },
+      { views: "10", age: "5d ago", ageLabel: "5 days ago" },
+      { views: "16", age: "2w ago", ageLabel: "2 weeks ago" },
+      { views: "26", age: "3mo ago", ageLabel: "3 months ago" },
+      { views: "1.2K", age: "4y ago", ageLabel: "4 years ago" },
+      { views: "8", age: "30m ago", ageLabel: "30 minutes ago" },
+      { views: "8", age: "45s ago", ageLabel: "45 seconds ago" }
+    ];
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      ...statistics.map((compactStatistics, index) => channelTabLockup({
+        compactStatistics,
+        displayName: "Fixture Creator",
+        id: `compact-statistics-${index}`,
+        includeAvatar: false
+      }))
+    ].join(""), "/@fixturecreator/videos");
+
+    await expect(youtube.card("channel-header").locator(".cf-block-button")).toHaveCount(1);
+    await expect(extensionPage.locator("ytd-rich-item-renderer .cf-block-button"))
+      .toHaveCount(0);
+  });
+
+  test("retains avatar and text creator controls beside abbreviated video statistics", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      channelHeader("Fixture Creator", "@fixturecreator"),
+      channelTabLockup({
+        compactStatistics: { views: "8", age: "16h ago", ageLabel: "16 hours ago" },
+        displayName: "Studio 8",
+        id: "guest-avatar-with-compact-statistics",
+        includeAvatar: true
+      }),
+      `<yt-lockup-view-model data-testid="text-creator-with-compact-statistics">
+        <a href="/watch?v=text-creator">Guest video</a>
+        <yt-content-metadata-view-model>
+          <div class="ytContentMetadataViewModelMetadataRow">
+            <span role="text">Studio 16h</span>
+          </div>
+          <div class="ytContentMetadataViewModelMetadataRow">
+            <span role="text" aria-label="10 views">10</span>
+            <span aria-hidden="true"> </span>
+            <span role="text" aria-label="5 days ago">5d ago</span>
+          </div>
+        </yt-content-metadata-view-model>
+      </yt-lockup-view-model>`
+    ].join(""), "/@fixturecreator/videos");
+
+    await expect(youtube.blockButton("guest-avatar-with-compact-statistics"))
+      .toHaveAttribute("aria-label", "Block Studio 8");
+    const textCreatorButton = youtube.blockButton("text-creator-with-compact-statistics");
+    await expect(textCreatorButton).toHaveAttribute("aria-label", "Block Studio 16h");
+    await textCreatorButton.click();
+    await expect(youtube.card("text-creator-with-compact-statistics")).toBeHidden();
+    await expect.poll(async () => {
+      const stored = await extensionStorage.get<{
+        cfBlockedChannels: Array<{ displayName: string; key: string }>;
+      }>("cfBlockedChannels");
+      return stored.cfBlockedChannels;
+    }).toEqual([expect.objectContaining({ displayName: "Studio 16h", key: "name:studio 16h" })]);
+    await expect(youtube.card("guest-avatar-with-compact-statistics")).toBeVisible();
+  });
+
   test("offers independent block controls for every collaboration owner", async ({
     extensionPage,
     extensionStorage

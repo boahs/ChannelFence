@@ -23,6 +23,7 @@ New-Item -ItemType Directory -Path (Join-Path $stage "assets\icons") -Force | Ou
 New-Item -ItemType Directory -Path $dist -Force | Out-Null
 
 Copy-Item -LiteralPath $manifestPath -Destination $stage
+Copy-Item -LiteralPath (Join-Path $workspace "LICENSE") -Destination $stage
 Copy-Item -LiteralPath (Join-Path $workspace "src") -Destination $stage -Recurse
 Copy-Item -LiteralPath (Join-Path $workspace "ui") -Destination $stage -Recurse
 $runtimeIcons = @(

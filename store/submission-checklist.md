@@ -15,7 +15,9 @@
 - [ ] Add and verify an official website in Google Search Console if one will be shown as the publisher URL.
 - [x] Capture current 1280×800 product screenshots; five are recommended.
 - [x] Review the small promotional tile and optional marquee image.
-- [x] Run the complete tests and create the final ZIP.
+- [x] Run the complete tests and create `dist/ChannelFence-0.2.6.zip` (48 unit tests, type check, and 92 browser tests against the extracted ZIP; all 18 packaged files, including the MIT license, verified against source).
+- [x] Confirm the reported empty grid slot is resolved in Chrome Canary (user confirmed version 0.2.5 works).
+- [ ] Load the extracted 0.2.6 package in Chrome Canary, disable other ChannelFence copies in that profile, refresh YouTube tabs, and complete the collaboration and feed layout checks below before uploading that ZIP.
 - [x] Add the source repository, homepage, and support URLs to the listing copy.
 
 ## Dashboard declarations
@@ -47,6 +49,18 @@
 13. Confirm the Shorts navigation remains visible and a direct Shorts URL still opens with creator controls.
 14. Refresh and restart Chrome; confirm settings persist.
 15. Review the console and Network panel on each tested surface for unexpected errors or non-YouTube requests.
+
+### Collaboration and feed layout checks for 0.2.6
+
+1. Test cards with two and three identified creators, including combined bylines without channel links. Block each collaborator individually, one at a time, and confirm the matching card is hidden even when the blocked creator is second or third.
+2. Block from a collaboration card and confirm the saved entry names the selected creator instead of the whole combined byline. Select Undo and confirm the card returns when no other collaborator is blocked.
+3. Refresh the page and navigate between Home, search, and recommendations; confirm matching collaboration cards remain hidden without duplicate controls.
+4. Test a collapsed `Creator A and 2 more` byline. Blocking A should hide it. Match other collaborators only when their names or links are exposed on the card; do not expect the count to identify them.
+5. Confirm existing individual creator blocks still work. If the list contains an older combined-name entry, optionally remove it and block the named creator from their channel page.
+6. Block a card in the middle of a Home row and confirm remaining videos fill its grid slot, including videos from the following row. Repeat after refreshing with the creator already blocked.
+7. Use Undo and pause/resume filtering; confirm cards return in their original order and blocked cards leave no empty tiles when filtering resumes.
+8. Scroll through more rows, resize the window, and check any full-width shelves. Shelves should keep their position and width while video rows fill available slots.
+9. On channel Videos cards, confirm abbreviated statistics such as `8 16h ago` do not receive block controls, while real creator controls remain usable.
 
 ## Reviewer notes to paste with the submission
 

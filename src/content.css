@@ -2,6 +2,23 @@
   display: none !important;
 }
 
+/* Modern feeds reserve space on the rich item, outside the linkless lockup
+   that identifies the creator. Collapse that cell when its own card is hidden.
+   Keep this limited to the card slot so a hidden comment or shelf item cannot
+   hide an unrelated container. */
+ytd-rich-item-renderer:has(> :is(yt-lockup-view-model, .yt-lockup-view-model, .yt-lockup-view-model--wrapper).cf-hidden-by-channelfence),
+ytd-rich-item-renderer:has(> #content > :is(yt-lockup-view-model, .yt-lockup-view-model, .yt-lockup-view-model--wrapper).cf-hidden-by-channelfence) {
+  display: none !important;
+}
+
+/* Older Home layouts wrap cards in fixed rows. Let the enclosing flex grid
+   place the remaining cards across rows instead of retaining partly empty
+   rows. YouTube keeps ownership of the DOM and full-width shelf sections. */
+ytd-rich-grid-renderer:has(.cf-hidden-by-channelfence) > #contents > ytd-rich-grid-row,
+ytd-rich-grid-renderer:has(.cf-hidden-by-channelfence) > #contents > ytd-rich-grid-row > #contents {
+  display: contents !important;
+}
+
 .cf-compact-short-row-reflow {
   column-gap: 16px !important;
   justify-content: flex-start !important;

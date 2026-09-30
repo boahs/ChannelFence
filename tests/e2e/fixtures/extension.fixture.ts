@@ -10,7 +10,9 @@ import {
   type Worker
 } from "@playwright/test";
 
-const extensionPath = path.resolve(__dirname, "../../..");
+const extensionPath = process.env.CHANNELFENCE_EXTENSION_PATH
+  ? path.resolve(process.env.CHANNELFENCE_EXTENSION_PATH)
+  : path.resolve(__dirname, "../../..");
 
 type ExtensionStorageValues = Record<string, unknown>;
 

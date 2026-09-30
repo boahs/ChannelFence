@@ -341,6 +341,7 @@
 
   function ownerContextsFromElement(root) {
     const contexts = new Map();
+    const collaborationNames = collaborationNamesFromElement(root);
     for (const anchor of channelAnchorsFromElement(root)) {
       const ref = Shared.normalizeChannelRef(
         anchor.href || anchor.getAttribute("href"),
@@ -350,9 +351,21 @@
         continue;
       }
 
-      const displayName = displayNameFromAnchor(anchor, ref);
-      const normalizedName = Shared.normalizeCreatorName(displayName);
-      const contextKey = normalizedName || ref.key;
+      let displayName = displayNameFromAnchor(anchor, ref);
+      if (collaborationNames.length > 0) {
+        const explicitName = [anchor.getAttribute("aria-label"), anchor.getAttribute("title")]
+          .map((label) => Shared.cleanCreatorDisplayName(label))
+          .find((name) => collaborationNames.some((candidate) =>
+            Shared.normalizeCreatorName(candidate) === Shared.normalizeCreatorName(name)));
+        if (explicitName) {
+          displayName = explicitName;
+        } else if (/\s+(?:and|&)\s+\d+\s+more$/i.test(displayName)) {
+          displayName = splitCollaborationLabel(displayName)[0] || displayName;
+        }
+      }
+      // A shared display name does not prove that two collaborators are the
+      // same channel. Deduplicate repeated avatar/byline links by identity.
+      const contextKey = ref.key;
       const existing = contexts.get(contextKey);
       if (existing) {
         existing.refs = Shared.uniqueRefs([...existing.refs, ref]);
@@ -369,7 +382,18 @@
       });
     }
 
-    if (contexts.size === 0) {
+    const linklessNames = linklessCollaborationNames(root, [...contexts.values()]);
+    for (const name of linklessNames) {
+      const ref = Shared.normalizeCreatorNameRef(name);
+      if (ref) {
+        contexts.set(ref.key, {
+          refs: [ref],
+          displayName: name,
+          anchor: collaborationBylineElements(root)[0] || null
+        });
+      }
+    }
+    if (contexts.size === 0 && !isCollaboration(root)) {
       for (const name of linklessLockupCreatorNames(root)) {
         const ref = Shared.normalizeCreatorNameRef(name);
         if (ref) {
@@ -433,25 +457,92 @@
     return [...names];
   }
 
-  function collaborationNamesFromElement(root) {
-    if (!root?.querySelector?.(
-      "yt-avatar-stack-view-model[aria-label*='Collaboration' i]"
-    )) {
+  function isCollaboration(root) {
+    if (root?.querySelector?.("yt-avatar-stack-view-model")) {
+      return true;
+    }
+    // Channel Videos omits the avatar stack. A collapsed participant count or
+    // a byline extending the known channel title still identifies a collab.
+    return [...(root?.querySelectorAll?.(
+      `#attributed-channel-name, ${LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR}`
+    ) || [])].some((element) => {
+      const label = Shared.cleanCreatorDisplayName(linklessLockupCreatorLabel(element));
+      if (/\s+(?:and|&)\s+\d+\s+more$/i.test(label)) {
+        return true;
+      }
+      const normalized = Shared.normalizeCreatorName(label);
+      return [...(state.channelPageIdentity?.names || [])].some((name) =>
+        normalized.startsWith(`${name} and `) || normalized.startsWith(`${name} & `));
+    });
+  }
+
+  function collaborationBylineElements(root) {
+    if (!isCollaboration(root)) {
       return [];
     }
+    const elements = [...root.querySelectorAll(
+      `#attributed-channel-name, ${LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR}`
+    )];
+    // Ignore hidden legacy copies whenever YouTube exposes a visible byline.
+    const visible = elements.filter((element) => !isHiddenWithin(root, element));
+    return visible.length > 0 ? visible : elements;
+  }
 
-    const label = [...root.querySelectorAll("#attributed-channel-name")]
-      .map((element) => Shared.cleanCreatorDisplayName(element.textContent))
-      .find((name) => /\s(?:and|&)\s|,/.test(name));
-    if (!label) {
+  function splitCollaborationLabel(value) {
+    // Limit each creator after splitting, not the combined byline: three full
+    // channel names can exceed the single-name length limit.
+    const label = String(value || "").normalize("NFKC")
+      .replace(/[\u200B-\u200D\uFEFF]/g, "")
+      .replace(/\s+/g, " ").trim()
+      .replace(/^go to channel\s+/i, "");
+    if (!label || /^collaboration channels$/i.test(label)) {
       return [];
     }
-
-    return label
-      .split(/\s+(?:and|&)\s+|,\s*/i)
-      .map((name) => Shared.cleanCreatorDisplayName(name))
-      .filter(Boolean)
+    // "and 2 more" is a count, not a creator. Only the named lead is known
+    // when the rest of the participants are absent from the DOM.
+    const collapsed = label.match(/^(.*?)\s+(?:and|&)\s+\d+\s+more\s*$/i);
+    const normalized = Shared.normalizeCreatorName(label);
+    const channelTitle = [...(state.channelPageIdentity?.names || [])].find((name) =>
+      normalized.startsWith(`${name} and `) || normalized.startsWith(`${name} & `));
+    const remainder = channelTitle
+      ? label.slice(channelTitle.length).replace(/^\s+(?:and|&)\s+/i, "")
+      : label;
+    const parts = collapsed ? [collapsed[1]] : [
+      ...(channelTitle ? [label.slice(0, channelTitle.length)] : []),
+      ...remainder.split(/\s+(?:and|&)\s+|,\s*/i)
+    ];
+    return parts
+      .map((name) => cleanLinklessLockupCreatorName(name))
+      .filter((name) => name && !/^\d+\s+more$/i.test(name) &&
+        !/(?:\.{3}|\u2026)$/.test(name))
       .slice(0, 8);
+  }
+
+  function collaborationNamesFromElement(root) {
+    let names = [];
+    for (const byline of collaborationBylineElements(root)) {
+      const elements = [byline, ...byline.querySelectorAll("[title], [aria-label]")];
+      for (const element of elements) {
+        if (isChannelFenceNode(element)) {
+          continue;
+        }
+        const copy = element.cloneNode(true);
+        copy.querySelectorAll(".cf-block-button, .cf-shorts-action, .cf-menu-item")
+          .forEach((control) => control.remove());
+        for (const label of [
+          element.getAttribute("title"), element.getAttribute("aria-label"), copy.textContent
+        ]) {
+          const candidates = splitCollaborationLabel(label);
+          // Prefer a complete accessibility/tooltip label over "and N more".
+          // A nested badge's single-word tooltip is not a creator byline.
+          if (candidates.length > names.length &&
+              (element === byline || candidates.length > 1)) {
+            names = candidates;
+          }
+        }
+      }
+    }
+    return [...new Set(names)];
   }
 
   function linklessCollaborationNames(root, ownerContexts) {
@@ -465,8 +556,12 @@
 
     const stableOwners = (Array.isArray(ownerContexts) ? ownerContexts : [])
       .filter((owner) => owner.refs?.some((ref) => ref.type !== "name"));
+    const reconciledNames = new Set();
     for (const owner of stableOwners) {
       const normalizedOwnerName = Shared.normalizeCreatorName(owner.displayName);
+      if (reconciledNames.has(normalizedOwnerName)) {
+        continue;
+      }
       const matchIndex = remaining.findIndex(
         (candidate) => candidate.normalizedName === normalizedOwnerName
       );
@@ -477,6 +572,7 @@
         return [];
       }
       remaining.splice(matchIndex, 1);
+      reconciledNames.add(normalizedOwnerName);
     }
     return remaining.map((candidate) => candidate.displayName);
   }
@@ -541,7 +637,8 @@
     }
     const metadataOnly = [
       /(?:^|\s)(?:no|\d[\d,.]*\s*[KMBT]?)\s+views?\b/i,
-      /\b\d+\s+(?:seconds?|minutes?|hours?|days?|weeks?|months?|years?)\s+ago\b/i,
+      // Compact channel cards omit "views" and abbreviate ages: "8 16h ago".
+      /\b\d+\s*(?:seconds?|minutes?|hours?|days?|weeks?|months?|years?|secs?|mins?|hrs?|[smhdwy]|mo)\s+ago\b/i,
       /^(?:streamed|premiered|scheduled)\b/i,
       /(?:^|\s)\d[\d,.]*\s*[KMBT]?\s+subscribers?\b/i,
       /^(?:new|live|members only|4k|8k|cc)$/i,
@@ -565,6 +662,9 @@
   }
 
   function linklessLockupCreatorNames(root) {
+    if (isCollaboration(root)) {
+      return collaborationNamesFromElement(root);
+    }
     const names = [];
     const seen = new Set();
     for (const element of linklessLockupCreatorElements(root)) {
@@ -1631,11 +1731,20 @@
       }
 
       const freshOwners = ownerContextsFromElement(root);
+      const matchesPreviousIdentity = (candidate) => candidate.refs.some((ref) =>
+        ownerContext?.refs.some((previousRef) => previousRef.key === ref.key));
+      const ownersAtAnchor = ownerContext?.anchor
+        ? freshOwners.filter((candidate) => candidate.anchor === ownerContext.anchor)
+        : [];
       const freshOwner = ownerContext
-        ? freshOwners.find((candidate) => candidate.anchor === ownerContext.anchor) ||
-          freshOwners.find((candidate) => candidate.refs.some((ref) =>
-            ownerContext.refs.some((previousRef) => previousRef.key === ref.key)))
+        ? ownersAtAnchor.find(matchesPreviousIdentity) ||
+          freshOwners.find(matchesPreviousIdentity) ||
+          (ownersAtAnchor.length === 1 ? ownersAtAnchor[0] : null)
         : null;
+      if (ownerContext && !freshOwner) {
+        scheduleScan();
+        return;
+      }
       const freshPageContext = pageButton && !ownerContext ? currentPageContext() : null;
       const freshDisplayName = freshOwner?.displayName ||
         freshPageContext?.displayName ||
@@ -2476,6 +2585,14 @@
       state.mutationRoots,
       includeDescendants
     );
+    // Both a rich-item wrapper and its nested lockup can be hidden. YouTube
+    // reuses the inner byline, so refresh containing cards as well to release
+    // an old block when that same wrapper starts showing an allowed creator.
+    let ancestor = element.closest?.(CONTENT_SELECTOR)?.parentElement?.closest(CONTENT_SELECTOR);
+    while (ancestor) {
+      state.mutationRoots.add(ancestor);
+      ancestor = ancestor.parentElement?.closest(CONTENT_SELECTOR);
+    }
     addMutationRoots(
       element,
       SHORTS_VISIBILITY_SELECTOR,

@@ -29,6 +29,16 @@ ChannelFence also works inside the Shorts viewer. Use the branded ChannelFence a
 
 You can undo immediately, pause filtering without losing your list, or manage every blocked creator from the extension’s settings. ChannelFence does not block reuploads posted by a different creator.
 
+## Collaboration videos
+
+ChannelFence checks each creator that YouTube identifies on a collaboration card. It also recognizes names in combined bylines such as `Creator A and Creator B` or `Creator A and Creator B and Creator C`, so an existing block for any identified collaborator can hide the card.
+
+Some cards show only `Creator A and 2 more`. ChannelFence uses fuller creator labels when YouTube supplies them; if the card exposes only Creator A, it can match only Creator A. The words `2 more` are not treated as a creator. Blocking an unnamed collaborator cannot hide that card until YouTube exposes their identity.
+
+Your existing individual creator blocks remain saved. If an older version added a combined entry such as `Business Insider and 2 more`, you can remove that entry in settings and block the named creator from their channel page if needed.
+
+When a matching video is hidden, ChannelFence also collapses its enclosing grid tile and lets remaining cards fill gaps across Home rows. This fixes the blank space that could remain in version 0.2.4 even after the video itself was hidden. Full-width shelves keep their place in the feed.
+
 ## Privacy and permissions
 
 - Uses only the `storage` extension permission.
@@ -46,6 +56,21 @@ You can undo immediately, pause filtering without losing your list, or manage ev
 5. Open YouTube and use the three-dot menu or ⊘ button beside a creator.
 
 After editing the extension, select **Reload** on its `chrome://extensions` card and refresh open YouTube tabs.
+
+### Test version 0.2.6 in Chrome Canary
+
+1. Extract `dist/ChannelFence-0.2.6.zip` to a folder.
+2. In Chrome Canary, open `chrome://extensions` and disable any other ChannelFence copy in that Canary profile to avoid duplicate controls and filtering.
+3. Enable **Developer mode**, select **Load unpacked**, and choose the extracted folder containing `manifest.json`.
+4. Confirm the extension shows version **0.2.6**. To reuse your block list from another Chrome profile, export it from ChannelFence settings there and import it into the Canary copy.
+5. Refresh open YouTube tabs. Test a two-creator and a three-creator collaboration with one identified collaborator blocked at a time, including the second or third creator when their name is available.
+6. Block from a collaboration card and check that the saved entry names the selected creator. Use **Undo**, confirm the card returns when no other collaborator is blocked, then block again and refresh to check persistence.
+7. Test an `A and 2 more` card: blocking A should hide it. Other collaborators can match only when YouTube exposes their names or channel links on the card.
+8. Block a video in the middle of a Home row and confirm nearby videos fill its slot. Check several rows, including any full-width shelves, then use **Undo** and pause/resume filtering to confirm cards return in their original order. Refresh and repeat with an existing block.
+
+9. On a channel's Videos tab, confirm view counts and abbreviated upload ages such as `16h ago` have no creator block buttons. Real creator bylines and the channel header should keep their controls.
+
+After your Canary checks, upload the same `dist/ChannelFence-0.2.6.zip` through the Chrome Web Store Developer Dashboard.
 
 ## Tests
 
@@ -71,7 +96,7 @@ npm run test:e2e:headed
 npm run test:e2e:ui
 ```
 
-The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, membership lockups, Shorts controls, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
+The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, collaboration bylines, membership lockups, Shorts controls, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
 
 GitHub Actions runs the complete deterministic suite on every push and pull request. A separate scheduled workflow runs the intentionally small live YouTube smoke check. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
 

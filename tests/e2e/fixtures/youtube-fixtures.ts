@@ -119,17 +119,31 @@ export function courseLockup(displayName: string, id = "course-lockup"): string 
 
 export function channelTabLockup({
   avatarHidden = false,
+  compactStatistics,
   displayName,
   id,
   includeAvatar
 }: {
   avatarHidden?: boolean;
+  compactStatistics?: { views: string; age: string; ageLabel: string };
   displayName: string;
   id: string;
   includeAvatar: boolean;
 }): string {
   const safeId = escapeHtml(id);
   const safeName = escapeHtml(displayName);
+  const statistics = compactStatistics
+    ? `<span class="ytIconWrapperHost ytContentMetadataViewModelLeadingIcon"></span>
+       <span class="ytContentMetadataViewModelMetadataText" role="text"
+             aria-label="${escapeHtml(compactStatistics.views)} views">${escapeHtml(compactStatistics.views)}</span>
+       <span class="ytContentMetadataViewModelDelimiter" aria-hidden="true"> </span>
+       <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextLastPart"
+             role="text" aria-label="${escapeHtml(compactStatistics.ageLabel)}">${escapeHtml(compactStatistics.age)}</span>`
+    : `<span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextFirstPart"
+             role="text" data-testid="${safeId}-views">58K views</span>
+       <span aria-hidden="true"> &middot; </span>
+       <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextLastPart"
+             role="text" data-testid="${safeId}-age">2 weeks ago</span>`;
   const avatar = includeAvatar
     ? `${avatarHidden ? "" : `<div class="ytLockupMetadataViewModelAvatar" style="display: none">
         <div role="button" aria-label="Go to channel Stale Hidden Creator"></div>
@@ -155,13 +169,7 @@ export function channelTabLockup({
             <div class="ytLockupMetadataViewModelTextContainer">
               <h3>A channel-tab video</h3>
               <div class="ytLockupMetadataViewModelMetadata">
-                <div class="ytContentMetadataViewModelMetadataRow">
-                  <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextFirstPart"
-                        role="text" data-testid="${safeId}-views">58K views</span>
-                  <span aria-hidden="true"> &middot; </span>
-                  <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextLastPart"
-                        role="text" data-testid="${safeId}-age">2 weeks ago</span>
-                </div>
+                <div class="ytContentMetadataViewModelMetadataRow" role="group">${statistics}</div>
               </div>
             </div>
             <button data-testid="${safeId}-menu" aria-label="More actions">More</button>

@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.2.6 - 2026-09-30
+
+### Fixed
+
+- Stopped abbreviated upload ages such as `16h ago` and `5d ago` from being mistaken for creator names on channel Videos cards.
+- Preserved legitimate avatar and text creator controls beside compact video statistics.
+
+### Tests
+
+- Added browser regressions for compact timestamps and for blocking a real creator beside abbreviated statistics.
+
+Includes the collaboration and feed layout fixes from 0.2.5. The release ZIP now includes the existing MIT license. There are no new permissions, additional network requests, remote code, or analytics in this release.
+
+## 0.2.5 - 2026-09-15
+
+### Fixed
+
+- Collapsed the enclosing grid tile when a blocked video's inner card is hidden, removing the empty tile left in some Home layouts.
+- Allowed remaining video cards to fill gaps across fixed Home rows while preserving their order and full-width shelf boundaries.
+
+### Tests
+
+- Added browser checks of actual card positions after blocking, Undo, pause/resume, collaboration label updates, and reused cards, including feeds with a full-width shelf.
+
+Includes the collaboration matching fixes from 0.2.4. There are no new permissions, additional network requests, remote code, or analytics in this release.
+
+## 0.2.4 - 2026-09-15
+
+### Fixed
+
+- Recognized individual creator names in combined collaboration bylines, including two- and three-creator cards without channel links, so existing individual blocks can hide matching collaborations.
+- Stopped treating summary text such as `Business Insider and 2 more` as a single creator; used fuller creator labels when YouTube exposes them.
+- Kept collaborators with separate channel links distinct even when their display names match.
+- Kept shared-byline controls bound to the selected collaborator and refreshed enclosing feed cards when YouTube reuses their metadata.
+
+### Changed
+
+- Documented collaboration matching limits and Chrome Canary testing before Web Store upload. When YouTube exposes only `A and 2 more`, only A can match; unnamed collaborators cannot be inferred from the count.
+- Preserved existing individual block entries. Older combined-name entries can be removed manually and the named creator blocked from their channel page if needed.
+
+### Tests
+
+- Added 19 browser regressions for collaboration matching, individual inline/menu actions, collapsed and full labels, same-named channels, card reuse, and Undo.
+
+There are no new permissions, no additional network requests, no remote code, and no analytics in this release.
+
 ## 0.2.3 - 2026-09-03
 
 ### Changed
