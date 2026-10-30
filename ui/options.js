@@ -1,6 +1,7 @@
 "use strict";
 
 const Shared = globalThis.ChannelFenceShared;
+const I18n = globalThis.ChannelFenceI18n;
 const elements = {
   version: document.getElementById("version"),
   enabled: document.getElementById("enabledToggle"),
@@ -67,11 +68,11 @@ function renderList() {
   elements.blockedCount.textContent = String(blockedEntries.length);
   elements.empty.hidden = filtered.length > 0;
   elements.empty.textContent = blockedEntries.length === 0
-    ? "Your block list is empty."
-    : "No blocked creators match this search.";
+    ? I18n.get("emptyBlockList")
+    : I18n.get("noSearchMatches");
   elements.pagination.hidden = visibleEntries.length >= filtered.length;
   elements.listStatus.textContent = visibleEntries.length < filtered.length
-    ? `Showing ${visibleEntries.length} of ${filtered.length} matching creators.`
+    ? I18n.get("showingCreators", [String(visibleEntries.length), String(filtered.length)])
     : "";
   const fragment = document.createDocumentFragment();
 
@@ -89,17 +90,19 @@ function renderList() {
     name.textContent = Shared.labelForEntry(entry);
     const meta = document.createElement("div");
     meta.className = "block-list__meta";
-    meta.textContent = `${entry.key}${entry.blockedAt ? ` · Blocked ${formatDate(entry.blockedAt)}` : ""}`;
+    meta.textContent = entry.blockedAt
+      ? I18n.get("blockedEntryDetails", [entry.key, formatDate(entry.blockedAt)])
+      : entry.key;
     details.append(name, meta);
 
     const unblock = document.createElement("button");
     unblock.className = "button button--danger button--small";
     unblock.type = "button";
-    unblock.textContent = "Unblock";
+    unblock.textContent = I18n.get("unblock");
     unblock.addEventListener("click", () => {
       persistBlocked(
         Shared.removeEntriesMatchingRefs(blockedEntries, entry.aliases),
-        `Unblocked ${Shared.labelForEntry(entry)}`
+        I18n.get("unblockedNamed", Shared.labelForEntry(entry))
       );
     });
 
@@ -122,17 +125,17 @@ function scheduleRenderList() {
 
 elements.enabled.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.enabled]: elements.enabled.checked });
-  showToast(elements.enabled.checked ? "ChannelFence enabled" : "ChannelFence paused");
+  showToast(I18n.get(elements.enabled.checked ? "enabledToast" : "pausedToast"));
 });
 
 elements.comments.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.hideComments]: elements.comments.checked });
-  showToast(elements.comments.checked ? "Blocked comments will be hidden" : "Comments will remain visible");
+  showToast(I18n.get(elements.comments.checked ? "hideCommentsToast" : "showCommentsToast"));
 });
 
 elements.shorts.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.hideHomeShorts]: elements.shorts.checked });
-  showToast(elements.shorts.checked ? "Shorts will be hidden in feeds" : "Shorts will remain in feeds");
+  showToast(I18n.get(elements.shorts.checked ? "hideShortsToast" : "showShortsToast"));
 });
 
 elements.search.addEventListener("input", () => {
@@ -149,7 +152,7 @@ elements.manualForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const ref = Shared.normalizeManualChannelInput(elements.manualInput.value);
   if (!ref) {
-    showToast("Enter a valid YouTube handle or channel URL");
+    showToast(I18n.get("invalidHandle"));
     elements.manualInput.focus();
     elements.manualInput.select();
     return;
@@ -157,14 +160,14 @@ elements.manualForm.addEventListener("submit", async (event) => {
 
   const existing = Shared.findMatchingEntry(blockedEntries, [ref]);
   if (existing) {
-    showToast(`${Shared.labelForEntry(existing)} is already blocked`);
+    showToast(I18n.get("alreadyBlocked", Shared.labelForEntry(existing)));
     elements.manualInput.focus();
     return;
   }
 
   const entry = Shared.createBlockedEntry([ref], ref.value);
   if (!entry) {
-    showToast("That creator could not be added");
+    showToast(I18n.get("couldNotAddCreator"));
     return;
   }
 
@@ -172,7 +175,7 @@ elements.manualForm.addEventListener("submit", async (event) => {
   try {
     await persistBlocked(
       Shared.mergeBlockedEntry(blockedEntries, entry),
-      `Blocked ${Shared.labelForEntry(entry)}`
+      I18n.get("blockedNamed", Shared.labelForEntry(entry))
     );
     elements.manualInput.value = "";
     elements.manualInput.focus();
@@ -195,7 +198,7 @@ elements.exportButton.addEventListener("click", () => {
   anchor.download = `channelfence-block-list-${new Date().toISOString().slice(0, 10)}.json`;
   anchor.click();
   URL.revokeObjectURL(url);
-  showToast("Block list exported");
+  showToast(I18n.get("exportedBlockList"));
 });
 
 elements.importButton.addEventListener("click", () => elements.importFile.click());
@@ -216,9 +219,12 @@ elements.importFile.addEventListener("change", async () => {
       throw new Error("No valid channels");
     }
     const merged = Shared.mergeBlockedEntries(blockedEntries, incoming);
-    await persistBlocked(merged, `Imported ${incoming.length} creator${incoming.length === 1 ? "" : "s"}`);
+    await persistBlocked(merged, I18n.get(
+      incoming.length === 1 ? "importedCreatorOne" : "importedCreatorOther",
+      String(incoming.length)
+    ));
   } catch {
-    showToast("That file is not a valid ChannelFence export");
+    showToast(I18n.get("invalidExport"));
   }
 });
 
@@ -226,8 +232,8 @@ elements.clearButton.addEventListener("click", async () => {
   if (blockedEntries.length === 0) {
     return;
   }
-  if (confirm(`Unblock all ${blockedEntries.length} creators?`)) {
-    await persistBlocked([], "Block list cleared");
+  if (confirm(I18n.get("confirmClearAll", String(blockedEntries.length)))) {
+    await persistBlocked([], I18n.get("clearedBlockList"));
   }
 });
 
@@ -237,7 +243,7 @@ async function initialize() {
   elements.enabled.checked = values[Shared.STORAGE.enabled] !== false;
   elements.shorts.checked = values[Shared.STORAGE.hideHomeShorts] === true;
   elements.comments.checked = values[Shared.STORAGE.hideComments] !== false;
-  elements.version.textContent = `Version ${chrome.runtime.getManifest().version}`;
+  elements.version.textContent = I18n.get("version", chrome.runtime.getManifest().version);
   renderList();
 }
 
@@ -262,4 +268,4 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 });
 
-initialize().catch(() => showToast("Settings could not be loaded"));
+initialize().catch(() => showToast(I18n.get("settingsLoadError")));

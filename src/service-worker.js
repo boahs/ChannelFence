@@ -1,8 +1,9 @@
 "use strict";
 
-importScripts("shared.js");
+importScripts("shared.js", "i18n.js");
 
 const Shared = globalThis.ChannelFenceShared;
+const I18n = globalThis.ChannelFenceI18n;
 
 async function ensureDefaults() {
   const current = await chrome.storage.local.get(Object.keys(Shared.DEFAULTS));
@@ -54,7 +55,7 @@ async function updateBadgeForTab(tabId) {
   await chrome.action.setBadgeBackgroundColor({ color: "#ff5f46", tabId });
   await chrome.action.setBadgeText({ text: badgeText, tabId });
   await chrome.action.setTitle({
-    title: enabled ? `ChannelFence — ${count} blocked` : "ChannelFence — paused",
+    title: enabled ? I18n.get("actionBlockedCount", String(count)) : I18n.get("actionPaused"),
     tabId
   });
 }

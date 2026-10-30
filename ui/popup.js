@@ -1,6 +1,7 @@
 "use strict";
 
 const Shared = globalThis.ChannelFenceShared;
+const I18n = globalThis.ChannelFenceI18n;
 const elements = {
   enabled: document.getElementById("enabledToggle"),
   shorts: document.getElementById("shortsToggle"),
@@ -48,8 +49,8 @@ function renderBlockedList() {
     const unblock = document.createElement("button");
     unblock.className = "icon-button";
     unblock.type = "button";
-    unblock.textContent = "Unblock";
-    unblock.setAttribute("aria-label", `Unblock ${Shared.labelForEntry(entry)}`);
+    unblock.textContent = I18n.get("unblock");
+    unblock.setAttribute("aria-label", I18n.get("unblockNamed", Shared.labelForEntry(entry)));
     unblock.addEventListener("click", () => {
       saveBlocked(Shared.removeEntriesMatchingRefs(blockedEntries, entry.aliases));
     });
@@ -62,12 +63,12 @@ function renderBlockedList() {
 function renderPageContext() {
   elements.pageActions.replaceChildren();
   if (!pageContext || !pageContext.ok || pageContext.refs.length === 0) {
-    elements.pageTitle.textContent = "No creator detected";
-    elements.pageCopy.textContent = "Open a creator, video, or Short to block its creator.";
+    elements.pageTitle.textContent = I18n.get("noCreator");
+    elements.pageCopy.textContent = I18n.get("openCreatorHelp");
     const action = document.createElement("button");
     action.className = "button button--primary";
     action.type = "button";
-    action.textContent = "Block creator";
+    action.textContent = I18n.get("blockCreator");
     action.disabled = true;
     elements.pageActions.append(action);
     return;
@@ -77,27 +78,27 @@ function renderPageContext() {
     ? pageContext.owners
     : [{ refs: pageContext.refs, displayName: pageContext.displayName }];
   if (owners.length > 1) {
-    elements.pageTitle.textContent = "Multiple creators detected";
-    elements.pageCopy.textContent = "Choose which creator to block or unblock.";
+    elements.pageTitle.textContent = I18n.get("multipleCreators");
+    elements.pageCopy.textContent = I18n.get("chooseCreator");
   } else {
     const owner = owners[0];
     const match = Shared.findMatchingEntry(blockedEntries, owner.refs);
-    elements.pageTitle.textContent = owner.displayName || owner.refs[0]?.value || "This creator";
+    elements.pageTitle.textContent = owner.displayName || owner.refs[0]?.value || I18n.get("thisCreator");
     elements.pageCopy.textContent = match
-      ? "This creator is currently blocked everywhere ChannelFence can identify them."
-      : "Hide this creator from feeds, search, recommendations, Shorts, and direct visits.";
+      ? I18n.get("creatorIsBlocked")
+      : I18n.get("creatorBlockHelp");
   }
 
   for (const owner of owners) {
     const match = Shared.findMatchingEntry(blockedEntries, owner.refs);
-    const name = owner.displayName || owner.refs[0]?.value || "creator";
+    const name = owner.displayName || owner.refs[0]?.value || I18n.get("creator");
     const action = document.createElement("button");
     action.type = "button";
     action.className = `button ${match ? "button--secondary" : "button--primary"}`;
     action.textContent = owners.length > 1
-      ? `${match ? "Unblock" : "Block"} ${name}`
-      : `${match ? "Unblock" : "Block"} creator`;
-    action.setAttribute("aria-label", `${match ? "Unblock" : "Block"} ${name}`);
+      ? I18n.get(match ? "unblockNamed" : "blockNamed", name)
+      : I18n.get(match ? "unblockCreator" : "blockCreator");
+    action.setAttribute("aria-label", I18n.get(match ? "unblockNamed" : "blockNamed", name));
     action.addEventListener("click", async () => {
       if (match) {
         await saveBlocked(Shared.removeEntriesMatchingRefs(blockedEntries, owner.refs));
@@ -125,7 +126,9 @@ async function loadPageContext() {
 
 elements.enabled.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.enabled]: elements.enabled.checked });
-  elements.status.textContent = elements.enabled.checked ? `${blockedEntries.length} blocked` : "Paused";
+  elements.status.textContent = elements.enabled.checked
+    ? I18n.get("blockedCount", String(blockedEntries.length))
+    : I18n.get("paused");
 });
 
 elements.shorts.addEventListener("change", async () => {
@@ -139,7 +142,9 @@ async function initialize() {
   blockedEntries = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]);
   elements.enabled.checked = values[Shared.STORAGE.enabled] !== false;
   elements.shorts.checked = values[Shared.STORAGE.hideHomeShorts] === true;
-  elements.status.textContent = elements.enabled.checked ? `${blockedEntries.length} blocked` : "Paused";
+  elements.status.textContent = elements.enabled.checked
+    ? I18n.get("blockedCount", String(blockedEntries.length))
+    : I18n.get("paused");
   renderBlockedList();
   await loadPageContext();
 }
@@ -159,14 +164,14 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       changes[Shared.STORAGE.blocked].newValue
     );
     elements.status.textContent = elements.enabled.checked
-      ? `${blockedEntries.length} blocked`
-      : "Paused";
+      ? I18n.get("blockedCount", String(blockedEntries.length))
+      : I18n.get("paused");
     renderBlockedList();
     renderPageContext();
   }
 });
 
 initialize().catch(() => {
-  elements.status.textContent = "Unavailable";
+  elements.status.textContent = I18n.get("unavailable");
   renderPageContext();
 });

@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ChannelFence settings</title>
+  <title data-i18n="settingsPageTitle">ChannelFence settings</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="../src/i18n.js" defer></script>
   <script src="../src/shared.js" defer></script>
   <script src="options.js" defer></script>
 </head>
@@ -15,95 +16,95 @@
         <img class="brand__icon" src="../assets/icons/channelfence-128.png" alt="">
         <div>
           <div class="brand__name">ChannelFence</div>
-          <div class="brand__tagline">Creator blocker settings</div>
+          <div class="brand__tagline" data-i18n="settingsTagline">Creator blocker settings</div>
         </div>
       </div>
       <div class="version" id="version"></div>
     </header>
 
     <section class="settings-card" aria-labelledby="settingsHeading">
-      <h1 id="settingsHeading">Settings</h1>
-      <p class="settings-intro">ChannelFence runs only on YouTube and keeps your preferences on this device.</p>
+      <h1 id="settingsHeading" data-i18n="settings">Settings</h1>
+      <p class="settings-intro" data-i18n="settingsIntro">ChannelFence runs only on YouTube and keeps your preferences on this device.</p>
 
       <div class="setting-row">
         <div>
-          <div class="setting-row__title">Enable ChannelFence</div>
-          <div class="setting-row__copy">Pause all blocking without deleting your list.</div>
+          <div class="setting-row__title" data-i18n="enableChannelFence">Enable ChannelFence</div>
+          <div class="setting-row__copy" data-i18n="pauseHelp">Pause all blocking without deleting your list.</div>
         </div>
         <label class="switch">
-          <input id="enabledToggle" type="checkbox" aria-label="Enable ChannelFence">
+          <input id="enabledToggle" type="checkbox" aria-label="Enable ChannelFence" data-i18n-aria-label="enableChannelFence">
           <span class="switch__track" aria-hidden="true"></span>
         </label>
       </div>
 
       <div class="setting-row">
         <div>
-          <div class="setting-row__title">Hide Shorts in feeds</div>
-          <div class="setting-row__copy">Removes Shorts shelves and cards from Home, search, and other feeds. The Shorts tab remains available.</div>
+          <div class="setting-row__title" data-i18n="hideShorts">Hide Shorts in feeds</div>
+          <div class="setting-row__copy" data-i18n="hideShortsHelp">Removes Shorts shelves and cards from Home, search, and other feeds. The Shorts tab remains available.</div>
         </div>
         <label class="switch">
-          <input id="shortsToggle" type="checkbox" aria-label="Hide Shorts in YouTube feeds">
+          <input id="shortsToggle" type="checkbox" aria-label="Hide Shorts in YouTube feeds" data-i18n-aria-label="hideShortsAccessible">
           <span class="switch__track" aria-hidden="true"></span>
         </label>
       </div>
 
       <div class="setting-row">
         <div>
-          <div class="setting-row__title">Hide comments from blocked creators</div>
-          <div class="setting-row__copy">Also removes comments when ChannelFence can identify the commenter’s channel.</div>
+          <div class="setting-row__title" data-i18n="hideComments">Hide comments from blocked creators</div>
+          <div class="setting-row__copy" data-i18n="hideCommentsHelp">Also removes comments when ChannelFence can identify the commenter’s channel.</div>
         </div>
         <label class="switch">
-          <input id="commentsToggle" type="checkbox" aria-label="Hide comments from blocked creators">
+          <input id="commentsToggle" type="checkbox" aria-label="Hide comments from blocked creators" data-i18n-aria-label="hideComments">
           <span class="switch__track" aria-hidden="true"></span>
         </label>
       </div>
     </section>
 
     <section class="settings-card" aria-labelledby="blockListHeading">
-      <h2 id="blockListHeading">Blocked creators <span class="count-pill" id="blockedCount">0</span></h2>
-      <p class="settings-intro">Search, unblock, or back up your list. Imported entries are merged with the current list.</p>
+      <h2 id="blockListHeading"><span data-i18n="blockedCreators">Blocked creators</span> <span class="count-pill" id="blockedCount">0</span></h2>
+      <p class="settings-intro" data-i18n="blockListHelp">Search, unblock, or back up your list. Imported entries are merged with the current list.</p>
 
       <form class="manual-block-form" id="manualBlockForm">
-        <label class="manual-block-form__label" for="manualBlockInput">Block by handle or channel URL</label>
+        <label class="manual-block-form__label" for="manualBlockInput" data-i18n="manualBlockLabel">Block by handle or channel URL</label>
         <div class="manual-block-form__row">
           <input class="search-input manual-block-form__input" id="manualBlockInput" type="text"
-            placeholder="@creator or youtube.com/@creator" autocomplete="off" spellcheck="false"
+            placeholder="@creator or youtube.com/@creator" data-i18n-placeholder="manualBlockPlaceholder" autocomplete="off" spellcheck="false"
             aria-describedby="manualBlockHelp">
-          <button class="button button--primary" id="manualBlockButton" type="submit">Block creator</button>
+          <button class="button button--primary" id="manualBlockButton" type="submit" data-i18n="blockCreator">Block creator</button>
         </div>
-        <p class="manual-block-form__help" id="manualBlockHelp">Paste a YouTube handle or channel URL. It is validated and saved only in Chrome's local extension storage.</p>
+        <p class="manual-block-form__help" id="manualBlockHelp" data-i18n="manualBlockHelp">Paste a YouTube handle or channel URL. It is validated and saved only in Chrome's local extension storage.</p>
       </form>
 
       <div class="list-toolbar">
-        <input class="search-input" id="searchInput" type="search" placeholder="Search blocked creators" aria-label="Search blocked creators">
+        <input class="search-input" id="searchInput" type="search" placeholder="Search blocked creators" data-i18n-placeholder="searchBlocked" aria-label="Search blocked creators" data-i18n-aria-label="searchBlocked">
         <div class="toolbar-actions">
-          <button class="button button--secondary button--small" id="exportButton" type="button">Export</button>
-          <button class="button button--secondary button--small" id="importButton" type="button">Import</button>
-          <button class="button button--danger button--small" id="clearButton" type="button">Clear all</button>
+          <button class="button button--secondary button--small" id="exportButton" type="button" data-i18n="export">Export</button>
+          <button class="button button--secondary button--small" id="importButton" type="button" data-i18n="import">Import</button>
+          <button class="button button--danger button--small" id="clearButton" type="button" data-i18n="clearAll">Clear all</button>
           <input id="importFile" type="file" accept="application/json,.json" hidden>
         </div>
       </div>
 
       <ul class="block-list" id="blockList"></ul>
-      <div class="empty-state" id="emptyState" hidden>Your block list is empty.</div>
+      <div class="empty-state" id="emptyState" hidden data-i18n="emptyBlockList">Your block list is empty.</div>
       <div class="list-pagination" id="listPagination" hidden>
         <span id="listStatus"></span>
-        <button class="button button--secondary button--small" id="loadMoreButton" type="button">
+        <button class="button button--secondary button--small" id="loadMoreButton" type="button" data-i18n="showMore">
           Show 200 more
         </button>
       </div>
 
       <div class="privacy-note">
-        <strong>Private by design.</strong> Channel names, channel links, settings, and your block list stay in Chrome’s local extension storage. ChannelFence does not send them to us or anyone else.
-        If something slips through, <a href="https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml" target="_blank" rel="noreferrer">report a bug</a>.
+        <strong data-i18n="privateByDesign">Private by design.</strong> <span data-i18n="settingsPrivacy">Channel names, channel links, settings, and your block list stay in Chrome’s local extension storage. ChannelFence does not send them to us or anyone else.</span>
+        <span data-i18n="settingsReport">If something slips through, <a data-i18n-link href="https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml" target="_blank" rel="noreferrer" data-i18n="reportBugInline">report a bug</a>.</span>
       </div>
 
       <div class="review-note">
         <div>
-          <div class="review-note__title">Enjoying ChannelFence?</div>
-          <div class="review-note__copy">An honest Chrome Store review helps other people find it.</div>
+          <div class="review-note__title" data-i18n="enjoyingChannelFence">Enjoying ChannelFence?</div>
+          <div class="review-note__copy" data-i18n="reviewHelp">An honest Chrome Store review helps other people find it.</div>
         </div>
-        <a class="button button--secondary button--small" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm/reviews" target="_blank" rel="noreferrer">Leave a review</a>
+        <a class="button button--secondary button--small" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm/reviews" target="_blank" rel="noreferrer" data-i18n="leaveReview">Leave a review</a>
       </div>
     </section>
   </main>

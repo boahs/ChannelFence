@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "ChannelFence – YouTube Channel Blocker",
+  "name": "__MSG_extensionName__",
   "short_name": "ChannelFence",
   "version": "0.2.6",
-  "description": "Block YouTube channels and creators across Home, search, recommendations, Shorts, comments, and direct visits.",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
   "homepage_url": "https://channelfence.app/",
   "permissions": [
     "storage"
@@ -42,6 +43,7 @@
       ],
       "js": [
         "src/shared.js",
+        "src/i18n.js",
         "src/content.js"
       ],
       "run_at": "document_start",

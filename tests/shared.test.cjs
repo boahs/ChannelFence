@@ -68,6 +68,24 @@ test("creates and removes a display-name fallback entry for linkless lockups", (
   assert.equal(Shared.removeEntriesMatchingRefs([entry], [ref]).length, 0);
 });
 
+test("preserves localized channel identities across manual input and encoded URLs", () => {
+  for (const handle of ["한국채널", "日本語", "قناة", "café"]) {
+    const manual = Shared.normalizeManualChannelInput(`@${handle}`);
+    const linked = Shared.normalizeChannelRef(`/@${encodeURIComponent(handle)}/videos?hl=ko`);
+    assert.equal(manual.key, `handle:@${handle}`);
+    assert.equal(linked.key, manual.key);
+  }
+
+  const composed = Shared.normalizeCreatorNameRef("한글 채널");
+  const decomposed = Shared.normalizeCreatorNameRef("한글 채널".normalize("NFD"));
+  assert.equal(decomposed.key, composed.key);
+  const blocked = Shared.createBlockedEntry([composed], "한글 채널");
+  assert.equal(
+    Shared.findMatchingEntryByNames([blocked], ["한글 채널".normalize("NFD")]).key,
+    blocked.key
+  );
+});
+
 test("uses a stable handle without @ as the visible label while preferring a channel id key", () => {
   const entry = Shared.createBlockedEntry([
     Shared.normalizeChannelRef("https://www.youtube.com/@Creator"),

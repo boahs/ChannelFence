@@ -3,39 +3,40 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ChannelFence Privacy Policy</title>
+  <title data-i18n="privacyTitle">ChannelFence Privacy Policy</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="../src/i18n.js" defer></script>
 </head>
 <body class="legal">
   <main class="page-shell">
     <article>
-      <h1>ChannelFence Privacy Policy</h1>
-      <p><strong>Effective date:</strong> August 27, 2026</p>
-      <p>ChannelFence is designed to work without an account, analytics, advertising, or a developer-controlled server. Its single purpose is to give users local controls for hiding selected creators and optional Shorts shelves in YouTube feeds.</p>
+      <h1 data-i18n="privacyTitle">ChannelFence Privacy Policy</h1>
+      <p><strong data-i18n="privacyEffectiveDate">Effective date:</strong> <span data-i18n="privacyDate">August 27, 2026</span></p>
+      <p data-i18n="privacyIntro">ChannelFence is designed to work without an account, analytics, advertising, or a developer-controlled server. Its single purpose is to give users local controls for hiding selected creators and optional Shorts shelves in YouTube feeds.</p>
 
-      <h2>Information ChannelFence processes</h2>
-      <p>While you use YouTube, ChannelFence reads limited page content needed to identify creator names and channel links, determine whether a creator is on your block list, add block controls, and hide matching content. When your block list is not empty, compact Shorts cards that omit their creators are checked using YouTube's oEmbed endpoint so ChannelFence can determine whether their creators are blocked. The returned compact Shorts metadata is cached only in memory and is not added to browsing history or extension storage. When you choose to block a creator, ChannelFence stores that creator’s displayed name, public channel identifier or handle, public channel URL, and the time the block was created. If you block from a compact Short, ChannelFence also stores that user-selected public Short path with the creator record so the exact card remains hidden after a refresh.</p>
+      <h2 data-i18n="privacyInformationHeading">Information ChannelFence processes</h2>
+      <p data-i18n="privacyInformation">While you use YouTube, ChannelFence reads limited page content needed to identify creator names and channel links, determine whether a creator is on your block list, add block controls, and hide matching content. When your block list is not empty, compact Shorts cards that omit their creators are checked using YouTube's oEmbed endpoint so ChannelFence can determine whether their creators are blocked. The returned compact Shorts metadata is cached only in memory and is not added to browsing history or extension storage. When you choose to block a creator, ChannelFence stores that creator’s displayed name, public channel identifier or handle, public channel URL, and the time the block was created. If you block from a compact Short, ChannelFence also stores that user-selected public Short path with the creator record so the exact card remains hidden after a refresh.</p>
 
-      <h2>Storage and transmission</h2>
-      <p>Settings and blocked-creator records are stored only in Chrome’s local extension storage on your device and are never transmitted to the developer. Compact Shorts lookups send only public Short URLs to youtube.com so YouTube can return their public creator names and channel URLs. Requests omit account credentials. ChannelFence makes no requests to a developer-controlled server or any non-YouTube service. It does not sell data, use data for advertising, or permit humans to read user data.</p>
+      <h2 data-i18n="privacyStorageHeading">Storage and transmission</h2>
+      <p data-i18n="privacyStorage">Settings and blocked-creator records are stored only in Chrome’s local extension storage on your device and are never transmitted to the developer. Compact Shorts lookups send only public Short URLs to youtube.com so YouTube can return their public creator names and channel URLs. Requests omit account credentials. ChannelFence makes no requests to a developer-controlled server or any non-YouTube service. It does not sell data, use data for advertising, or permit humans to read user data.</p>
 
-      <h2>Permissions</h2>
+      <h2 data-i18n="privacyPermissionsHeading">Permissions</h2>
       <ul>
-        <li><strong>Storage:</strong> saves the enabled state, comment and feed-level Shorts preferences, and blocked-creator list locally.</li>
-        <li><strong>Access to youtube.com:</strong> identifies creators on YouTube pages, adds user-facing block controls, and hides content from blocked creators.</li>
+        <li><strong data-i18n="privacyStorageLabel">Storage:</strong> <span data-i18n="privacyStoragePermission">saves the enabled state, comment and feed-level Shorts preferences, and blocked-creator list locally.</span></li>
+        <li><strong data-i18n="privacyYouTubeLabel">Access to youtube.com:</strong> <span data-i18n="privacyYouTubePermission">identifies creators on YouTube pages, adds user-facing block controls, and hides content from blocked creators.</span></li>
       </ul>
 
-      <h2>Data control and deletion</h2>
-      <p>You can view, export, unblock, or clear blocked creators from ChannelFence settings. Uninstalling ChannelFence causes Chrome to remove the extension’s locally stored data.</p>
+      <h2 data-i18n="privacyControlHeading">Data control and deletion</h2>
+      <p data-i18n="privacyControl">You can view, export, unblock, or clear blocked creators from ChannelFence settings. Uninstalling ChannelFence causes Chrome to remove the extension’s locally stored data.</p>
 
-      <h2>Limited Use</h2>
-      <p>ChannelFence’s use of information is limited to providing and improving its single user-facing purpose. Information is not transferred for advertising, credit decisions, data brokerage, or unrelated purposes.</p>
+      <h2 data-i18n="privacyLimitedUseHeading">Limited Use</h2>
+      <p data-i18n="privacyLimitedUse">ChannelFence’s use of information is limited to providing and improving its single user-facing purpose. Information is not transferred for advertising, credit decisions, data brokerage, or unrelated purposes.</p>
 
-      <h2>Changes</h2>
-      <p>If ChannelFence’s data practices change, this policy and the Chrome Web Store disclosures will be updated before the changed practice is introduced.</p>
+      <h2 data-i18n="privacyChangesHeading">Changes</h2>
+      <p data-i18n="privacyChanges">If ChannelFence’s data practices change, this policy and the Chrome Web Store disclosures will be updated before the changed practice is introduced.</p>
 
-      <h2>Contact</h2>
-      <p>Privacy and support questions can be submitted through the <a href="https://github.com/boahs/ChannelFence/issues">ChannelFence issue tracker</a> or the Support link on its Chrome Web Store listing.</p>
+      <h2 data-i18n="privacyContactHeading">Contact</h2>
+      <p data-i18n="privacyContact">Privacy and support questions can be submitted through the <a data-i18n-link href="https://github.com/boahs/ChannelFence/issues" data-i18n="issueTracker">ChannelFence issue tracker</a> or the Support link on its Chrome Web Store listing.</p>
     </article>
   </main>
 </body>

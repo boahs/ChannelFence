@@ -366,9 +366,9 @@ export function shortsViewer(displayName: string, handle: string): string {
     </ytd-shorts>`;
 }
 
-export function youtubeDocument(body: string): string {
+export function youtubeDocument(body: string, language = "en"): string {
   return `<!doctype html>
-    <html lang="en" style="--yt-spec-text-secondary: #606060">
+    <html lang="${escapeHtml(language)}" style="--yt-spec-text-secondary: #606060">
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

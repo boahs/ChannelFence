@@ -10,9 +10,15 @@ The browser suite launches ChannelFence as a real unpacked Manifest V3 extension
 - `smoke/` covers the primary block, hide, and undo journey.
 - `regression/` covers known bugs and secondary surfaces, including late-populated and hidden search bylines, description mentions, linked and combined-name collaboration owners, linkless right-rail recommendations, compact Shorts cards and menus, feed-wide Shorts hiding, and manual handle entry.
 - `regression/feed-layout.spec.ts` checks card positions across Home rows after blocking, Undo, pause/resume, creator-label updates, and renderer reuse, including full-width shelf boundaries.
+- `regression/localized-ui.spec.ts` checks Korean extension controls, Korean handles, and English fallback in an untranslated browser locale. It also verifies that translating ChannelFence does not change YouTube's language.
+- `regression/localized-youtube.spec.ts` covers localized creator labels and statistics independently of the browser's interface language.
 - `live/` verifies injection plus current search-result, compact Shorts blocking, and watch-page right-rail compatibility against the real YouTube origin; it is not part of the normal local or pull-request run.
 
 The deterministic tests fulfill navigation requests at `https://www.youtube.com/` with local HTML. The real content scripts and styles still load because the document has a manifest-matched YouTube URL, while the test avoids network data, accounts, recommendations, ads, and YouTube A/B experiments.
+
+`live/youtube-locales.spec.ts` verifies Korean YouTube using a Korean browser profile and asserts the rendered document language. Its regression markup comes from public, logged-out YouTube pages captured in CI. Run live validation through the existing **Live YouTube Playwright tests** workflow with **Run workflow** on the work branch. The workflow uploads Playwright diagnostics on manual runs as well as scheduled runs.
+
+Tests can set `test.use({ locale: "ko-KR" })` to select the browser and extension interface language. `YouTubeSurfacePage.open(body, path, "ko")` selects the fixture document's language independently. Translated catalogs alone do not establish compatibility with every YouTube locale.
 
 ## Commands
 
