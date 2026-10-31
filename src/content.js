@@ -2,6 +2,7 @@
   "use strict";
 
   const Shared = globalThis.ChannelFenceShared;
+  const I18n = globalThis.ChannelFenceI18n;
   if (!Shared || globalThis.__channelFenceLoaded) {
     return;
   }
@@ -623,6 +624,11 @@
     // what previously produced three controls from "11 views · 16 hours ago".
     const rows = [...root.querySelectorAll(LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR)]
       .filter((row) => !isHiddenWithin(root, row) &&
+        // A creator occupies one text field. Count/age groups are separate
+        // fields even when their localized labels contain no English words.
+        !row.querySelector(".ytContentMetadataViewModelLeadingIcon") &&
+        !(row.matches("[role='group']") &&
+          row.querySelectorAll(".ytContentMetadataViewModelMetadataText").length > 1) &&
         cleanLinklessLockupCreatorName(linklessLockupCreatorLabel(row)))
       .sort((left, right) => placementScore(right) - placementScore(left));
     return rows.slice(0, 1);
@@ -1205,7 +1211,10 @@
     const isShortsControl = Boolean(control.closest(
       "ytd-reel-video-renderer, yt-reel-player-overlay-view-model, reel-action-bar-view-model"
     ));
-    return Boolean(control.closest("ytd-menu-renderer, yt-menu-renderer")) ||
+    return Boolean(control.closest(
+      "ytd-menu-renderer, yt-menu-renderer, .ytLockupMetadataViewModelMenuButton, " +
+      ".ytLockupViewModelMenuButton, .shortsLockupViewModelHostOutsideMetadataMenu"
+    )) ||
       /action menu|more actions/i.test(label) ||
       (isShortsControl && /^more$/i.test(label.trim()));
   }
@@ -1371,7 +1380,7 @@
   async function blockCompactShortCreator(root) {
     const path = compactShortPath(root);
     if (!path) {
-      showToast("ChannelFence couldn't identify this Short.");
+      showToast(I18n.get("contentUnidentifiedShort"));
       return;
     }
     const buttons = buttonsOwnedByRoot(root);
@@ -1391,7 +1400,7 @@
         state.compactShortContexts.delete(path);
       }
     } catch {
-      showToast("ChannelFence couldn't identify this creator. Try opening the Short first.");
+      showToast(I18n.get("contentOpenShortFirst"));
     } finally {
       buttons.forEach((button) => {
         if (button.isConnected) {
@@ -1451,8 +1460,9 @@
       return;
     }
 
-    refs = refsWithNameFallback(refs, displayName);
     if (refs.length === 0) {
+      state.pendingMenuContext = null;
+      scheduleMenuScan();
       return;
     }
     state.pendingMenuContext = {
@@ -1541,7 +1551,7 @@
       button.type = "button";
       button.className = "cf-menu-item";
       button.setAttribute("role", "menuitem");
-      button.setAttribute("aria-label", "Block this Short's creator with ChannelFence");
+      button.setAttribute("aria-label", I18n.get("contentBlockShortCreator"));
       if (menuTextColor) {
         button.style.setProperty("--cf-menu-text-color", menuTextColor);
       }
@@ -1553,7 +1563,7 @@
 
       const label = document.createElement("span");
       label.className = "cf-menu-item__label";
-      label.textContent = "ChannelFence: Block creator";
+      label.textContent = I18n.get("contentMenuBlockCreator");
       button.append(symbol, label);
       button.addEventListener("click", async (event) => {
         event.preventDefault();
@@ -1578,9 +1588,10 @@
       button.type = "button";
       button.className = "cf-menu-item";
       button.setAttribute("role", "menuitem");
-      button.setAttribute("aria-label", existingEntry
-        ? `Unblock ${owner.displayName} with ChannelFence`
-        : `Block ${owner.displayName} with ChannelFence`);
+      button.setAttribute("aria-label", I18n.get(
+        existingEntry ? "contentUnblockWithBrand" : "contentBlockWithBrand",
+        owner.displayName
+      ));
       if (menuTextColor) {
         button.style.setProperty("--cf-menu-text-color", menuTextColor);
       }
@@ -1592,9 +1603,10 @@
 
       const label = document.createElement("span");
       label.className = "cf-menu-item__label";
-      label.textContent = existingEntry
-        ? `ChannelFence: Unblock${showOwnerName ? ` ${owner.displayName}` : ""}`
-        : `ChannelFence: Block${showOwnerName ? ` ${owner.displayName}` : ""}`;
+      const messageKey = existingEntry
+        ? (showOwnerName ? "contentMenuUnblockNamed" : "contentMenuUnblock")
+        : (showOwnerName ? "contentMenuBlockNamed" : "contentMenuBlock");
+      label.textContent = I18n.get(messageKey, owner.displayName);
       button.append(symbol, label);
 
       button.addEventListener("click", async (event) => {
@@ -1606,7 +1618,7 @@
 
         if (existingEntry) {
           await unblockCreator(existingEntry.aliases);
-          showToast(`Unblocked ${Shared.labelForEntry(existingEntry)}`);
+          showToast(I18n.get("contentUnblocked", Shared.labelForEntry(existingEntry)));
           return;
         }
         await blockCreator(owner.refs, owner.displayName);
@@ -1676,8 +1688,8 @@
     const existingButton = buttonsOwnedByRoot(root)
       .find((button) => button.dataset.cfIdentity === key);
     if (existingButton) {
-      existingButton.title = `Block ${displayName} with ChannelFence`;
-      setAttributeIfChanged(existingButton, "aria-label", `Block ${displayName}`);
+      existingButton.title = I18n.get("contentBlockWithBrand", displayName);
+      setAttributeIfChanged(existingButton, "aria-label", I18n.get("contentBlockNamed", displayName));
       if (ownerContext?.anchor?.isConnected &&
           existingButton.__channelFenceAnchor !== ownerContext.anchor) {
         ownerContext.anchor.insertAdjacentElement("afterend", existingButton);
@@ -1698,8 +1710,8 @@
     button.dataset.cfIdentity = key;
     button.__channelFenceRoot = root;
     button.__channelFenceAnchor = ownerContext?.anchor || null;
-    button.title = `Block ${displayName} with ChannelFence`;
-    button.setAttribute("aria-label", `Block ${displayName}`);
+    button.title = I18n.get("contentBlockWithBrand", displayName);
+    button.setAttribute("aria-label", I18n.get("contentBlockNamed", displayName));
 
     if (pageButton) {
       const icon = document.createElement("img");
@@ -1791,8 +1803,8 @@
     button.className = "cf-block-button cf-compact-shorts-block";
     button.dataset.cfIdentity = key;
     button.__channelFenceRoot = root;
-    button.title = "Block this Short's creator with ChannelFence";
-    button.setAttribute("aria-label", "Block this Short's creator with ChannelFence");
+    button.title = I18n.get("contentBlockShortCreator");
+    button.setAttribute("aria-label", I18n.get("contentBlockShortCreator"));
 
     const symbol = document.createElement("span");
     symbol.className = "cf-block-button__symbol";
@@ -1831,11 +1843,11 @@
     const existingAction = ownedActions.find((action) => action.dataset.cfIdentity === key);
     if (existingAction) {
       const existingButton = existingAction.querySelector(".cf-shorts-action__button");
-      existingButton.title = `Block ${displayName} with ChannelFence`;
+      existingButton.title = I18n.get("contentBlockWithBrand", displayName);
       setAttributeIfChanged(
         existingButton,
         "aria-label",
-        `Block ${displayName} with ChannelFence`
+        I18n.get("contentBlockWithBrand", displayName)
       );
       if (existingAction.parentElement !== actionBar ||
           actionBar.firstElementChild !== existingAction) {
@@ -1852,8 +1864,8 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className = "cf-shorts-action__button";
-    button.title = `Block ${displayName} with ChannelFence`;
-    button.setAttribute("aria-label", `Block ${displayName} with ChannelFence`);
+    button.title = I18n.get("contentBlockWithBrand", displayName);
+    button.setAttribute("aria-label", I18n.get("contentBlockWithBrand", displayName));
 
     const icon = document.createElement("img");
     icon.className = "cf-shorts-action__icon";
@@ -1864,7 +1876,7 @@
     const label = document.createElement("span");
     label.className = "cf-shorts-action__label";
     label.setAttribute("aria-hidden", "true");
-    label.textContent = "Block";
+    label.textContent = I18n.get("contentBlock");
 
     button.append(icon);
     action.append(button, label);
@@ -2050,22 +2062,22 @@
 
     const title = document.createElement("h1");
     title.id = "cf-hard-block-title";
-    title.textContent = "Creator blocked";
+    title.textContent = I18n.get("contentCreatorBlocked");
 
     const message = document.createElement("p");
-    message.textContent = `${Shared.labelForEntry(entry)} is on your ChannelFence block list.`;
+    message.textContent = I18n.get("contentBlockedDescription", Shared.labelForEntry(entry));
 
     const actions = document.createElement("div");
     actions.className = "cf-hard-block-actions";
 
     const home = document.createElement("button");
     home.type = "button";
-    home.textContent = "Go to Home";
+    home.textContent = I18n.get("contentGoHome");
     home.addEventListener("click", () => location.assign("/"));
 
     const unblock = document.createElement("button");
     unblock.type = "button";
-    unblock.textContent = "Unblock and continue";
+    unblock.textContent = I18n.get("contentUnblockContinue");
     unblock.addEventListener("click", async () => {
       await unblockCreator(entry.aliases);
       removeOverlay();
@@ -2668,7 +2680,7 @@
       shortPath ? [shortPath] : []
     );
     if (!entry) {
-      showToast("ChannelFence couldn't identify this creator yet.");
+      showToast(I18n.get("contentUnidentifiedCreator"));
       return false;
     }
     const nextBlocked = Shared.mergeBlockedEntry(state.blocked, entry);
@@ -2678,8 +2690,8 @@
     state.blocked = nextBlocked;
     rebuildBlockedLookup();
     await chrome.storage.local.set({ [Shared.STORAGE.blocked]: state.blocked });
-    showToast(`Blocked ${Shared.labelForEntry(entry)}`, {
-      label: "Undo",
+    showToast(I18n.get("contentBlocked", Shared.labelForEntry(entry)), {
+      label: I18n.get("contentUndo"),
       action: () => unblockCreator(entry.aliases)
     });
     scheduleScan();

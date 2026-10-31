@@ -26,6 +26,7 @@ Copy-Item -LiteralPath $manifestPath -Destination $stage
 Copy-Item -LiteralPath (Join-Path $workspace "LICENSE") -Destination $stage
 Copy-Item -LiteralPath (Join-Path $workspace "src") -Destination $stage -Recurse
 Copy-Item -LiteralPath (Join-Path $workspace "ui") -Destination $stage -Recurse
+Copy-Item -LiteralPath (Join-Path $workspace "_locales") -Destination $stage -Recurse
 $runtimeIcons = @(
   "channelfence-16.png",
   "channelfence-32.png",

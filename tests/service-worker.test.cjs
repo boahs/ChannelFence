@@ -54,6 +54,9 @@ function loadWorker(options = {}) {
     }
   };
   const sandbox = {
+    ChannelFenceI18n: {
+      get: (key) => key
+    },
     ChannelFenceShared: {
       DEFAULTS: values,
       STORAGE: {

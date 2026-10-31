@@ -73,8 +73,33 @@ test("extension pages reference existing packaged assets", () => {
   }
 });
 
-test("manifest description fits the store summary limit", () => {
-  assert.ok(manifest.description.length <= 132);
+test("localized manifest descriptions fit the store summary limit", () => {
+  assert.equal(manifest.default_locale, "en");
+  assert.equal(manifest.name, "__MSG_extensionName__");
+  assert.equal(manifest.description, "__MSG_extensionDescription__");
+  for (const locale of fs.readdirSync(path.join(root, "_locales"))) {
+    const messages = JSON.parse(fs.readFileSync(
+      path.join(root, "_locales", locale, "messages.json"), "utf8"
+    ));
+    assert.ok(messages.extensionName.message.length > 0, `${locale} has no extension name`);
+    assert.ok(messages.extensionDescription.message.length <= 132, `${locale} summary is too long`);
+  }
+});
+
+test("localization is loaded before runtime UI and included in release packages", () => {
+  const contentScripts = manifest.content_scripts[0].js;
+  assert.ok(contentScripts.includes("src/i18n.js"));
+  assert.ok(contentScripts.indexOf("src/i18n.js") < contentScripts.indexOf("src/content.js"));
+  for (const file of fs.readdirSync(path.join(root, "ui")).filter((name) => name.endsWith(".html"))) {
+    const html = fs.readFileSync(path.join(root, "ui", file), "utf8");
+    assert.match(html, /<script src="\.\.\/src\/i18n\.js" defer><\/script>/, file);
+    const pageScript = `<script src="${file.replace(".html", ".js")}"`;
+    if (html.includes(pageScript)) {
+      assert.ok(html.indexOf("../src/i18n.js") < html.indexOf(pageScript), file);
+    }
+  }
+  const packageScript = fs.readFileSync(path.join(root, "scripts", "package.ps1"), "utf8");
+  assert.match(packageScript, /Copy-Item -LiteralPath \(Join-Path \$workspace "_locales"\) -Destination \$stage -Recurse/);
 });
 
 test("publishes the project homepage and keeps package versions aligned", () => {

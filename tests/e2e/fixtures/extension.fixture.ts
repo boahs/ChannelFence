@@ -60,12 +60,17 @@ type ExtensionFixtures = {
 };
 
 export const test = base.extend<ExtensionFixtures>({
-  extensionContext: async ({}, use) => {
+  extensionContext: async ({ locale }, use) => {
+    const browserLocale = locale || "en-US";
     const userDataDir = await mkdtemp(path.join(tmpdir(), "channelfence-playwright-"));
     const context = await chromium.launchPersistentContext(userDataDir, {
       channel: "chromium",
       headless: true,
+      locale: browserLocale,
+      // Chrome's extension UI locale is separate from navigator.language.
+      env: { ...process.env, LANGUAGE: browserLocale.replaceAll("-", "_") },
       args: [
+        `--lang=${browserLocale}`,
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`
       ]

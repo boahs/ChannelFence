@@ -4,8 +4,8 @@ import { youtubeDocument } from "../fixtures/youtube-fixtures";
 export class YouTubeSurfacePage {
   constructor(readonly page: Page) {}
 
-  async open(body: string, path = "/__channelfence_fixture__/home"): Promise<void> {
-    const html = youtubeDocument(body);
+  async open(body: string, path = "/__channelfence_fixture__/home", language = "en"): Promise<void> {
+    const html = youtubeDocument(body, language);
     await this.page.route("https://www.youtube.com/**", async (route) => {
       if (route.request().isNavigationRequest()) {
         await route.fulfill({
