@@ -1,6 +1,14 @@
 # Changelog
 
-## 0.2.6 - 2026-09-30
+<a id="v0-2-6"></a>
+
+## [0.2.6](#v0-2-6) - 2026-09-30
+
+- Fixed upload ages such as "16h ago" being mistaken for creator names on channel Videos pages.
+- Kept real creator controls working beside compact video statistics.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
 
 ### Fixed
 
@@ -13,7 +21,17 @@
 
 Includes the collaboration and feed layout fixes from 0.2.5. The release ZIP now includes the existing MIT license. There are no new permissions, additional network requests, remote code, or analytics in this release.
 
-## 0.2.5 - 2026-09-15
+</details>
+
+<a id="v0-2-5"></a>
+
+## [0.2.5](#v0-2-5) - 2026-09-15
+
+- Fixed empty spaces left by blocked videos in some Home layouts.
+- Let remaining videos fill those gaps while keeping their order and full-width shelves in place.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
 
 ### Fixed
 
@@ -26,7 +44,18 @@ Includes the collaboration and feed layout fixes from 0.2.5. The release ZIP now
 
 Includes the collaboration matching fixes from 0.2.4. There are no new permissions, additional network requests, remote code, or analytics in this release.
 
-## 0.2.4 - 2026-09-15
+</details>
+
+<a id="v0-2-4"></a>
+
+## [0.2.4](#v0-2-4) - 2026-09-15
+
+- Improved blocking for videos with multiple creators, including some bylines without channel links.
+- Kept collaborators with different channel links separate even when their names match.
+- Preserved existing individual blocks. If YouTube only shows "A and 2 more," unnamed collaborators still cannot be identified from that count alone.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
 
 ### Fixed
 
@@ -46,7 +75,17 @@ Includes the collaboration matching fixes from 0.2.4. There are no new permissio
 
 There are no new permissions, no additional network requests, no remote code, and no analytics in this release.
 
-## 0.2.3 - 2026-09-03
+</details>
+
+<a id="v0-2-3"></a>
+
+## [0.2.3](#v0-2-3) - 2026-09-03
+
+- Made popup footer links easier to read in light and dark themes.
+- Added an optional Chrome Web Store review link in settings.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
 
 ### Changed
 
@@ -59,7 +98,18 @@ There are no new permissions, no additional network requests, no remote code, an
 
 There are no new permissions, no remote code, and no analytics in this release.
 
-## 0.2.2 - 2026-08-29
+</details>
+
+<a id="v0-2-2"></a>
+
+## [0.2.2](#v0-2-2) - 2026-08-29
+
+- Fixed unexpected returns to Home, double advances, and repeated navigation while blocking Shorts.
+- Used stable YouTube handles for saved creator labels and kept different channels with matching names separate.
+- Made the channel-profile block control easier to recognize.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
 
 ### Fixed
 
@@ -84,7 +134,18 @@ There are no new permissions, no remote code, and no analytics in this release.
 
 There are no new permissions, no remote code, and no analytics in this release.
 
-## 0.2.1 - 2026-08-28
+</details>
+
+<a id="v0-2-1"></a>
+
+## [0.2.1](#v0-2-1) - 2026-08-28
+
+- Removed duplicate block controls and improved creator detection as YouTube updates its pages.
+- Reduced cases where video statistics were mistaken for creator names.
+- Improved handling of large block lists, with faster matching and a searchable, paged settings list.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
 
 The `0.2.1` package was prepared on August 28, 2026.
 
@@ -109,3 +170,5 @@ The `0.2.1` package was prepared on August 28, 2026.
 - Added large-list coverage with 500 entries in settings and 1,000 blocked creators in feed matching.
 
 There are no new permissions, no remote code, and no analytics in this release.
+
+</details>
