@@ -1,5 +1,36 @@
 # Changelog
 
+<a id="v0-2-7"></a>
+
+## [0.2.7](#v0-2-7) - 2026-10-30
+
+- Added a Korean interface for settings, the popup, onboarding, privacy information, and blocking controls. English remains the fallback for other browser languages.
+- Fixed block buttons incorrectly appearing beside Korean view counts and upload ages.
+- Improved creator blocking from menus on Korean YouTube.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
+
+### Changed
+
+- Added bundled English and Korean message catalogs using Chrome's built-in localization. Chrome's interface language selects the translation independently of YouTube's language.
+- Preserved creator names, channel identities, and block-list backups without translating them.
+
+### Fixed
+
+- Used YouTube metadata groups and menu containers to identify statistics and menu controls without depending on their English labels.
+- Cleared stale menu context when a card has no identified creator, preventing unrelated or generic creator actions from appearing.
+
+### Tests
+
+- Added Korean interface checks, English fallback checks, and mixed browser/YouTube language coverage.
+- Added regression fixtures for Korean, Japanese, and Arabic metadata, plus Unicode creator identities. These checks do not establish full support for those additional interfaces or YouTube locales.
+- Added live Korean YouTube checks for channel pages, search results, watch recommendations, and compact Shorts.
+
+There are no new permissions, additional network requests, remote code, or extension analytics in this release. Translations are bundled locally.
+
+</details>
+
 <a id="v0-2-6"></a>
 
 ## [0.2.6](#v0-2-6) - 2026-09-30

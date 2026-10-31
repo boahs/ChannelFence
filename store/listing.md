@@ -12,34 +12,49 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
+What's new in 0.2.7:
+
+- Added a Korean interface, alongside English. Other browser languages fall back to English.
+- Fixed block buttons incorrectly appearing beside Korean view counts and upload ages.
+- Improved creator blocking from menus on Korean YouTube.
+
 Features:
 
-- Block creators with one click beside their channel name.
-- Block directly from supported video and compact Shorts three-dot menus with a clearly labeled ChannelFence action.
-- Add a creator manually by pasting their YouTube handle or channel URL.
-- Block the current creator directly from the YouTube Shorts viewer and move to the next Short.
-- Block a creator from a compact Shorts card without opening the Short or leaving the feed.
+- Block creators beside their channel name or from supported video and compact Shorts menus, without leaving the feed.
+- Add a creator manually using their YouTube handle or channel URL.
+- Block the current creator in the Shorts viewer and continue to the next Short.
 - Optionally hide Shorts shelves and cards from Home, search, and other feeds while keeping the Shorts viewer available.
-- Hide videos, Shorts, recommendations, and comments from blocked creators.
-- Stop direct visits with a clear blocked-page screen.
+- Hide collaboration videos when YouTube identifies a creator you've blocked.
+- Stop supported direct visits with a clear blocked-page screen.
 - Undo a block immediately or manage your complete block list at any time.
 - Pause blocking without deleting your list.
 - Import or export a private block-list backup.
-- No account, analytics, tracking, advertising, remote code, or developer-controlled server.
+- No account, extension analytics, tracking, advertising, remote code, or developer-controlled server.
 
 Privacy by design:
 
-ChannelFence processes public creator names, channel identifiers, channel URLs, and user-selected compact Short paths only to provide its blocking feature. Your settings and block list remain in Chrome’s local extension storage and are never transmitted to the developer. While your block list is not empty, public compact Short URLs are sent only to YouTube's oEmbed endpoint to retrieve creator metadata and determine whether their creators are blocked. Requests omit account credentials, and returned metadata is cached only in memory. ChannelFence makes no requests to a developer-controlled server or non-YouTube service.
+ChannelFence processes public creator names, channel identifiers, channel URLs, and user-selected compact Short paths only to provide its blocking feature. Your settings and block list remain in Chrome's local extension storage and are never transmitted to the developer.
+
+While your block list is not empty, ChannelFence may send public compact Short URLs directly to YouTube to look up their creators. These requests omit account credentials, and returned metadata is cached only in memory. ChannelFence makes no requests to a developer-controlled server or non-YouTube service.
 
 ChannelFence is open-source software released under the MIT License.
 
-Source code: https://github.com/boahs/ChannelFence
+Source code:
+https://github.com/boahs/ChannelFence
 
-Website: https://channelfence.app/
+Website:
+https://channelfence.app/
 
-Support and bug reports: https://channelfence.app/support/
+What's new:
+https://channelfence.app/changelog/
 
-ChannelFence is an independent extension and is not affiliated with, endorsed by, or sponsored by Google LLC.
+Support and bug reports:
+https://channelfence.app/support/
+
+Privacy policy:
+https://channelfence.app/PRIVACY.html
+
+ChannelFence is independent software and is not affiliated with, endorsed by, or sponsored by Google LLC.
 
 YouTube is a trademark of Google LLC.
 
