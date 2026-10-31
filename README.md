@@ -108,6 +108,14 @@ The Playwright suite launches the real unpacked extension in an isolated Chromiu
 
 GitHub Actions runs the complete deterministic suite on every push and pull request. A separate scheduled workflow runs the intentionally small live YouTube smoke check. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
 
+## Website changelog
+
+The website is published by GitHub Pages from `main`. Its [What's new page](https://channelfence.app/changelog/) renders `CHANGELOG.md` through `changelog.html`, so release notes have one source.
+
+For each version, add a dated entry with a permanent `vX-Y-Z` anchor, a short list of user-facing changes, and optional technical details inside the existing collapsible format. Keep the recorded dates intact; they are changelog dates, not necessarily Chrome Web Store approval dates. Add changes when the release is ready, rather than advertising unmerged work. Update the changelog's `lastmod` in `sitemap.xml` alongside the entry.
+
+The CI website job builds the page with GitHub Pages' Jekyll action and uploads the rendered page for review. Merging the PR lets the existing Pages deployment publish it; no separate hosting setup is needed.
+
 ## Create the Web Store ZIP
 
 Run:

@@ -510,6 +510,21 @@ footer {
 
 .related-guides ul { list-style: none; padding-left: 0; }
 
+.release-notes > h2 {
+  border-top: 1px solid var(--line);
+  padding-top: 32px;
+}
+
+.release-notes > h2:first-of-type { border-top: 0; padding-top: 0; }
+
+.release-notes details {
+  border-left: 2px solid var(--line);
+  margin: 24px 0 48px;
+  padding-left: 20px;
+}
+
+.release-notes summary { color: var(--teal); cursor: pointer; font-weight: 650; }
+
 @media (max-width: 850px) {
   .hero,
   .steps-section,

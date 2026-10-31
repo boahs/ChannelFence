@@ -10,6 +10,7 @@ const siteOrigin = "https://channelfence.app";
 const channelFenceStoreId = "koeingndpmmgabfoihkcoikiopgkjenm";
 const publicPages = [
   { file: "index.html", canonical: `${siteOrigin}/` },
+  { file: "changelog.html", canonical: `${siteOrigin}/changelog/` },
   {
     file: "how-to-block-youtube-channels-in-chrome/index.html",
     canonical: `${siteOrigin}/how-to-block-youtube-channels-in-chrome/`
