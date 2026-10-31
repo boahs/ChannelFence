@@ -517,8 +517,6 @@ footer {
 
 .release-notes > h2:first-of-type { border-top: 0; padding-top: 0; }
 
-.release-notes > a[id] { scroll-margin-top: 24px; }
-
 .release-notes details {
   border-left: 2px solid var(--line);
   margin: 24px 0 48px;
