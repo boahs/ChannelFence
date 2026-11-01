@@ -1,4 +1,5 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
+import { translatedLocales } from "../fixtures/locales";
 import {
   channelHeader,
   channelTabLockup,
@@ -6,27 +7,26 @@ import {
 } from "../fixtures/youtube-fixtures";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
-test.describe("Localized YouTube creator detection", () => {
+test.describe("Localized YouTube creator detection with English extension UI", () => {
   // The structure and Korean labels came from the Korean CI DOM capture.
   // Other labels exercise the same structure without language-specific parsing.
   for (const locale of [
-    { language: "ko", views: "조회수 1회", age: "23시간 전" },
-    { language: "ja", views: "1回視聴", age: "23時間前" },
-    { language: "ar", views: "مشاهدة واحدة", age: "قبل 23 ساعة" }
+    ...translatedLocales,
+    { youtubeLanguage: "ar", creator: "قناةعربية", views: "مشاهدة واحدة", age: "قبل 23 ساعة" }
   ]) {
-    test(`does not turn ${locale.language} channel statistics into creators`, async ({ extensionPage }) => {
+    test(`does not turn ${locale.youtubeLanguage} channel statistics into creators`, async ({ extensionPage }) => {
       const youtube = new YouTubeSurfacePage(extensionPage);
       const card = channelTabLockup({
         compactStatistics: { views: "1", age: locale.age, ageLabel: locale.age },
-        displayName: "테스트 채널",
+        displayName: locale.creator,
         id: "localized-statistics",
         includeAvatar: false
       }).replace('aria-label="1 views"', `aria-label="${locale.views}"`);
       await youtube.open(
-        channelHeader("테스트 채널", "@테스트채널") + card +
+        channelHeader(locale.creator, `@${locale.creator}`) + card +
           rightRailLockup({ displayName: "Known Guest", id: "known-guest" }),
-        "/@테스트채널/videos",
-        locale.language
+        `/@${locale.creator}/videos`,
+        locale.youtubeLanguage
       );
 
       await expect(youtube.blockButton("channel-header")).toHaveCount(1);
@@ -43,60 +43,62 @@ test.describe("Localized YouTube creator detection", () => {
     });
   }
 
-  test("blocks a Korean linkless creator through the structural overflow menu", async ({
-    extensionPage,
-    extensionStorage
-  }) => {
-    const youtube = new YouTubeSurfacePage(extensionPage);
-    const card = rightRailLockup({ displayName: "한국 요리", id: "korean-rail" })
-      .replace("Go to channel 한국 요리", "한국 요리 채널로 이동")
-      .replace("ytLockupViewModelMenuButton", "ytLockupMetadataViewModelMenuButton")
-      .replace('aria-label="More actions"', 'aria-label="추가 작업"');
-    await youtube.open(card, "/watch?v=korean-menu", "ko");
+  for (const locale of translatedLocales) {
+    test(`blocks a ${locale.name} linkless creator through the structural overflow menu`, async ({
+      extensionPage,
+      extensionStorage
+    }) => {
+      const youtube = new YouTubeSurfacePage(extensionPage);
+      const card = rightRailLockup({ displayName: locale.creator, id: "localized-rail" })
+        .replace(`Go to channel ${locale.creator}`, locale.goToChannel)
+        .replace("ytLockupViewModelMenuButton", "ytLockupMetadataViewModelMenuButton")
+        .replace('aria-label="More actions"', `aria-label="${locale.moreActions}"`);
+      await youtube.open(card, "/watch?v=localized-menu", locale.youtubeLanguage);
 
-    await expect(youtube.blockButton("korean-rail"))
-      .toHaveAttribute("data-cf-identity", "name:한국 요리");
-    const item = await youtube.openCreatorMenu("korean-rail-menu");
-    await expect(item).toHaveAttribute("aria-label", "Block 한국 요리 with ChannelFence");
-    await item.click();
-    await expect(youtube.card("korean-rail")).toBeHidden();
-    const stored = await extensionStorage.get<{
-      cfBlockedChannels: Array<{ aliases: string[]; displayName: string }>;
-    }>("cfBlockedChannels");
-    expect(stored.cfBlockedChannels).toEqual([
-      expect.objectContaining({ aliases: ["name:한국 요리"], displayName: "한국 요리" })
-    ]);
-  });
-
-  test("keeps Korean collaborators separate by their links", async ({
-    extensionPage,
-    extensionStorage
-  }) => {
-    await extensionStorage.set({
-      cfBlockedChannels: [blockedCreator("@unrelated", "같은 이름")]
+      await expect(youtube.blockButton("localized-rail"))
+        .toHaveAttribute("data-cf-identity", `name:${locale.creator}`);
+      const item = await youtube.openCreatorMenu("localized-rail-menu");
+      await expect(item).toHaveAttribute("aria-label", `Block ${locale.creator} with ChannelFence`);
+      await item.click();
+      await expect(youtube.card("localized-rail")).toBeHidden();
+      const stored = await extensionStorage.get<{
+        cfBlockedChannels: Array<{ aliases: string[]; displayName: string }>;
+      }>("cfBlockedChannels");
+      expect(stored.cfBlockedChannels).toEqual([
+        expect.objectContaining({ aliases: [`name:${locale.creator}`], displayName: locale.creator })
+      ]);
     });
-    const youtube = new YouTubeSurfacePage(extensionPage);
-    await youtube.open(`
-      <yt-lockup-view-model data-testid="korean-collaboration">
-        <a href="/watch?v=korean-collaboration">공동 제작 동영상</a>
-        <yt-avatar-stack-view-model aria-label="공동작업 채널"></yt-avatar-stack-view-model>
-        <div class="ytContentMetadataViewModelMetadataRow">
-          <a href="/@첫번째채널">같은 이름</a> 및
-          <a href="/@두번째채널">같은 이름</a>
-        </div>
-      </yt-lockup-view-model>`, "/results?search_query=collaboration", "ko");
 
-    const card = youtube.card("korean-collaboration");
-    await expect(card).toBeVisible();
-    await expect(youtube.blockButton("korean-collaboration")).toHaveCount(2);
-    await card.locator('[data-cf-identity="handle:@두번째채널"]').click();
-    await expect(card).toBeHidden();
-    const stored = await extensionStorage.get<{
-      cfBlockedChannels: Array<{ aliases: string[] }>;
-    }>("cfBlockedChannels");
-    expect(stored.cfBlockedChannels.map((entry) => entry.aliases)).toEqual([
-      ["handle:@두번째채널"],
-      ["handle:@unrelated"]
-    ]);
-  });
+    test(`keeps ${locale.name} collaborators separate by their links`, async ({
+      extensionPage,
+      extensionStorage
+    }) => {
+      await extensionStorage.set({
+        cfBlockedChannels: [blockedCreator("@unrelated", locale.creator)]
+      });
+      const youtube = new YouTubeSurfacePage(extensionPage);
+      await youtube.open(`
+        <yt-lockup-view-model data-testid="localized-collaboration">
+          <a href="/watch?v=localized-collaboration">${locale.creator}</a>
+          <yt-avatar-stack-view-model></yt-avatar-stack-view-model>
+          <div class="ytContentMetadataViewModelMetadataRow">
+            <a href="/@${locale.collaborators[0]}">${locale.creator}</a> ${locale.conjunction}
+            <a href="/@${locale.collaborators[1]}">${locale.creator}</a>
+          </div>
+        </yt-lockup-view-model>`, "/results?search_query=collaboration", locale.youtubeLanguage);
+
+      const card = youtube.card("localized-collaboration");
+      await expect(card).toBeVisible();
+      await expect(youtube.blockButton("localized-collaboration")).toHaveCount(2);
+      await card.locator(`[data-cf-identity="handle:@${locale.collaborators[1]}"]`).click();
+      await expect(card).toBeHidden();
+      const stored = await extensionStorage.get<{
+        cfBlockedChannels: Array<{ aliases: string[] }>;
+      }>("cfBlockedChannels");
+      expect(stored.cfBlockedChannels.map((entry) => entry.aliases)).toEqual([
+        [`handle:@${locale.collaborators[1]}`],
+        ["handle:@unrelated"]
+      ]);
+    });
+  }
 });

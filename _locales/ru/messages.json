@@ -1,0 +1,540 @@
+{
+  "languageCode": {
+    "message": "ru"
+  },
+  "extensionName": {
+    "message": "ChannelFence - Блокировка каналов YouTube"
+  },
+  "extensionDescription": {
+    "message": "Блокируйте каналы и авторов YouTube на главной, в поиске, рекомендациях, Shorts, комментариях и при прямом переходе."
+  },
+  "loading": {
+    "message": "Загрузка…"
+  },
+  "enableChannelFence": {
+    "message": "Включить ChannelFence"
+  },
+  "pauseOrEnable": {
+    "message": "Приостановить или включить ChannelFence"
+  },
+  "currentPage": {
+    "message": "Текущая страница"
+  },
+  "checkingPage": {
+    "message": "Проверка страницы…"
+  },
+  "openCreatorHelp": {
+    "message": "Откройте канал, видео или ролик Shorts, чтобы заблокировать автора."
+  },
+  "blockCreator": {
+    "message": "Заблокировать автора"
+  },
+  "unblockCreator": {
+    "message": "Разблокировать автора"
+  },
+  "hideShorts": {
+    "message": "Скрывать Shorts в лентах"
+  },
+  "hideShortsSummary": {
+    "message": "Убирает разделы Shorts с главной страницы, из поиска и других лент."
+  },
+  "hideOrShowShorts": {
+    "message": "Скрывать или показывать Shorts в лентах YouTube"
+  },
+  "hideShortsAccessible": {
+    "message": "Скрывать Shorts в лентах YouTube"
+  },
+  "recentlyBlocked": {
+    "message": "Недавно заблокированные"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "Вы ещё не заблокировали ни одного автора. Нажмите кнопку ⊘ рядом с именем автора на YouTube."
+  },
+  "manageBlockList": {
+    "message": "Управление списком блокировки"
+  },
+  "reportBug": {
+    "message": "Сообщить об ошибке"
+  },
+  "reportBugInline": {
+    "message": "сообщите об ошибке"
+  },
+  "privacy": {
+    "message": "Конфиденциальность"
+  },
+  "unblock": {
+    "message": "Разблокировать"
+  },
+  "unblockNamed": {
+    "message": "Разблокировать $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "Заблокировать $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "Автор не определён"
+  },
+  "multipleCreators": {
+    "message": "Найдено несколько авторов"
+  },
+  "chooseCreator": {
+    "message": "Выберите автора, которого хотите заблокировать или разблокировать."
+  },
+  "thisCreator": {
+    "message": "Этот автор"
+  },
+  "creator": {
+    "message": "автор"
+  },
+  "creatorIsBlocked": {
+    "message": "Этот автор заблокирован везде, где ChannelFence может его определить."
+  },
+  "creatorBlockHelp": {
+    "message": "Скройте этого автора из лент, поиска, рекомендаций, Shorts и при прямом переходе."
+  },
+  "blockedCount": {
+    "message": "Заблокировано: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "Приостановлено"
+  },
+  "unavailable": {
+    "message": "Недоступно"
+  },
+  "settingsPageTitle": {
+    "message": "Настройки ChannelFence"
+  },
+  "settingsTagline": {
+    "message": "Настройки блокировки авторов"
+  },
+  "settings": {
+    "message": "Настройки"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence работает только на YouTube и хранит ваши настройки на этом устройстве."
+  },
+  "pauseHelp": {
+    "message": "Приостановите все блокировки, сохранив список."
+  },
+  "hideShortsHelp": {
+    "message": "Убирает разделы и карточки Shorts с главной страницы, из поиска и других лент. Вкладка Shorts остаётся доступной."
+  },
+  "hideComments": {
+    "message": "Скрывать комментарии заблокированных авторов"
+  },
+  "hideCommentsHelp": {
+    "message": "Также убирает комментарии, если ChannelFence может определить канал комментатора."
+  },
+  "blockedCreators": {
+    "message": "Заблокированные авторы"
+  },
+  "blockListHelp": {
+    "message": "Ищите и разблокируйте авторов или сохраните резервную копию списка. Импортированные записи объединяются с текущим списком."
+  },
+  "manualBlockLabel": {
+    "message": "Блокировка по псевдониму или URL канала"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@автор или youtube.com/@автор"
+  },
+  "manualBlockHelp": {
+    "message": "Вставьте псевдоним YouTube или URL канала. Он будет проверен и сохранён только в локальном хранилище расширения в Chrome."
+  },
+  "searchBlocked": {
+    "message": "Поиск заблокированных авторов"
+  },
+  "export": {
+    "message": "Экспорт"
+  },
+  "import": {
+    "message": "Импорт"
+  },
+  "clearAll": {
+    "message": "Очистить всё"
+  },
+  "emptyBlockList": {
+    "message": "Ваш список блокировки пуст."
+  },
+  "showMore": {
+    "message": "Показать ещё 200"
+  },
+  "privateByDesign": {
+    "message": "Конфиденциальность заложена в основу."
+  },
+  "settingsPrivacy": {
+    "message": "Названия и ссылки каналов, настройки и список блокировки остаются в локальном хранилище расширения в Chrome. ChannelFence не отправляет их ни нам, ни кому-либо ещё."
+  },
+  "settingsReport": {
+    "message": "Если какой-то контент не блокируется, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "Нравится ChannelFence?"
+  },
+  "reviewHelp": {
+    "message": "Честный отзыв в Интернет-магазине Chrome поможет другим найти расширение."
+  },
+  "leaveReview": {
+    "message": "Оставить отзыв"
+  },
+  "noSearchMatches": {
+    "message": "По этому запросу заблокированные авторы не найдены."
+  },
+  "showingCreators": {
+    "message": "Найдено авторов: $TOTAL$. Показано: $VISIBLE$.",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · Дата блокировки: $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "Блокировка снята: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence включён"
+  },
+  "pausedToast": {
+    "message": "ChannelFence приостановлен"
+  },
+  "hideCommentsToast": {
+    "message": "Комментарии заблокированных авторов будут скрыты"
+  },
+  "showCommentsToast": {
+    "message": "Комментарии останутся видимыми"
+  },
+  "hideShortsToast": {
+    "message": "Shorts будут скрыты в лентах"
+  },
+  "showShortsToast": {
+    "message": "Shorts останутся в лентах"
+  },
+  "invalidHandle": {
+    "message": "Введите корректный псевдоним YouTube или URL канала"
+  },
+  "alreadyBlocked": {
+    "message": "Уже в списке блокировки: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "Не удалось добавить этого автора"
+  },
+  "blockedNamed": {
+    "message": "Добавлен в список блокировки: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "Список блокировки экспортирован"
+  },
+  "importedCreatorOne": {
+    "message": "Импортировано авторов: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "Импортировано авторов: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "Этот файл не является корректным экспортом ChannelFence"
+  },
+  "confirmClearAll": {
+    "message": "Снять все блокировки ($COUNT$)?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "Список блокировки очищен"
+  },
+  "version": {
+    "message": "Версия $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "Не удалось загрузить настройки"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence: заблокировано $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: приостановлено"
+  },
+  "welcomeTitle": {
+    "message": "Добро пожаловать в ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence готов к работе"
+  },
+  "welcomeHeadline": {
+    "message": "Больше не видеть этого автора."
+  },
+  "welcomeLead": {
+    "message": "Блокируйте нежелательных авторов в главной ленте YouTube, результатах поиска, рекомендациях, Shorts, комментариях и при прямом переходе на страницы."
+  },
+  "welcomeOpenYouTube": {
+    "message": "Открыть YouTube и заблокировать автора"
+  },
+  "welcomeIconAlt": {
+    "message": "Значок заблокированного автора ChannelFence"
+  },
+  "welcomeHowItWorks": {
+    "message": "Как работает ChannelFence"
+  },
+  "welcomeFindCreator": {
+    "message": "Найдите автора"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "Пользуйтесь YouTube как обычно. ChannelFence добавляет небольшую кнопку ⊘ рядом с именами авторов."
+  },
+  "welcomeBlockOnce": {
+    "message": "Заблокируйте один раз"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "Нажмите кнопку, и контент этого автора исчезнет из поддерживаемых разделов YouTube."
+  },
+  "welcomeStayInControl": {
+    "message": "Управляйте блокировками"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "Используйте значок на панели инструментов, чтобы приостановить ChannelFence, отменить блокировку или управлять полным списком."
+  },
+  "welcomePrivacy": {
+    "message": "Без аккаунта. Без отслеживания. Без сервера под управлением разработчика. Ваш список блокировки остаётся в локальном хранилище расширения в Chrome."
+  },
+  "privacyTitle": {
+    "message": "Политика конфиденциальности ChannelFence"
+  },
+  "privacyEffectiveDate": {
+    "message": "Дата вступления в силу:"
+  },
+  "privacyDate": {
+    "message": "27 августа 2026 г."
+  },
+  "privacyIntro": {
+    "message": "ChannelFence работает без аккаунта, аналитики, рекламы и сервера под управлением разработчика. Его единственная задача: дать пользователям локальные средства для скрытия выбранных авторов и, по желанию, разделов Shorts в лентах YouTube."
+  },
+  "privacyInformationHeading": {
+    "message": "Какие сведения обрабатывает ChannelFence"
+  },
+  "privacyInformation": {
+    "message": "Когда вы пользуетесь YouTube, ChannelFence читает только необходимую часть содержимого страницы, чтобы определить имена авторов и ссылки на каналы, проверить наличие автора в списке блокировки, добавить кнопки блокировки и скрыть соответствующий контент. Если ваш список блокировки не пуст, компактные карточки Shorts без указания авторов проверяются через точку доступа oEmbed YouTube, чтобы ChannelFence мог определить, заблокированы ли их авторы. Полученные метаданные компактных Shorts кешируются только в оперативной памяти и не добавляются в историю браузера или хранилище расширения. Когда вы блокируете автора, ChannelFence сохраняет его отображаемое имя, общедоступный идентификатор или псевдоним канала, общедоступный URL канала и время создания блокировки. При блокировке из компактного ролика Shorts ChannelFence также сохраняет выбранный вами общедоступный путь этого ролика в записи автора, чтобы именно эта карточка оставалась скрытой после обновления страницы."
+  },
+  "privacyStorageHeading": {
+    "message": "Хранение и передача"
+  },
+  "privacyStorage": {
+    "message": "Настройки и записи заблокированных авторов хранятся только в локальном хранилище расширения в Chrome на вашем устройстве и никогда не передаются разработчику. При проверке компактных Shorts на youtube.com отправляются только общедоступные URL роликов, чтобы YouTube мог вернуть общедоступные имена авторов и URL каналов. Запросы не содержат учётных данных аккаунта. ChannelFence не отправляет запросы на сервер под управлением разработчика или в какие-либо сервисы, кроме YouTube. Расширение не продаёт данные, не использует их для рекламы и не предоставляет людям доступ для чтения данных пользователей."
+  },
+  "privacyPermissionsHeading": {
+    "message": "Разрешения"
+  },
+  "privacyStorageLabel": {
+    "message": "Хранилище:"
+  },
+  "privacyStoragePermission": {
+    "message": "локально сохраняет состояние включения, настройки комментариев и Shorts в лентах, а также список заблокированных авторов."
+  },
+  "privacyYouTubeLabel": {
+    "message": "Доступ к youtube.com:"
+  },
+  "privacyYouTubePermission": {
+    "message": "определяет авторов на страницах YouTube, добавляет кнопки блокировки и скрывает контент заблокированных авторов."
+  },
+  "privacyControlHeading": {
+    "message": "Управление данными и их удаление"
+  },
+  "privacyControl": {
+    "message": "В настройках ChannelFence можно просмотреть и экспортировать список заблокированных авторов, снять отдельные блокировки или очистить весь список. При удалении ChannelFence браузер Chrome удаляет локально сохранённые данные расширения."
+  },
+  "privacyLimitedUseHeading": {
+    "message": "Ограниченное использование"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence использует информацию только для выполнения и улучшения своей единственной пользовательской функции. Информация не передаётся для рекламы, принятия кредитных решений, торговли данными или иных не связанных с этой функцией целей."
+  },
+  "privacyChangesHeading": {
+    "message": "Изменения"
+  },
+  "privacyChanges": {
+    "message": "Если правила работы ChannelFence с данными изменятся, эта политика и сведения в Интернет-магазине Chrome будут обновлены до вступления изменений в силу."
+  },
+  "privacyContactHeading": {
+    "message": "Связь с нами"
+  },
+  "privacyContact": {
+    "message": "Вопросы о конфиденциальности и поддержке можно отправить через $LINK$ или по ссылке поддержки на странице расширения в Интернет-магазине Chrome.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "трекер задач ChannelFence"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence не удалось определить этот ролик Shorts."
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence не удалось определить этого автора. Попробуйте сначала открыть ролик Shorts."
+  },
+  "contentBlockShortCreator": {
+    "message": "Заблокировать автора этого ролика Shorts с помощью ChannelFence"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: Заблокировать автора"
+  },
+  "contentUnblockWithBrand": {
+    "message": "Разблокировать $CREATOR$ с помощью ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "Заблокировать $CREATOR$ с помощью ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "Заблокировать $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: Разблокировать"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: Заблокировать"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: Разблокировать $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: Заблокировать $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "Блокировка снята: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "Заблокировать"
+  },
+  "contentCreatorBlocked": {
+    "message": "Автор заблокирован"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ в вашем списке блокировки ChannelFence.",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "На главную"
+  },
+  "contentUnblockContinue": {
+    "message": "Разблокировать и продолжить"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence пока не удалось определить этого автора."
+  },
+  "contentBlocked": {
+    "message": "Добавлен в список блокировки: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "Отменить"
+  }
+}

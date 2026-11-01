@@ -12,11 +12,11 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
-What's new in 0.2.7:
+What's new in 0.2.8:
 
-- Added a Korean interface, alongside English. Other browser languages fall back to English.
-- Fixed block buttons incorrectly appearing beside Korean view counts and upload ages.
-- Improved creator blocking from menus on Korean YouTube.
+- Added Japanese, Brazilian Portuguese, and Russian interfaces alongside English and Korean.
+- Translated settings, the popup, onboarding, privacy information, and blocking controls.
+- Chrome's interface language selects the translation. YouTube can use a different language; untranslated browser languages fall back to English.
 
 Features:
 

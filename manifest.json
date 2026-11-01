@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
   "short_name": "ChannelFence",
-  "version": "0.2.6",
+  "version": "0.2.8",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "homepage_url": "https://channelfence.app/",

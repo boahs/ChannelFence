@@ -74,11 +74,11 @@ After your Canary checks, upload the same `dist/ChannelFence-0.2.6.zip` through 
 
 ## Languages
 
-ChannelFence's interface is available in English and Korean. Chrome selects the translation from its interface language; other languages fall back to English. YouTube can use a different language from Chrome. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
+ChannelFence's interface is available in English, Korean, Japanese, Brazilian Portuguese, and Russian. Chrome selects the translation from its interface language; other languages fall back to English. YouTube can use a different language from Chrome. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
 
-Translations are bundled locally in `_locales/<language>/messages.json`, using Chrome's built-in internationalization. No translation service or additional permission is needed. To add another Chrome-supported locale, translate the English catalog, preserve its message keys and placeholders, and validate the interface and YouTube behavior before advertising support. The Korean copy is an initial translation and still needs native-speaker review. Other locales have not yet been released as translated interfaces.
+Translations are bundled locally in `_locales/<language>/messages.json`, using Chrome's built-in internationalization. No translation service or additional permission is needed. To add another Chrome-supported locale, translate the English catalog, preserve its message keys and placeholders, and add the locale to the shared browser tests. Validate the interface, long text, count wording, and live YouTube behavior before advertising support. Native-speaker review is still welcome; automated tests verify completeness and behavior, not fluency.
 
-The regression suite includes Korean interface checks, English fallback, localized YouTube markup, and a separate live Korean YouTube check. Store descriptions and screenshots are localized separately in the Chrome Web Store dashboard.
+The regression suite checks each translated interface, English fallback, and localized YouTube markup. A separate CI suite checks real YouTube pages for Korean, Japanese, Brazilian Portuguese, and Russian. Store descriptions and screenshots are localized separately in the Chrome Web Store dashboard. The website is currently English; visitors can use their browser's translation feature, but bundled extension translations do not translate the website.
 
 ## Tests
 

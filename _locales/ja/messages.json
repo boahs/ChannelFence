@@ -1,0 +1,540 @@
+{
+  "languageCode": {
+    "message": "ja"
+  },
+  "extensionName": {
+    "message": "ChannelFence: YouTube チャンネルブロッカー"
+  },
+  "extensionDescription": {
+    "message": "YouTube のホーム、検索、おすすめ、ショート、コメント、直接開いたページで、不要なチャンネルやクリエイターをブロック。"
+  },
+  "loading": {
+    "message": "読み込み中…"
+  },
+  "enableChannelFence": {
+    "message": "ChannelFence を有効にする"
+  },
+  "pauseOrEnable": {
+    "message": "ChannelFence を一時停止または有効にする"
+  },
+  "currentPage": {
+    "message": "現在のページ"
+  },
+  "checkingPage": {
+    "message": "このページを確認中…"
+  },
+  "openCreatorHelp": {
+    "message": "クリエイターをブロックするには、そのチャンネル、動画、またはショートを開いてください。"
+  },
+  "blockCreator": {
+    "message": "クリエイターをブロック"
+  },
+  "unblockCreator": {
+    "message": "クリエイターのブロックを解除"
+  },
+  "hideShorts": {
+    "message": "フィードのショートを非表示"
+  },
+  "hideShortsSummary": {
+    "message": "ホーム、検索、その他のフィードからショートのセクションを非表示にします。"
+  },
+  "hideOrShowShorts": {
+    "message": "YouTube のフィードでショートの表示を切り替える"
+  },
+  "hideShortsAccessible": {
+    "message": "YouTube のフィードのショートを非表示にする"
+  },
+  "recentlyBlocked": {
+    "message": "最近ブロックしたクリエイター"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "まだクリエイターをブロックしていません。YouTube のクリエイター名の横にある ⊘ ボタンを使ってみてください。"
+  },
+  "manageBlockList": {
+    "message": "ブロックリストを管理"
+  },
+  "reportBug": {
+    "message": "不具合を報告"
+  },
+  "reportBugInline": {
+    "message": "不具合を報告してください"
+  },
+  "privacy": {
+    "message": "プライバシー"
+  },
+  "unblock": {
+    "message": "ブロックを解除"
+  },
+  "unblockNamed": {
+    "message": "$CREATOR$ のブロックを解除",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "$CREATOR$ をブロック",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "クリエイターが見つかりません"
+  },
+  "multipleCreators": {
+    "message": "複数のクリエイターが見つかりました"
+  },
+  "chooseCreator": {
+    "message": "ブロックまたはブロック解除するクリエイターを選んでください。"
+  },
+  "thisCreator": {
+    "message": "このクリエイター"
+  },
+  "creator": {
+    "message": "クリエイター"
+  },
+  "creatorIsBlocked": {
+    "message": "このクリエイターは、ChannelFence が識別できるすべての場所でブロックされています。"
+  },
+  "creatorBlockHelp": {
+    "message": "このクリエイターをフィード、検索、おすすめ、ショート、直接開いたページで非表示にします。"
+  },
+  "blockedCount": {
+    "message": "$COUNT$ 件をブロック中",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "一時停止中"
+  },
+  "unavailable": {
+    "message": "利用できません"
+  },
+  "settingsPageTitle": {
+    "message": "ChannelFence の設定"
+  },
+  "settingsTagline": {
+    "message": "クリエイターのブロック設定"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence は YouTube でのみ動作し、設定はこのデバイスに保存されます。"
+  },
+  "pauseHelp": {
+    "message": "リストを削除せずに、すべてのブロックを一時停止します。"
+  },
+  "hideShortsHelp": {
+    "message": "ホーム、検索、その他のフィードからショートのセクションとカードを非表示にします。ショートタブは引き続き利用できます。"
+  },
+  "hideComments": {
+    "message": "ブロックしたクリエイターのコメントを非表示"
+  },
+  "hideCommentsHelp": {
+    "message": "ChannelFence が投稿者のチャンネルを識別できる場合は、コメントも非表示にします。"
+  },
+  "blockedCreators": {
+    "message": "ブロックしたクリエイター"
+  },
+  "blockListHelp": {
+    "message": "リストの検索、ブロック解除、バックアップができます。インポートした項目は現在のリストに追加されます。"
+  },
+  "manualBlockLabel": {
+    "message": "ハンドルまたはチャンネル URL でブロック"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@creator または youtube.com/@creator"
+  },
+  "manualBlockHelp": {
+    "message": "YouTube のハンドルまたはチャンネル URL を貼り付けてください。入力内容を検証し、Chrome の拡張機能用ローカルストレージにのみ保存します。"
+  },
+  "searchBlocked": {
+    "message": "ブロックしたクリエイターを検索"
+  },
+  "export": {
+    "message": "エクスポート"
+  },
+  "import": {
+    "message": "インポート"
+  },
+  "clearAll": {
+    "message": "すべて解除"
+  },
+  "emptyBlockList": {
+    "message": "ブロックリストは空です。"
+  },
+  "showMore": {
+    "message": "さらに 200 件表示"
+  },
+  "privateByDesign": {
+    "message": "プライバシーを重視した設計。"
+  },
+  "settingsPrivacy": {
+    "message": "チャンネル名、チャンネルのリンク、設定、ブロックリストは Chrome の拡張機能用ローカルストレージに保存されます。ChannelFence がこれらを開発者や第三者に送信することはありません。"
+  },
+  "settingsReport": {
+    "message": "ブロックしたコンテンツが表示される場合は、$LINK$。",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "ChannelFence はお役に立っていますか？"
+  },
+  "reviewHelp": {
+    "message": "Chrome ウェブストアでの率直なレビューは、他の方がこの拡張機能を見つけるきっかけになります。"
+  },
+  "leaveReview": {
+    "message": "レビューを書く"
+  },
+  "noSearchMatches": {
+    "message": "検索に一致するブロック済みクリエイターはいません。"
+  },
+  "showingCreators": {
+    "message": "検索に一致する $TOTAL$ 件のうち $VISIBLE$ 件を表示しています。",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · ブロック日: $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "$CREATOR$ のブロックを解除しました",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence を有効にしました"
+  },
+  "pausedToast": {
+    "message": "ChannelFence を一時停止しました"
+  },
+  "hideCommentsToast": {
+    "message": "ブロックしたクリエイターのコメントを非表示にします"
+  },
+  "showCommentsToast": {
+    "message": "コメントを表示します"
+  },
+  "hideShortsToast": {
+    "message": "フィードのショートを非表示にします"
+  },
+  "showShortsToast": {
+    "message": "フィードのショートを表示します"
+  },
+  "invalidHandle": {
+    "message": "有効な YouTube のハンドルまたはチャンネル URL を入力してください"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ はすでにブロックされています",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "このクリエイターを追加できませんでした"
+  },
+  "blockedNamed": {
+    "message": "$CREATOR$ をブロックしました",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "ブロックリストをエクスポートしました"
+  },
+  "importedCreatorOne": {
+    "message": "クリエイターを $COUNT$ 件インポートしました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "クリエイターを $COUNT$ 件インポートしました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "このファイルは有効な ChannelFence のエクスポートファイルではありません"
+  },
+  "confirmClearAll": {
+    "message": "$COUNT$ 件すべてのクリエイターのブロックを解除しますか？",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "ブロックリストを空にしました"
+  },
+  "version": {
+    "message": "バージョン $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "設定を読み込めませんでした"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence · $COUNT$ 件をブロック中",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence · 一時停止中"
+  },
+  "welcomeTitle": {
+    "message": "ChannelFence へようこそ"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence の準備ができました"
+  },
+  "welcomeHeadline": {
+    "message": "見たくないクリエイターを非表示に。"
+  },
+  "welcomeLead": {
+    "message": "YouTube のホームフィード、検索結果、おすすめ、ショート、コメント、直接開いたページで、不要なクリエイターをブロックします。"
+  },
+  "welcomeOpenYouTube": {
+    "message": "YouTube を開いてクリエイターをブロック"
+  },
+  "welcomeIconAlt": {
+    "message": "ChannelFence のクリエイターブロックアイコン"
+  },
+  "welcomeHowItWorks": {
+    "message": "ChannelFence の使い方"
+  },
+  "welcomeFindCreator": {
+    "message": "クリエイターを見つける"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "いつもどおり YouTube を閲覧してください。ChannelFence がクリエイター名の横に小さな ⊘ ボタンを追加します。"
+  },
+  "welcomeBlockOnce": {
+    "message": "一度ブロックするだけ"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "ボタンを押すと、対応する YouTube の各画面でそのクリエイターが非表示になります。"
+  },
+  "welcomeStayInControl": {
+    "message": "いつでも設定を変更"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "ツールバーのアイコンから ChannelFence の一時停止、ブロックの解除、リスト全体の管理ができます。"
+  },
+  "welcomePrivacy": {
+    "message": "アカウント不要。追跡なし。開発者が管理するサーバーなし。ブロックリストは Chrome の拡張機能用ローカルストレージに保存されます。"
+  },
+  "privacyTitle": {
+    "message": "ChannelFence プライバシーポリシー"
+  },
+  "privacyEffectiveDate": {
+    "message": "施行日:"
+  },
+  "privacyDate": {
+    "message": "2026年8月27日"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence は、アカウント、アクセス解析、広告、開発者が管理するサーバーを必要としない設計です。選択したクリエイターや、必要に応じてショートのセクションを YouTube のフィードから非表示にする操作を、ユーザーのデバイス上で提供することだけを目的としています。"
+  },
+  "privacyInformationHeading": {
+    "message": "ChannelFence が処理する情報"
+  },
+  "privacyInformation": {
+    "message": "YouTube の利用中、ChannelFence はクリエイター名やチャンネルのリンクを識別し、クリエイターがブロックリストに含まれているかを確認し、ブロック用のボタンを追加して該当するコンテンツを非表示にするために必要な、限定的なページ内容を読み取ります。ブロックリストが空でない場合、クリエイター情報のない小型のショートカードについては、YouTube の oEmbed エンドポイントを使ってクリエイターがブロックされているか確認します。返されたショートのメタデータはメモリ内にのみキャッシュされ、閲覧履歴や拡張機能のストレージには追加されません。クリエイターをブロックすると、そのクリエイターの表示名、公開チャンネル ID またはハンドル、公開チャンネル URL、ブロックした日時を保存します。小型のショートカードからブロックした場合は、再読み込み後も同じカードを非表示にできるように、ユーザーが選択した公開ショートのパスもクリエイターの記録に保存します。"
+  },
+  "privacyStorageHeading": {
+    "message": "保存と送信"
+  },
+  "privacyStorage": {
+    "message": "設定とブロックしたクリエイターの記録は、お使いのデバイスの Chrome 拡張機能用ローカルストレージにのみ保存され、開発者に送信されることはありません。小型のショートカードの情報を取得する際は、公開ショート URL のみを youtube.com に送信し、YouTube から公開クリエイター名とチャンネル URL を取得します。このリクエストにアカウントの認証情報は含まれません。ChannelFence は、開発者が管理するサーバーや YouTube 以外のサービスにリクエストを送信しません。データを販売したり、広告に利用したり、人によるユーザーデータの閲覧を認めたりすることはありません。"
+  },
+  "privacyPermissionsHeading": {
+    "message": "権限"
+  },
+  "privacyStorageLabel": {
+    "message": "ストレージ:"
+  },
+  "privacyStoragePermission": {
+    "message": "有効・無効の状態、コメントやフィード内のショートに関する設定、ブロックしたクリエイターのリストをローカルに保存します。"
+  },
+  "privacyYouTubeLabel": {
+    "message": "youtube.com へのアクセス:"
+  },
+  "privacyYouTubePermission": {
+    "message": "YouTube のページでクリエイターを識別し、ユーザーが操作するブロック用のボタンを追加して、ブロックしたクリエイターのコンテンツを非表示にします。"
+  },
+  "privacyControlHeading": {
+    "message": "データの管理と削除"
+  },
+  "privacyControl": {
+    "message": "ChannelFence の設定から、ブロックしたクリエイターの確認、エクスポート、ブロック解除、リスト全体の消去ができます。ChannelFence をアンインストールすると、Chrome が拡張機能のローカル保存データを削除します。"
+  },
+  "privacyLimitedUseHeading": {
+    "message": "利用目的の制限"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence による情報の利用は、ユーザー向けの単一の機能を提供し、改善するために限定されています。広告、与信判断、データ仲介、その他無関係な目的で情報を転送することはありません。"
+  },
+  "privacyChangesHeading": {
+    "message": "変更"
+  },
+  "privacyChanges": {
+    "message": "ChannelFence のデータの取り扱いを変更する場合は、変更を実施する前に、このポリシーと Chrome ウェブストアの開示情報を更新します。"
+  },
+  "privacyContactHeading": {
+    "message": "お問い合わせ"
+  },
+  "privacyContact": {
+    "message": "プライバシーやサポートに関するご質問は、$LINK$ または Chrome ウェブストア掲載ページのサポートリンクからお寄せください。",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "ChannelFence の問題報告ページ"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence はこのショートを識別できませんでした。"
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence はこのクリエイターを識別できませんでした。先にショートを開いてみてください。"
+  },
+  "contentBlockShortCreator": {
+    "message": "ChannelFence でこのショートのクリエイターをブロック"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: クリエイターをブロック"
+  },
+  "contentUnblockWithBrand": {
+    "message": "ChannelFence で $CREATOR$ のブロックを解除",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "ChannelFence で $CREATOR$ をブロック",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "$CREATOR$ をブロック",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: ブロックを解除"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: ブロック"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: $CREATOR$ のブロックを解除",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: $CREATOR$ をブロック",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "$CREATOR$ のブロックを解除しました",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "ブロック"
+  },
+  "contentCreatorBlocked": {
+    "message": "クリエイターはブロックされています"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ は ChannelFence のブロックリストに含まれています。",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "ホームへ移動"
+  },
+  "contentUnblockContinue": {
+    "message": "ブロックを解除して続行"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence はまだこのクリエイターを識別できません。"
+  },
+  "contentBlocked": {
+    "message": "$CREATOR$ をブロックしました",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "元に戻す"
+  }
+}
