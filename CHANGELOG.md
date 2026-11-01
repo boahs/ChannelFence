@@ -7,6 +7,7 @@
 - Added Japanese, Brazilian Portuguese, and Russian interfaces alongside English and Korean.
 - Translated settings, the popup, onboarding, privacy information, and blocking controls. Chrome selects the translation from its interface language, independently of YouTube's language.
 - Kept creator names and block-list backups unchanged, with English as the fallback for untranslated browser languages.
+- Fixed long privacy headings overflowing narrow windows.
 
 <details markdown="1">
 <summary>Technical details and tests</summary>
