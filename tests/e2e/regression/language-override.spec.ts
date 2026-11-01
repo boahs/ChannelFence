@@ -30,7 +30,7 @@ test.describe("extension language override", () => {
     for (const { value, messages } of [
       { value: "en", messages: en },
       ...translatedLocales.map((locale) => ({
-        value: locale.youtubeLanguage.replace("-", "_"), messages: locale.messages
+        value: locale.catalogCode, messages: locale.messages
       })),
       { value: "auto", messages: en }
     ]) {

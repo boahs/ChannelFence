@@ -144,7 +144,7 @@ test("only supported catalog paths can be read", async () => {
   const { i18n, requests } = loadI18n({ worker: true, language: "../private" });
   await i18n.ready;
   assert.equal(i18n.language, "auto");
-  for (const invalid of ["auto", "../private", "https://example.com", "fr", null]) {
+  for (const invalid of ["auto", "../private", "https://example.com", "pl", null]) {
     assert.equal(await i18n.loadCatalog(invalid), null);
   }
   assert.equal(requests.length, 0);

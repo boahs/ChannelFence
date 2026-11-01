@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "fr"
+  },
+  "languageLabel": {
+    "message": "Langue"
+  },
+  "languageHelp": {
+    "message": "Choisissez la langue de ChannelFence. YouTube conserve son propre réglage de langue."
+  },
+  "languageAutomatic": {
+    "message": "Automatique (langue du navigateur)"
+  },
+  "languageSaveError": {
+    "message": "Impossible d’enregistrer la langue. Veuillez réessayer."
+  },
+  "extensionName": {
+    "message": "ChannelFence - Bloqueur de chaînes YouTube"
+  },
+  "extensionDescription": {
+    "message": "Bloquez les chaînes YouTube dans l’accueil, la recherche, les recommandations, les Shorts, les commentaires et les accès directs."
+  },
+  "loading": {
+    "message": "Chargement…"
+  },
+  "enableChannelFence": {
+    "message": "Activer ChannelFence"
+  },
+  "pauseOrEnable": {
+    "message": "Mettre en pause ou activer ChannelFence"
+  },
+  "currentPage": {
+    "message": "Page actuelle"
+  },
+  "checkingPage": {
+    "message": "Vérification de cette page…"
+  },
+  "openCreatorHelp": {
+    "message": "Ouvrez une chaîne, une vidéo ou un Short pour bloquer son créateur."
+  },
+  "blockCreator": {
+    "message": "Bloquer le créateur"
+  },
+  "unblockCreator": {
+    "message": "Débloquer le créateur"
+  },
+  "hideShorts": {
+    "message": "Masquer les Shorts dans les flux"
+  },
+  "hideShortsSummary": {
+    "message": "Retire les sections Shorts de l’accueil, de la recherche et des autres flux."
+  },
+  "hideOrShowShorts": {
+    "message": "Masquer ou afficher les Shorts dans les flux YouTube"
+  },
+  "hideShortsAccessible": {
+    "message": "Masquer les Shorts dans les flux YouTube"
+  },
+  "recentlyBlocked": {
+    "message": "Bloqués récemment"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "Aucun créateur bloqué pour le moment. Utilisez le bouton ⊘ à côté d’un créateur sur YouTube."
+  },
+  "manageBlockList": {
+    "message": "Gérer les blocages"
+  },
+  "reportBug": {
+    "message": "Signaler un problème"
+  },
+  "reportBugInline": {
+    "message": "signalez un problème"
+  },
+  "privacy": {
+    "message": "Confidentialité"
+  },
+  "unblock": {
+    "message": "Débloquer"
+  },
+  "unblockNamed": {
+    "message": "Débloquer $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "Bloquer $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "Aucun créateur identifié"
+  },
+  "multipleCreators": {
+    "message": "Plusieurs créateurs identifiés"
+  },
+  "chooseCreator": {
+    "message": "Choisissez le créateur à bloquer ou à débloquer."
+  },
+  "thisCreator": {
+    "message": "Ce créateur"
+  },
+  "creator": {
+    "message": "créateur"
+  },
+  "creatorIsBlocked": {
+    "message": "Ce créateur est bloqué partout où ChannelFence peut l’identifier."
+  },
+  "creatorBlockHelp": {
+    "message": "Masquez ce créateur dans les flux, la recherche, les recommandations, les Shorts et lors des accès directs."
+  },
+  "blockedCount": {
+    "message": "Blocages : $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "En pause"
+  },
+  "unavailable": {
+    "message": "Indisponible"
+  },
+  "settingsPageTitle": {
+    "message": "Paramètres de ChannelFence"
+  },
+  "settingsTagline": {
+    "message": "Paramètres du bloqueur de créateurs"
+  },
+  "settings": {
+    "message": "Paramètres"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence fonctionne uniquement sur YouTube et conserve vos préférences sur cet appareil."
+  },
+  "pauseHelp": {
+    "message": "Mettez tous les blocages en pause sans supprimer votre liste."
+  },
+  "hideShortsHelp": {
+    "message": "Retire les sections et les cartes Shorts de l’accueil, de la recherche et des autres flux. L’onglet Shorts reste accessible."
+  },
+  "hideComments": {
+    "message": "Masquer les commentaires des créateurs bloqués"
+  },
+  "hideCommentsHelp": {
+    "message": "Retire aussi les commentaires lorsque ChannelFence peut identifier la chaîne de leur auteur."
+  },
+  "blockedCreators": {
+    "message": "Créateurs bloqués"
+  },
+  "blockListHelp": {
+    "message": "Recherchez, débloquez ou sauvegardez votre liste. Les éléments importés sont fusionnés avec la liste actuelle."
+  },
+  "manualBlockLabel": {
+    "message": "Bloquer par identifiant ou URL de chaîne"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@créateur ou youtube.com/@créateur"
+  },
+  "manualBlockHelp": {
+    "message": "Collez un identifiant YouTube ou une URL de chaîne. Il sera vérifié et enregistré uniquement dans le stockage local de l’extension dans Chrome."
+  },
+  "searchBlocked": {
+    "message": "Rechercher dans les blocages"
+  },
+  "export": {
+    "message": "Exporter"
+  },
+  "import": {
+    "message": "Importer"
+  },
+  "clearAll": {
+    "message": "Tout effacer"
+  },
+  "emptyBlockList": {
+    "message": "Votre liste de blocage est vide."
+  },
+  "showMore": {
+    "message": "Afficher 200 de plus"
+  },
+  "privateByDesign": {
+    "message": "La confidentialité dès la conception."
+  },
+  "settingsPrivacy": {
+    "message": "Les noms et les liens des chaînes, les paramètres et votre liste de blocage restent dans le stockage local de l’extension dans Chrome. ChannelFence ne les transmet ni à nous ni à qui que ce soit."
+  },
+  "settingsReport": {
+    "message": "Si du contenu échappe au blocage, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "ChannelFence vous plaît ?"
+  },
+  "reviewHelp": {
+    "message": "Un avis sincère sur le Chrome Web Store aide d’autres personnes à le découvrir."
+  },
+  "leaveReview": {
+    "message": "Laisser un avis"
+  },
+  "noSearchMatches": {
+    "message": "Aucun créateur bloqué ne correspond à cette recherche."
+  },
+  "showingCreators": {
+    "message": "$VISIBLE$ créateurs affichés sur $TOTAL$ résultats.",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · Blocage le $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "$CREATOR$ débloqué",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence activé"
+  },
+  "pausedToast": {
+    "message": "ChannelFence en pause"
+  },
+  "hideCommentsToast": {
+    "message": "Les commentaires des créateurs bloqués seront masqués"
+  },
+  "showCommentsToast": {
+    "message": "Les commentaires resteront visibles"
+  },
+  "hideShortsToast": {
+    "message": "Les Shorts seront masqués dans les flux"
+  },
+  "showShortsToast": {
+    "message": "Les Shorts resteront dans les flux"
+  },
+  "invalidHandle": {
+    "message": "Saisissez un identifiant YouTube ou une URL de chaîne valide"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ est déjà bloqué",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "Impossible d’ajouter ce créateur"
+  },
+  "blockedNamed": {
+    "message": "$CREATOR$ bloqué",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "Liste de blocage exportée"
+  },
+  "importedCreatorOne": {
+    "message": "$COUNT$ créateur importé",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "$COUNT$ créateurs importés",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "Ce fichier n’est pas une exportation ChannelFence valide"
+  },
+  "confirmClearAll": {
+    "message": "Tout débloquer ($COUNT$) ?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "Liste de blocage effacée"
+  },
+  "version": {
+    "message": "Version $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "Impossible de charger les paramètres"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence : $COUNT$ dans la liste de blocage",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence : en pause"
+  },
+  "welcomeTitle": {
+    "message": "Bienvenue dans ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence est prêt"
+  },
+  "welcomeHeadline": {
+    "message": "Ne voyez plus ce créateur."
+  },
+  "welcomeLead": {
+    "message": "Bloquez les créateurs indésirables dans le flux d’accueil YouTube, les résultats de recherche, les recommandations, les Shorts, les commentaires et lors des accès directs."
+  },
+  "welcomeOpenYouTube": {
+    "message": "Ouvrir YouTube et bloquer un créateur"
+  },
+  "welcomeIconAlt": {
+    "message": "Icône de créateur bloqué de ChannelFence"
+  },
+  "welcomeHowItWorks": {
+    "message": "Comment fonctionne ChannelFence"
+  },
+  "welcomeFindCreator": {
+    "message": "Trouvez un créateur"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "Parcourez YouTube comme d’habitude. ChannelFence ajoute un petit bouton ⊘ à côté des noms des créateurs."
+  },
+  "welcomeBlockOnce": {
+    "message": "Bloquez une fois"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "Sélectionnez le bouton et ce créateur disparaît des sections de YouTube prises en charge."
+  },
+  "welcomeStayInControl": {
+    "message": "Gardez le contrôle"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "Utilisez l’icône de la barre d’outils pour mettre ChannelFence en pause, annuler un blocage ou gérer votre liste complète."
+  },
+  "welcomePrivacy": {
+    "message": "Sans compte. Sans suivi. Sans serveur contrôlé par le développeur. Votre liste de blocage reste dans le stockage local de l’extension dans Chrome."
+  },
+  "privacyTitle": {
+    "message": "Politique de confidentialité de ChannelFence"
+  },
+  "privacyEffectiveDate": {
+    "message": "Date d’entrée en vigueur :"
+  },
+  "privacyDate": {
+    "message": "27 août 2026"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence est conçu pour fonctionner sans compte, analyse d’utilisation, publicité ni serveur contrôlé par le développeur. Son unique objectif est de fournir des commandes locales permettant de masquer les créateurs sélectionnés et, au choix, les sections Shorts dans les flux YouTube."
+  },
+  "privacyInformationHeading": {
+    "message": "Informations traitées par ChannelFence"
+  },
+  "privacyInformation": {
+    "message": "Lorsque vous utilisez YouTube, ChannelFence lit uniquement le contenu de la page nécessaire pour identifier les noms des créateurs et les liens des chaînes, vérifier si un créateur figure dans votre liste de blocage, ajouter des commandes de blocage et masquer le contenu correspondant. Si votre liste de blocage n’est pas vide, les cartes Shorts compactes qui n’indiquent pas leur créateur sont vérifiées via le point d’accès oEmbed de YouTube afin que ChannelFence puisse déterminer si leurs créateurs sont bloqués. Les métadonnées de ces Shorts sont mises en cache uniquement en mémoire et ne sont ajoutées ni à l’historique de navigation ni au stockage de l’extension. Lorsque vous bloquez un créateur, ChannelFence enregistre son nom affiché, l’ID public ou l’identifiant public de sa chaîne, l’URL publique de la chaîne et la date et l’heure du blocage. Si vous bloquez depuis un Short compact, ChannelFence enregistre aussi le chemin public de ce Short, sélectionné par vous, dans la fiche du créateur, pour que cette carte précise reste masquée après l’actualisation de la page."
+  },
+  "privacyStorageHeading": {
+    "message": "Stockage et transmission"
+  },
+  "privacyStorage": {
+    "message": "Les paramètres et les fiches des créateurs bloqués sont enregistrés uniquement dans le stockage local de l’extension dans Chrome, sur votre appareil, et ne sont jamais transmis au développeur. Les recherches de Shorts compacts envoient uniquement des URL publiques de Shorts à youtube.com afin que YouTube puisse renvoyer les noms publics des créateurs et les URL de leurs chaînes. Les requêtes ne contiennent pas d’identifiants de connexion au compte. ChannelFence n’envoie aucune requête à un serveur contrôlé par le développeur ni à un service autre que YouTube. Il ne vend pas de données, ne les utilise pas à des fins publicitaires et ne permet pas à des personnes de lire les données des utilisateurs."
+  },
+  "privacyPermissionsHeading": {
+    "message": "Autorisations"
+  },
+  "privacyStorageLabel": {
+    "message": "Stockage :"
+  },
+  "privacyStoragePermission": {
+    "message": "enregistre localement l’état d’activation, la langue choisie, les préférences de commentaires et de Shorts dans les flux, ainsi que la liste des créateurs bloqués."
+  },
+  "privacyYouTubeLabel": {
+    "message": "Accès à youtube.com :"
+  },
+  "privacyYouTubePermission": {
+    "message": "identifie les créateurs sur les pages YouTube, ajoute des commandes de blocage pour l’utilisateur et masque le contenu des créateurs bloqués."
+  },
+  "privacyControlHeading": {
+    "message": "Contrôle et suppression des données"
+  },
+  "privacyControl": {
+    "message": "Vous pouvez consulter ou exporter la liste des créateurs bloqués, débloquer des créateurs ou effacer la liste depuis les paramètres de ChannelFence. Lorsque vous désinstallez ChannelFence, Chrome supprime les données de l’extension enregistrées localement."
+  },
+  "privacyLimitedUseHeading": {
+    "message": "Utilisation limitée"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence utilise les informations uniquement pour assurer et améliorer son unique fonction destinée aux utilisateurs. Les informations ne sont pas transférées à des fins de publicité, de décisions de crédit, de courtage de données ou à des fins sans rapport avec cette fonction."
+  },
+  "privacyChangesHeading": {
+    "message": "Modifications"
+  },
+  "privacyChanges": {
+    "message": "Si les pratiques de ChannelFence en matière de données changent, cette politique et les déclarations du Chrome Web Store seront mises à jour avant l’introduction de ces changements."
+  },
+  "privacyContactHeading": {
+    "message": "Contact"
+  },
+  "privacyContact": {
+    "message": "Les questions relatives à la confidentialité et à l’assistance peuvent être envoyées via le $LINK$ ou le lien d’assistance sur la fiche Chrome Web Store de l’extension.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "suivi des problèmes de ChannelFence"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence n’a pas pu identifier ce Short."
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence n’a pas pu identifier ce créateur. Essayez d’abord d’ouvrir le Short."
+  },
+  "contentBlockShortCreator": {
+    "message": "Bloquer le créateur de ce Short avec ChannelFence"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence : Bloquer le créateur"
+  },
+  "contentUnblockWithBrand": {
+    "message": "Débloquer $CREATOR$ avec ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "Bloquer $CREATOR$ avec ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "Bloquer $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence : Débloquer"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence : Bloquer"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence : Débloquer $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence : Bloquer $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "$CREATOR$ débloqué",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "Bloquer"
+  },
+  "contentCreatorBlocked": {
+    "message": "Créateur bloqué"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ figure dans votre liste de blocage ChannelFence.",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "Aller à l’accueil"
+  },
+  "contentUnblockContinue": {
+    "message": "Débloquer et continuer"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence n’a pas encore pu identifier ce créateur."
+  },
+  "contentBlocked": {
+    "message": "$CREATOR$ bloqué",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "Annuler"
+  }
+}

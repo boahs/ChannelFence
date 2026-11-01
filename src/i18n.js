@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const languages = ["en", "ko", "ja", "pt_BR", "ru"];
+  const languages = ["en", "ko", "ja", "pt_BR", "ru", "es", "fr", "de", "zh_CN", "zh_TW"];
   const listeners = new Set();
   const extensionPage = globalThis.document && globalThis.location?.protocol === "chrome-extension:";
   let language = "auto";

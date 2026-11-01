@@ -1,4 +1,5 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
+import es from "../../../_locales/es/messages.json";
 import { translatedLocales } from "../fixtures/locales";
 import { creatorCard } from "../fixtures/youtube-fixtures";
 import { OptionsPage, PopupPage } from "../pages/extension-ui.page";
@@ -128,14 +129,39 @@ for (const locale of translatedLocales) {
   });
 }
 
+test.describe("Latin American Spanish browser locale", () => {
+  test.use({ locale: "es-419" });
+
+  test("automatically uses the base Spanish catalog for static and dynamic messages", async ({
+    extensionId, extensionPage, extensionStorage, serviceWorker
+  }) => {
+    expect(await serviceWorker.evaluate<string>("chrome.i18n.getUILanguage()"))
+      .toBe("es-419");
+    await extensionStorage.set({ cfBlockedChannels: [blockedCreator("@example", "Example")] });
+    const options = new OptionsPage(extensionPage, extensionId);
+    await options.open();
+    await expect(extensionPage.locator("#languageSelect")).toHaveValue("auto");
+    await expect(extensionPage).toHaveTitle(es.settingsPageTitle.message);
+    const popup = new PopupPage(extensionPage, extensionId);
+    await popup.open();
+    await expect(extensionPage.locator("html")).toHaveAttribute("lang", "es");
+    await expect(extensionPage.getByRole("button", { name: es.manageBlockList.message })).toBeVisible();
+    await expect(extensionPage.locator("#statusText"))
+      .toHaveText(es.blockedCount.message.replace("$COUNT$", "1"));
+    await expect(extensionPage.getByRole("button", {
+      name: es.unblockNamed.message.replace("$CREATOR$", "example"), exact: true
+    })).toBeVisible();
+  });
+});
+
 test.describe("untranslated browser locale", () => {
-  test.use({ locale: "de-DE" });
+  test.use({ locale: "pl-PL" });
 
   test("falls back to English for both static and dynamic messages", async ({
     extensionId, extensionPage, extensionStorage, serviceWorker
   }) => {
     expect(await serviceWorker.evaluate<string>("chrome.i18n.getUILanguage()"))
-      .toMatch(/^de(?:-|$)/);
+      .toMatch(/^pl(?:-|$)/);
     await extensionStorage.set({ cfBlockedChannels: [blockedCreator("@example", "Example")] });
     const popup = new PopupPage(extensionPage, extensionId);
     await popup.open();
