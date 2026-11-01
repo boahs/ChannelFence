@@ -2,6 +2,18 @@
   "languageCode": {
     "message": "ru"
   },
+  "languageLabel": {
+    "message": "Язык"
+  },
+  "languageHelp": {
+    "message": "Выберите язык ChannelFence. Настройка языка YouTube останется прежней."
+  },
+  "languageAutomatic": {
+    "message": "Автоматически (язык браузера)"
+  },
+  "languageSaveError": {
+    "message": "Не удалось сохранить язык. Попробуйте ещё раз."
+  },
   "extensionName": {
     "message": "ChannelFence - Блокировка каналов YouTube"
   },
@@ -397,7 +409,7 @@
     "message": "Хранилище:"
   },
   "privacyStoragePermission": {
-    "message": "локально сохраняет состояние включения, настройки комментариев и Shorts в лентах, а также список заблокированных авторов."
+    "message": "локально сохраняет состояние включения, настройку языка, настройки комментариев и Shorts в лентах, а также список заблокированных авторов."
   },
   "privacyYouTubeLabel": {
     "message": "Доступ к youtube.com:"

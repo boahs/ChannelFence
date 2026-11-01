@@ -70,16 +70,16 @@ After editing the extension, select **Reload** on its `chrome://extensions` card
 
 9. On a channel's Videos tab, confirm view counts and abbreviated upload ages such as `16h ago` have no creator block buttons. Real creator bylines and the channel header should keep their controls.
 
-10. Change Chrome Canary's interface language to Japanese, Portuguese (Brazil), or Russian and restart it. Confirm the popup, settings, onboarding, privacy page, and blocking controls use that language. Check import feedback, readable text in narrow windows, and unchanged creator names.
+10. In ChannelFence settings, choose Japanese, Portuguese (Brazil), or Russian. Confirm the popup, settings, onboarding, privacy page, and blocking controls update, including already-open pages. Reopen settings to check the saved choice. Choose Automatic to return to Chrome's interface language. Check import feedback, readable text in narrow windows, and unchanged creator names.
 11. Set YouTube's language separately. Check a channel's Videos page, search-result menus, watch recommendations, and compact Shorts in each supported YouTube language, including a different language from Chrome. Verify blocked creators stay hidden and Undo restores them.
 
 After your Canary checks, upload the same `dist/ChannelFence-0.2.8.zip` through the Chrome Web Store Developer Dashboard.
 
 ## Languages
 
-ChannelFence's interface is available in English, Korean, Japanese, Brazilian Portuguese, and Russian. Chrome selects the translation from its interface language; other languages fall back to English. YouTube can use a different language from Chrome. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
+ChannelFence's interface is available in English, Korean, Japanese, Brazilian Portuguese, and Russian. By default, it follows Chrome's interface language; unsupported languages fall back to English. The Language setting lets you choose any supported language or return to Automatic. The choice stays on this device and updates open ChannelFence controls. YouTube keeps its own language setting. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
 
-Translations are bundled locally in `_locales/<language>/messages.json`, using Chrome's built-in internationalization. No translation service or additional permission is needed. To add another Chrome-supported locale, translate the English catalog, preserve its message keys and placeholders, and add the locale to the shared browser tests. Validate the interface, long text, count wording, and live YouTube behavior before advertising support. Native-speaker review is still welcome; automated tests verify completeness and behavior, not fluency.
+Translations are bundled locally in `_locales/<language>/messages.json`. Automatic mode uses Chrome's built-in internationalization; manual choices read the same bundled catalogs. Chrome still selects the extension name and description shown in its own extension manager. No translation service or additional permission is needed. To add another Chrome-supported locale, translate the English catalog, preserve its message keys and placeholders, and add the locale to the language selector, runtime allowlist, and shared browser tests. Validate the interface, long text, count wording, and live YouTube behavior before advertising support. Native-speaker review is still welcome; automated tests verify completeness and behavior, not fluency.
 
 The regression suite checks each translated interface, English fallback, and localized YouTube markup. A separate CI suite checks real YouTube pages for Korean, Japanese, Brazilian Portuguese, and Russian. Store descriptions and screenshots are localized separately in the Chrome Web Store dashboard. The website is currently English; visitors can use their browser's translation feature, but bundled extension translations do not translate the website.
 

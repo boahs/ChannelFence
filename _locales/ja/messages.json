@@ -2,6 +2,18 @@
   "languageCode": {
     "message": "ja"
   },
+  "languageLabel": {
+    "message": "言語"
+  },
+  "languageHelp": {
+    "message": "ChannelFence の表示言語を選んでください。YouTube の言語設定は変わりません。"
+  },
+  "languageAutomatic": {
+    "message": "自動（ブラウザの言語）"
+  },
+  "languageSaveError": {
+    "message": "言語設定を保存できませんでした。もう一度お試しください。"
+  },
   "extensionName": {
     "message": "ChannelFence: YouTube チャンネルブロッカー"
   },
@@ -397,7 +409,7 @@
     "message": "ストレージ:"
   },
   "privacyStoragePermission": {
-    "message": "有効・無効の状態、コメントやフィード内のショートに関する設定、ブロックしたクリエイターのリストをローカルに保存します。"
+    "message": "有効・無効の状態、言語設定、コメントやフィード内のショートに関する設定、ブロックしたクリエイターのリストをローカルに保存します。"
   },
   "privacyYouTubeLabel": {
     "message": "youtube.com へのアクセス:"

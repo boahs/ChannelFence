@@ -5,7 +5,8 @@
 ## [0.2.8](#v0-2-8) - 2026-11-01
 
 - Added Japanese, Brazilian Portuguese, and Russian interfaces alongside English and Korean.
-- Translated settings, the popup, onboarding, privacy information, and blocking controls. Chrome selects the translation from its interface language, independently of YouTube's language.
+- Translated settings, the popup, onboarding, privacy information, and blocking controls. ChannelFence follows Chrome's interface language by default.
+- Added a language choice in settings. Choose any supported language or return to automatic detection, with open ChannelFence controls updating immediately. YouTube keeps its own language setting.
 - Kept creator names and block-list backups unchanged, with English as the fallback for untranslated browser languages.
 - Fixed long privacy headings overflowing narrow windows.
 
@@ -16,14 +17,16 @@
 
 - Added bundled `ja`, `pt_BR`, and `ru` message catalogs using the existing Chrome localization system.
 - Used count-neutral Russian wording where a single plural form would be incorrect.
+- Saved the language preference locally and reused bundled catalogs for manual overrides.
 
 ### Tests
 
 - Extended shared browser regressions to all four translated interfaces, including Unicode handles, block and Undo controls, import feedback, privacy links, and narrow layouts.
+- Added checks for saved language overrides, switching back to automatic detection, and updates across open extension pages and YouTube controls.
 - Added Japanese, Brazilian Portuguese, and Russian YouTube fixtures for statistics, creator menus, and collaborator identities.
 - Extended live YouTube checks to these languages for channel headers, search results, watch recommendations, and compact Shorts. The checks verify both Chrome's interface language and YouTube's rendered language.
 
-There are no new permissions, additional network requests, remote code, or extension analytics in this release. Translations are bundled locally; website and store-listing translations are separate.
+There are no new permissions, additional external network requests, remote code, or extension analytics in this release. Translations are bundled locally; website and store-listing translations are separate.
 
 </details>
 

@@ -16,7 +16,7 @@ What's new in 0.2.8:
 
 - Added Japanese, Brazilian Portuguese, and Russian interfaces alongside English and Korean.
 - Translated settings, the popup, onboarding, privacy information, and blocking controls.
-- Chrome's interface language selects the translation. YouTube can use a different language; untranslated browser languages fall back to English.
+- ChannelFence follows Chrome's interface language by default, with a language selector in settings for a manual choice. YouTube keeps its own language setting; untranslated browser languages fall back to English.
 
 Features:
 

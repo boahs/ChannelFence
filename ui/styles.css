@@ -27,7 +27,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -38,7 +39,8 @@ a {
 
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 3px solid rgba(18, 207, 200, 0.46);
   outline-offset: 2px;
 }
@@ -461,6 +463,22 @@ input:focus-visible {
   font-size: 12px;
   line-height: 1.45;
   margin-top: 3px;
+}
+
+.setting-row--language {
+  align-items: stretch;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.language-select {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--ink);
+  min-height: 42px;
+  padding: 0 13px;
+  width: min(100%, 300px);
 }
 
 .manual-block-form {

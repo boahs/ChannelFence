@@ -274,6 +274,7 @@
   }
 
   async function initializeState() {
+    await I18n.ready;
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         await loadState();
@@ -1536,7 +1537,7 @@
       return;
     }
 
-    const contextKey = creatorMenuContextKey(context);
+    const contextKey = `${creatorMenuContextKey(context)}|${I18n.get("languageCode")}`;
     const existingItems = popup.querySelectorAll(".cf-menu-item");
     if (existingItems.length > 0 && popup.dataset.cfMenuContextKey === contextKey) {
       return;
@@ -1794,6 +1795,8 @@
     const existingButton = buttonsOwnedByRoot(root)
       .find((button) => button.dataset.cfIdentity === key);
     if (existingButton) {
+      existingButton.title = I18n.get("contentBlockShortCreator");
+      setAttributeIfChanged(existingButton, "aria-label", I18n.get("contentBlockShortCreator"));
       return;
     }
 
@@ -1843,6 +1846,7 @@
     const existingAction = ownedActions.find((action) => action.dataset.cfIdentity === key);
     if (existingAction) {
       const existingButton = existingAction.querySelector(".cf-shorts-action__button");
+      existingAction.querySelector(".cf-shorts-action__label").textContent = I18n.get("contentBlock");
       existingButton.title = I18n.get("contentBlockWithBrand", displayName);
       setAttributeIfChanged(
         existingButton,
@@ -2039,7 +2043,8 @@
     pauseVisibleVideos();
 
     const existing = document.getElementById("cf-hard-block-overlay");
-    if (existing?.dataset.mode === "creator" && existing.dataset.entryKey === entry.key) {
+    if (existing?.dataset.mode === "creator" && existing.dataset.entryKey === entry.key &&
+        existing.dataset.language === I18n.get("languageCode")) {
       return;
     }
     existing?.remove();
@@ -2048,6 +2053,7 @@
     overlay.id = "cf-hard-block-overlay";
     overlay.dataset.mode = "creator";
     overlay.dataset.entryKey = entry.key;
+    overlay.dataset.language = I18n.get("languageCode");
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
     overlay.setAttribute("aria-labelledby", "cf-hard-block-title");
@@ -2751,6 +2757,11 @@
     scheduleScan();
   }
 
+  I18n.onChange(() => {
+    requestActionUpdate();
+    scheduleStorageScan();
+  });
+
   chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName !== "local") {
       return;
@@ -2779,7 +2790,10 @@
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked]) {
       requestActionUpdate();
     }
-    scheduleStorageScan();
+    if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked] ||
+        changes[Shared.STORAGE.hideComments] || changes[Shared.STORAGE.hideHomeShorts]) {
+      scheduleStorageScan();
+    }
   });
 
   document.addEventListener("visibilitychange", () => {

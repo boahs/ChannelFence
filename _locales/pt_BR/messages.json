@@ -2,6 +2,18 @@
   "languageCode": {
     "message": "pt-BR"
   },
+  "languageLabel": {
+    "message": "Idioma"
+  },
+  "languageHelp": {
+    "message": "Escolha o idioma do ChannelFence. A configuração de idioma do YouTube não será alterada."
+  },
+  "languageAutomatic": {
+    "message": "Automático (idioma do navegador)"
+  },
+  "languageSaveError": {
+    "message": "Não foi possível salvar o idioma. Tente novamente."
+  },
   "extensionName": {
     "message": "ChannelFence - Bloqueador de canais do YouTube"
   },
@@ -397,7 +409,7 @@
     "message": "Armazenamento:"
   },
   "privacyStoragePermission": {
-    "message": "salva localmente o estado de ativação, as preferências de comentários e de Shorts nos feeds e a lista de criadores bloqueados."
+    "message": "salva localmente o estado de ativação, a preferência de idioma, as preferências de comentários e de Shorts nos feeds e a lista de criadores bloqueados."
   },
   "privacyYouTubeLabel": {
     "message": "Acesso ao youtube.com:"

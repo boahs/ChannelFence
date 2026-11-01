@@ -51,6 +51,7 @@ async function updateBadgeForTab(tabId) {
     return;
   }
   const { enabled, count, badgeText } = await badgeState();
+  await I18n.ready;
 
   await chrome.action.setBadgeBackgroundColor({ color: "#ff5f46", tabId });
   await chrome.action.setBadgeText({ text: badgeText, tabId });
@@ -79,6 +80,10 @@ chrome.runtime.onStartup.addListener(async () => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (!message) {
     return false;
+  }
+  if (message.type === "CF_GET_MESSAGES") {
+    I18n.loadCatalog(message.language).then(sendResponse, () => sendResponse(null));
+    return true;
   }
   if (message.type === "CF_SYNC_ACTION" && Number.isInteger(sender.tab?.id)) {
     updateBadgeForTab(sender.tab.id).catch(() => undefined);

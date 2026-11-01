@@ -26,6 +26,21 @@
       <h1 id="settingsHeading" data-i18n="settings">Settings</h1>
       <p class="settings-intro" data-i18n="settingsIntro">ChannelFence runs only on YouTube and keeps your preferences on this device.</p>
 
+      <div class="setting-row setting-row--language">
+        <div>
+          <label class="setting-row__title" for="languageSelect" data-i18n="languageLabel">Language</label>
+          <div class="setting-row__copy" id="languageHelp" data-i18n="languageHelp">Choose the language for ChannelFence. YouTube keeps its own language setting.</div>
+        </div>
+        <select class="language-select" id="languageSelect" aria-describedby="languageHelp" disabled>
+          <option value="auto" data-i18n="languageAutomatic">Automatic (browser language)</option>
+          <option value="en" lang="en">English</option>
+          <option value="ko" lang="ko">한국어</option>
+          <option value="ja" lang="ja">日本語</option>
+          <option value="pt_BR" lang="pt-BR">Português (Brasil)</option>
+          <option value="ru" lang="ru">Русский</option>
+        </select>
+      </div>
+
       <div class="setting-row">
         <div>
           <div class="setting-row__title" data-i18n="enableChannelFence">Enable ChannelFence</div>

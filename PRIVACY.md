@@ -16,7 +16,7 @@ Settings and blocked-creator records are stored only in Chrome’s local extensi
 
 ## Permissions
 
-- **Storage:** saves the enabled state, comment and feed-level Shorts preferences, and blocked-creator list locally.
+- **Storage:** saves the enabled state, language preference, comment and feed-level Shorts preferences, and blocked-creator list locally.
 - **Access to youtube.com:** identifies creators on YouTube pages, adds user-facing block controls, and hides content from blocked creators.
 
 ## Data control and deletion

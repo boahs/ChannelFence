@@ -5,14 +5,16 @@
     enabled: "cfEnabled",
     blocked: "cfBlockedChannels",
     hideComments: "cfHideComments",
-    hideHomeShorts: "cfHideHomeShorts"
+    hideHomeShorts: "cfHideHomeShorts",
+    language: "cfLanguage"
   });
 
   const DEFAULTS = Object.freeze({
     [STORAGE.enabled]: true,
     [STORAGE.blocked]: [],
     [STORAGE.hideComments]: true,
-    [STORAGE.hideHomeShorts]: false
+    [STORAGE.hideHomeShorts]: false,
+    [STORAGE.language]: "auto"
   });
 
   const CHANNEL_TYPES = new Set(["channel", "handle", "custom", "user", "name"]);
