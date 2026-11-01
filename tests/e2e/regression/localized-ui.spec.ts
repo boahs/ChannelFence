@@ -135,8 +135,9 @@ test.describe("Latin American Spanish browser locale", () => {
   test("automatically uses the base Spanish catalog for static and dynamic messages", async ({
     extensionId, extensionPage, extensionStorage, serviceWorker
   }) => {
+    // Chromium reports its Latin American Spanish UI as es-MX for an es-419 profile.
     expect(await serviceWorker.evaluate<string>("chrome.i18n.getUILanguage()"))
-      .toBe("es-419");
+      .toBe("es-MX");
     await extensionStorage.set({ cfBlockedChannels: [blockedCreator("@example", "Example")] });
     const options = new OptionsPage(extensionPage, extensionId);
     await options.open();

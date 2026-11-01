@@ -56,7 +56,7 @@ export const translatedLocales = [
     name: "German", catalogCode: "de", browserLocale: "de-DE", uiLanguage: /^de(?:-|$)/,
     youtubeLanguage: "de", documentLanguage: /^de(?:-|$)/, messages: de,
     creator: "küchenkanal", collaborators: ["ersterkanal", "zweiterkanal"],
-    goToChannel: "küchenkanal – zum Kanal.", moreActions: "Weitere Aktionen",
+    goToChannel: "Zu Kanal „küchenkanal“", moreActions: "Mehr Aktionen",
     views: "1 Aufruf", age: "vor 23 Stunden", conjunction: "und"
   },
   {
@@ -64,7 +64,7 @@ export const translatedLocales = [
     uiLanguage: /^zh-(?:CN|Hans(?:-CN)?)$/i,
     youtubeLanguage: "zh-CN", documentLanguage: /^zh-(?:CN|Hans(?:-CN)?)$/i, messages: zhCN,
     creator: "中华美食", collaborators: ["第一个频道", "第二个频道"],
-    goToChannel: "中华美食。前往频道。", moreActions: "更多操作",
+    goToChannel: "前往频道：中华美食", moreActions: "其他操作",
     views: "1次观看", age: "23小时前", conjunction: "和"
   },
   {
@@ -72,7 +72,7 @@ export const translatedLocales = [
     uiLanguage: /^zh-(?:TW|Hant(?:-TW)?)$/i,
     youtubeLanguage: "zh-TW", documentLanguage: /^zh-(?:TW|Hant(?:-TW)?)$/i, messages: zhTW,
     creator: "中華美食", collaborators: ["第一個頻道", "第二個頻道"],
-    goToChannel: "前往頻道中華美食", moreActions: "更多動作",
+    goToChannel: "前往頻道：中華美食", moreActions: "其他動作",
     views: "觀看次數：1次", age: "23 小時前", conjunction: "和"
   }
 ];

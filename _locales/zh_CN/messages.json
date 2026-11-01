@@ -36,7 +36,7 @@
     "message": "正在检查此页面…"
   },
   "openCreatorHelp": {
-    "message": "打开频道、视频或 Shorts 短视频，即可屏蔽其创作者。"
+    "message": "打开频道、视频或 Shorts，即可屏蔽其创作者。"
   },
   "blockCreator": {
     "message": "屏蔽创作者"
@@ -48,7 +48,7 @@
     "message": "隐藏信息流中的 Shorts"
   },
   "hideShortsSummary": {
-    "message": "隐藏首页、搜索和其他信息流中的 Shorts 栏目。"
+    "message": "隐藏首页、搜索等信息流中的 Shorts 栏目。"
   },
   "hideOrShowShorts": {
     "message": "隐藏或显示 YouTube 信息流中的 Shorts"
