@@ -30,10 +30,10 @@ npm run test:e2e:live
 npm run test:report
 ```
 
-To test an extracted release ZIP, set `CHANNELFENCE_EXTENSION_PATH` to the extracted folder containing `manifest.json`. For example, after extracting to `dist/ChannelFence-0.2.6`:
+To test an extracted release ZIP, set `CHANNELFENCE_EXTENSION_PATH` to the extracted folder containing `manifest.json`. For example, after extracting to `dist/ChannelFence-0.2.8`:
 
 ```powershell
-$env:CHANNELFENCE_EXTENSION_PATH = (Resolve-Path .\dist\ChannelFence-0.2.6).Path
+$env:CHANNELFENCE_EXTENSION_PATH = (Resolve-Path .\dist\ChannelFence-0.2.8).Path
 try { npm run test:e2e } finally { Remove-Item Env:CHANNELFENCE_EXTENSION_PATH }
 ```
 
@@ -41,4 +41,4 @@ Without this override, the fixture loads the extension from the project director
 
 When a YouTube DOM change causes a bug, first represent the smallest relevant markup in `youtube-fixtures.ts`, then add a focused spec named after the user-visible behavior. Keep the live suite small; behavior belongs in the deterministic suite whenever possible.
 
-For release testing against the current YouTube layout, follow the [Chrome Canary steps in the README](../../README.md#test-version-026-in-chrome-canary) and the [collaboration and feed layout acceptance checks](../../store/submission-checklist.md#collaboration-and-feed-layout-checks-for-026). Test two- and three-creator bylines, collapsed `A and 2 more` labels, existing individual blocks, Undo, and persistence after refresh. Confirm remaining videos fill blocked grid slots across rows, including after pausing and resuming filtering, and that full-width shelves keep their position. A collapsed label can identify unnamed collaborators only if YouTube also exposes their full names or channel links.
+For release testing against the current YouTube layout, follow the [Chrome Canary steps in the README](../../README.md#test-version-028-in-chrome-canary) and the [collaboration and feed layout acceptance checks](../../store/submission-checklist.md#collaboration-and-feed-layout-checks-for-026). Test two- and three-creator bylines, collapsed `A and 2 more` labels, existing individual blocks, Undo, and persistence after refresh. Confirm remaining videos fill blocked grid slots across rows, including after pausing and resuming filtering, and that full-width shelves keep their position. A collapsed label can identify unnamed collaborators only if YouTube also exposes their full names or channel links.

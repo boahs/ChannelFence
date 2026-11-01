@@ -30,7 +30,7 @@ export const translatedLocales = [
     name: "Russian", browserLocale: "ru-RU", uiLanguage: /^ru(?:-|$)/,
     youtubeLanguage: "ru", documentLanguage: /^ru(?:-|$)/, messages: ru,
     creator: "русскаякухня", collaborators: ["первыйканал", "второйканал"],
-    goToChannel: "Перейти на канал русскаякухня", moreActions: "Другие действия",
+    goToChannel: "Перейти на канал русскаякухня", moreActions: "Ещё",
     views: "1 просмотр", age: "23 часа назад", conjunction: "и"
   }
 ];

@@ -57,12 +57,12 @@ When a matching video is hidden, ChannelFence also collapses its enclosing grid 
 
 After editing the extension, select **Reload** on its `chrome://extensions` card and refresh open YouTube tabs.
 
-### Test version 0.2.6 in Chrome Canary
+### Test version 0.2.8 in Chrome Canary
 
-1. Extract `dist/ChannelFence-0.2.6.zip` to a folder.
+1. Extract `dist/ChannelFence-0.2.8.zip` to a folder.
 2. In Chrome Canary, open `chrome://extensions` and disable any other ChannelFence copy in that Canary profile to avoid duplicate controls and filtering.
 3. Enable **Developer mode**, select **Load unpacked**, and choose the extracted folder containing `manifest.json`.
-4. Confirm the extension shows version **0.2.6**. To reuse your block list from another Chrome profile, export it from ChannelFence settings there and import it into the Canary copy.
+4. Confirm the extension shows version **0.2.8**. To reuse your block list from another Chrome profile, export it from ChannelFence settings there and import it into the Canary copy.
 5. Refresh open YouTube tabs. Test a two-creator and a three-creator collaboration with one identified collaborator blocked at a time, including the second or third creator when their name is available.
 6. Block from a collaboration card and check that the saved entry names the selected creator. Use **Undo**, confirm the card returns when no other collaborator is blocked, then block again and refresh to check persistence.
 7. Test an `A and 2 more` card: blocking A should hide it. Other collaborators can match only when YouTube exposes their names or channel links on the card.
@@ -70,7 +70,10 @@ After editing the extension, select **Reload** on its `chrome://extensions` card
 
 9. On a channel's Videos tab, confirm view counts and abbreviated upload ages such as `16h ago` have no creator block buttons. Real creator bylines and the channel header should keep their controls.
 
-After your Canary checks, upload the same `dist/ChannelFence-0.2.6.zip` through the Chrome Web Store Developer Dashboard.
+10. Change Chrome Canary's interface language to Japanese, Portuguese (Brazil), or Russian and restart it. Confirm the popup, settings, onboarding, privacy page, and blocking controls use that language. Check import feedback, readable text in narrow windows, and unchanged creator names.
+11. Set YouTube's language separately. Check a channel's Videos page, search-result menus, watch recommendations, and compact Shorts in each supported YouTube language, including a different language from Chrome. Verify blocked creators stay hidden and Undo restores them.
+
+After your Canary checks, upload the same `dist/ChannelFence-0.2.8.zip` through the Chrome Web Store Developer Dashboard.
 
 ## Languages
 
