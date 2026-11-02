@@ -39,6 +39,16 @@ Your existing individual creator blocks remain saved. If an older version added 
 
 When a matching video is hidden, ChannelFence also collapses its enclosing grid tile and lets remaining cards fill gaps across Home rows. This fixes the blank space that could remain in version 0.2.4 even after the video itself was hidden. Full-width shelves keep their place in the feed.
 
+## Home feed appearance
+
+The popup and settings include three optional controls for desktop YouTube Home, all off by default:
+
+- **Hide sponsored cards on Home** hides supported sponsored feed cards and their slots.
+- **Hide annoying YouTube features** hides supported Home inserts: Explore more topics, Playables/game shelves, featured and promotional banners, Premium/Primetime offers, recommendation prompts, and feedback surveys.
+- **Compact Home grid** lets you choose Small, Medium, or Large thumbnails. The grid adapts to the available width, with up to six, five, or four columns respectively.
+
+These preferences are saved locally and work with an empty block list. Regular recommendations, courses, mixes, and the top category filters remain available. Sponsored cards and **Hide Shorts in feeds** have separate controls. An attached survey is hidden without removing its ordinary video. The Home controls do not hide search information panels or ads during video playback. Their labels are available in all eighteen supported interface languages, and they require no new permissions or network requests.
+
 ## Privacy and permissions
 
 - Uses only the `storage` extension permission.
@@ -72,6 +82,8 @@ After editing the extension, select **Reload** on its `chrome://extensions` card
 
 10. In ChannelFence settings, try the supported languages, including both Chinese variants, Hindi, Bengali, and Arabic. Confirm the popup, settings, onboarding, privacy page, and blocking controls update, including already-open pages. Reopen settings to check the saved choice. Choose Automatic to return to Chrome's interface language. Check import feedback, readable text in narrow windows, and unchanged creator names. Arabic should use a right-to-left layout while handles and URLs remain readable.
 11. Set YouTube's language separately. Check a channel's Videos page, search-result menus, watch recommendations, and compact Shorts in each supported YouTube language, including a different language from Chrome. Verify blocked creators stay hidden and Undo restores them.
+12. On Home, try **Hide sponsored cards on Home** and **Hide annoying YouTube features** separately, including with an empty block list. Check available Explore more topics, Playables, promotional offers, prompts, and surveys. Regular videos, courses, mixes, and the top category filters should remain; Shorts follow their own preference. An attached survey should disappear without hiding its video. Turn each option off to restore its content.
+13. Enable the compact Home grid and try each thumbnail size at wide and narrow window sizes. Confirm cards stay readable and in order, shelves keep their place, and disabling the option restores YouTube's layout. Reopen the popup and settings to check that your choices are saved.
 
 After your Canary checks, upload the same `dist/ChannelFence-0.2.8.zip` through the Chrome Web Store Developer Dashboard.
 

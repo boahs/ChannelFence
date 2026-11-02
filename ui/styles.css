@@ -186,6 +186,9 @@ select:focus-visible {
 
 .popup {
   background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
   min-height: 410px;
   width: 360px;
 }
@@ -194,11 +197,15 @@ select:focus-visible {
   align-items: center;
   border-bottom: 1px solid var(--line);
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   padding: 16px 17px;
 }
 
 .popup__main {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   padding: 16px 17px 10px;
 }
 
@@ -256,6 +263,26 @@ select:focus-visible {
 .popup-quick-setting h2 {
   font-size: 13px;
   margin: 0;
+}
+
+.popup-quick-setting--compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.popup-size-setting:not([hidden]) {
+  align-items: center;
+  display: flex;
+  grid-column: 1 / -1;
+  font-size: 12px;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.popup-size-setting .language-select {
+  max-width: 55%;
+  min-width: 0;
+  width: auto;
 }
 
 .popup-quick-setting p {
@@ -361,6 +388,7 @@ select:focus-visible {
 .popup__footer {
   border-top: 1px solid var(--line);
   display: flex;
+  flex-shrink: 0;
   gap: 8px;
   justify-content: space-between;
   margin-top: 8px;

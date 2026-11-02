@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Убирает разделы и карточки Shorts с главной страницы, из поиска и других лент. Вкладка Shorts остаётся доступной."
   },
+  "hideHomeAds": {
+    "message": "Скрывать рекламные карточки на главной"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Скрывает карточки рекламных видео на главной странице YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "Скрывать навязчивые функции YouTube"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "На главной странице скрывает «Больше тем», разделы Playables и игр, баннеры с избранным контентом и промоакциями, предложения Premium/Primetime, опросы и подсказки о рекомендациях. Рекламные карточки и Shorts настраиваются отдельно."
+  },
+  "compactHomeGrid": {
+    "message": "Компактная сетка на главной"
+  },
+  "compactHomeGridHelp": {
+    "message": "Выберите размер значков видео. Сетка подстраивается под размер окна."
+  },
+  "compactHomeSize": {
+    "message": "Размер значков видео"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Маленький"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Средний"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Большой"
+  },
   "hideComments": {
     "message": "Скрывать комментарии заблокированных авторов"
   },

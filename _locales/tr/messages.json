@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Ana sayfa, arama ve diğer akışlardaki Shorts bölümlerini ve kartlarını kaldırır. Shorts sekmesi kullanılabilir durumda kalır."
   },
+  "hideHomeAds": {
+    "message": "Ana sayfadaki sponsorlu kartları gizle"
+  },
+  "hideHomeAdsHelp": {
+    "message": "YouTube ana sayfasındaki sponsorlu video kartlarını gizler."
+  },
+  "hideHomePromotions": {
+    "message": "Rahatsız edici YouTube özelliklerini gizle"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Ana sayfada Daha fazla konu keşfet, Playables/oyun bölümleri, öne çıkan içerik ve tanıtım banner'ları, Premium/Primetime tekliflerini, geri bildirim anketlerini ve öneri istemlerini gizler. Sponsorlu kartlar ve Shorts için ayrı ayarlar vardır."
+  },
+  "compactHomeGrid": {
+    "message": "Ana sayfada kompakt ızgara"
+  },
+  "compactHomeGridHelp": {
+    "message": "Küçük resim boyutunu seçin. Izgara pencerenize uyum sağlar."
+  },
+  "compactHomeSize": {
+    "message": "Küçük resim boyutu"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Küçük"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Orta"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Büyük"
+  },
   "hideComments": {
     "message": "Engellenen üreticilerin yorumlarını gizle"
   },

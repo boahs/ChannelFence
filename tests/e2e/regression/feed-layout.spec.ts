@@ -1,6 +1,6 @@
 import { type Page } from "@playwright/test";
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
-import { creatorCard, rightRailLockup } from "../fixtures/youtube-fixtures";
+import { creatorCard, promotedHomeCard, rightRailLockup } from "../fixtures/youtube-fixtures";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
 const cardWidth = 216;
@@ -135,6 +135,59 @@ async function replaceByline(page: Page, label: string): Promise<void> {
 }
 
 test.describe("Home feed layout after creator blocking", () => {
+  for (const insert of [
+    { name: "sponsored card", setting: "cfHideHomeAds", markup: promotedHomeCard("Fixture Advertiser", "home-insert") },
+    { name: "recommendation prompt", setting: "cfHideHomePromotions", markup: `<ytd-rich-item-renderer data-testid="home-insert">
+      <ytd-feed-nudge-renderer>Looking for something different?</ytd-feed-nudge-renderer></ytd-rich-item-renderer>` },
+    { name: "Playables card", setting: "cfHideHomePromotions", markup: `<ytd-rich-item-renderer data-testid="home-insert"><div id="content">
+      <mini-game-card-view-model>Play a game</mini-game-card-view-model></div></ytd-rich-item-renderer>` }
+  ]) {
+    test(`packs recommendations across a hidden ${insert.name} and restores its original slot`, async ({
+      extensionPage,
+      extensionStorage
+    }) => {
+      const unfilteredOrder = ["a", "home-insert", "c", "d", "e", "f"];
+      const firstRow = `<ytd-rich-grid-row><div id="contents">${[
+        creatorCard({ id: "a", displayName: "Allowed a", handle: "@allowed-a" }),
+        insert.markup,
+        creatorCard({ id: "c", displayName: "Allowed c", handle: "@allowed-c" })
+      ].join("")}</div></ytd-rich-grid-row>`;
+      const youtube = new YouTubeSurfacePage(extensionPage);
+      await youtube.open(`<ytd-browse page-subtype="home">${feedMarkup(firstRow + row(["d", "e", "f"]))}</ytd-browse>`, "/");
+      await expectPackedCards(extensionPage, unfilteredOrder);
+
+      await extensionStorage.set({ [insert.setting]: true });
+      await expect(youtube.card("home-insert")).toBeHidden();
+      await expectPackedCards(extensionPage, unfilteredOrder.filter((id) => id !== "home-insert"));
+      await expect(youtube.blockButton("a")).toBeVisible();
+      await expect(youtube.blockButton("c")).toBeVisible();
+
+      await extensionStorage.set({ [insert.setting]: false });
+      await expect(youtube.card("home-insert")).toBeVisible();
+      await expectPackedCards(extensionPage, unfilteredOrder);
+    });
+  }
+
+  test("collapses a modern Explore section while preserving an ordinary full-width shelf", async ({
+    extensionPage, extensionStorage
+  }) => {
+    const sections = `<ytd-rich-section-renderer data-testid="ordinary-section"><h2>Explore more topics</h2></ytd-rich-section-renderer>
+      <ytd-rich-section-renderer data-testid="explore-section"><div id="content">
+        <yt-chips-shelf-view-model class="ytChipsShelfViewModelHost">더 많은 주제 탐색</yt-chips-shelf-view-model>
+      </div></ytd-rich-section-renderer>`;
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(`<ytd-browse page-subtype="home">${feedMarkup(row(["a", "b", "c"]) + sections + row(["d", "e", "f"]))}</ytd-browse>`, "/");
+    await expectPackedCards(extensionPage, ["a", "b", "c"]);
+    await expectPackedCards(extensionPage, ["d", "e", "f"], rowStep + 240);
+    await extensionStorage.set({ cfHideHomePromotions: true });
+    await expect(youtube.card("explore-section")).toBeHidden();
+    await expect(youtube.card("ordinary-section")).toBeVisible();
+    await expectPackedCards(extensionPage, ["d", "e", "f"], rowStep + 120);
+    await extensionStorage.set({ cfHideHomePromotions: false });
+    await expect(youtube.card("explore-section")).toBeVisible();
+    await expectPackedCards(extensionPage, ["d", "e", "f"], rowStep + 240);
+  });
+
   test("removes the full ordinary linkless feed cell and restores its original slot with Undo", async ({
     extensionPage,
     extensionStorage

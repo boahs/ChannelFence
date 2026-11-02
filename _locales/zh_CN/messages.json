@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "隐藏首页、搜索和其他信息流中的 Shorts 栏目与卡片。Shorts 标签页仍可使用。"
   },
+  "hideHomeAds": {
+    "message": "隐藏首页的赞助卡片"
+  },
+  "hideHomeAdsHelp": {
+    "message": "隐藏 YouTube 首页的赞助视频卡片。"
+  },
+  "hideHomePromotions": {
+    "message": "隐藏 YouTube 的烦人功能"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "在首页隐藏“探索更多主题”、Playables/游戏栏目、精选和推广横幅、Premium/Primetime 优惠、反馈调查和推荐提示。赞助卡片和 Shorts 有单独的控制选项。"
+  },
+  "compactHomeGrid": {
+    "message": "紧凑首页网格"
+  },
+  "compactHomeGridHelp": {
+    "message": "选择缩略图大小。网格会根据窗口大小调整。"
+  },
+  "compactHomeSize": {
+    "message": "缩略图大小"
+  },
+  "compactHomeSizeSmall": {
+    "message": "小"
+  },
+  "compactHomeSizeMedium": {
+    "message": "中"
+  },
+  "compactHomeSizeLarge": {
+    "message": "大"
+  },
   "hideComments": {
     "message": "隐藏已屏蔽创作者的评论"
   },

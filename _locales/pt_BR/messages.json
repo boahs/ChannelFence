@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Remove seções e cartões de Shorts do início, da busca e de outros feeds. A aba Shorts continua disponível."
   },
+  "hideHomeAds": {
+    "message": "Ocultar cartões patrocinados no início"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Oculta cartões de vídeos patrocinados no início do YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "Ocultar recursos irritantes do YouTube"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "No início, oculta Explorar mais temas, seções de Playables/jogos, banners de destaques e promoções, ofertas do Premium/Primetime, pesquisas de opinião e avisos de recomendações. Cartões patrocinados e Shorts têm controles separados."
+  },
+  "compactHomeGrid": {
+    "message": "Grade compacta no início"
+  },
+  "compactHomeGridHelp": {
+    "message": "Escolha o tamanho das miniaturas. A grade se adapta à sua janela."
+  },
+  "compactHomeSize": {
+    "message": "Tamanho das miniaturas"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Pequeno"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Médio"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Grande"
+  },
   "hideComments": {
     "message": "Ocultar comentários de criadores bloqueados"
   },
