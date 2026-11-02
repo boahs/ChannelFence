@@ -178,6 +178,16 @@ for (const locale of allLocales) {
       const caption = action.locator(".cf-shorts-action__label");
       await expect(caption).toHaveText(locale.messages.contentBlock.message);
       await expect(action).toHaveAttribute("dir", locale.catalogCode === "ar" ? "rtl" : "ltr");
+      const darkTheme = await extensionPage.locator("html").evaluate((element) => element.hasAttribute("dark"));
+      const captionColor = await caption.evaluate((element) => getComputedStyle(element).color);
+      const channels = captionColor.match(/[\d.]+/g)!.slice(0, 3).map(Number);
+      expect(channels).toHaveLength(3);
+      const colorMessage = `Caption color ${captionColor} must contrast with the ${darkTheme ? "dark" : "light"} page`;
+      if (darkTheme) {
+        expect(Math.min(...channels), colorMessage).toBeGreaterThanOrEqual(192);
+      } else {
+        expect(Math.max(...channels), colorMessage).toBeLessThanOrEqual(96);
+      }
       await captureAction(action, testInfo, `${locale.catalogCode}-live-shorts-viewer-button`);
       await expect(action).toBeInViewport({ ratio: 1 });
       expect(await caption.evaluate((element) => element.scrollWidth - element.clientWidth))

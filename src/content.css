@@ -101,7 +101,7 @@ html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
 .cf-shorts-action {
   align-items: center !important;
   box-sizing: border-box !important;
-  color: var(--yt-spec-text-primary, #f1f1f1) !important;
+  color: var(--yt-spec-text-primary, #0f0f0f) !important;
   display: flex !important;
   flex: 0 0 auto !important;
   flex-direction: column !important;
@@ -116,7 +116,7 @@ html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
 .cf-shorts-action__button {
   align-items: center !important;
   appearance: none !important;
-  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1)) !important;
+  background: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.05)) !important;
   border: 0 !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
@@ -131,6 +131,19 @@ html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
 }
 
 .cf-shorts-action__button:hover {
+  background: var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.1)) !important;
+}
+
+/* Current Shorts pages can omit these legacy theme variables. */
+html[dark] .cf-shorts-action {
+  color: var(--yt-spec-text-primary, #f1f1f1) !important;
+}
+
+html[dark] .cf-shorts-action__button {
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1)) !important;
+}
+
+html[dark] .cf-shorts-action__button:hover {
   background: var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.2)) !important;
 }
 

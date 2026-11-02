@@ -222,6 +222,47 @@ test.describe("YouTube Shorts controls", () => {
     expect(stored.cfHideHomeShorts).toBe(true);
   });
 
+  test("keeps the Shorts action readable across themes without legacy YouTube variables", async ({
+    extensionPage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(shortsViewer("Shorts Creator", "@shortscreator"), "/shorts/fixture-short");
+    const action = youtube.card("shorts-action-bar").locator(":scope > .cf-shorts-action");
+    const caption = action.locator(".cf-shorts-action__label");
+    const button = action.getByRole("button", { name: "Block Shorts Creator with ChannelFence" });
+    await expect(button).toBeVisible();
+    expect(await action.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return ["--yt-spec-text-primary", "--yt-spec-badge-chip-background", "--yt-spec-10-percent-layer"]
+        .map((property) => style.getPropertyValue(property).trim());
+    })).toEqual(["", "", ""]);
+
+    for (const theme of [
+      { dark: false, text: "rgb(15, 15, 15)", background: "rgba(0, 0, 0, 0.05)", hover: "rgba(0, 0, 0, 0.1)" },
+      { dark: true, text: "rgb(241, 241, 241)", background: "rgba(255, 255, 255, 0.1)", hover: "rgba(255, 255, 255, 0.2)" }
+    ]) {
+      await extensionPage.evaluate((dark) => document.documentElement.toggleAttribute("dark", dark), theme.dark);
+      await extensionPage.mouse.move(0, 0);
+      await expect(caption).toHaveCSS("color", theme.text);
+      await expect(button).toHaveCSS("background-color", theme.background);
+      await button.hover();
+      await expect(button).toHaveCSS("background-color", theme.hover);
+    }
+
+    // Native variables take precedence when YouTube supplies them.
+    await extensionPage.evaluate(() => {
+      const style = document.documentElement.style;
+      style.setProperty("--yt-spec-text-primary", "#dedede");
+      style.setProperty("--yt-spec-badge-chip-background", "#333333");
+      style.setProperty("--yt-spec-10-percent-layer", "#444444");
+    });
+    await extensionPage.mouse.move(0, 0);
+    await expect(caption).toHaveCSS("color", "rgb(222, 222, 222)");
+    await expect(button).toHaveCSS("background-color", "rgb(51, 51, 51)");
+    await button.hover();
+    await expect(button).toHaveCSS("background-color", "rgb(68, 68, 68)");
+  });
+
   test("hides Shorts shelves and modern cards in search results", async ({
     extensionPage,
     extensionStorage
