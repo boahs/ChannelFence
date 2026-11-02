@@ -274,6 +274,7 @@
   }
 
   async function initializeState() {
+    await I18n.ready;
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         await loadState();
@@ -1536,7 +1537,7 @@
       return;
     }
 
-    const contextKey = creatorMenuContextKey(context);
+    const contextKey = `${creatorMenuContextKey(context)}|${I18n.get("languageCode")}`;
     const existingItems = popup.querySelectorAll(".cf-menu-item");
     if (existingItems.length > 0 && popup.dataset.cfMenuContextKey === contextKey) {
       return;
@@ -1550,6 +1551,8 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = "cf-menu-item";
+      button.dir = I18n.direction;
+      button.lang = I18n.get("languageCode");
       button.setAttribute("role", "menuitem");
       button.setAttribute("aria-label", I18n.get("contentBlockShortCreator"));
       if (menuTextColor) {
@@ -1587,6 +1590,8 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = "cf-menu-item";
+      button.dir = I18n.direction;
+      button.lang = I18n.get("languageCode");
       button.setAttribute("role", "menuitem");
       button.setAttribute("aria-label", I18n.get(
         existingEntry ? "contentUnblockWithBrand" : "contentBlockWithBrand",
@@ -1794,6 +1799,8 @@
     const existingButton = buttonsOwnedByRoot(root)
       .find((button) => button.dataset.cfIdentity === key);
     if (existingButton) {
+      existingButton.title = I18n.get("contentBlockShortCreator");
+      setAttributeIfChanged(existingButton, "aria-label", I18n.get("contentBlockShortCreator"));
       return;
     }
 
@@ -1842,7 +1849,10 @@
 
     const existingAction = ownedActions.find((action) => action.dataset.cfIdentity === key);
     if (existingAction) {
+      setAttributeIfChanged(existingAction, "dir", I18n.direction);
+      setAttributeIfChanged(existingAction, "lang", I18n.get("languageCode"));
       const existingButton = existingAction.querySelector(".cf-shorts-action__button");
+      existingAction.querySelector(".cf-shorts-action__label").textContent = I18n.get("contentBlock");
       existingButton.title = I18n.get("contentBlockWithBrand", displayName);
       setAttributeIfChanged(
         existingButton,
@@ -1858,6 +1868,8 @@
 
     const action = document.createElement("div");
     action.className = "cf-shorts-action";
+    action.dir = I18n.direction;
+    action.lang = I18n.get("languageCode");
     action.dataset.cfIdentity = key;
     action.__channelFenceRoot = root;
 
@@ -2039,15 +2051,19 @@
     pauseVisibleVideos();
 
     const existing = document.getElementById("cf-hard-block-overlay");
-    if (existing?.dataset.mode === "creator" && existing.dataset.entryKey === entry.key) {
+    if (existing?.dataset.mode === "creator" && existing.dataset.entryKey === entry.key &&
+        existing.dataset.language === I18n.get("languageCode")) {
       return;
     }
     existing?.remove();
 
     const overlay = document.createElement("section");
     overlay.id = "cf-hard-block-overlay";
+    overlay.dir = I18n.direction;
+    overlay.lang = I18n.get("languageCode");
     overlay.dataset.mode = "creator";
     overlay.dataset.entryKey = entry.key;
+    overlay.dataset.language = I18n.get("languageCode");
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
     overlay.setAttribute("aria-labelledby", "cf-hard-block-title");
@@ -2715,6 +2731,8 @@
 
     const toast = document.createElement("div");
     toast.id = "cf-toast";
+    toast.dir = I18n.direction;
+    toast.lang = I18n.get("languageCode");
     toast.setAttribute("role", "status");
 
     const text = document.createElement("span");
@@ -2751,6 +2769,11 @@
     scheduleScan();
   }
 
+  I18n.onChange(() => {
+    requestActionUpdate();
+    scheduleStorageScan();
+  });
+
   chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName !== "local") {
       return;
@@ -2779,7 +2802,10 @@
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked]) {
       requestActionUpdate();
     }
-    scheduleStorageScan();
+    if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked] ||
+        changes[Shared.STORAGE.hideComments] || changes[Shared.STORAGE.hideHomeShorts]) {
+      scheduleStorageScan();
+    }
   });
 
   document.addEventListener("visibilitychange", () => {

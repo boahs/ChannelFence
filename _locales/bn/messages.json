@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "bn"
+  },
+  "languageLabel": {
+    "message": "ভাষা"
+  },
+  "languageHelp": {
+    "message": "ChannelFence-এর ভাষা বেছে নিন। YouTube-এর ভাষার সেটিং অপরিবর্তিত থাকবে।"
+  },
+  "languageAutomatic": {
+    "message": "স্বয়ংক্রিয় (ব্রাউজারের ভাষা)"
+  },
+  "languageSaveError": {
+    "message": "ভাষার সেটিং সেভ করা যায়নি। আবার চেষ্টা করুন।"
+  },
+  "extensionName": {
+    "message": "ChannelFence - YouTube চ্যানেল ব্লকার"
+  },
+  "extensionDescription": {
+    "message": "YouTube-এর হোম, সার্চ, সুপারিশ, Shorts, মন্তব্য ও সরাসরি খোলা পৃষ্ঠায় চ্যানেল ও নির্মাতাদের ব্লক করুন।"
+  },
+  "loading": {
+    "message": "লোড হচ্ছে…"
+  },
+  "enableChannelFence": {
+    "message": "ChannelFence চালু করুন"
+  },
+  "pauseOrEnable": {
+    "message": "ChannelFence বন্ধ বা চালু করুন"
+  },
+  "currentPage": {
+    "message": "বর্তমান পৃষ্ঠা"
+  },
+  "checkingPage": {
+    "message": "এই পৃষ্ঠা পরীক্ষা করা হচ্ছে…"
+  },
+  "openCreatorHelp": {
+    "message": "নির্মাতাকে ব্লক করতে তাঁর চ্যানেল, ভিডিও বা Shorts খুলুন।"
+  },
+  "blockCreator": {
+    "message": "নির্মাতাকে ব্লক করুন"
+  },
+  "unblockCreator": {
+    "message": "নির্মাতাকে আনব্লক করুন"
+  },
+  "hideShorts": {
+    "message": "ফিডে Shorts লুকান"
+  },
+  "hideShortsSummary": {
+    "message": "হোম, সার্চ ও অন্যান্য ফিডের Shorts বিভাগ লুকিয়ে দেয়।"
+  },
+  "hideOrShowShorts": {
+    "message": "YouTube ফিডে Shorts লুকান বা দেখান"
+  },
+  "hideShortsAccessible": {
+    "message": "YouTube ফিডে Shorts লুকান"
+  },
+  "recentlyBlocked": {
+    "message": "সম্প্রতি ব্লক করা"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "এখনও কাউকে ব্লক করেননি। YouTube-এ নির্মাতার নামের পাশে ⊘ বোতামটি ব্যবহার করুন।"
+  },
+  "manageBlockList": {
+    "message": "ব্লক তালিকা দেখুন"
+  },
+  "reportBug": {
+    "message": "সমস্যা জানান"
+  },
+  "reportBugInline": {
+    "message": "সমস্যাটি জানান"
+  },
+  "privacy": {
+    "message": "গোপনীয়তা"
+  },
+  "unblock": {
+    "message": "আনব্লক করুন"
+  },
+  "unblockNamed": {
+    "message": "$CREATOR$-কে আনব্লক করুন",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "$CREATOR$-কে ব্লক করুন",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "কোনো নির্মাতাকে শনাক্ত করা যায়নি"
+  },
+  "multipleCreators": {
+    "message": "একাধিক নির্মাতা শনাক্ত হয়েছে"
+  },
+  "chooseCreator": {
+    "message": "কোন নির্মাতাকে ব্লক বা আনব্লক করবেন তা বেছে নিন।"
+  },
+  "thisCreator": {
+    "message": "এই নির্মাতা"
+  },
+  "creator": {
+    "message": "নির্মাতা"
+  },
+  "creatorIsBlocked": {
+    "message": "ChannelFence এই নির্মাতাকে শনাক্ত করতে পারে এমন সব জায়গায় তাঁকে ব্লক করা আছে।"
+  },
+  "creatorBlockHelp": {
+    "message": "ফিড, সার্চ, সুপারিশ, Shorts ও সরাসরি খোলা পৃষ্ঠায় এই নির্মাতাকে লুকিয়ে দিন।"
+  },
+  "blockedCount": {
+    "message": "ব্লক করা হয়েছে: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "সাময়িক বন্ধ"
+  },
+  "unavailable": {
+    "message": "উপলভ্য নয়"
+  },
+  "settingsPageTitle": {
+    "message": "ChannelFence সেটিংস"
+  },
+  "settingsTagline": {
+    "message": "নির্মাতাদের ব্লক করার সেটিংস"
+  },
+  "settings": {
+    "message": "সেটিংস"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence শুধু YouTube-এ কাজ করে এবং আপনার পছন্দের সেটিংস এই ডিভাইসেই রাখে।"
+  },
+  "pauseHelp": {
+    "message": "তালিকা না মুছে সব ব্লক সাময়িকভাবে বন্ধ রাখুন।"
+  },
+  "hideShortsHelp": {
+    "message": "হোম, সার্চ ও অন্যান্য ফিড থেকে Shorts বিভাগ ও কার্ড লুকিয়ে দেয়। Shorts ট্যাব ব্যবহার করা যাবে।"
+  },
+  "hideComments": {
+    "message": "ব্লক করা নির্মাতাদের মন্তব্য লুকান"
+  },
+  "hideCommentsHelp": {
+    "message": "ChannelFence মন্তব্যকারীর চ্যানেল শনাক্ত করতে পারলে তাঁর মন্তব্যও লুকিয়ে দেয়।"
+  },
+  "blockedCreators": {
+    "message": "ব্লক করা নির্মাতারা"
+  },
+  "blockListHelp": {
+    "message": "তালিকায় খুঁজুন, আনব্লক করুন বা ব্যাকআপ রাখুন। ইমপোর্ট করা তথ্য বর্তমান তালিকার সঙ্গে যোগ হয়।"
+  },
+  "manualBlockLabel": {
+    "message": "হ্যান্ডেল বা চ্যানেলের URL দিয়ে ব্লক করুন"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@নির্মাতা অথবা youtube.com/@নির্মাতা"
+  },
+  "manualBlockHelp": {
+    "message": "YouTube হ্যান্ডেল বা চ্যানেলের URL পেস্ট করুন। যাচাই করে এটি শুধু Chrome-এর এক্সটেনশনের লোকাল স্টোরেজে সেভ করা হয়।"
+  },
+  "searchBlocked": {
+    "message": "ব্লক করা নির্মাতাদের খুঁজুন"
+  },
+  "export": {
+    "message": "এক্সপোর্ট"
+  },
+  "import": {
+    "message": "ইমপোর্ট"
+  },
+  "clearAll": {
+    "message": "সব মুছুন"
+  },
+  "emptyBlockList": {
+    "message": "আপনার ব্লক তালিকা খালি।"
+  },
+  "showMore": {
+    "message": "আরও ২০০ জন দেখান"
+  },
+  "privateByDesign": {
+    "message": "গোপনীয়তাকে গুরুত্ব দিয়ে তৈরি।"
+  },
+  "settingsPrivacy": {
+    "message": "চ্যানেলের নাম, লিঙ্ক, সেটিংস ও ব্লক তালিকা Chrome-এর এক্সটেনশনের লোকাল স্টোরেজেই থাকে। ChannelFence এগুলো আমাদের বা অন্য কারও কাছে পাঠায় না।"
+  },
+  "settingsReport": {
+    "message": "ব্লক করা কোনো কনটেন্ট দেখা গেলে $LINK$।",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "ChannelFence ভালো লাগছে?"
+  },
+  "reviewHelp": {
+    "message": "Chrome ওয়েব স্টোরে সৎ রিভিউ দিলে অন্যরা এক্সটেনশনটি খুঁজে পেতে পারেন।"
+  },
+  "leaveReview": {
+    "message": "রিভিউ লিখুন"
+  },
+  "noSearchMatches": {
+    "message": "এই সার্চের সঙ্গে মেলে এমন কোনো ব্লক করা নির্মাতা নেই।"
+  },
+  "showingCreators": {
+    "message": "মোট $TOTAL$ জন মিলে যাওয়া নির্মাতার মধ্যে $VISIBLE$ জন দেখানো হচ্ছে।",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · ব্লক করা হয়েছে: $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "$CREATOR$-কে আনব্লক করা হয়েছে",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence চালু করা হয়েছে"
+  },
+  "pausedToast": {
+    "message": "ChannelFence সাময়িকভাবে বন্ধ করা হয়েছে"
+  },
+  "hideCommentsToast": {
+    "message": "ব্লক করা নির্মাতাদের মন্তব্য লুকানো হবে"
+  },
+  "showCommentsToast": {
+    "message": "মন্তব্য দেখা যাবে"
+  },
+  "hideShortsToast": {
+    "message": "ফিডে Shorts লুকানো হবে"
+  },
+  "showShortsToast": {
+    "message": "ফিডে Shorts দেখা যাবে"
+  },
+  "invalidHandle": {
+    "message": "একটি সঠিক YouTube হ্যান্ডেল বা চ্যানেলের URL লিখুন"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$-কে আগেই ব্লক করা হয়েছে",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "এই নির্মাতাকে যোগ করা যায়নি"
+  },
+  "blockedNamed": {
+    "message": "$CREATOR$-কে ব্লক করা হয়েছে",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "ব্লক তালিকা এক্সপোর্ট করা হয়েছে"
+  },
+  "importedCreatorOne": {
+    "message": "$COUNT$ জন নির্মাতাকে ইমপোর্ট করা হয়েছে",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "$COUNT$ জন নির্মাতাকে ইমপোর্ট করা হয়েছে",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "এটি সঠিক ChannelFence এক্সপোর্ট ফাইল নয়"
+  },
+  "confirmClearAll": {
+    "message": "সব $COUNT$ জন নির্মাতাকে আনব্লক করবেন?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "ব্লক তালিকা খালি করা হয়েছে"
+  },
+  "version": {
+    "message": "সংস্করণ $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "সেটিংস লোড করা যায়নি"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence: ব্লক করা হয়েছে $COUNT$ জনকে",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: সাময়িক বন্ধ"
+  },
+  "welcomeTitle": {
+    "message": "ChannelFence-এ স্বাগতম"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence প্রস্তুত"
+  },
+  "welcomeHeadline": {
+    "message": "অপছন্দের নির্মাতাকে আর দেখতে হবে না।"
+  },
+  "welcomeLead": {
+    "message": "YouTube-এর হোম ফিড, সার্চের ফলাফল, সুপারিশ, Shorts, মন্তব্য ও সরাসরি খোলা পৃষ্ঠায় অপছন্দের নির্মাতাদের ব্লক করুন।"
+  },
+  "welcomeOpenYouTube": {
+    "message": "YouTube খুলে কোনো নির্মাতাকে ব্লক করুন"
+  },
+  "welcomeIconAlt": {
+    "message": "ChannelFence-এর ব্লক করা নির্মাতার আইকন"
+  },
+  "welcomeHowItWorks": {
+    "message": "ChannelFence যেভাবে কাজ করে"
+  },
+  "welcomeFindCreator": {
+    "message": "নির্মাতাকে খুঁজুন"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "স্বাভাবিকভাবে YouTube ব্রাউজ করুন। ChannelFence নির্মাতাদের নামের পাশে ছোট একটি ⊘ বোতাম যোগ করে।"
+  },
+  "welcomeBlockOnce": {
+    "message": "একবার ব্লক করুন"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "বোতামটি চাপলে সমর্থিত YouTube পৃষ্ঠাগুলোতে সেই নির্মাতার কনটেন্ট লুকিয়ে যায়।"
+  },
+  "welcomeStayInControl": {
+    "message": "নিয়ন্ত্রণ আপনার হাতে"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "টুলবারের আইকন দিয়ে ChannelFence সাময়িকভাবে বন্ধ করতে, ব্লক ফিরিয়ে নিতে বা পুরো তালিকা পরিচালনা করতে পারবেন।"
+  },
+  "welcomePrivacy": {
+    "message": "অ্যাকাউন্ট লাগে না। ট্র্যাকিং নেই। ডেভেলপারের নিয়ন্ত্রণাধীন সার্ভার নেই। আপনার ব্লক তালিকা Chrome-এর এক্সটেনশনের লোকাল স্টোরেজেই থাকে।"
+  },
+  "privacyTitle": {
+    "message": "ChannelFence-এর গোপনীয়তা নীতি"
+  },
+  "privacyEffectiveDate": {
+    "message": "কার্যকর হওয়ার তারিখ:"
+  },
+  "privacyDate": {
+    "message": "২৭ আগস্ট ২০২৬"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence অ্যাকাউন্ট, ব্যবহার বিশ্লেষণ, বিজ্ঞাপন বা ডেভেলপারের নিয়ন্ত্রণাধীন সার্ভার ছাড়াই কাজ করার জন্য তৈরি। এর একমাত্র উদ্দেশ্য হলো ব্যবহারকারীর ডিভাইসে নিয়ন্ত্রণের ব্যবস্থা দেওয়া, যাতে YouTube ফিডে বেছে নেওয়া নির্মাতাদের এবং চাইলে Shorts বিভাগ লুকানো যায়।"
+  },
+  "privacyInformationHeading": {
+    "message": "ChannelFence যেসব তথ্য প্রক্রিয়া করে"
+  },
+  "privacyInformation": {
+    "message": "আপনি YouTube ব্যবহার করার সময় ChannelFence পৃষ্ঠার শুধু প্রয়োজনীয় সীমিত অংশ পড়ে। এর মাধ্যমে নির্মাতার নাম ও চ্যানেলের লিঙ্ক শনাক্ত করা, কোনো নির্মাতা ব্লক তালিকায় আছেন কি না দেখা, ব্লক করার বোতাম যোগ করা এবং সংশ্লিষ্ট কনটেন্ট লুকানো হয়। ব্লক তালিকা খালি না থাকলে, নির্মাতার পরিচয় না দেখানো ছোট Shorts কার্ডগুলোর তথ্য YouTube-এর oEmbed এন্ডপয়েন্ট দিয়ে যাচাই করা হয়, যাতে সেই নির্মাতারা ব্লক করা আছেন কি না বোঝা যায়। ফেরত আসা Shorts মেটাডেটা শুধু মেমরিতে ক্যাশ করা হয়; ব্রাউজিং ইতিহাস বা এক্সটেনশনের স্টোরেজে যোগ করা হয় না। আপনি কোনো নির্মাতাকে ব্লক করলে ChannelFence তাঁর প্রদর্শিত নাম, প্রকাশ্য চ্যানেল আইডি বা হ্যান্ডেল, প্রকাশ্য চ্যানেলের URL এবং ব্লক করার সময় সেভ করে। ছোট Shorts কার্ড থেকে ব্লক করলে, পৃষ্ঠা রিফ্রেশ করার পরও একই কার্ড লুকিয়ে রাখতে আপনার বেছে নেওয়া সেই প্রকাশ্য Shorts-এর পাথও নির্মাতার রেকর্ডে সেভ করা হয়।"
+  },
+  "privacyStorageHeading": {
+    "message": "তথ্য সংরক্ষণ ও পাঠানো"
+  },
+  "privacyStorage": {
+    "message": "সেটিংস ও ব্লক করা নির্মাতাদের রেকর্ড শুধু আপনার ডিভাইসে Chrome-এর এক্সটেনশনের লোকাল স্টোরেজে থাকে এবং কখনও ডেভেলপারের কাছে পাঠানো হয় না। ছোট Shorts কার্ডের তথ্য খোঁজার সময় শুধু প্রকাশ্য Shorts URL youtube.com-এ পাঠানো হয়, যাতে YouTube প্রকাশ্য নির্মাতার নাম ও চ্যানেলের URL ফেরত দিতে পারে। এই অনুরোধে অ্যাকাউন্টে প্রবেশের তথ্য থাকে না। ChannelFence ডেভেলপারের নিয়ন্ত্রণাধীন সার্ভার বা YouTube ছাড়া অন্য কোনো পরিষেবায় অনুরোধ পাঠায় না। এটি ডেটা বিক্রি করে না, বিজ্ঞাপনে ব্যবহার করে না এবং কোনো ব্যক্তিকে ব্যবহারকারীর ডেটা পড়ার অনুমতি দেয় না।"
+  },
+  "privacyPermissionsHeading": {
+    "message": "অনুমতি"
+  },
+  "privacyStorageLabel": {
+    "message": "স্টোরেজ:"
+  },
+  "privacyStoragePermission": {
+    "message": "চালু বা বন্ধ থাকার অবস্থা, ভাষার পছন্দ, মন্তব্য ও ফিডের Shorts সংক্রান্ত পছন্দ এবং ব্লক করা নির্মাতাদের তালিকা ডিভাইসেই সেভ করে।"
+  },
+  "privacyYouTubeLabel": {
+    "message": "youtube.com-এ অ্যাক্সেস:"
+  },
+  "privacyYouTubePermission": {
+    "message": "YouTube পৃষ্ঠায় নির্মাতাদের শনাক্ত করে, ব্যবহারকারীর জন্য ব্লক করার বোতাম যোগ করে এবং ব্লক করা নির্মাতাদের কনটেন্ট লুকিয়ে দেয়।"
+  },
+  "privacyControlHeading": {
+    "message": "ডেটা নিয়ন্ত্রণ ও মুছে ফেলা"
+  },
+  "privacyControl": {
+    "message": "ChannelFence সেটিংস থেকে ব্লক করা নির্মাতাদের দেখতে, তালিকা এক্সপোর্ট করতে, কাউকে আনব্লক করতে বা পুরো তালিকা খালি করতে পারবেন। ChannelFence আনইনস্টল করলে Chrome এক্সটেনশনের লোকাল স্টোরেজের ডেটা মুছে দেয়।"
+  },
+  "privacyLimitedUseHeading": {
+    "message": "সীমিত ব্যবহার"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence শুধু ব্যবহারকারীদের জন্য নির্ধারিত একমাত্র কাজটি প্রদান ও উন্নত করতে তথ্য ব্যবহার করে। বিজ্ঞাপন, ঋণসংক্রান্ত সিদ্ধান্ত, ডেটা কেনাবেচার মধ্যস্থতা বা সম্পর্কহীন কোনো উদ্দেশ্যে তথ্য পাঠানো হয় না।"
+  },
+  "privacyChangesHeading": {
+    "message": "পরিবর্তন"
+  },
+  "privacyChanges": {
+    "message": "ChannelFence-এর ডেটা ব্যবহারের পদ্ধতি বদলালে, সেই পরিবর্তন চালু হওয়ার আগেই এই নীতি ও Chrome ওয়েব স্টোরে প্রকাশিত তথ্য হালনাগাদ করা হবে।"
+  },
+  "privacyContactHeading": {
+    "message": "যোগাযোগ"
+  },
+  "privacyContact": {
+    "message": "গোপনীয়তা ও সহায়তা সংক্রান্ত প্রশ্ন $LINK$ অথবা Chrome ওয়েব স্টোরে এক্সটেনশনের পৃষ্ঠায় থাকা সহায়তার লিঙ্ক দিয়ে জমা দিতে পারবেন।",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "ChannelFence-এর সমস্যা জানানোর পৃষ্ঠা"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence এই Shorts-টি শনাক্ত করতে পারেনি।"
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence এই নির্মাতাকে শনাক্ত করতে পারেনি। আগে Shorts-টি খুলে দেখুন।"
+  },
+  "contentBlockShortCreator": {
+    "message": "ChannelFence দিয়ে এই Shorts-এর নির্মাতাকে ব্লক করুন"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: নির্মাতাকে ব্লক করুন"
+  },
+  "contentUnblockWithBrand": {
+    "message": "ChannelFence দিয়ে $CREATOR$-কে আনব্লক করুন",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "ChannelFence দিয়ে $CREATOR$-কে ব্লক করুন",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "$CREATOR$-কে ব্লক করুন",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: আনব্লক করুন"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: ব্লক করুন"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: $CREATOR$-কে আনব্লক করুন",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: $CREATOR$-কে ব্লক করুন",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "$CREATOR$-কে আনব্লক করা হয়েছে",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "ব্লক"
+  },
+  "contentCreatorBlocked": {
+    "message": "নির্মাতাকে ব্লক করা হয়েছে"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ আপনার ChannelFence ব্লক তালিকায় আছেন।",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "হোমে যান"
+  },
+  "contentUnblockContinue": {
+    "message": "আনব্লক করে এগিয়ে যান"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence এখনও এই নির্মাতাকে শনাক্ত করতে পারেনি।"
+  },
+  "contentBlocked": {
+    "message": "$CREATOR$-কে ব্লক করা হয়েছে",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "ফিরিয়ে নিন"
+  }
+}

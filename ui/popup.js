@@ -29,6 +29,12 @@ async function saveBlocked(entries) {
   renderPageContext();
 }
 
+function renderStatus() {
+  elements.status.textContent = elements.enabled.checked
+    ? I18n.get("blockedCount", String(blockedEntries.length))
+    : I18n.get("paused");
+}
+
 function renderBlockedList() {
   elements.recentList.replaceChildren();
   elements.blockedCount.textContent = String(blockedEntries.length);
@@ -44,6 +50,7 @@ function renderBlockedList() {
 
     const name = document.createElement("span");
     name.className = "mini-list__name";
+    name.dir = "auto";
     name.textContent = Shared.labelForEntry(entry);
 
     const unblock = document.createElement("button");
@@ -126,9 +133,7 @@ async function loadPageContext() {
 
 elements.enabled.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.enabled]: elements.enabled.checked });
-  elements.status.textContent = elements.enabled.checked
-    ? I18n.get("blockedCount", String(blockedEntries.length))
-    : I18n.get("paused");
+  renderStatus();
 });
 
 elements.shorts.addEventListener("change", async () => {
@@ -138,16 +143,21 @@ elements.shorts.addEventListener("change", async () => {
 elements.openOptions.addEventListener("click", () => chrome.runtime.openOptionsPage());
 
 async function initialize() {
+  await I18n.ready;
   const values = await chrome.storage.local.get(Object.keys(Shared.DEFAULTS));
   blockedEntries = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]);
   elements.enabled.checked = values[Shared.STORAGE.enabled] !== false;
   elements.shorts.checked = values[Shared.STORAGE.hideHomeShorts] === true;
-  elements.status.textContent = elements.enabled.checked
-    ? I18n.get("blockedCount", String(blockedEntries.length))
-    : I18n.get("paused");
+  renderStatus();
   renderBlockedList();
   await loadPageContext();
 }
+
+I18n.onChange(() => {
+  renderStatus();
+  renderBlockedList();
+  renderPageContext();
+});
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName !== "local") {
@@ -155,6 +165,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
   if (changes[Shared.STORAGE.enabled]) {
     elements.enabled.checked = changes[Shared.STORAGE.enabled].newValue !== false;
+    renderStatus();
   }
   if (changes[Shared.STORAGE.hideHomeShorts]) {
     elements.shorts.checked = changes[Shared.STORAGE.hideHomeShorts].newValue === true;
@@ -163,9 +174,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     blockedEntries = Shared.sanitizeBlockedEntries(
       changes[Shared.STORAGE.blocked].newValue
     );
-    elements.status.textContent = elements.enabled.checked
-      ? I18n.get("blockedCount", String(blockedEntries.length))
-      : I18n.get("paused");
+    renderStatus();
     renderBlockedList();
     renderPageContext();
   }

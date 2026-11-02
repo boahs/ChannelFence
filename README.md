@@ -57,12 +57,12 @@ When a matching video is hidden, ChannelFence also collapses its enclosing grid 
 
 After editing the extension, select **Reload** on its `chrome://extensions` card and refresh open YouTube tabs.
 
-### Test version 0.2.6 in Chrome Canary
+### Test version 0.2.8 in Chrome Canary
 
-1. Extract `dist/ChannelFence-0.2.6.zip` to a folder.
+1. Extract `dist/ChannelFence-0.2.8.zip` to a folder.
 2. In Chrome Canary, open `chrome://extensions` and disable any other ChannelFence copy in that Canary profile to avoid duplicate controls and filtering.
 3. Enable **Developer mode**, select **Load unpacked**, and choose the extracted folder containing `manifest.json`.
-4. Confirm the extension shows version **0.2.6**. To reuse your block list from another Chrome profile, export it from ChannelFence settings there and import it into the Canary copy.
+4. Confirm the extension shows version **0.2.8**. To reuse your block list from another Chrome profile, export it from ChannelFence settings there and import it into the Canary copy.
 5. Refresh open YouTube tabs. Test a two-creator and a three-creator collaboration with one identified collaborator blocked at a time, including the second or third creator when their name is available.
 6. Block from a collaboration card and check that the saved entry names the selected creator. Use **Undo**, confirm the card returns when no other collaborator is blocked, then block again and refresh to check persistence.
 7. Test an `A and 2 more` card: blocking A should hide it. Other collaborators can match only when YouTube exposes their names or channel links on the card.
@@ -70,15 +70,18 @@ After editing the extension, select **Reload** on its `chrome://extensions` card
 
 9. On a channel's Videos tab, confirm view counts and abbreviated upload ages such as `16h ago` have no creator block buttons. Real creator bylines and the channel header should keep their controls.
 
-After your Canary checks, upload the same `dist/ChannelFence-0.2.6.zip` through the Chrome Web Store Developer Dashboard.
+10. In ChannelFence settings, try the supported languages, including both Chinese variants, Hindi, Bengali, and Arabic. Confirm the popup, settings, onboarding, privacy page, and blocking controls update, including already-open pages. Reopen settings to check the saved choice. Choose Automatic to return to Chrome's interface language. Check import feedback, readable text in narrow windows, and unchanged creator names. Arabic should use a right-to-left layout while handles and URLs remain readable.
+11. Set YouTube's language separately. Check a channel's Videos page, search-result menus, watch recommendations, and compact Shorts in each supported YouTube language, including a different language from Chrome. Verify blocked creators stay hidden and Undo restores them.
+
+After your Canary checks, upload the same `dist/ChannelFence-0.2.8.zip` through the Chrome Web Store Developer Dashboard.
 
 ## Languages
 
-ChannelFence's interface is available in English and Korean. Chrome selects the translation from its interface language; other languages fall back to English. YouTube can use a different language from Chrome. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
+ChannelFence's interface is available in English, Korean, Japanese, Brazilian Portuguese, Russian, Spanish, French, German, Simplified Chinese, Traditional Chinese, Hindi, Indonesian, Bengali, Turkish, Vietnamese, Arabic, Italian, and Dutch. By default, it follows Chrome's interface language; unsupported languages fall back to English. The Language setting lets you choose any supported language or return to Automatic. The choice stays on this device and updates open ChannelFence controls. Arabic uses a right-to-left layout. YouTube keeps its own language and direction settings. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
 
-Translations are bundled locally in `_locales/<language>/messages.json`, using Chrome's built-in internationalization. No translation service or additional permission is needed. To add another Chrome-supported locale, translate the English catalog, preserve its message keys and placeholders, and validate the interface and YouTube behavior before advertising support. The Korean copy is an initial translation and still needs native-speaker review. Other locales have not yet been released as translated interfaces.
+Translations are bundled locally in `_locales/<language>/messages.json`. Automatic mode uses Chrome's built-in internationalization; manual choices read the same bundled catalogs. Chrome still selects the extension name and description shown in its own extension manager. No translation service or additional permission is needed. To add another Chrome-supported locale, translate the English catalog, preserve its message keys and placeholders, and add the locale to the language selector, runtime allowlist, and shared browser tests. Validate the interface, long text, count wording, and live YouTube behavior before advertising support. Native-speaker review is still welcome; automated tests verify completeness and behavior, not fluency.
 
-The regression suite includes Korean interface checks, English fallback, localized YouTube markup, and a separate live Korean YouTube check. Store descriptions and screenshots are localized separately in the Chrome Web Store dashboard.
+The regression suite checks each translated interface, English fallback, and localized YouTube markup. A separate CI suite checks real YouTube pages in every supported language. Store descriptions and screenshots are localized separately in the Chrome Web Store dashboard. The website is currently English; visitors can use their browser's translation feature, but bundled extension translations do not translate the website.
 
 ## Tests
 

@@ -2,6 +2,18 @@
   "languageCode": {
     "message": "en"
   },
+  "languageLabel": {
+    "message": "Language"
+  },
+  "languageHelp": {
+    "message": "Choose the language for ChannelFence. YouTube keeps its own language setting."
+  },
+  "languageAutomatic": {
+    "message": "Automatic (browser language)"
+  },
+  "languageSaveError": {
+    "message": "Could not save the language. Please try again."
+  },
   "extensionName": {
     "message": "ChannelFence – YouTube Channel Blocker"
   },
@@ -397,7 +409,7 @@
     "message": "Storage:"
   },
   "privacyStoragePermission": {
-    "message": "saves the enabled state, comment and feed-level Shorts preferences, and blocked-creator list locally."
+    "message": "saves the enabled state, language preference, comment and feed-level Shorts preferences, and blocked-creator list locally."
   },
   "privacyYouTubeLabel": {
     "message": "Access to youtube.com:"

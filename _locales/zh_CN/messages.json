@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "zh-CN"
+  },
+  "languageLabel": {
+    "message": "语言"
+  },
+  "languageHelp": {
+    "message": "选择 ChannelFence 的显示语言。YouTube 的语言设置保持不变。"
+  },
+  "languageAutomatic": {
+    "message": "自动（浏览器语言）"
+  },
+  "languageSaveError": {
+    "message": "无法保存语言设置。请重试。"
+  },
+  "extensionName": {
+    "message": "ChannelFence：YouTube 频道屏蔽工具"
+  },
+  "extensionDescription": {
+    "message": "在 YouTube 首页、搜索、推荐、Shorts、评论和直接访问的页面中屏蔽不想看的频道与创作者。"
+  },
+  "loading": {
+    "message": "正在加载…"
+  },
+  "enableChannelFence": {
+    "message": "启用 ChannelFence"
+  },
+  "pauseOrEnable": {
+    "message": "暂停或启用 ChannelFence"
+  },
+  "currentPage": {
+    "message": "当前页面"
+  },
+  "checkingPage": {
+    "message": "正在检查此页面…"
+  },
+  "openCreatorHelp": {
+    "message": "打开频道、视频或 Shorts，即可屏蔽其创作者。"
+  },
+  "blockCreator": {
+    "message": "屏蔽创作者"
+  },
+  "unblockCreator": {
+    "message": "解除屏蔽创作者"
+  },
+  "hideShorts": {
+    "message": "隐藏信息流中的 Shorts"
+  },
+  "hideShortsSummary": {
+    "message": "隐藏首页、搜索等信息流中的 Shorts 栏目。"
+  },
+  "hideOrShowShorts": {
+    "message": "隐藏或显示 YouTube 信息流中的 Shorts"
+  },
+  "hideShortsAccessible": {
+    "message": "隐藏 YouTube 信息流中的 Shorts"
+  },
+  "recentlyBlocked": {
+    "message": "最近屏蔽"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "还没有屏蔽任何创作者。点击 YouTube 创作者名称旁的 ⊘ 按钮即可屏蔽。"
+  },
+  "manageBlockList": {
+    "message": "管理屏蔽列表"
+  },
+  "reportBug": {
+    "message": "报告问题"
+  },
+  "reportBugInline": {
+    "message": "请报告问题"
+  },
+  "privacy": {
+    "message": "隐私"
+  },
+  "unblock": {
+    "message": "解除屏蔽"
+  },
+  "unblockNamed": {
+    "message": "解除对 $CREATOR$ 的屏蔽",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "屏蔽 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "未识别到创作者"
+  },
+  "multipleCreators": {
+    "message": "识别到多位创作者"
+  },
+  "chooseCreator": {
+    "message": "选择要屏蔽或解除屏蔽的创作者。"
+  },
+  "thisCreator": {
+    "message": "此创作者"
+  },
+  "creator": {
+    "message": "创作者"
+  },
+  "creatorIsBlocked": {
+    "message": "在 ChannelFence 能识别此创作者的所有位置，均已将其屏蔽。"
+  },
+  "creatorBlockHelp": {
+    "message": "在信息流、搜索、推荐、Shorts 和直接访问的页面中隐藏此创作者。"
+  },
+  "blockedCount": {
+    "message": "已屏蔽 $COUNT$ 位",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "已暂停"
+  },
+  "unavailable": {
+    "message": "不可用"
+  },
+  "settingsPageTitle": {
+    "message": "ChannelFence 设置"
+  },
+  "settingsTagline": {
+    "message": "创作者屏蔽设置"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence 仅在 YouTube 上运行，并将偏好设置保存在此设备上。"
+  },
+  "pauseHelp": {
+    "message": "暂停所有屏蔽功能，同时保留列表。"
+  },
+  "hideShortsHelp": {
+    "message": "隐藏首页、搜索和其他信息流中的 Shorts 栏目与卡片。Shorts 标签页仍可使用。"
+  },
+  "hideComments": {
+    "message": "隐藏已屏蔽创作者的评论"
+  },
+  "hideCommentsHelp": {
+    "message": "当 ChannelFence 能识别评论者的频道时，也会隐藏其评论。"
+  },
+  "blockedCreators": {
+    "message": "已屏蔽的创作者"
+  },
+  "blockListHelp": {
+    "message": "搜索、解除屏蔽或备份列表。导入的条目会合并到当前列表中。"
+  },
+  "manualBlockLabel": {
+    "message": "通过标识名或频道网址屏蔽"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@creator 或 youtube.com/@creator"
+  },
+  "manualBlockHelp": {
+    "message": "粘贴 YouTube 标识名或频道网址。验证后，仅保存在 Chrome 的扩展程序本地存储中。"
+  },
+  "searchBlocked": {
+    "message": "搜索已屏蔽的创作者"
+  },
+  "export": {
+    "message": "导出"
+  },
+  "import": {
+    "message": "导入"
+  },
+  "clearAll": {
+    "message": "全部清空"
+  },
+  "emptyBlockList": {
+    "message": "屏蔽列表为空。"
+  },
+  "showMore": {
+    "message": "再显示 200 位"
+  },
+  "privateByDesign": {
+    "message": "以保护隐私为设计原则。"
+  },
+  "settingsPrivacy": {
+    "message": "频道名称、频道链接、设置和屏蔽列表均保存在 Chrome 的扩展程序本地存储中。ChannelFence 不会将这些数据发送给我们或任何其他人。"
+  },
+  "settingsReport": {
+    "message": "如果仍然出现应被屏蔽的内容，$LINK$。",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "觉得 ChannelFence 好用吗？"
+  },
+  "reviewHelp": {
+    "message": "在 Chrome 应用商店留下真实评价，可以帮助更多人发现它。"
+  },
+  "leaveReview": {
+    "message": "撰写评价"
+  },
+  "noSearchMatches": {
+    "message": "没有找到符合搜索条件的已屏蔽创作者。"
+  },
+  "showingCreators": {
+    "message": "共找到 $TOTAL$ 位创作者，当前显示 $VISIBLE$ 位。",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · 屏蔽时间：$DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "已解除对 $CREATOR$ 的屏蔽",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "已启用 ChannelFence"
+  },
+  "pausedToast": {
+    "message": "已暂停 ChannelFence"
+  },
+  "hideCommentsToast": {
+    "message": "将隐藏已屏蔽创作者的评论"
+  },
+  "showCommentsToast": {
+    "message": "评论将继续显示"
+  },
+  "hideShortsToast": {
+    "message": "将隐藏信息流中的 Shorts"
+  },
+  "showShortsToast": {
+    "message": "Shorts 将继续显示在信息流中"
+  },
+  "invalidHandle": {
+    "message": "请输入有效的 YouTube 标识名或频道网址"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ 已被屏蔽",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "无法添加此创作者"
+  },
+  "blockedNamed": {
+    "message": "已屏蔽 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "已导出屏蔽列表"
+  },
+  "importedCreatorOne": {
+    "message": "已导入 $COUNT$ 位创作者",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "已导入 $COUNT$ 位创作者",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "此文件不是有效的 ChannelFence 导出文件"
+  },
+  "confirmClearAll": {
+    "message": "要解除对全部 $COUNT$ 位创作者的屏蔽吗？",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "已清空屏蔽列表"
+  },
+  "version": {
+    "message": "版本 $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "无法加载设置"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence：已屏蔽 $COUNT$ 位",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence：已暂停"
+  },
+  "welcomeTitle": {
+    "message": "欢迎使用 ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence 已准备就绪"
+  },
+  "welcomeHeadline": {
+    "message": "不再看到不想看的创作者。"
+  },
+  "welcomeLead": {
+    "message": "在 YouTube 首页信息流、搜索结果、推荐、Shorts、评论和直接访问的页面中，屏蔽不想看的创作者。"
+  },
+  "welcomeOpenYouTube": {
+    "message": "打开 YouTube 并屏蔽创作者"
+  },
+  "welcomeIconAlt": {
+    "message": "ChannelFence 已屏蔽创作者图标"
+  },
+  "welcomeHowItWorks": {
+    "message": "如何使用 ChannelFence"
+  },
+  "welcomeFindCreator": {
+    "message": "找到创作者"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "像平时一样浏览 YouTube。ChannelFence 会在创作者名称旁添加一个小型 ⊘ 按钮。"
+  },
+  "welcomeBlockOnce": {
+    "message": "屏蔽一次即可"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "点击按钮后，该创作者的内容就会在受支持的 YouTube 界面中隐藏。"
+  },
+  "welcomeStayInControl": {
+    "message": "随时管理屏蔽设置"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "通过工具栏图标，可以暂停 ChannelFence、撤销屏蔽或管理完整列表。"
+  },
+  "welcomePrivacy": {
+    "message": "无需账号。不进行跟踪。没有开发者控制的服务器。屏蔽列表保存在 Chrome 的扩展程序本地存储中。"
+  },
+  "privacyTitle": {
+    "message": "ChannelFence 隐私政策"
+  },
+  "privacyEffectiveDate": {
+    "message": "生效日期："
+  },
+  "privacyDate": {
+    "message": "2026年8月27日"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence 的设计不需要账号、分析工具、广告或开发者控制的服务器。它唯一的用途是在本地提供控制功能，让用户在 YouTube 信息流中隐藏选定的创作者，并可选择隐藏 Shorts 栏目。"
+  },
+  "privacyInformationHeading": {
+    "message": "ChannelFence 处理的信息"
+  },
+  "privacyInformation": {
+    "message": "使用 YouTube 时，ChannelFence 仅会读取必要的有限页面内容，用于识别创作者名称和频道链接、判断创作者是否在屏蔽列表中、添加屏蔽按钮，以及隐藏匹配的内容。当屏蔽列表不为空时，对于未显示创作者的小型 Shorts 卡片，ChannelFence 会通过 YouTube 的 oEmbed 接口查询，以判断其创作者是否已被屏蔽。返回的 Shorts 元数据仅缓存在内存中，不会添加到浏览记录或扩展程序存储中。当你选择屏蔽创作者时，ChannelFence 会保存其显示名称、公开频道 ID 或标识名、公开频道网址，以及屏蔽时间。如果从小型 Shorts 卡片进行屏蔽，ChannelFence 还会在该创作者的记录中保存你所选择的公开 Shorts 路径，以确保刷新页面后同一卡片仍保持隐藏。"
+  },
+  "privacyStorageHeading": {
+    "message": "存储与传输"
+  },
+  "privacyStorage": {
+    "message": "设置和已屏蔽创作者的记录仅保存在你设备上的 Chrome 扩展程序本地存储中，绝不会传输给开发者。查询小型 Shorts 卡片时，仅向 youtube.com 发送公开的 Shorts 网址，以便 YouTube 返回公开的创作者名称和频道网址。请求不包含账号凭据。ChannelFence 不会向开发者控制的服务器或任何非 YouTube 服务发送请求。它不会出售数据、将数据用于广告，也不会允许人员读取用户数据。"
+  },
+  "privacyPermissionsHeading": {
+    "message": "权限"
+  },
+  "privacyStorageLabel": {
+    "message": "存储："
+  },
+  "privacyStoragePermission": {
+    "message": "在本地保存启用状态、语言偏好、评论和信息流中的 Shorts 偏好设置，以及已屏蔽创作者列表。"
+  },
+  "privacyYouTubeLabel": {
+    "message": "访问 youtube.com："
+  },
+  "privacyYouTubePermission": {
+    "message": "识别 YouTube 页面中的创作者，添加供用户操作的屏蔽按钮，并隐藏已屏蔽创作者的内容。"
+  },
+  "privacyControlHeading": {
+    "message": "数据管理与删除"
+  },
+  "privacyControl": {
+    "message": "你可以在 ChannelFence 设置中查看、导出、解除屏蔽或清空已屏蔽创作者列表。卸载 ChannelFence 后，Chrome 会删除扩展程序在本地保存的数据。"
+  },
+  "privacyLimitedUseHeading": {
+    "message": "限制使用"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence 仅为提供和改进其面向用户的单一功能而使用信息。不会为广告、信用决策、数据交易或其他无关目的传输信息。"
+  },
+  "privacyChangesHeading": {
+    "message": "变更"
+  },
+  "privacyChanges": {
+    "message": "如果 ChannelFence 的数据处理方式发生变更，我们会在实施变更前更新本政策及 Chrome 应用商店中的披露信息。"
+  },
+  "privacyContactHeading": {
+    "message": "联系我们"
+  },
+  "privacyContact": {
+    "message": "有关隐私和支持的问题，可通过 $LINK$ 或 Chrome 应用商店详情页中的支持链接提交。",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "ChannelFence 问题跟踪页面"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence 无法识别此 Shorts 短视频。"
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence 无法识别此创作者。请先尝试打开 Shorts 短视频。"
+  },
+  "contentBlockShortCreator": {
+    "message": "使用 ChannelFence 屏蔽此 Shorts 的创作者"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence：屏蔽创作者"
+  },
+  "contentUnblockWithBrand": {
+    "message": "使用 ChannelFence 解除对 $CREATOR$ 的屏蔽",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "使用 ChannelFence 屏蔽 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "屏蔽 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence：解除屏蔽"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence：屏蔽"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence：解除对 $CREATOR$ 的屏蔽",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence：屏蔽 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "已解除对 $CREATOR$ 的屏蔽",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "屏蔽"
+  },
+  "contentCreatorBlocked": {
+    "message": "创作者已被屏蔽"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ 在你的 ChannelFence 屏蔽列表中。",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "前往首页"
+  },
+  "contentUnblockContinue": {
+    "message": "解除屏蔽并继续"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence 暂时无法识别此创作者。"
+  },
+  "contentBlocked": {
+    "message": "已屏蔽 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "撤销"
+  }
+}

@@ -4,6 +4,7 @@ const Shared = globalThis.ChannelFenceShared;
 const I18n = globalThis.ChannelFenceI18n;
 const elements = {
   version: document.getElementById("version"),
+  language: document.getElementById("languageSelect"),
   enabled: document.getElementById("enabledToggle"),
   shorts: document.getElementById("shortsToggle"),
   comments: document.getElementById("commentsToggle"),
@@ -43,7 +44,7 @@ function avatarLetter(entry) {
 
 function formatDate(value) {
   const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? "" : date.toLocaleDateString();
+  return Number.isNaN(date.valueOf()) ? "" : date.toLocaleDateString(I18n.get("languageCode"));
 }
 
 async function persistBlocked(entries, message) {
@@ -87,12 +88,15 @@ function renderList() {
     const details = document.createElement("div");
     const name = document.createElement("div");
     name.className = "block-list__name";
+    name.dir = "auto";
     name.textContent = Shared.labelForEntry(entry);
     const meta = document.createElement("div");
     meta.className = "block-list__meta";
+    // Isolate dynamic identifiers and dates so RTL text cannot reorder them.
+    const isolatedKey = `\u2068${entry.key}\u2069`;
     meta.textContent = entry.blockedAt
-      ? I18n.get("blockedEntryDetails", [entry.key, formatDate(entry.blockedAt)])
-      : entry.key;
+      ? I18n.get("blockedEntryDetails", [isolatedKey, `\u2068${formatDate(entry.blockedAt)}\u2069`])
+      : isolatedKey;
     details.append(name, meta);
 
     const unblock = document.createElement("button");
@@ -122,6 +126,27 @@ function scheduleRenderList() {
     renderList();
   });
 }
+
+function renderLocalizedUI() {
+  clearTimeout(toastTimer);
+  elements.toast.classList.remove("toast--visible");
+  elements.toast.textContent = "";
+  elements.language.value = I18n.language;
+  elements.version.textContent = I18n.get("version", chrome.runtime.getManifest().version);
+  renderList();
+}
+
+elements.language.addEventListener("change", async () => {
+  elements.language.disabled = true;
+  try {
+    await chrome.storage.local.set({ [Shared.STORAGE.language]: elements.language.value });
+  } catch {
+    elements.language.value = I18n.language;
+    showToast(I18n.get("languageSaveError"));
+  } finally {
+    elements.language.disabled = false;
+  }
+});
 
 elements.enabled.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.enabled]: elements.enabled.checked });
@@ -238,14 +263,17 @@ elements.clearButton.addEventListener("click", async () => {
 });
 
 async function initialize() {
+  await I18n.ready;
   const values = await chrome.storage.local.get(Object.keys(Shared.DEFAULTS));
   blockedEntries = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]);
   elements.enabled.checked = values[Shared.STORAGE.enabled] !== false;
   elements.shorts.checked = values[Shared.STORAGE.hideHomeShorts] === true;
   elements.comments.checked = values[Shared.STORAGE.hideComments] !== false;
-  elements.version.textContent = I18n.get("version", chrome.runtime.getManifest().version);
-  renderList();
+  renderLocalizedUI();
+  elements.language.disabled = false;
 }
+
+I18n.onChange(renderLocalizedUI);
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName !== "local") {

@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "zh-TW"
+  },
+  "languageLabel": {
+    "message": "語言"
+  },
+  "languageHelp": {
+    "message": "選擇 ChannelFence 的顯示語言。YouTube 的語言設定不會變更。"
+  },
+  "languageAutomatic": {
+    "message": "自動（瀏覽器語言）"
+  },
+  "languageSaveError": {
+    "message": "無法儲存語言設定，請再試一次。"
+  },
+  "extensionName": {
+    "message": "ChannelFence：YouTube 頻道封鎖工具"
+  },
+  "extensionDescription": {
+    "message": "在 YouTube 首頁、搜尋、推薦內容、Shorts、留言及直接開啟的頁面中，封鎖不想看的頻道與創作者。"
+  },
+  "loading": {
+    "message": "載入中…"
+  },
+  "enableChannelFence": {
+    "message": "啟用 ChannelFence"
+  },
+  "pauseOrEnable": {
+    "message": "暫停或啟用 ChannelFence"
+  },
+  "currentPage": {
+    "message": "目前頁面"
+  },
+  "checkingPage": {
+    "message": "正在檢查此頁面…"
+  },
+  "openCreatorHelp": {
+    "message": "開啟頻道、影片或 Shorts 短片，即可封鎖該創作者。"
+  },
+  "blockCreator": {
+    "message": "封鎖創作者"
+  },
+  "unblockCreator": {
+    "message": "解除封鎖創作者"
+  },
+  "hideShorts": {
+    "message": "隱藏動態消息中的 Shorts"
+  },
+  "hideShortsSummary": {
+    "message": "隱藏首頁、搜尋等動態消息中的 Shorts 專區。"
+  },
+  "hideOrShowShorts": {
+    "message": "隱藏或顯示 YouTube 動態消息中的 Shorts"
+  },
+  "hideShortsAccessible": {
+    "message": "隱藏 YouTube 動態消息中的 Shorts"
+  },
+  "recentlyBlocked": {
+    "message": "最近封鎖"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "尚未封鎖任何創作者。使用 YouTube 創作者名稱旁的 ⊘ 按鈕即可封鎖。"
+  },
+  "manageBlockList": {
+    "message": "管理封鎖清單"
+  },
+  "reportBug": {
+    "message": "回報問題"
+  },
+  "reportBugInline": {
+    "message": "請回報問題"
+  },
+  "privacy": {
+    "message": "隱私權"
+  },
+  "unblock": {
+    "message": "解除封鎖"
+  },
+  "unblockNamed": {
+    "message": "解除封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "未辨識到創作者"
+  },
+  "multipleCreators": {
+    "message": "辨識到多位創作者"
+  },
+  "chooseCreator": {
+    "message": "選擇要封鎖或解除封鎖的創作者。"
+  },
+  "thisCreator": {
+    "message": "這位創作者"
+  },
+  "creator": {
+    "message": "創作者"
+  },
+  "creatorIsBlocked": {
+    "message": "在 ChannelFence 能辨識這位創作者的所有位置，都已將其封鎖。"
+  },
+  "creatorBlockHelp": {
+    "message": "在動態消息、搜尋、推薦內容、Shorts 及直接開啟的頁面中隱藏這位創作者。"
+  },
+  "blockedCount": {
+    "message": "已封鎖 $COUNT$ 位",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "已暫停"
+  },
+  "unavailable": {
+    "message": "無法使用"
+  },
+  "settingsPageTitle": {
+    "message": "ChannelFence 設定"
+  },
+  "settingsTagline": {
+    "message": "創作者封鎖設定"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence 僅在 YouTube 上運作，並將偏好設定保存在這部裝置上。"
+  },
+  "pauseHelp": {
+    "message": "暫停所有封鎖功能，同時保留清單。"
+  },
+  "hideShortsHelp": {
+    "message": "隱藏首頁、搜尋和其他動態消息中的 Shorts 專區與卡片。Shorts 分頁仍可使用。"
+  },
+  "hideComments": {
+    "message": "隱藏已封鎖創作者的留言"
+  },
+  "hideCommentsHelp": {
+    "message": "當 ChannelFence 能辨識留言者的頻道時，也會隱藏其留言。"
+  },
+  "blockedCreators": {
+    "message": "已封鎖的創作者"
+  },
+  "blockListHelp": {
+    "message": "搜尋、解除封鎖或備份清單。匯入的項目會合併至目前的清單。"
+  },
+  "manualBlockLabel": {
+    "message": "透過帳號代碼或頻道網址封鎖"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@creator 或 youtube.com/@creator"
+  },
+  "manualBlockHelp": {
+    "message": "貼上 YouTube 帳號代碼或頻道網址。驗證後，僅儲存於 Chrome 的擴充功能本機儲存空間。"
+  },
+  "searchBlocked": {
+    "message": "搜尋已封鎖的創作者"
+  },
+  "export": {
+    "message": "匯出"
+  },
+  "import": {
+    "message": "匯入"
+  },
+  "clearAll": {
+    "message": "全部清除"
+  },
+  "emptyBlockList": {
+    "message": "封鎖清單目前是空的。"
+  },
+  "showMore": {
+    "message": "再顯示 200 位"
+  },
+  "privateByDesign": {
+    "message": "以保護隱私為設計原則。"
+  },
+  "settingsPrivacy": {
+    "message": "頻道名稱、頻道連結、設定與封鎖清單都保存在 Chrome 的擴充功能本機儲存空間。ChannelFence 不會將這些資料傳送給我們或任何其他人。"
+  },
+  "settingsReport": {
+    "message": "如果仍看到應被封鎖的內容，$LINK$。",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "喜歡 ChannelFence 嗎？"
+  },
+  "reviewHelp": {
+    "message": "在 Chrome 線上應用程式商店留下真實評論，可以幫助更多人找到它。"
+  },
+  "leaveReview": {
+    "message": "撰寫評論"
+  },
+  "noSearchMatches": {
+    "message": "找不到符合搜尋條件的已封鎖創作者。"
+  },
+  "showingCreators": {
+    "message": "共找到 $TOTAL$ 位創作者，目前顯示 $VISIBLE$ 位。",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · 封鎖時間：$DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "已解除封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "已啟用 ChannelFence"
+  },
+  "pausedToast": {
+    "message": "已暫停 ChannelFence"
+  },
+  "hideCommentsToast": {
+    "message": "將隱藏已封鎖創作者的留言"
+  },
+  "showCommentsToast": {
+    "message": "留言將繼續顯示"
+  },
+  "hideShortsToast": {
+    "message": "將隱藏動態消息中的 Shorts"
+  },
+  "showShortsToast": {
+    "message": "Shorts 將繼續顯示在動態消息中"
+  },
+  "invalidHandle": {
+    "message": "請輸入有效的 YouTube 帳號代碼或頻道網址"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ 已被封鎖",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "無法新增這位創作者"
+  },
+  "blockedNamed": {
+    "message": "已封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "已匯出封鎖清單"
+  },
+  "importedCreatorOne": {
+    "message": "已匯入 $COUNT$ 位創作者",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "已匯入 $COUNT$ 位創作者",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "這個檔案不是有效的 ChannelFence 匯出檔案"
+  },
+  "confirmClearAll": {
+    "message": "要解除封鎖全部 $COUNT$ 位創作者嗎？",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "已清空封鎖清單"
+  },
+  "version": {
+    "message": "版本 $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "無法載入設定"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence：已封鎖 $COUNT$ 位",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence：已暫停"
+  },
+  "welcomeTitle": {
+    "message": "歡迎使用 ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence 已準備就緒"
+  },
+  "welcomeHeadline": {
+    "message": "不再看到不想看的創作者。"
+  },
+  "welcomeLead": {
+    "message": "在 YouTube 首頁動態消息、搜尋結果、推薦內容、Shorts、留言及直接開啟的頁面中，封鎖不想看的創作者。"
+  },
+  "welcomeOpenYouTube": {
+    "message": "開啟 YouTube 並封鎖創作者"
+  },
+  "welcomeIconAlt": {
+    "message": "ChannelFence 已封鎖創作者圖示"
+  },
+  "welcomeHowItWorks": {
+    "message": "如何使用 ChannelFence"
+  },
+  "welcomeFindCreator": {
+    "message": "找到創作者"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "像平常一樣瀏覽 YouTube。ChannelFence 會在創作者名稱旁加入一個小型 ⊘ 按鈕。"
+  },
+  "welcomeBlockOnce": {
+    "message": "封鎖一次即可"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "按下按鈕後，這位創作者的內容就會從支援的 YouTube 介面中隱藏。"
+  },
+  "welcomeStayInControl": {
+    "message": "隨時管理封鎖設定"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "使用工具列圖示，即可暫停 ChannelFence、復原封鎖或管理完整清單。"
+  },
+  "welcomePrivacy": {
+    "message": "不需帳戶。不進行追蹤。沒有開發者控管的伺服器。封鎖清單保存在 Chrome 的擴充功能本機儲存空間。"
+  },
+  "privacyTitle": {
+    "message": "ChannelFence 隱私權政策"
+  },
+  "privacyEffectiveDate": {
+    "message": "生效日期："
+  },
+  "privacyDate": {
+    "message": "2026年8月27日"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence 的設計不需要帳戶、使用情況分析、廣告或開發者控管的伺服器。唯一的用途是在本機提供控制功能，讓使用者在 YouTube 動態消息中隱藏選取的創作者，並可選擇隱藏 Shorts 專區。"
+  },
+  "privacyInformationHeading": {
+    "message": "ChannelFence 處理的資訊"
+  },
+  "privacyInformation": {
+    "message": "使用 YouTube 時，ChannelFence 僅會讀取必要的有限頁面內容，用來辨識創作者名稱與頻道連結、判斷創作者是否在封鎖清單中、加入封鎖按鈕，以及隱藏符合條件的內容。當封鎖清單不是空的時，對於未顯示創作者的精簡版 Shorts 卡片，ChannelFence 會透過 YouTube 的 oEmbed 端點查詢，以判斷其創作者是否已被封鎖。傳回的 Shorts 中繼資料僅快取於記憶體中，不會加入瀏覽記錄或擴充功能儲存空間。當你選擇封鎖創作者時，ChannelFence 會儲存其顯示名稱、公開頻道識別碼或帳號代碼、公開頻道網址，以及建立封鎖的時間。如果從精簡版 Shorts 卡片進行封鎖，ChannelFence 還會將你所選取的公開 Shorts 路徑儲存於該創作者的記錄中，確保重新整理頁面後，同一卡片仍維持隱藏。"
+  },
+  "privacyStorageHeading": {
+    "message": "儲存與傳輸"
+  },
+  "privacyStorage": {
+    "message": "設定與已封鎖創作者的記錄，僅儲存在你裝置上的 Chrome 擴充功能本機儲存空間，絕不會傳送給開發者。查詢精簡版 Shorts 卡片時，只會將公開的 Shorts 網址傳送至 youtube.com，讓 YouTube 傳回公開的創作者名稱與頻道網址。這些要求不包含帳戶憑證。ChannelFence 不會向開發者控管的伺服器或任何非 YouTube 服務發送要求。它不會販售資料、將資料用於廣告，也不會允許人員讀取使用者資料。"
+  },
+  "privacyPermissionsHeading": {
+    "message": "權限"
+  },
+  "privacyStorageLabel": {
+    "message": "儲存空間："
+  },
+  "privacyStoragePermission": {
+    "message": "在本機儲存啟用狀態、語言偏好、留言與動態消息中的 Shorts 偏好設定，以及已封鎖創作者清單。"
+  },
+  "privacyYouTubeLabel": {
+    "message": "存取 youtube.com："
+  },
+  "privacyYouTubePermission": {
+    "message": "辨識 YouTube 頁面中的創作者，加入供使用者操作的封鎖按鈕，並隱藏已封鎖創作者的內容。"
+  },
+  "privacyControlHeading": {
+    "message": "資料管理與刪除"
+  },
+  "privacyControl": {
+    "message": "你可以在 ChannelFence 設定中查看、匯出、解除封鎖或清除已封鎖創作者清單。解除安裝 ChannelFence 後，Chrome 會刪除擴充功能儲存在本機的資料。"
+  },
+  "privacyLimitedUseHeading": {
+    "message": "限制使用"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence 僅為提供及改善其面向使用者的單一功能而使用資訊。不會為廣告、信用決策、資料仲介或其他無關目的傳輸資訊。"
+  },
+  "privacyChangesHeading": {
+    "message": "變更"
+  },
+  "privacyChanges": {
+    "message": "如果 ChannelFence 的資料處理方式有變更，我們會在實施前更新本政策及 Chrome 線上應用程式商店中的揭露資訊。"
+  },
+  "privacyContactHeading": {
+    "message": "聯絡我們"
+  },
+  "privacyContact": {
+    "message": "隱私權與支援相關問題，可透過 $LINK$ 或 Chrome 線上應用程式商店詳細資料頁面的支援連結提交。",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "ChannelFence 問題追蹤頁面"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence 無法辨識這部 Shorts 短片。"
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence 無法辨識這位創作者。請先嘗試開啟 Shorts 短片。"
+  },
+  "contentBlockShortCreator": {
+    "message": "使用 ChannelFence 封鎖這部 Shorts 的創作者"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence：封鎖創作者"
+  },
+  "contentUnblockWithBrand": {
+    "message": "使用 ChannelFence 解除封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "使用 ChannelFence 封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence：解除封鎖"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence：封鎖"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence：解除封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence：封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "已解除封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "封鎖"
+  },
+  "contentCreatorBlocked": {
+    "message": "創作者已被封鎖"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ 在你的 ChannelFence 封鎖清單中。",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "前往首頁"
+  },
+  "contentUnblockContinue": {
+    "message": "解除封鎖並繼續"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence 目前無法辨識這位創作者。"
+  },
+  "contentBlocked": {
+    "message": "已封鎖 $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "復原"
+  }
+}

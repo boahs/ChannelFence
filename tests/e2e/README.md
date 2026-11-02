@@ -10,13 +10,18 @@ The browser suite launches ChannelFence as a real unpacked Manifest V3 extension
 - `smoke/` covers the primary block, hide, and undo journey.
 - `regression/` covers known bugs and secondary surfaces, including late-populated and hidden search bylines, description mentions, linked and combined-name collaboration owners, linkless right-rail recommendations, compact Shorts cards and menus, feed-wide Shorts hiding, and manual handle entry.
 - `regression/feed-layout.spec.ts` checks card positions across Home rows after blocking, Undo, pause/resume, creator-label updates, and renderer reuse, including full-width shelf boundaries.
-- `regression/localized-ui.spec.ts` checks Korean extension controls, Korean handles, and English fallback in an untranslated browser locale. It also verifies that translating ChannelFence does not change YouTube's language.
+- `fixtures/locales.ts` lists the supported locales and keeps Chrome catalog codes, browser locales, and YouTube language settings separate, including Simplified and Traditional Chinese. `allLocales` includes English; `translatedLocales` contains the other interfaces.
+- `regression/localized-ui.spec.ts` checks translated extension controls, Unicode handles, import counts, privacy links, and narrow layouts for every locale in the shared table. It also verifies automatic Latin American Spanish fallback to the base Spanish catalog, English fallback for Polish, and that translating ChannelFence does not change YouTube's language.
+- `regression/language-override.spec.ts` changes every language through settings in an English browser, checks persistence and updates in open extension pages, and returns to automatic. It also checks existing YouTube controls, the toolbar title, and the blocked-channel overlay without changing creator identity.
+- `regression/rtl-language.spec.ts` checks Arabic and English overrides on pages with the opposite direction, including open menus and blocked-channel overlays, while preserving YouTube's document and creator identity.
 - `regression/localized-youtube.spec.ts` covers localized creator labels and statistics independently of the browser's interface language.
 - `live/` verifies injection plus current search-result, compact Shorts blocking, and watch-page right-rail compatibility against the real YouTube origin; it is not part of the normal local or pull-request run.
 
 The deterministic tests fulfill navigation requests at `https://www.youtube.com/` with local HTML. The real content scripts and styles still load because the document has a manifest-matched YouTube URL, while the test avoids network data, accounts, recommendations, ads, and YouTube A/B experiments.
 
-`live/youtube-locales.spec.ts` verifies Korean YouTube using a Korean browser profile and asserts the rendered document language. Its regression markup comes from public, logged-out YouTube pages captured in CI. Run live validation through the existing **Live YouTube Playwright tests** workflow with **Run workflow** on the work branch. The workflow uploads Playwright diagnostics on manual runs as well as scheduled runs.
+`live/youtube-locales.spec.ts` shares channel-header, search-menu, watch-recommendation, compact Shorts, and Shorts viewer layout journeys across every supported locale in the shared table. It asserts Chrome's actual interface language and YouTube's rendered document language, distinguishing Simplified from Traditional Chinese. The locale journeys use public, logged-out YouTube surfaces and capture relevant markup when a test fails. Run live validation through the existing **Live YouTube Playwright tests** workflow with **Run workflow** on the work branch. The workflow uploads Playwright diagnostics on manual runs as well as scheduled runs.
+
+Successful locale tests attach action-named screenshots for visual review. Names beginning with the catalog code and `ui` show extension pages, `live` shows the real YouTube site, and `fixture` shows controls on deterministic test pages. These generated images stay in the ignored Playwright reports and are not source assets.
 
 Tests can set `test.use({ locale: "ko-KR" })` to select the browser and extension interface language. `YouTubeSurfacePage.open(body, path, "ko")` selects the fixture document's language independently. Translated catalogs alone do not establish compatibility with every YouTube locale.
 
@@ -30,10 +35,10 @@ npm run test:e2e:live
 npm run test:report
 ```
 
-To test an extracted release ZIP, set `CHANNELFENCE_EXTENSION_PATH` to the extracted folder containing `manifest.json`. For example, after extracting to `dist/ChannelFence-0.2.6`:
+To test an extracted release ZIP, set `CHANNELFENCE_EXTENSION_PATH` to the extracted folder containing `manifest.json`. For example, after extracting to `dist/ChannelFence-0.2.8`:
 
 ```powershell
-$env:CHANNELFENCE_EXTENSION_PATH = (Resolve-Path .\dist\ChannelFence-0.2.6).Path
+$env:CHANNELFENCE_EXTENSION_PATH = (Resolve-Path .\dist\ChannelFence-0.2.8).Path
 try { npm run test:e2e } finally { Remove-Item Env:CHANNELFENCE_EXTENSION_PATH }
 ```
 
@@ -41,4 +46,4 @@ Without this override, the fixture loads the extension from the project director
 
 When a YouTube DOM change causes a bug, first represent the smallest relevant markup in `youtube-fixtures.ts`, then add a focused spec named after the user-visible behavior. Keep the live suite small; behavior belongs in the deterministic suite whenever possible.
 
-For release testing against the current YouTube layout, follow the [Chrome Canary steps in the README](../../README.md#test-version-026-in-chrome-canary) and the [collaboration and feed layout acceptance checks](../../store/submission-checklist.md#collaboration-and-feed-layout-checks-for-026). Test two- and three-creator bylines, collapsed `A and 2 more` labels, existing individual blocks, Undo, and persistence after refresh. Confirm remaining videos fill blocked grid slots across rows, including after pausing and resuming filtering, and that full-width shelves keep their position. A collapsed label can identify unnamed collaborators only if YouTube also exposes their full names or channel links.
+For release testing against the current YouTube layout, follow the [Chrome Canary steps in the README](../../README.md#test-version-028-in-chrome-canary) and the [collaboration and feed layout acceptance checks](../../store/submission-checklist.md#collaboration-and-feed-layout-checks-for-026). Test two- and three-creator bylines, collapsed `A and 2 more` labels, existing individual blocks, Undo, and persistence after refresh. Confirm remaining videos fill blocked grid slots across rows, including after pausing and resuming filtering, and that full-width shelves keep their position. A collapsed label can identify unnamed collaborators only if YouTube also exposes their full names or channel links.

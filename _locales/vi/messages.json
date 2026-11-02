@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "vi"
+  },
+  "languageLabel": {
+    "message": "Ngôn ngữ"
+  },
+  "languageHelp": {
+    "message": "Chọn ngôn ngữ cho ChannelFence. YouTube vẫn giữ cài đặt ngôn ngữ riêng."
+  },
+  "languageAutomatic": {
+    "message": "Tự động (ngôn ngữ trình duyệt)"
+  },
+  "languageSaveError": {
+    "message": "Không lưu được ngôn ngữ. Vui lòng thử lại."
+  },
+  "extensionName": {
+    "message": "ChannelFence - Chặn kênh YouTube"
+  },
+  "extensionDescription": {
+    "message": "Chặn kênh YouTube ở trang chủ, tìm kiếm, đề xuất, Shorts, bình luận và khi truy cập trực tiếp."
+  },
+  "loading": {
+    "message": "Đang tải…"
+  },
+  "enableChannelFence": {
+    "message": "Bật ChannelFence"
+  },
+  "pauseOrEnable": {
+    "message": "Tạm dừng hoặc bật ChannelFence"
+  },
+  "currentPage": {
+    "message": "Trang hiện tại"
+  },
+  "checkingPage": {
+    "message": "Đang kiểm tra trang này…"
+  },
+  "openCreatorHelp": {
+    "message": "Mở kênh, video hoặc video Shorts để chặn nhà sáng tạo."
+  },
+  "blockCreator": {
+    "message": "Chặn nhà sáng tạo"
+  },
+  "unblockCreator": {
+    "message": "Bỏ chặn nhà sáng tạo"
+  },
+  "hideShorts": {
+    "message": "Ẩn Shorts trong bảng tin"
+  },
+  "hideShortsSummary": {
+    "message": "Ẩn các mục Shorts ở trang chủ, tìm kiếm và bảng tin khác."
+  },
+  "hideOrShowShorts": {
+    "message": "Ẩn hoặc hiện Shorts trong bảng tin YouTube"
+  },
+  "hideShortsAccessible": {
+    "message": "Ẩn Shorts trong bảng tin YouTube"
+  },
+  "recentlyBlocked": {
+    "message": "Đã chặn gần đây"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "Chưa chặn nhà sáng tạo nào. Hãy dùng nút ⊘ cạnh tên nhà sáng tạo trên YouTube."
+  },
+  "manageBlockList": {
+    "message": "Quản lý danh sách chặn"
+  },
+  "reportBug": {
+    "message": "Báo lỗi"
+  },
+  "reportBugInline": {
+    "message": "hãy báo lỗi"
+  },
+  "privacy": {
+    "message": "Quyền riêng tư"
+  },
+  "unblock": {
+    "message": "Bỏ chặn"
+  },
+  "unblockNamed": {
+    "message": "Bỏ chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "Chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "Không xác định được nhà sáng tạo"
+  },
+  "multipleCreators": {
+    "message": "Tìm thấy nhiều nhà sáng tạo"
+  },
+  "chooseCreator": {
+    "message": "Chọn nhà sáng tạo bạn muốn chặn hoặc bỏ chặn."
+  },
+  "thisCreator": {
+    "message": "Nhà sáng tạo này"
+  },
+  "creator": {
+    "message": "nhà sáng tạo"
+  },
+  "creatorIsBlocked": {
+    "message": "Nhà sáng tạo này đang bị chặn ở mọi nơi mà ChannelFence có thể nhận diện."
+  },
+  "creatorBlockHelp": {
+    "message": "Ẩn nhà sáng tạo này trong bảng tin, tìm kiếm, đề xuất, Shorts và khi truy cập trực tiếp."
+  },
+  "blockedCount": {
+    "message": "Đã chặn: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "Đã tạm dừng"
+  },
+  "unavailable": {
+    "message": "Không khả dụng"
+  },
+  "settingsPageTitle": {
+    "message": "Cài đặt ChannelFence"
+  },
+  "settingsTagline": {
+    "message": "Cài đặt chặn nhà sáng tạo"
+  },
+  "settings": {
+    "message": "Cài đặt"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence chỉ hoạt động trên YouTube và lưu các tùy chọn của bạn trên thiết bị này."
+  },
+  "pauseHelp": {
+    "message": "Tạm dừng mọi thao tác chặn mà không xóa danh sách."
+  },
+  "hideShortsHelp": {
+    "message": "Ẩn các mục và thẻ Shorts ở trang chủ, tìm kiếm và bảng tin khác. Thẻ Shorts vẫn dùng được."
+  },
+  "hideComments": {
+    "message": "Ẩn bình luận của nhà sáng tạo bị chặn"
+  },
+  "hideCommentsHelp": {
+    "message": "Cũng ẩn bình luận khi ChannelFence xác định được kênh của người bình luận."
+  },
+  "blockedCreators": {
+    "message": "Nhà sáng tạo bị chặn"
+  },
+  "blockListHelp": {
+    "message": "Tìm kiếm, bỏ chặn hoặc sao lưu danh sách. Các mục được nhập sẽ được gộp vào danh sách hiện tại."
+  },
+  "manualBlockLabel": {
+    "message": "Chặn bằng tên người dùng hoặc URL kênh"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@nhasangtao hoặc youtube.com/@nhasangtao"
+  },
+  "manualBlockHelp": {
+    "message": "Dán tên người dùng YouTube hoặc URL kênh. Dữ liệu này được kiểm tra và chỉ lưu trong bộ nhớ cục bộ của tiện ích trên Chrome."
+  },
+  "searchBlocked": {
+    "message": "Tìm nhà sáng tạo bị chặn"
+  },
+  "export": {
+    "message": "Xuất"
+  },
+  "import": {
+    "message": "Nhập"
+  },
+  "clearAll": {
+    "message": "Xóa tất cả"
+  },
+  "emptyBlockList": {
+    "message": "Danh sách chặn của bạn đang trống."
+  },
+  "showMore": {
+    "message": "Hiện thêm 200"
+  },
+  "privateByDesign": {
+    "message": "Được thiết kế để bảo vệ quyền riêng tư."
+  },
+  "settingsPrivacy": {
+    "message": "Tên kênh, liên kết kênh, cài đặt và danh sách chặn nằm trong bộ nhớ cục bộ của tiện ích trên Chrome. ChannelFence không gửi các dữ liệu này cho chúng tôi hay bất kỳ ai khác."
+  },
+  "settingsReport": {
+    "message": "Nếu nội dung vẫn lọt qua bộ lọc chặn, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "Bạn thích ChannelFence chứ?"
+  },
+  "reviewHelp": {
+    "message": "Đánh giá chân thực trên Cửa hàng Chrome trực tuyến giúp người khác tìm thấy tiện ích."
+  },
+  "leaveReview": {
+    "message": "Viết đánh giá"
+  },
+  "noSearchMatches": {
+    "message": "Không có nhà sáng tạo bị chặn nào khớp với tìm kiếm này."
+  },
+  "showingCreators": {
+    "message": "Đang hiển thị $VISIBLE$ trong tổng số $TOTAL$ nhà sáng tạo phù hợp.",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · Đã chặn vào $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "Đã bỏ chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "Đã bật ChannelFence"
+  },
+  "pausedToast": {
+    "message": "Đã tạm dừng ChannelFence"
+  },
+  "hideCommentsToast": {
+    "message": "Bình luận của nhà sáng tạo bị chặn sẽ được ẩn"
+  },
+  "showCommentsToast": {
+    "message": "Bình luận sẽ tiếp tục hiển thị"
+  },
+  "hideShortsToast": {
+    "message": "Shorts sẽ được ẩn trong bảng tin"
+  },
+  "showShortsToast": {
+    "message": "Shorts sẽ tiếp tục hiển thị trong bảng tin"
+  },
+  "invalidHandle": {
+    "message": "Nhập tên người dùng YouTube hoặc URL kênh hợp lệ"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ đã bị chặn",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "Không thêm được nhà sáng tạo này"
+  },
+  "blockedNamed": {
+    "message": "Đã chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "Đã xuất danh sách chặn"
+  },
+  "importedCreatorOne": {
+    "message": "Đã nhập $COUNT$ nhà sáng tạo",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "Đã nhập $COUNT$ nhà sáng tạo",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "Tệp này không phải tệp xuất hợp lệ của ChannelFence"
+  },
+  "confirmClearAll": {
+    "message": "Bỏ chặn tất cả $COUNT$ nhà sáng tạo?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "Đã xóa danh sách chặn"
+  },
+  "version": {
+    "message": "Phiên bản $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "Không tải được cài đặt"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence: đã chặn $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: đã tạm dừng"
+  },
+  "welcomeTitle": {
+    "message": "Chào mừng bạn đến với ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence đã sẵn sàng"
+  },
+  "welcomeHeadline": {
+    "message": "Không còn thấy nhà sáng tạo bạn không muốn xem."
+  },
+  "welcomeLead": {
+    "message": "Chặn nhà sáng tạo không mong muốn trên bảng tin trang chủ, kết quả tìm kiếm, đề xuất, Shorts, bình luận và các trang mở trực tiếp trên YouTube."
+  },
+  "welcomeOpenYouTube": {
+    "message": "Mở YouTube và chặn nhà sáng tạo"
+  },
+  "welcomeIconAlt": {
+    "message": "Biểu tượng nhà sáng tạo bị chặn của ChannelFence"
+  },
+  "welcomeHowItWorks": {
+    "message": "Cách ChannelFence hoạt động"
+  },
+  "welcomeFindCreator": {
+    "message": "Tìm nhà sáng tạo"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "Duyệt YouTube như bình thường. ChannelFence thêm nút ⊘ nhỏ cạnh tên nhà sáng tạo."
+  },
+  "welcomeBlockOnce": {
+    "message": "Chỉ cần chặn một lần"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "Nhấn nút và nội dung của nhà sáng tạo đó sẽ biến mất khỏi các giao diện YouTube được hỗ trợ."
+  },
+  "welcomeStayInControl": {
+    "message": "Luôn chủ động quản lý"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "Dùng biểu tượng trên thanh công cụ để tạm dừng ChannelFence, hoàn tác thao tác chặn hoặc quản lý toàn bộ danh sách."
+  },
+  "welcomePrivacy": {
+    "message": "Không cần tài khoản. Không theo dõi. Không có máy chủ do nhà phát triển kiểm soát. Danh sách chặn nằm trong bộ nhớ cục bộ của tiện ích trên Chrome."
+  },
+  "privacyTitle": {
+    "message": "Chính sách quyền riêng tư của ChannelFence"
+  },
+  "privacyEffectiveDate": {
+    "message": "Ngày có hiệu lực:"
+  },
+  "privacyDate": {
+    "message": "27 tháng 8 năm 2026"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence được thiết kế để hoạt động mà không cần tài khoản, phân tích sử dụng, quảng cáo hay máy chủ do nhà phát triển kiểm soát. Mục đích duy nhất là cung cấp các công cụ điều khiển cục bộ để người dùng ẩn nhà sáng tạo đã chọn và tùy chọn ẩn các mục Shorts trong bảng tin YouTube."
+  },
+  "privacyInformationHeading": {
+    "message": "Thông tin ChannelFence xử lý"
+  },
+  "privacyInformation": {
+    "message": "Khi bạn dùng YouTube, ChannelFence chỉ đọc phần nội dung trang cần thiết để nhận diện tên nhà sáng tạo và liên kết kênh, kiểm tra nhà sáng tạo có trong danh sách chặn hay không, thêm nút chặn và ẩn nội dung phù hợp. Khi danh sách chặn không trống, những thẻ Shorts nhỏ gọn không hiển thị nhà sáng tạo sẽ được kiểm tra qua điểm cuối oEmbed của YouTube để xác định nhà sáng tạo của chúng có bị chặn hay không. Siêu dữ liệu Shorts được trả về chỉ được lưu tạm trong bộ nhớ và không được thêm vào lịch sử duyệt web hay bộ nhớ lưu trữ của tiện ích. Khi bạn chọn chặn nhà sáng tạo, ChannelFence lưu tên hiển thị, mã kênh hoặc tên người dùng công khai, URL kênh công khai và thời điểm chặn. Nếu chặn từ thẻ Shorts nhỏ gọn, ChannelFence còn lưu đường dẫn công khai của video Shorts do bạn chọn vào hồ sơ nhà sáng tạo, để đúng thẻ đó vẫn được ẩn sau khi tải lại trang."
+  },
+  "privacyStorageHeading": {
+    "message": "Lưu trữ và truyền dữ liệu"
+  },
+  "privacyStorage": {
+    "message": "Cài đặt và hồ sơ nhà sáng tạo bị chặn chỉ được lưu trong bộ nhớ cục bộ của tiện ích trên Chrome trên thiết bị của bạn, và không bao giờ được truyền cho nhà phát triển. Việc tra cứu các thẻ Shorts nhỏ gọn chỉ gửi URL Shorts công khai đến youtube.com để YouTube trả về tên nhà sáng tạo và URL kênh công khai. Các yêu cầu không chứa thông tin xác thực tài khoản. ChannelFence không gửi yêu cầu đến máy chủ do nhà phát triển kiểm soát hay bất kỳ dịch vụ nào ngoài YouTube. Tiện ích không bán dữ liệu, không dùng dữ liệu cho quảng cáo và không cho phép con người đọc dữ liệu người dùng."
+  },
+  "privacyPermissionsHeading": {
+    "message": "Quyền truy cập"
+  },
+  "privacyStorageLabel": {
+    "message": "Lưu trữ:"
+  },
+  "privacyStoragePermission": {
+    "message": "lưu cục bộ trạng thái bật, ngôn ngữ đã chọn, tùy chọn bình luận và Shorts trong bảng tin, cùng danh sách nhà sáng tạo bị chặn."
+  },
+  "privacyYouTubeLabel": {
+    "message": "Truy cập youtube.com:"
+  },
+  "privacyYouTubePermission": {
+    "message": "nhận diện nhà sáng tạo trên các trang YouTube, thêm nút chặn cho người dùng và ẩn nội dung của nhà sáng tạo bị chặn."
+  },
+  "privacyControlHeading": {
+    "message": "Quản lý và xóa dữ liệu"
+  },
+  "privacyControl": {
+    "message": "Bạn có thể xem, xuất, bỏ chặn hoặc xóa danh sách nhà sáng tạo bị chặn trong cài đặt ChannelFence. Khi gỡ cài đặt ChannelFence, Chrome sẽ xóa dữ liệu được lưu cục bộ của tiện ích."
+  },
+  "privacyLimitedUseHeading": {
+    "message": "Sử dụng hạn chế"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence chỉ sử dụng thông tin để cung cấp và cải thiện chức năng duy nhất dành cho người dùng. Thông tin không được chuyển giao để phục vụ quảng cáo, quyết định tín dụng, môi giới dữ liệu hay các mục đích không liên quan."
+  },
+  "privacyChangesHeading": {
+    "message": "Thay đổi"
+  },
+  "privacyChanges": {
+    "message": "Nếu cách ChannelFence xử lý dữ liệu thay đổi, chính sách này và thông tin công bố trên Cửa hàng Chrome trực tuyến sẽ được cập nhật trước khi áp dụng thay đổi."
+  },
+  "privacyContactHeading": {
+    "message": "Liên hệ"
+  },
+  "privacyContact": {
+    "message": "Bạn có thể gửi câu hỏi về quyền riêng tư và hỗ trợ qua $LINK$ hoặc liên kết hỗ trợ trên trang giới thiệu tiện ích trong Cửa hàng Chrome trực tuyến.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "trang theo dõi vấn đề của ChannelFence"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence không xác định được video Shorts này."
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence không xác định được nhà sáng tạo này. Hãy thử mở video Shorts trước."
+  },
+  "contentBlockShortCreator": {
+    "message": "Chặn nhà sáng tạo của video Shorts này bằng ChannelFence"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: Chặn nhà sáng tạo"
+  },
+  "contentUnblockWithBrand": {
+    "message": "Bỏ chặn $CREATOR$ bằng ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "Chặn $CREATOR$ bằng ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "Chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: Bỏ chặn"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: Chặn"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: Bỏ chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: Chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "Đã bỏ chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "Chặn"
+  },
+  "contentCreatorBlocked": {
+    "message": "Nhà sáng tạo đã bị chặn"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ nằm trong danh sách chặn ChannelFence của bạn.",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "Về trang chủ"
+  },
+  "contentUnblockContinue": {
+    "message": "Bỏ chặn và tiếp tục"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence chưa xác định được nhà sáng tạo này."
+  },
+  "contentBlocked": {
+    "message": "Đã chặn $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "Hoàn tác"
+  }
+}
