@@ -29,11 +29,11 @@
     "@type": "HowTo",
     "name": "How to hide YouTube Shorts in Chrome",
     "description": "Use ChannelFence to hide supported YouTube Shorts shelves and cards from feeds while keeping the Shorts viewer available.",
-    "dateModified": "2026-08-29",
+    "dateModified": "2026-11-02",
     "mainEntityOfPage": "https://channelfence.app/how-to-hide-youtube-shorts-in-chrome/",
     "step": [
       { "@type": "HowToStep", "name": "Install ChannelFence", "text": "Install ChannelFence from the Chrome Web Store and refresh open YouTube tabs." },
-      { "@type": "HowToStep", "name": "Open the popup", "text": "Select the ChannelFence icon in Chrome's extensions area." },
+      { "@type": "HowToStep", "name": "Open the popup", "text": "Select ChannelFence in Chrome's Extensions menu and make sure the switch at the top of its popup is on." },
       { "@type": "HowToStep", "name": "Turn on Hide Shorts in feeds", "text": "Enable Hide Shorts in feeds to remove supported Shorts shelves and cards from feeds." }
     ]
   }
@@ -60,32 +60,40 @@
         <p class="eyebrow">Chrome guide</p>
         <h1>How to hide YouTube Shorts in Chrome</h1>
         <p class="article-lead">ChannelFence can remove supported Shorts shelves and cards from Home, search, and other feeds without removing the Shorts tab or preventing you from opening the Shorts viewer.</p>
+        <p class="article-meta">Updated November 2, 2026 · For ChannelFence 0.2.8. These steps use the English labels.</p>
       </header>
 
       <h2>Hide Shorts from YouTube feeds</h2>
       <ol>
         <li>Install ChannelFence from the Chrome Web Store.</li>
         <li>Refresh YouTube if it was already open.</li>
-        <li>Select the ChannelFence icon in Chrome.</li>
+        <li>Open Chrome's Extensions menu and select ChannelFence. You can pin it for easier access.</li>
+        <li>Make sure the switch at the top of the popup is on. If the status says <strong>Paused</strong>, turn that switch back on.</li>
         <li>Turn on <strong>Hide Shorts in feeds</strong>.</li>
       </ol>
-      <p>The same setting is available on ChannelFence's full settings page. Changes are stored locally and stay synchronized between the popup and settings.</p>
+      <p>This option is off by default and does not need any blocked creators to work. It is also available by choosing <strong>Manage block list</strong> at the bottom of the popup and finding <strong>Hide Shorts in feeds</strong> under <strong>Settings</strong>. Changes are saved automatically and appear in both places for the same Chrome profile.</p>
 
       <div class="article-note">
         <strong>The Shorts tab remains available</strong>
         <p>This option is meant to make regular feeds less intrusive. It does not remove YouTube's Shorts navigation item or disable the direct Shorts viewer.</p>
       </div>
+      <p>It does not skip sponsored Shorts playing in the viewer or remove ads inside the video player. <strong>Hide sponsored cards on Home</strong> is a separate option for sponsored cards in the Home feed.</p>
 
       <h2>Block one Shorts creator instead</h2>
-      <p>If you still use Shorts but do not want to see a specific creator, leave the feed setting off and block only that creator:</p>
+      <p>Creator blocking and hiding Shorts shelves are separate choices. To keep Shorts in your feeds but remove a specific creator, leave <strong>Hide Shorts in feeds</strong> off and use one of these methods:</p>
       <ul>
-        <li>Use ChannelFence's control on a supported compact Shorts card without opening it.</li>
-        <li>Use the ChannelFence button in the Shorts viewer. After blocking the current creator, ChannelFence advances to the next Short.</li>
-        <li>Open settings and enter the creator's handle or channel URL manually.</li>
+        <li>Use ChannelFence's control on a supported compact Shorts card, or choose <strong>ChannelFence: Block creator</strong> from its supported three-dot menu, without opening the Short.</li>
+        <li>Use the ChannelFence button in the Shorts viewer to block the current creator and continue to the next Short.</li>
+        <li>Choose <strong>Manage block list</strong> in the popup, enter the creator's handle or channel URL under <strong>Block by handle or channel URL</strong>, and select <strong>Block creator</strong>.</li>
       </ul>
+      <p>You can also keep creator blocking active while hiding Shorts shelves. Opening the Shorts viewer directly still applies your creator block list.</p>
 
       <h2>Turn Shorts back on</h2>
-      <p>Open the popup or settings and turn off <strong>Hide Shorts in feeds</strong>. The setting does not delete your creator block list.</p>
+      <p>Open the popup or settings and turn off <strong>Hide Shorts in feeds</strong>. Your creator block list stays active, so Shorts from blocked creators can remain hidden.</p>
+      <p>To unblock a creator, select <strong>Unblock</strong> in the popup's <strong>Recently blocked</strong> list or find them through <strong>Manage block list</strong>. To pause all ChannelFence filtering, use the switch at the top of the popup. Pausing keeps your list and settings, including your Shorts preference, ready for when you enable it again.</p>
+
+      <h2>If a Shorts shelf still appears</h2>
+      <p>Check that ChannelFence is enabled and <strong>Hide Shorts in feeds</strong> is on, then refresh the YouTube tab after installing or updating. The option targets supported feed shelves and cards; being able to open the Shorts viewer is expected. If a shelf in a regular feed still slips through, <a href="../support/">report it with the page URL, a screenshot, and your YouTube language</a>.</p>
 
       <div class="article-cta">
         <p><strong>Choose what appears in your feeds.</strong><br>ChannelFence is free, open source, and has no extension analytics.</p>
@@ -96,6 +104,8 @@
         <h2 id="related-heading">Related guides</h2>
         <ul>
           <li><a href="../how-to-block-youtube-channels-in-chrome/">How to block YouTube channels in Chrome</a></li>
+          <li><a href="../how-to-customize-youtube-home/">How to customize YouTube Home</a></li>
+          <li><a href="../how-to-change-channelfence-language/">How to change ChannelFence's language</a></li>
           <li><a href="../youtube-dont-recommend-channel-vs-block/">"Don't recommend channel" vs. blocking a creator</a></li>
           <li><a href="../channelfence-vs-blocktube/">ChannelFence vs. BlockTube</a></li>
         </ul>

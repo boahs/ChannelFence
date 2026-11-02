@@ -24,6 +24,14 @@ const publicPages = [
     canonical: `${siteOrigin}/how-to-hide-youtube-shorts-in-chrome/`
   },
   {
+    file: "how-to-customize-youtube-home/index.html",
+    canonical: `${siteOrigin}/how-to-customize-youtube-home/`
+  },
+  {
+    file: "how-to-change-channelfence-language/index.html",
+    canonical: `${siteOrigin}/how-to-change-channelfence-language/`
+  },
+  {
     file: "channelfence-vs-blocktube/index.html",
     canonical: `${siteOrigin}/channelfence-vs-blocktube/`
   },
@@ -115,13 +123,13 @@ test("public pages expose a complete large social-card image", () => {
   }
 });
 
-test("homepage structured data identifies version 0.2.1 and includes FAQ schema", () => {
+test("homepage structured data identifies the current version and includes FAQ schema", () => {
   const nodes = schemaNodes(jsonLdDocuments(read("index.html")));
   const software = nodes.find((node) => node?.["@type"] === "SoftwareApplication");
   const faq = nodes.find((node) => node?.["@type"] === "FAQPage");
 
   assert.ok(software, "Missing SoftwareApplication JSON-LD");
-  assert.equal(software.softwareVersion, "0.2.1");
+  assert.equal(software.softwareVersion, JSON.parse(read("manifest.json")).version);
   assert.ok(faq, "Missing FAQPage JSON-LD");
   assert.ok(Array.isArray(faq.mainEntity) && faq.mainEntity.length > 0, "FAQPage has no questions");
 });
@@ -132,7 +140,7 @@ test("support page publishes contact routes and current software schema", () => 
   const software = nodes.find((node) => node?.["@type"] === "SoftwareApplication");
 
   assert.ok(software, "Support page is missing SoftwareApplication JSON-LD");
-  assert.equal(software.softwareVersion, "0.2.1");
+  assert.equal(software.softwareVersion, JSON.parse(read("manifest.json")).version);
   assert.match(html, /href="https:\/\/x\.com\/GetChannelFence"/);
   assert.doesNotMatch(html, /mailto:|support@channelfence\.app/i);
   const privacy = read("PRIVACY.md");
