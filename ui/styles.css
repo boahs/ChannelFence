@@ -11,6 +11,7 @@
   --footer-link: #33458f;
   --footer-link-hover: #c8402d;
   --teal: #12cfc8;
+  --scrollbar-thumb: #417b85;
   --coral: #ff5f46;
   --danger: #d73a28;
   --shadow: 0 16px 50px rgba(17, 28, 86, 0.14);
@@ -24,6 +25,14 @@ body {
   background: var(--soft);
   color: var(--ink);
   margin: 0;
+}
+
+@media (forced-colors: none) {
+  :root,
+  .popup__main {
+    scrollbar-color: var(--scrollbar-thumb) var(--soft);
+    scrollbar-width: thin;
+  }
 }
 
 button,
@@ -817,6 +826,7 @@ select:focus-visible {
     --line: #2a345f;
     --footer-link: #c6d0ff;
     --footer-link-hover: #64e1dc;
+    --scrollbar-thumb: #52939d;
   }
 
   .button--secondary,
