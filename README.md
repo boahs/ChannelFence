@@ -121,7 +121,7 @@ npm run test:e2e:ui
 
 The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, collaboration bylines, membership lockups, Shorts controls, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
 
-GitHub Actions runs the complete deterministic suite on every push and pull request. A separate scheduled workflow runs the intentionally small live YouTube smoke check. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
+GitHub Actions runs the complete deterministic suite on pull requests and pushes to `main`. The separate live YouTube workflow runs the full live suite daily at 00:17 and 12:17 in `America/New_York`, following daylight saving time automatically. Scheduled runs use the latest default-branch commit, and **Run workflow** remains available for manual validation. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
 
 ## Website changelog
 
