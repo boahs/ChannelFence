@@ -18,6 +18,8 @@ What's new in 0.2.8:
 - Translated settings, the popup, onboarding, privacy information, and blocking controls.
 - ChannelFence follows Chrome's interface language by default, with a language selector in settings for a manual choice. YouTube keeps its own language setting; untranslated browser languages fall back to English.
 - Arabic includes right-to-left layouts for extension pages and ChannelFence controls.
+- Added optional Home controls to hide sponsored cards and YouTube featured or promotional banners.
+- Added a compact Home grid with Small, Medium, and Large thumbnails that adapt to your window. The new Home controls are off by default and translated into all eighteen supported languages.
 
 Features:
 
@@ -25,6 +27,7 @@ Features:
 - Add a creator manually using their YouTube handle or channel URL.
 - Block the current creator in the Shorts viewer and continue to the next Short.
 - Optionally hide Shorts shelves and cards from Home, search, and other feeds while keeping the Shorts viewer available.
+- Customize Home with separate controls for sponsored cards, featured banners, and thumbnail size. Regular recommendations and courses remain available; Shorts use their own setting. These controls do not hide search information panels or ads during video playback.
 - Hide collaboration videos when YouTube identifies a creator you've blocked.
 - Stop supported direct visits with a clear blocked-page screen.
 - Undo a block immediately or manage your complete block list at any time.
@@ -35,6 +38,8 @@ Features:
 Privacy by design:
 
 ChannelFence processes public creator names, channel identifiers, channel URLs, and user-selected compact Short paths only to provide its blocking feature. Your settings and block list remain in Chrome's local extension storage and are never transmitted to the developer.
+
+Optional Home appearance preferences are applied locally and make no additional network requests.
 
 While your block list is not empty, ChannelFence may send public compact Short URLs directly to YouTube to look up their creators. These requests omit account credentials, and returned metadata is cached only in memory. ChannelFence makes no requests to a developer-controlled server or non-YouTube service.
 
@@ -75,22 +80,22 @@ English (United States)
 
 ## Single purpose statement
 
-ChannelFence gives users local controls for hiding selected YouTube creators and optional Shorts shelves in YouTube feeds.
+ChannelFence gives users local controls to customize their YouTube feeds by hiding selected creators and optional feed content, and adjusting the Home grid.
 
 ## Permission justification
 
 ### storage
 
-Required to save the user's enabled state, comment and feed-level Shorts preferences, and blocked-creator list locally on the device.
+Required to save the user's enabled state, interface language, comment and feed appearance preferences, and blocked-creator list locally on the device.
 
 ### www.youtube.com and m.youtube.com site access
 
-Required to read public creator identifiers from the page, retrieve public creator metadata from YouTube when compact Shorts omit that identity and the block list is not empty, add user-facing block buttons, hide matching content, and display the direct-navigation block screen. The extension does not request access to other websites.
+Required to read public creator identifiers and page structure, retrieve public creator metadata from YouTube when compact Shorts omit that identity and the block list is not empty, add user-facing block buttons, hide matching content, apply the user's optional Home appearance preferences, and display the direct-navigation block screen. The extension does not request access to other websites.
 
 ## Privacy practices answers
 
 - **Does the extension collect or use user data?** Yes, conservatively disclose local processing of website content and user-generated block-list selections.
-- **Website content:** Public creator display names, public channel handles/identifiers, public channel URLs, and a compact Short path that the user explicitly selects for blocking are processed to provide blocking. User-selected records are stored locally.
+- **Website content:** Public creator display names, public channel handles/identifiers, public channel URLs, and a compact Short path that the user explicitly selects for blocking are processed to provide blocking. Page structure is read to apply selected feed appearance preferences. User-selected records and settings are stored locally.
 - **Web history:** Not collected or recorded. The extension does not maintain browsing history. A compact Short path is saved only when the user explicitly blocks from that card, as part of the selected creator record.
 - **Authentication, personal communications, location, financial, health, and personally identifiable information:** Not collected.
 - **Data sale:** No.

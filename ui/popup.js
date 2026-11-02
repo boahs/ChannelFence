@@ -5,6 +5,10 @@ const I18n = globalThis.ChannelFenceI18n;
 const elements = {
   enabled: document.getElementById("enabledToggle"),
   shorts: document.getElementById("shortsToggle"),
+  homeAds: document.getElementById("homeAdsToggle"),
+  homePromotions: document.getElementById("homePromotionsToggle"),
+  compactHomeGrid: document.getElementById("compactHomeGridToggle"),
+  compactHomeSize: document.getElementById("compactHomeSizeSelect"),
   status: document.getElementById("statusText"),
   pageTitle: document.getElementById("pageTitle"),
   pageCopy: document.getElementById("pageCopy"),
@@ -136,6 +140,23 @@ elements.enabled.addEventListener("change", async () => {
   renderStatus();
 });
 
+elements.homeAds.addEventListener("change", async () => {
+  await chrome.storage.local.set({ [Shared.STORAGE.hideHomeAds]: elements.homeAds.checked });
+});
+
+elements.homePromotions.addEventListener("change", async () => {
+  await chrome.storage.local.set({ [Shared.STORAGE.hideHomePromotions]: elements.homePromotions.checked });
+});
+
+elements.compactHomeGrid.addEventListener("change", async () => {
+  elements.compactHomeSize.disabled = !elements.compactHomeGrid.checked;
+  await chrome.storage.local.set({ [Shared.STORAGE.compactHomeGrid]: elements.compactHomeGrid.checked });
+});
+
+elements.compactHomeSize.addEventListener("change", async () => {
+  await chrome.storage.local.set({ [Shared.STORAGE.compactHomeSize]: elements.compactHomeSize.value });
+});
+
 elements.shorts.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.hideHomeShorts]: elements.shorts.checked });
 });
@@ -148,6 +169,12 @@ async function initialize() {
   blockedEntries = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]);
   elements.enabled.checked = values[Shared.STORAGE.enabled] !== false;
   elements.shorts.checked = values[Shared.STORAGE.hideHomeShorts] === true;
+  elements.homeAds.checked = values[Shared.STORAGE.hideHomeAds] === true;
+  elements.homePromotions.checked = values[Shared.STORAGE.hideHomePromotions] === true;
+  elements.compactHomeGrid.checked = values[Shared.STORAGE.compactHomeGrid] === true;
+  elements.compactHomeSize.disabled = !elements.compactHomeGrid.checked;
+  elements.compactHomeSize.value = ["small", "medium", "large"].includes(values[Shared.STORAGE.compactHomeSize])
+    ? values[Shared.STORAGE.compactHomeSize] : "medium";
   renderStatus();
   renderBlockedList();
   await loadPageContext();
@@ -169,6 +196,20 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
   if (changes[Shared.STORAGE.hideHomeShorts]) {
     elements.shorts.checked = changes[Shared.STORAGE.hideHomeShorts].newValue === true;
+  }
+  if (changes[Shared.STORAGE.hideHomeAds]) {
+    elements.homeAds.checked = changes[Shared.STORAGE.hideHomeAds].newValue === true;
+  }
+  if (changes[Shared.STORAGE.hideHomePromotions]) {
+    elements.homePromotions.checked = changes[Shared.STORAGE.hideHomePromotions].newValue === true;
+  }
+  if (changes[Shared.STORAGE.compactHomeGrid]) {
+    elements.compactHomeGrid.checked = changes[Shared.STORAGE.compactHomeGrid].newValue === true;
+    elements.compactHomeSize.disabled = !elements.compactHomeGrid.checked;
+  }
+  if (changes[Shared.STORAGE.compactHomeSize]) {
+    const size = changes[Shared.STORAGE.compactHomeSize].newValue;
+    elements.compactHomeSize.value = ["small", "medium", "large"].includes(size) ? size : "medium";
   }
   if (changes[Shared.STORAGE.blocked]) {
     blockedEntries = Shared.sanitizeBlockedEntries(

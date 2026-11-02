@@ -12,6 +12,9 @@
 - Kept long translated Shorts action labels readable by allowing them to wrap without overlapping the next button.
 - Fixed low-contrast Shorts controls on light YouTube pages.
 - Added right-to-left layouts for Arabic, including mixed-language controls on YouTube and readable creator names and URLs.
+- Added separate, optional controls to hide sponsored cards and YouTube featured or promotional banners on Home.
+- Added an optional compact Home grid with Small, Medium, and Large thumbnail sizes that adapt to the available window width.
+- Kept the new Home controls off by default, with locally saved preferences and labels in all eighteen supported languages. Regular recommendations, courses, and the separate Hide Shorts preference remain independent.
 
 <details markdown="1">
 <summary>Technical details and tests</summary>
@@ -21,6 +24,7 @@
 - Added bundled `ja`, `pt_BR`, `ru`, `es`, `fr`, `de`, `zh_CN`, `zh_TW`, `hi`, `id`, `bn`, `tr`, `vi`, `ar`, `it`, and `nl` message catalogs using the existing Chrome localization system.
 - Used count-neutral Russian wording where a single plural form would be incorrect.
 - Saved the language preference locally and reused bundled catalogs for manual overrides.
+- Applied Home appearance preferences locally without changing search information panels or ads during video playback. Compact thumbnail sizes allow up to six, five, or four columns respectively when space permits.
 
 ### Tests
 
@@ -31,6 +35,8 @@
 - Attached screenshots of extension pages, blocking controls, and open menus to the browser test reports for visual review.
 - Added mixed-direction checks for Arabic ChannelFence on English YouTube and English ChannelFence on Arabic YouTube.
 - Checked Shorts text and button contrast when YouTube's theme variables are unavailable.
+- Added Home cleanup checks for mixed sections, recycled ad slots, independent preferences, and restoration when paused or navigating away.
+- Added responsive grid checks for all three thumbnail sizes, legacy rows, blocked-card packing, and full-width shelves.
 
 There are no new permissions, additional external network requests, remote code, or extension analytics in this release. Translations are bundled locally; website and store-listing translations are separate.
 

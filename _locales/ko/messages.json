@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "홈, 검색 및 기타 피드에서 Shorts 섹션과 카드를 숨깁니다. Shorts 탭은 계속 사용할 수 있습니다."
   },
+  "hideHomeAds": {
+    "message": "홈에서 광고 카드 숨기기"
+  },
+  "hideHomeAdsHelp": {
+    "message": "YouTube 홈에서 광고 동영상 카드를 숨깁니다."
+  },
+  "hideHomePromotions": {
+    "message": "홈에서 추천 배너 숨기기"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "YouTube 홈에서 추천 및 프로모션 배너를 숨깁니다."
+  },
+  "compactHomeGrid": {
+    "message": "홈 그리드 좁게 보기"
+  },
+  "compactHomeGridHelp": {
+    "message": "썸네일 크기를 선택하세요. 그리드는 창 크기에 맞춰 조정됩니다."
+  },
+  "compactHomeSize": {
+    "message": "썸네일 크기"
+  },
+  "compactHomeSizeSmall": {
+    "message": "작게"
+  },
+  "compactHomeSizeMedium": {
+    "message": "중간"
+  },
+  "compactHomeSizeLarge": {
+    "message": "크게"
+  },
   "hideComments": {
     "message": "차단한 크리에이터의 댓글 숨기기"
   },

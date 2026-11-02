@@ -6,6 +6,10 @@
     blocked: "cfBlockedChannels",
     hideComments: "cfHideComments",
     hideHomeShorts: "cfHideHomeShorts",
+    hideHomeAds: "cfHideHomeAds",
+    hideHomePromotions: "cfHideHomePromotions",
+    compactHomeGrid: "cfCompactHomeGrid",
+    compactHomeSize: "cfCompactHomeSize",
     language: "cfLanguage"
   });
 
@@ -14,6 +18,10 @@
     [STORAGE.blocked]: [],
     [STORAGE.hideComments]: true,
     [STORAGE.hideHomeShorts]: false,
+    [STORAGE.hideHomeAds]: false,
+    [STORAGE.hideHomePromotions]: false,
+    [STORAGE.compactHomeGrid]: false,
+    [STORAGE.compactHomeSize]: "medium",
     [STORAGE.language]: "auto"
   });
 

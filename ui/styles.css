@@ -186,6 +186,9 @@ select:focus-visible {
 
 .popup {
   background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
   min-height: 410px;
   width: 360px;
 }
@@ -194,11 +197,15 @@ select:focus-visible {
   align-items: center;
   border-bottom: 1px solid var(--line);
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   padding: 16px 17px;
 }
 
 .popup__main {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   padding: 16px 17px 10px;
 }
 
@@ -361,6 +368,7 @@ select:focus-visible {
 .popup__footer {
   border-top: 1px solid var(--line);
   display: flex;
+  flex-shrink: 0;
   gap: 8px;
   justify-content: space-between;
   margin-top: 8px;

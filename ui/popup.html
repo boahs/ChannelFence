@@ -45,6 +45,48 @@
       </label>
     </section>
 
+    <section class="popup-quick-setting" aria-labelledby="homeAdsSettingTitle">
+      <div>
+        <h2 id="homeAdsSettingTitle" data-i18n="hideHomeAds">Hide sponsored cards on Home</h2>
+        <p id="homeAdsHelp" data-i18n="hideHomeAdsHelp">Hide sponsored video cards on YouTube Home.</p>
+      </div>
+      <label class="switch">
+        <input id="homeAdsToggle" type="checkbox" aria-label="Hide sponsored cards on Home" data-i18n-aria-label="hideHomeAds" aria-describedby="homeAdsHelp">
+        <span class="switch__track" aria-hidden="true"></span>
+      </label>
+    </section>
+
+    <section class="popup-quick-setting" aria-labelledby="homePromotionsSettingTitle">
+      <div>
+        <h2 id="homePromotionsSettingTitle" data-i18n="hideHomePromotions">Hide featured banners on Home</h2>
+        <p id="homePromotionsHelp" data-i18n="hideHomePromotionsHelp">Hide YouTube featured and promotional banners on Home.</p>
+      </div>
+      <label class="switch">
+        <input id="homePromotionsToggle" type="checkbox" aria-label="Hide featured banners on Home" data-i18n-aria-label="hideHomePromotions" aria-describedby="homePromotionsHelp">
+        <span class="switch__track" aria-hidden="true"></span>
+      </label>
+    </section>
+
+    <section class="popup-quick-setting" aria-labelledby="compactHomeGridSettingTitle">
+      <div>
+        <h2 id="compactHomeGridSettingTitle" data-i18n="compactHomeGrid">Compact Home grid</h2>
+        <p id="compactHomeGridHelp" data-i18n="compactHomeGridHelp">Choose a thumbnail size. The grid adapts to your window.</p>
+      </div>
+      <label class="switch">
+        <input id="compactHomeGridToggle" type="checkbox" aria-label="Compact Home grid" data-i18n-aria-label="compactHomeGrid" aria-describedby="compactHomeGridHelp">
+        <span class="switch__track" aria-hidden="true"></span>
+      </label>
+    </section>
+
+    <section class="popup-quick-setting setting-row--language" aria-labelledby="compactHomeSizeLabel">
+      <h2><label id="compactHomeSizeLabel" for="compactHomeSizeSelect" data-i18n="compactHomeSize">Thumbnail size</label></h2>
+      <select class="language-select" id="compactHomeSizeSelect" aria-describedby="compactHomeGridHelp" disabled>
+        <option value="small" data-i18n="compactHomeSizeSmall">Small</option>
+        <option value="medium" data-i18n="compactHomeSizeMedium" selected>Medium</option>
+        <option value="large" data-i18n="compactHomeSizeLarge">Large</option>
+      </select>
+    </section>
+
     <section class="popup-section" aria-labelledby="recentHeading">
       <div class="section-heading">
         <h2 id="recentHeading" data-i18n="recentlyBlocked">Recently blocked</h2>

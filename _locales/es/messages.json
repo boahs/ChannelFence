@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Quita las secciones y tarjetas de Shorts de Inicio, las búsquedas y otras listas de videos. La pestaña Shorts sigue disponible."
   },
+  "hideHomeAds": {
+    "message": "Ocultar tarjetas patrocinadas en Inicio"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Oculta las tarjetas de videos patrocinados en Inicio de YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "Ocultar banners destacados en Inicio"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Oculta los banners de contenido destacado y promociones de YouTube en Inicio."
+  },
+  "compactHomeGrid": {
+    "message": "Cuadrícula compacta en Inicio"
+  },
+  "compactHomeGridHelp": {
+    "message": "Elige el tamaño de las miniaturas. La cuadrícula se adapta a la ventana."
+  },
+  "compactHomeSize": {
+    "message": "Tamaño de las miniaturas"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Pequeño"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Mediano"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Grande"
+  },
   "hideComments": {
     "message": "Ocultar comentarios de creadores bloqueados"
   },
