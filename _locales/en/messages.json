@@ -153,10 +153,10 @@
     "message": "Hide sponsored video cards on YouTube Home."
   },
   "hideHomePromotions": {
-    "message": "Hide featured banners on Home"
+    "message": "Hide annoying YouTube features"
   },
   "hideHomePromotionsHelp": {
-    "message": "Hide YouTube featured and promotional banners on Home."
+    "message": "On Home, hide Explore more topics, Playables/game shelves, featured and promotional banners, Premium/Primetime offers, feedback surveys, and recommendation prompts. Sponsored cards and Shorts have separate controls."
   },
   "compactHomeGrid": {
     "message": "Compact Home grid"

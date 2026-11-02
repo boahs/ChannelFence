@@ -265,6 +265,26 @@ select:focus-visible {
   margin: 0;
 }
 
+.popup-quick-setting--compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.popup-size-setting:not([hidden]) {
+  align-items: center;
+  display: flex;
+  grid-column: 1 / -1;
+  font-size: 12px;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.popup-size-setting .language-select {
+  max-width: 55%;
+  min-width: 0;
+  width: auto;
+}
+
 .popup-quick-setting p {
   color: var(--muted);
   font-size: 11px;

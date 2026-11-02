@@ -153,10 +153,10 @@
     "message": "YouTube होम पर प्रायोजित वीडियो कार्ड छिपाता है।"
   },
   "hideHomePromotions": {
-    "message": "होम पर चुनिंदा बैनर छिपाएँ"
+    "message": "परेशान करने वाली YouTube सुविधाएँ छिपाएँ"
   },
   "hideHomePromotionsHelp": {
-    "message": "होम पर YouTube के चुनिंदा और प्रचार बैनर छिपाता है।"
+    "message": "होम पर “और विषय खोजें”, Playables/गेम सेक्शन, चुनिंदा और प्रचार बैनर, Premium/Primetime ऑफ़र, फ़ीडबैक सर्वे और सुझाव संबंधी संदेश छिपाता है। प्रायोजित कार्ड और Shorts के लिए अलग नियंत्रण हैं।"
   },
   "compactHomeGrid": {
     "message": "होम पर कॉम्पैक्ट ग्रिड"

@@ -153,10 +153,10 @@
     "message": "Menyembunyikan kartu video bersponsor di Beranda YouTube."
   },
   "hideHomePromotions": {
-    "message": "Sembunyikan banner unggulan di Beranda"
+    "message": "Sembunyikan fitur YouTube yang mengganggu"
   },
   "hideHomePromotionsHelp": {
-    "message": "Menyembunyikan banner unggulan dan promosi YouTube di Beranda."
+    "message": "Di Beranda, menyembunyikan Jelajahi topik lainnya, bagian Playables/game, banner unggulan dan promosi, penawaran Premium/Primetime, survei masukan, serta ajakan rekomendasi. Kartu bersponsor dan Shorts memiliki kontrol terpisah."
   },
   "compactHomeGrid": {
     "message": "Grid ringkas di Beranda"

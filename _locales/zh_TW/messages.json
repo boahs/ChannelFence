@@ -153,10 +153,10 @@
     "message": "隱藏 YouTube 首頁的贊助影片卡片。"
   },
   "hideHomePromotions": {
-    "message": "隱藏首頁的精選橫幅"
+    "message": "隱藏 YouTube 的惱人功能"
   },
   "hideHomePromotionsHelp": {
-    "message": "隱藏 YouTube 首頁的精選內容和宣傳橫幅。"
+    "message": "在首頁隱藏「探索更多主題」、Playables／遊戲專區、精選和宣傳橫幅、Premium／Primetime 優惠、意見調查和推薦提示。贊助卡片和 Shorts 有獨立的控制選項。"
   },
   "compactHomeGrid": {
     "message": "緊湊首頁網格"

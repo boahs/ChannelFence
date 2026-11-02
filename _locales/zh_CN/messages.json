@@ -153,10 +153,10 @@
     "message": "隐藏 YouTube 首页的赞助视频卡片。"
   },
   "hideHomePromotions": {
-    "message": "隐藏首页的精选横幅"
+    "message": "隐藏 YouTube 的烦人功能"
   },
   "hideHomePromotionsHelp": {
-    "message": "隐藏 YouTube 首页的精选内容和推广横幅。"
+    "message": "在首页隐藏“探索更多主题”、Playables/游戏栏目、精选和推广横幅、Premium/Primetime 优惠、反馈调查和推荐提示。赞助卡片和 Shorts 有单独的控制选项。"
   },
   "compactHomeGrid": {
     "message": "紧凑首页网格"

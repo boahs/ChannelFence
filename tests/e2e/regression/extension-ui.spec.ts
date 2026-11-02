@@ -188,16 +188,17 @@ test.describe("extension UI", () => {
     const popup = new PopupPage(popupPage, extensionId);
     await popup.open();
     const optionsSize = extensionPage.getByRole("combobox", { name: "Thumbnail size" });
-    const popupSize = popupPage.getByRole("combobox", { name: "Thumbnail size" });
+    const popupSize = popupPage.locator("#compactHomeSizeSelect");
     await expect(popupPage.getByRole("checkbox", { name: "Hide Shorts in YouTube feeds" }))
       .toBeChecked();
     await expect(optionsSize).toBeDisabled();
+    await expect(popupSize).toBeHidden();
     await expect(popupSize).toBeDisabled();
     await expect(optionsSize).toHaveValue("medium");
     await expect(popupSize).toHaveValue("medium");
 
     const labels = [
-      "Hide sponsored cards on Home", "Hide featured banners on Home", "Compact Home grid"
+      "Hide sponsored cards on Home", "Hide annoying YouTube features", "Compact Home grid"
     ];
     for (const name of labels) {
       const optionsToggle = extensionPage.getByRole("checkbox", { name, exact: true });
@@ -209,6 +210,7 @@ test.describe("extension UI", () => {
       await expect(popupToggle).toBeChecked();
     }
     await expect(optionsSize).toBeEnabled();
+    await expect(popupSize).toBeVisible();
     await expect(popupSize).toBeEnabled();
     await popupSize.selectOption("small");
     await expect(optionsSize).toHaveValue("small");
@@ -226,6 +228,7 @@ test.describe("extension UI", () => {
 
     await extensionPage.reload();
     await popupPage.reload();
+    await expect(popupSize).toBeVisible();
     await expect(optionsSize).toHaveValue("large");
     await expect(popupSize).toHaveValue("large");
     for (const name of labels) {
@@ -238,6 +241,7 @@ test.describe("extension UI", () => {
       await expect(popupToggle).not.toBeChecked();
     }
     await expect(optionsSize).toBeDisabled();
+    await expect(popupSize).toBeHidden();
     await expect(popupSize).toBeDisabled();
     expect(await extensionStorage.get()).toMatchObject({
       ...existingPreferences,

@@ -153,10 +153,10 @@
     "message": "Nasconde le schede dei video sponsorizzati nella Home di YouTube."
   },
   "hideHomePromotions": {
-    "message": "Nascondi i banner in evidenza nella Home"
+    "message": "Nascondi le funzioni fastidiose di YouTube"
   },
   "hideHomePromotionsHelp": {
-    "message": "Nasconde i banner in evidenza e promozionali di YouTube nella Home."
+    "message": "Nella Home, nasconde Esplora altri argomenti, le sezioni Playables/giochi, i banner in evidenza e promozionali, le offerte Premium/Primetime, i sondaggi e gli avvisi sui suggerimenti. Le schede sponsorizzate e gli Shorts hanno controlli separati."
   },
   "compactHomeGrid": {
     "message": "Griglia compatta nella Home"

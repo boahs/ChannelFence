@@ -18,7 +18,7 @@ What's new in 0.2.8:
 - Translated settings, the popup, onboarding, privacy information, and blocking controls.
 - ChannelFence follows Chrome's interface language by default, with a language selector in settings for a manual choice. YouTube keeps its own language setting; untranslated browser languages fall back to English.
 - Arabic includes right-to-left layouts for extension pages and ChannelFence controls.
-- Added optional Home controls to hide sponsored cards and YouTube featured or promotional banners.
+- Added optional Home controls to hide sponsored cards and annoying YouTube features, including supported Explore more topics and Playables shelves, featured or promotional banners, Premium/Primetime offers, recommendation prompts, and feedback surveys.
 - Added a compact Home grid with Small, Medium, and Large thumbnails that adapt to your window. The new Home controls are off by default and translated into all eighteen supported languages.
 
 Features:
@@ -27,7 +27,7 @@ Features:
 - Add a creator manually using their YouTube handle or channel URL.
 - Block the current creator in the Shorts viewer and continue to the next Short.
 - Optionally hide Shorts shelves and cards from Home, search, and other feeds while keeping the Shorts viewer available.
-- Customize Home with separate controls for sponsored cards, featured banners, and thumbnail size. Regular recommendations and courses remain available; Shorts use their own setting. These controls do not hide search information panels or ads during video playback.
+- Customize Home with separate controls for sponsored cards, annoying YouTube features, and thumbnail size. Regular recommendations, courses, mixes, and top category filters remain available; Shorts use their own setting. Attached surveys can be hidden without removing their videos. These controls do not hide search information panels or ads during video playback.
 - Hide collaboration videos when YouTube identifies a creator you've blocked.
 - Stop supported direct visits with a clear blocked-page screen.
 - Undo a block immediately or manage your complete block list at any time.

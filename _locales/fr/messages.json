@@ -153,10 +153,10 @@
     "message": "Masque les cartes de vidéos sponsorisées sur l’accueil de YouTube."
   },
   "hideHomePromotions": {
-    "message": "Masquer les bannières à la une sur l’accueil"
+    "message": "Masquer les fonctionnalités gênantes de YouTube"
   },
   "hideHomePromotionsHelp": {
-    "message": "Masque les bannières à la une et promotionnelles de YouTube sur l’accueil."
+    "message": "Sur l’accueil, masque Explorer d’autres sujets, les sections Playables/jeux, les bannières à la une et promotionnelles, les offres Premium/Primetime, les enquêtes d’opinion et les invites de recommandations. Les cartes sponsorisées et les Shorts ont leurs propres réglages."
   },
   "compactHomeGrid": {
     "message": "Grille compacte sur l’accueil"

@@ -153,10 +153,10 @@
     "message": "Ẩn các thẻ video được tài trợ trên trang chủ YouTube."
   },
   "hideHomePromotions": {
-    "message": "Ẩn biểu ngữ nổi bật trên trang chủ"
+    "message": "Ẩn các tính năng YouTube gây phiền"
   },
   "hideHomePromotionsHelp": {
-    "message": "Ẩn các biểu ngữ nổi bật và quảng bá của YouTube trên trang chủ."
+    "message": "Trên trang chủ, ẩn Khám phá thêm chủ đề, các mục Playables/trò chơi, biểu ngữ nổi bật và quảng bá, ưu đãi Premium/Primetime, khảo sát ý kiến và lời nhắc về đề xuất. Thẻ được tài trợ và Shorts có tùy chọn riêng."
   },
   "compactHomeGrid": {
     "message": "Lưới thu gọn trên trang chủ"

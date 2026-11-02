@@ -153,10 +153,10 @@
     "message": "YouTube 홈에서 광고 동영상 카드를 숨깁니다."
   },
   "hideHomePromotions": {
-    "message": "홈에서 추천 배너 숨기기"
+    "message": "성가신 YouTube 기능 숨기기"
   },
   "hideHomePromotionsHelp": {
-    "message": "YouTube 홈에서 추천 및 프로모션 배너를 숨깁니다."
+    "message": "홈에서 더 많은 주제 탐색, Playables/게임 섹션, 추천 및 프로모션 배너, Premium/Primetime 제안, 의견 설문조사, 추천 안내를 숨깁니다. 광고 카드와 Shorts는 별도로 설정할 수 있습니다."
   },
   "compactHomeGrid": {
     "message": "홈 그리드 좁게 보기"

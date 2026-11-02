@@ -69,7 +69,8 @@ for (const locale of allLocales) {
         await expect(toggle).not.toBeChecked();
         await expect(toggle).toHaveAccessibleDescription(help.message);
       }
-      const popupSize = extensionPage.getByRole("combobox", { name: messages.compactHomeSize.message });
+      const popupSize = extensionPage.locator("#compactHomeSizeSelect");
+      await expect(popupSize).toBeHidden();
       await expect(popupSize).toBeDisabled();
       await expect(popupSize).toHaveValue("medium");
       await expect(popupSize.locator("option")).toHaveText([
@@ -88,6 +89,15 @@ for (const locale of allLocales) {
       await testInfo.attach(`${locale.catalogCode}-ui-popup`, {
         body: await extensionPage.locator("body").screenshot(), contentType: "image/png"
       });
+      const compactToggle = extensionPage.getByRole("checkbox", {
+        name: messages.compactHomeGrid.message, exact: true
+      });
+      await compactToggle.locator("..").click();
+      await expect(popupSize).toBeVisible();
+      await expect(popupSize).toBeEnabled();
+      await extensionPage.getByRole("combobox", { name: messages.compactHomeSize.message })
+        .selectOption("small");
+      await expect(popupSize).toHaveValue("small");
       await popupSize.scrollIntoViewIfNeeded();
       await expect(popupSize).toBeInViewport({ ratio: 1 });
       await expect(extensionPage.locator(".popup__header")).toBeInViewport({ ratio: 1 });
@@ -97,6 +107,13 @@ for (const locale of allLocales) {
       await testInfo.attach(`${locale.catalogCode}-ui-popup-home-controls`, {
         body: await extensionPage.locator("body").screenshot(), contentType: "image/png"
       });
+      expect(await extensionPage.locator("body").evaluate((body) => body.scrollWidth - body.clientWidth))
+        .toBeLessThanOrEqual(1);
+      expect(await extensionPage.locator(".popup__main").evaluate((main) => main.scrollWidth - main.clientWidth))
+        .toBeLessThanOrEqual(1);
+      await compactToggle.locator("..").click();
+      await expect(popupSize).toBeHidden();
+      await expect(popupSize).toBeDisabled();
       await extensionPage.getByRole("button", {
         name: messages.unblockNamed.message.replace("$CREATOR$", locale.creator), exact: true
       }).click();

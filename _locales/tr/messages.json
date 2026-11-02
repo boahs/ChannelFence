@@ -153,10 +153,10 @@
     "message": "YouTube ana sayfasındaki sponsorlu video kartlarını gizler."
   },
   "hideHomePromotions": {
-    "message": "Ana sayfadaki öne çıkan banner'ları gizle"
+    "message": "Rahatsız edici YouTube özelliklerini gizle"
   },
   "hideHomePromotionsHelp": {
-    "message": "Ana sayfadaki YouTube'un öne çıkan içerik ve tanıtım banner'larını gizler."
+    "message": "Ana sayfada Daha fazla konu keşfet, Playables/oyun bölümleri, öne çıkan içerik ve tanıtım banner'ları, Premium/Primetime tekliflerini, geri bildirim anketlerini ve öneri istemlerini gizler. Sponsorlu kartlar ve Shorts için ayrı ayarlar vardır."
   },
   "compactHomeGrid": {
     "message": "Ana sayfada kompakt ızgara"

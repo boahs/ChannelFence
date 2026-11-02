@@ -153,10 +153,10 @@
     "message": "Oculta cartões de vídeos patrocinados no início do YouTube."
   },
   "hideHomePromotions": {
-    "message": "Ocultar banners em destaque no início"
+    "message": "Ocultar recursos irritantes do YouTube"
   },
   "hideHomePromotionsHelp": {
-    "message": "Oculta banners de destaques e promoções do YouTube no início."
+    "message": "No início, oculta Explorar mais temas, seções de Playables/jogos, banners de destaques e promoções, ofertas do Premium/Primetime, pesquisas de opinião e avisos de recomendações. Cartões patrocinados e Shorts têm controles separados."
   },
   "compactHomeGrid": {
     "message": "Grade compacta no início"

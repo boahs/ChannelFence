@@ -61,9 +61,41 @@ html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-section-re
   display: none !important;
 }
 
-/* Let normal cards fill a hidden ad's slot in legacy fixed-row Home grids. */
+/* Dedicated Home inserts. A survey attached to a normal video must not hide
+   that video, so only collapse a slot when the insert is its sole content. */
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] :is(
+  ytd-chips-shelf-with-video-shelf-renderer, ytd-primetime-promo-renderer,
+  ytd-inline-survey-renderer, ytd-feed-nudge-renderer,
+  mini-game-card-view-model, ytd-mini-game-card-view-model
+),
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] :is(ytd-rich-item-renderer, ytd-rich-section-renderer):has(
+  > :is(ytd-chips-shelf-with-video-shelf-renderer, ytd-primetime-promo-renderer,
+    ytd-inline-survey-renderer, ytd-feed-nudge-renderer,
+    mini-game-card-view-model, ytd-mini-game-card-view-model):only-child,
+  > #content:only-child > :is(ytd-chips-shelf-with-video-shelf-renderer, ytd-primetime-promo-renderer,
+    ytd-inline-survey-renderer, ytd-feed-nudge-renderer,
+    mini-game-card-view-model, ytd-mini-game-card-view-model):only-child
+),
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-item-renderer #attached-survey {
+  display: none !important;
+}
+
+/* Explore and Playables are whole feature shelves, including their headings
+   and cards. Their structural markers avoid matching translated heading text
+   or the separate category bar at the top of Home. */
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has(
+  ytd-chips-shelf-with-video-shelf-renderer, .ytChipsShelfViewModelHost,
+  mini-game-card-view-model, ytd-mini-game-card-view-model,
+  ytd-rich-shelf-renderer a[href="/playables"], ytd-rich-shelf-renderer a[href^="/playables/"]
+) {
+  display: none !important;
+}
+
+/* Let normal cards fill hidden ad, game and nudge slots in legacy Home rows. */
 html.cf-hide-home-ads ytd-browse[page-subtype="home"] ytd-rich-grid-renderer:has(:is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer)) > #contents > ytd-rich-grid-row,
-html.cf-hide-home-ads ytd-browse[page-subtype="home"] ytd-rich-grid-renderer:has(:is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer)) > #contents > ytd-rich-grid-row > #contents {
+html.cf-hide-home-ads ytd-browse[page-subtype="home"] ytd-rich-grid-renderer:has(:is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer)) > #contents > ytd-rich-grid-row > #contents,
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-grid-renderer:has(ytd-feed-nudge-renderer, mini-game-card-view-model, ytd-mini-game-card-view-model) > #contents > ytd-rich-grid-row,
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-grid-renderer:has(ytd-feed-nudge-renderer, mini-game-card-view-model, ytd-mini-game-card-view-model) > #contents > ytd-rich-grid-row > #contents {
   display: contents !important;
 }
 
