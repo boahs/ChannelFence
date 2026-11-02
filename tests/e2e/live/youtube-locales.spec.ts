@@ -197,7 +197,8 @@ for (const locale of allLocales) {
       extensionPage,
       extensionStorage
     }, testInfo) => {
-      await extensionPage.goto(`https://www.youtube.com/results?search_query=cat+videos&hl=${locale.youtubeLanguage}`, {
+      // "cat videos" can return only full-length videos in some locales.
+      await extensionPage.goto(`https://www.youtube.com/results?search_query=funny+cats&hl=${locale.youtubeLanguage}`, {
         waitUntil: "domcontentloaded",
         timeout: 30_000
       });
