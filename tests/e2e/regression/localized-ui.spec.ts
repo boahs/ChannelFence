@@ -31,6 +31,7 @@ for (const locale of allLocales) {
       expect((await extensionStorage.get<{ cfBlockedChannels: Array<{ key: string }> }>(
         "cfBlockedChannels"
       )).cfBlockedChannels[0].key).toBe(`handle:@${locale.creator}`);
+      await expect(extensionPage.locator("#toast")).not.toHaveClass(/toast--visible/);
       await testInfo.attach(`${locale.catalogCode}-ui-settings`, {
         body: await extensionPage.screenshot({ fullPage: true }), contentType: "image/png"
       });
