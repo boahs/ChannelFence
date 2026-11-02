@@ -415,16 +415,16 @@
     "message": "Yürürlük tarihi:"
   },
   "privacyDate": {
-    "message": "27 Ağustos 2026"
+    "message": "1 Kasım 2026"
   },
   "privacyIntro": {
-    "message": "ChannelFence; hesap, kullanım analizi, reklam veya geliştirici tarafından kontrol edilen bir sunucu olmadan çalışacak şekilde tasarlanmıştır. Tek amacı, kullanıcıların YouTube akışlarında seçtikleri içerik üreticilerini ve isteğe bağlı olarak Shorts bölümlerini gizleyebilmeleri için yerel kontroller sağlamaktır."
+    "message": "ChannelFence; hesap, kullanım analizi, reklam veya geliştirici tarafından kontrol edilen bir sunucu olmadan çalışacak şekilde tasarlanmıştır. Tek amacı, seçilen içerik üreticilerini ve isteğe bağlı olarak belirli akış içeriklerini gizlemek ve Ana Sayfa ızgarasını ayarlamak için yerel kontroller sunarak YouTube akışlarını özelleştirmektir."
   },
   "privacyInformationHeading": {
     "message": "ChannelFence'in işlediği bilgiler"
   },
   "privacyInformation": {
-    "message": "YouTube'u kullanırken ChannelFence yalnızca içerik üreticisi adlarını ve kanal bağlantılarını belirlemek, üreticinin engel listesinde olup olmadığını kontrol etmek, engelleme düğmeleri eklemek ve eşleşen içerikleri gizlemek için gereken sınırlı sayfa içeriğini okur. Engel listeniz boş değilse, içerik üreticisini göstermeyen kompakt Shorts kartları YouTube'un oEmbed uç noktası üzerinden kontrol edilir. Böylece ChannelFence üreticilerinin engellenip engellenmediğini belirleyebilir. Dönen kompakt Shorts meta verileri yalnızca bellekte önbelleğe alınır; tarama geçmişine veya uzantı depolama alanına eklenmez. Bir içerik üreticisini engellemeyi seçtiğinizde ChannelFence, üreticinin görünen adını, herkese açık kanal kimliğini veya kullanıcı adını, herkese açık kanal URL'sini ve engellemenin oluşturulduğu zamanı kaydeder. Kompakt bir Short üzerinden engellerseniz ChannelFence, sayfa yenilendiğinde aynı kartın gizli kalması için sizin seçtiğiniz herkese açık Short yolunu da üreticinin kaydında saklar."
+    "message": "YouTube'u kullanırken ChannelFence yalnızca içerik üreticisi adlarını ve kanal bağlantılarını belirlemek, üreticinin engel listesinde olup olmadığını kontrol etmek, engelleme düğmeleri eklemek ve eşleşen içerikleri gizlemek için gereken sınırlı sayfa içeriğini okur. Engel listeniz boş değilse, içerik üreticisini göstermeyen kompakt Shorts kartları YouTube'un oEmbed uç noktası üzerinden kontrol edilir. Böylece ChannelFence üreticilerinin engellenip engellenmediğini belirleyebilir. Dönen kompakt Shorts meta verileri yalnızca bellekte önbelleğe alınır; tarama geçmişine veya uzantı depolama alanına eklenmez. Bir içerik üreticisini engellemeyi seçtiğinizde ChannelFence, üreticinin görünen adını, herkese açık kanal kimliğini veya kullanıcı adını, herkese açık kanal URL'sini ve engellemenin oluşturulduğu zamanı kaydeder. Kompakt bir Short üzerinden engellerseniz ChannelFence, sayfa yenilendiğinde aynı kartın gizli kalması için sizin seçtiğiniz herkese açık Short yolunu da üreticinin kaydında saklar. ChannelFence, seçtiğiniz Ana Sayfa görünümü tercihlerini uygulamak için sayfa yapısını da okur. Bu tercihler, ek ağ istekleri olmadan yerel olarak uygulanır."
   },
   "privacyStorageHeading": {
     "message": "Depolama ve aktarım"
@@ -439,13 +439,13 @@
     "message": "Depolama:"
   },
   "privacyStoragePermission": {
-    "message": "etkinleştirme durumunu, dil tercihini, yorum ve akışlardaki Shorts tercihlerini ve engellenen içerik üreticisi listesini yerel olarak kaydeder."
+    "message": "etkinleştirme durumunu, dil tercihini, yorum ve akış görünümü tercihlerini ve engellenen içerik üreticisi listesini yerel olarak kaydeder."
   },
   "privacyYouTubeLabel": {
     "message": "youtube.com erişimi:"
   },
   "privacyYouTubePermission": {
-    "message": "YouTube sayfalarındaki içerik üreticilerini belirler, kullanıcıya yönelik engelleme düğmeleri ekler ve engellenen üreticilerin içeriklerini gizler."
+    "message": "YouTube sayfalarındaki içerik üreticilerini belirler, kullanıcıya yönelik engelleme düğmeleri ekler, eşleşen içerikleri gizler ve seçilen Ana Sayfa görünümü tercihlerini uygular."
   },
   "privacyControlHeading": {
     "message": "Verileri yönetme ve silme"

@@ -415,16 +415,16 @@
     "message": "Ingangsdatum:"
   },
   "privacyDate": {
-    "message": "27 augustus 2026"
+    "message": "1 november 2026"
   },
   "privacyIntro": {
-    "message": "ChannelFence is ontworpen om te werken zonder account, gebruiksanalyses, advertenties of een server onder beheer van de ontwikkelaar. Het enige doel is gebruikers lokale bedieningselementen te bieden om geselecteerde makers en desgewenst Shorts-secties in YouTube-feeds te verbergen."
+    "message": "ChannelFence is ontworpen om te werken zonder account, gebruiksanalyses, advertenties of een server onder beheer van de ontwikkelaar. Het enige doel is lokale bedieningselementen te bieden om YouTube-feeds aan te passen door geselecteerde makers en desgewenst bepaalde feedonderdelen te verbergen en het raster op de homepage aan te passen."
   },
   "privacyInformationHeading": {
     "message": "Gegevens die ChannelFence verwerkt"
   },
   "privacyInformation": {
-    "message": "Terwijl je YouTube gebruikt, leest ChannelFence alleen de pagina-inhoud die nodig is om namen van makers en kanaallinks te herkennen, te bepalen of een maker op je blokkeerlijst staat, blokkeerknoppen toe te voegen en bijbehorende inhoud te verbergen. Als je blokkeerlijst niet leeg is, worden compacte Shorts-kaarten die hun maker niet vermelden gecontroleerd via het oEmbed-eindpunt van YouTube. Zo kan ChannelFence bepalen of de makers zijn geblokkeerd. De ontvangen metadata van compacte Shorts worden alleen in het werkgeheugen gecachet en niet toegevoegd aan de browsegeschiedenis of extensieopslag. Wanneer je een maker blokkeert, slaat ChannelFence de weergegeven naam van de maker, de openbare kanaal-ID of handle, de openbare kanaal-URL en het tijdstip van blokkeren op. Als je blokkeert via een compacte Short, slaat ChannelFence ook het openbare pad van die door jou gekozen Short op bij de gegevens van de maker, zodat diezelfde kaart na het vernieuwen van de pagina verborgen blijft."
+    "message": "Terwijl je YouTube gebruikt, leest ChannelFence alleen de pagina-inhoud die nodig is om namen van makers en kanaallinks te herkennen, te bepalen of een maker op je blokkeerlijst staat, blokkeerknoppen toe te voegen en bijbehorende inhoud te verbergen. Als je blokkeerlijst niet leeg is, worden compacte Shorts-kaarten die hun maker niet vermelden gecontroleerd via het oEmbed-eindpunt van YouTube. Zo kan ChannelFence bepalen of de makers zijn geblokkeerd. De ontvangen metadata van compacte Shorts worden alleen in het werkgeheugen gecachet en niet toegevoegd aan de browsegeschiedenis of extensieopslag. Wanneer je een maker blokkeert, slaat ChannelFence de weergegeven naam van de maker, de openbare kanaal-ID of handle, de openbare kanaal-URL en het tijdstip van blokkeren op. Als je blokkeert via een compacte Short, slaat ChannelFence ook het openbare pad van die door jou gekozen Short op bij de gegevens van de maker, zodat diezelfde kaart na het vernieuwen van de pagina verborgen blijft. ChannelFence leest ook de paginastructuur om je gekozen voorkeuren voor de weergave van de homepage toe te passen. Deze voorkeuren worden lokaal toegepast zonder extra netwerkverzoeken."
   },
   "privacyStorageHeading": {
     "message": "Opslag en overdracht"
@@ -439,13 +439,13 @@
     "message": "Opslag:"
   },
   "privacyStoragePermission": {
-    "message": "bewaart lokaal of de extensie is ingeschakeld, de taalvoorkeur, de voorkeuren voor reacties en Shorts in feeds en de lijst met geblokkeerde makers."
+    "message": "bewaart lokaal of de extensie is ingeschakeld, de taalvoorkeur, de voorkeuren voor reacties en feedweergave en de lijst met geblokkeerde makers."
   },
   "privacyYouTubeLabel": {
     "message": "Toegang tot youtube.com:"
   },
   "privacyYouTubePermission": {
-    "message": "herkent makers op YouTube-pagina's, voegt blokkeerknoppen voor gebruikers toe en verbergt inhoud van geblokkeerde makers."
+    "message": "herkent makers op YouTube-pagina's, voegt blokkeerknoppen voor gebruikers toe, verbergt bijbehorende inhoud en past de gekozen voorkeuren voor de weergave van de homepage toe."
   },
   "privacyControlHeading": {
     "message": "Gegevens beheren en verwijderen"

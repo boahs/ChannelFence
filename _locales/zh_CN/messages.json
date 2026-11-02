@@ -415,16 +415,16 @@
     "message": "生效日期："
   },
   "privacyDate": {
-    "message": "2026年8月27日"
+    "message": "2026年11月1日"
   },
   "privacyIntro": {
-    "message": "ChannelFence 的设计不需要账号、分析工具、广告或开发者控制的服务器。它唯一的用途是在本地提供控制功能，让用户在 YouTube 信息流中隐藏选定的创作者，并可选择隐藏 Shorts 栏目。"
+    "message": "ChannelFence 的设计不需要账号、分析工具、广告或开发者控制的服务器。它唯一的用途是在本地提供控制功能，让用户通过隐藏选定创作者的内容、按需隐藏信息流中的其他内容以及调整首页网格来自定义 YouTube 信息流。"
   },
   "privacyInformationHeading": {
     "message": "ChannelFence 处理的信息"
   },
   "privacyInformation": {
-    "message": "使用 YouTube 时，ChannelFence 仅会读取必要的有限页面内容，用于识别创作者名称和频道链接、判断创作者是否在屏蔽列表中、添加屏蔽按钮，以及隐藏匹配的内容。当屏蔽列表不为空时，对于未显示创作者的小型 Shorts 卡片，ChannelFence 会通过 YouTube 的 oEmbed 接口查询，以判断其创作者是否已被屏蔽。返回的 Shorts 元数据仅缓存在内存中，不会添加到浏览记录或扩展程序存储中。当你选择屏蔽创作者时，ChannelFence 会保存其显示名称、公开频道 ID 或标识名、公开频道网址，以及屏蔽时间。如果从小型 Shorts 卡片进行屏蔽，ChannelFence 还会在该创作者的记录中保存你所选择的公开 Shorts 路径，以确保刷新页面后同一卡片仍保持隐藏。"
+    "message": "使用 YouTube 时，ChannelFence 仅会读取必要的有限页面内容，用于识别创作者名称和频道链接、判断创作者是否在屏蔽列表中、添加屏蔽按钮，以及隐藏匹配的内容。当屏蔽列表不为空时，对于未显示创作者的小型 Shorts 卡片，ChannelFence 会通过 YouTube 的 oEmbed 接口查询，以判断其创作者是否已被屏蔽。返回的 Shorts 元数据仅缓存在内存中，不会添加到浏览记录或扩展程序存储中。当你选择屏蔽创作者时，ChannelFence 会保存其显示名称、公开频道 ID 或标识名、公开频道网址，以及屏蔽时间。如果从小型 Shorts 卡片进行屏蔽，ChannelFence 还会在该创作者的记录中保存你所选择的公开 Shorts 路径，以确保刷新页面后同一卡片仍保持隐藏。ChannelFence 还会读取页面结构，以应用你选择的首页外观偏好设置。这些设置在本地应用，不会产生额外的网络请求。"
   },
   "privacyStorageHeading": {
     "message": "存储与传输"
@@ -439,13 +439,13 @@
     "message": "存储："
   },
   "privacyStoragePermission": {
-    "message": "在本地保存启用状态、语言偏好、评论和信息流中的 Shorts 偏好设置，以及已屏蔽创作者列表。"
+    "message": "在本地保存启用状态、语言偏好、评论和信息流外观偏好设置，以及已屏蔽创作者列表。"
   },
   "privacyYouTubeLabel": {
     "message": "访问 youtube.com："
   },
   "privacyYouTubePermission": {
-    "message": "识别 YouTube 页面中的创作者，添加供用户操作的屏蔽按钮，并隐藏已屏蔽创作者的内容。"
+    "message": "识别 YouTube 页面中的创作者，添加供用户操作的屏蔽按钮，隐藏匹配的内容，并应用你选择的首页外观偏好设置。"
   },
   "privacyControlHeading": {
     "message": "数据管理与删除"

@@ -415,16 +415,16 @@
     "message": "Ngày có hiệu lực:"
   },
   "privacyDate": {
-    "message": "27 tháng 8 năm 2026"
+    "message": "1 tháng 11 năm 2026"
   },
   "privacyIntro": {
-    "message": "ChannelFence được thiết kế để hoạt động mà không cần tài khoản, phân tích sử dụng, quảng cáo hay máy chủ do nhà phát triển kiểm soát. Mục đích duy nhất là cung cấp các công cụ điều khiển cục bộ để người dùng ẩn nhà sáng tạo đã chọn và tùy chọn ẩn các mục Shorts trong bảng tin YouTube."
+    "message": "ChannelFence được thiết kế để hoạt động mà không cần tài khoản, phân tích sử dụng, quảng cáo hay máy chủ do nhà phát triển kiểm soát. Mục đích duy nhất là cung cấp các công cụ điều khiển cục bộ để tùy chỉnh bảng tin YouTube bằng cách ẩn nhà sáng tạo đã chọn, tùy chọn ẩn nội dung khác trong bảng tin và điều chỉnh lưới trên trang chủ."
   },
   "privacyInformationHeading": {
     "message": "Thông tin ChannelFence xử lý"
   },
   "privacyInformation": {
-    "message": "Khi bạn dùng YouTube, ChannelFence chỉ đọc phần nội dung trang cần thiết để nhận diện tên nhà sáng tạo và liên kết kênh, kiểm tra nhà sáng tạo có trong danh sách chặn hay không, thêm nút chặn và ẩn nội dung phù hợp. Khi danh sách chặn không trống, những thẻ Shorts nhỏ gọn không hiển thị nhà sáng tạo sẽ được kiểm tra qua điểm cuối oEmbed của YouTube để xác định nhà sáng tạo của chúng có bị chặn hay không. Siêu dữ liệu Shorts được trả về chỉ được lưu tạm trong bộ nhớ và không được thêm vào lịch sử duyệt web hay bộ nhớ lưu trữ của tiện ích. Khi bạn chọn chặn nhà sáng tạo, ChannelFence lưu tên hiển thị, mã kênh hoặc tên người dùng công khai, URL kênh công khai và thời điểm chặn. Nếu chặn từ thẻ Shorts nhỏ gọn, ChannelFence còn lưu đường dẫn công khai của video Shorts do bạn chọn vào hồ sơ nhà sáng tạo, để đúng thẻ đó vẫn được ẩn sau khi tải lại trang."
+    "message": "Khi bạn dùng YouTube, ChannelFence chỉ đọc phần nội dung trang cần thiết để nhận diện tên nhà sáng tạo và liên kết kênh, kiểm tra nhà sáng tạo có trong danh sách chặn hay không, thêm nút chặn và ẩn nội dung phù hợp. Khi danh sách chặn không trống, những thẻ Shorts nhỏ gọn không hiển thị nhà sáng tạo sẽ được kiểm tra qua điểm cuối oEmbed của YouTube để xác định nhà sáng tạo của chúng có bị chặn hay không. Siêu dữ liệu Shorts được trả về chỉ được lưu tạm trong bộ nhớ và không được thêm vào lịch sử duyệt web hay bộ nhớ lưu trữ của tiện ích. Khi bạn chọn chặn nhà sáng tạo, ChannelFence lưu tên hiển thị, mã kênh hoặc tên người dùng công khai, URL kênh công khai và thời điểm chặn. Nếu chặn từ thẻ Shorts nhỏ gọn, ChannelFence còn lưu đường dẫn công khai của video Shorts do bạn chọn vào hồ sơ nhà sáng tạo, để đúng thẻ đó vẫn được ẩn sau khi tải lại trang. ChannelFence cũng đọc cấu trúc trang để áp dụng các tùy chọn giao diện trang chủ mà bạn đã chọn. Những tùy chọn này được áp dụng cục bộ mà không có thêm yêu cầu mạng."
   },
   "privacyStorageHeading": {
     "message": "Lưu trữ và truyền dữ liệu"
@@ -439,13 +439,13 @@
     "message": "Lưu trữ:"
   },
   "privacyStoragePermission": {
-    "message": "lưu cục bộ trạng thái bật, ngôn ngữ đã chọn, tùy chọn bình luận và Shorts trong bảng tin, cùng danh sách nhà sáng tạo bị chặn."
+    "message": "lưu cục bộ trạng thái bật, ngôn ngữ đã chọn, tùy chọn bình luận và giao diện bảng tin, cùng danh sách nhà sáng tạo bị chặn."
   },
   "privacyYouTubeLabel": {
     "message": "Truy cập youtube.com:"
   },
   "privacyYouTubePermission": {
-    "message": "nhận diện nhà sáng tạo trên các trang YouTube, thêm nút chặn cho người dùng và ẩn nội dung của nhà sáng tạo bị chặn."
+    "message": "nhận diện nhà sáng tạo trên các trang YouTube, thêm nút chặn cho người dùng, ẩn nội dung phù hợp và áp dụng các tùy chọn giao diện trang chủ mà bạn đã chọn."
   },
   "privacyControlHeading": {
     "message": "Quản lý và xóa dữ liệu"
