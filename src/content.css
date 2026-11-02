@@ -28,6 +28,45 @@ ytd-rich-grid-renderer:has(.cf-hidden-by-channelfence) > #contents > ytd-rich-gr
   display: none !important;
 }
 
+/* Home cleanup is independent of creator blocking. Match dedicated promotion
+   renderers and their own slots, never an entire row containing normal videos.
+   Structural selectors also cover localized and newly inserted feed cards. */
+html.cf-hide-home-ads ytd-browse[page-subtype="home"] :is(
+  ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer,
+  ytd-promoted-video-renderer, ytd-display-ad-renderer
+),
+html.cf-hide-home-ads ytd-browse[page-subtype="home"] ytd-rich-item-renderer:has(
+  > :is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer),
+  > #content > :is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer)
+),
+html.cf-hide-home-ads ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has(
+  > :is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer):only-child,
+  > #content:only-child > :is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer):only-child
+) {
+  display: none !important;
+}
+
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] :is(
+  ytd-statement-banner-renderer, ytd-banner-promo-renderer,
+  ytd-brand-video-shelf-renderer, ytd-brand-video-singleton-renderer
+),
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-item-renderer:has(
+  > :is(ytd-statement-banner-renderer, ytd-banner-promo-renderer, ytd-brand-video-shelf-renderer, ytd-brand-video-singleton-renderer),
+  > #content > :is(ytd-statement-banner-renderer, ytd-banner-promo-renderer, ytd-brand-video-shelf-renderer, ytd-brand-video-singleton-renderer)
+),
+html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has(
+  > :is(ytd-statement-banner-renderer, ytd-banner-promo-renderer, ytd-brand-video-shelf-renderer, ytd-brand-video-singleton-renderer):only-child,
+  > #content:only-child > :is(ytd-statement-banner-renderer, ytd-banner-promo-renderer, ytd-brand-video-shelf-renderer, ytd-brand-video-singleton-renderer):only-child
+) {
+  display: none !important;
+}
+
+/* Let normal cards fill a hidden ad's slot in legacy fixed-row Home grids. */
+html.cf-hide-home-ads ytd-browse[page-subtype="home"] ytd-rich-grid-renderer:has(:is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer)) > #contents > ytd-rich-grid-row,
+html.cf-hide-home-ads ytd-browse[page-subtype="home"] ytd-rich-grid-renderer:has(:is(ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer, ytd-promoted-video-renderer, ytd-display-ad-renderer)) > #contents > ytd-rich-grid-row > #contents {
+  display: contents !important;
+}
+
 html.cf-watch-pending ytd-watch-flexy #movie_player,
 html.cf-watch-pending ytd-shorts ytd-reel-video-renderer video,
 html.cf-watch-pending ytd-shorts ytd-reel-video-renderer #player,
@@ -323,4 +362,56 @@ html[dark] .cf-shorts-action__button:hover {
     border-radius: 18px !important;
     padding: 28px 22px !important;
   }
+}
+
+/* Optional Home thumbnail sizes use the feed's available width, including
+   sidebar and browser zoom changes. Native layouts return when the flag is
+   removed. Medium is also the CSS fallback for an absent or invalid size. */
+html.cf-compact-home-grid {
+  --cf-home-card-min: 280px;
+  --cf-home-cap-width: calc((100% - 64px) / 5);
+}
+
+html.cf-compact-home-grid[data-cf-home-size="small"] {
+  --cf-home-card-min: 220px;
+  --cf-home-cap-width: calc((100% - 80px) / 6);
+}
+
+html.cf-compact-home-grid[data-cf-home-size="large"] {
+  --cf-home-card-min: 340px;
+  --cf-home-cap-width: calc((100% - 48px) / 4);
+}
+
+html.cf-compact-home-grid ytd-browse[page-subtype="home"] ytd-rich-grid-renderer > #contents {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, max(var(--cf-home-card-min), var(--cf-home-cap-width))), 1fr)) !important;
+  gap: 24px 16px !important;
+  align-items: start !important;
+  min-width: 0 !important;
+}
+
+/* Flatten only legacy row boxes. YouTube retains its original DOM order. */
+html.cf-compact-home-grid ytd-browse[page-subtype="home"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-row,
+html.cf-compact-home-grid ytd-browse[page-subtype="home"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-row > #contents {
+  display: contents !important;
+}
+
+/* Resize only outer feed cells, never cards nested inside a Shorts shelf. */
+html.cf-compact-home-grid ytd-browse[page-subtype="home"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer,
+html.cf-compact-home-grid ytd-browse[page-subtype="home"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-row > #contents > ytd-rich-item-renderer {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html.cf-compact-home-grid ytd-browse[page-subtype="home"] ytd-rich-grid-renderer > #contents > :is(ytd-rich-section-renderer, ytd-continuation-item-renderer),
+html.cf-compact-home-grid ytd-browse[page-subtype="home"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-row > #contents > :is(ytd-rich-section-renderer, ytd-continuation-item-renderer) {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  box-sizing: border-box !important;
 }

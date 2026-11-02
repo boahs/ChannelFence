@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Verwijdert Shorts-secties en -kaarten van Home, uit zoekresultaten en uit andere feeds. Het tabblad Shorts blijft beschikbaar."
   },
+  "hideHomeAds": {
+    "message": "Gesponsorde kaarten op Home verbergen"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Verbergt gesponsorde videokaarten op YouTube Home."
+  },
+  "hideHomePromotions": {
+    "message": "Uitgelichte banners op Home verbergen"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Verbergt uitgelichte en promotionele banners van YouTube op Home."
+  },
+  "compactHomeGrid": {
+    "message": "Compact raster op Home"
+  },
+  "compactHomeGridHelp": {
+    "message": "Kies een formaat voor de miniaturen. Het raster past zich aan je venster aan."
+  },
+  "compactHomeSize": {
+    "message": "Formaat van miniaturen"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Klein"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Middel"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Groot"
+  },
   "hideComments": {
     "message": "Reacties van geblokkeerde makers verbergen"
   },

@@ -1,6 +1,6 @@
 import { type Page } from "@playwright/test";
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
-import { creatorCard, rightRailLockup } from "../fixtures/youtube-fixtures";
+import { creatorCard, promotedHomeCard, rightRailLockup } from "../fixtures/youtube-fixtures";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
 const cardWidth = 216;
@@ -135,6 +135,31 @@ async function replaceByline(page: Page, label: string): Promise<void> {
 }
 
 test.describe("Home feed layout after creator blocking", () => {
+  test("packs recommendations across a hidden sponsored cell and restores its original slot", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const sponsoredOrder = ["a", "home-ad", "c", "d", "e", "f"];
+    const firstRow = `<ytd-rich-grid-row><div id="contents">${[
+      creatorCard({ id: "a", displayName: "Allowed a", handle: "@allowed-a" }),
+      promotedHomeCard("Fixture Advertiser", "home-ad"),
+      creatorCard({ id: "c", displayName: "Allowed c", handle: "@allowed-c" })
+    ].join("")}</div></ytd-rich-grid-row>`;
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(`<ytd-browse page-subtype="home">${feedMarkup(firstRow + row(["d", "e", "f"]))}</ytd-browse>`, "/");
+    await expectPackedCards(extensionPage, sponsoredOrder);
+
+    await extensionStorage.set({ cfHideHomeAds: true });
+    await expect(youtube.card("home-ad")).toBeHidden();
+    await expectPackedCards(extensionPage, sponsoredOrder.filter((id) => id !== "home-ad"));
+    await expect(youtube.blockButton("a")).toBeVisible();
+    await expect(youtube.blockButton("c")).toBeVisible();
+
+    await extensionStorage.set({ cfHideHomeAds: false });
+    await expect(youtube.card("home-ad")).toBeVisible();
+    await expectPackedCards(extensionPage, sponsoredOrder);
+  });
+
   test("removes the full ordinary linkless feed cell and restores its original slot with Undo", async ({
     extensionPage,
     extensionStorage

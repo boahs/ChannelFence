@@ -169,6 +169,109 @@ test.describe("extension UI", () => {
     await popupPage.close();
   });
 
+  test("Home cleanup is opt-in and synchronizes without changing existing preferences", async ({
+    extensionContext, extensionId, extensionPage, extensionStorage
+  }) => {
+    const existingPreferences = {
+      cfEnabled: false,
+      cfHideComments: false,
+      cfHideHomeShorts: true,
+      cfBlockedChannels: [blockedCreator("@kept", "Kept Creator")]
+    };
+    await extensionStorage.set(existingPreferences);
+    const options = new OptionsPage(extensionPage, extensionId);
+    await options.open();
+    await expect(extensionPage.getByRole("checkbox", { name: "Hide Shorts in YouTube feeds" }))
+      .toBeChecked();
+
+    const popupPage = await extensionContext.newPage();
+    const popup = new PopupPage(popupPage, extensionId);
+    await popup.open();
+    const optionsSize = extensionPage.getByRole("combobox", { name: "Thumbnail size" });
+    const popupSize = popupPage.getByRole("combobox", { name: "Thumbnail size" });
+    await expect(popupPage.getByRole("checkbox", { name: "Hide Shorts in YouTube feeds" }))
+      .toBeChecked();
+    await expect(optionsSize).toBeDisabled();
+    await expect(popupSize).toBeDisabled();
+    await expect(optionsSize).toHaveValue("medium");
+    await expect(popupSize).toHaveValue("medium");
+
+    const labels = [
+      "Hide sponsored cards on Home", "Hide featured banners on Home", "Compact Home grid"
+    ];
+    for (const name of labels) {
+      const optionsToggle = extensionPage.getByRole("checkbox", { name, exact: true });
+      const popupToggle = popupPage.getByRole("checkbox", { name, exact: true });
+      await expect(optionsToggle).not.toBeChecked();
+      await expect(popupToggle).not.toBeChecked();
+      await popupToggle.locator("..").click();
+      await expect(optionsToggle).toBeChecked();
+      await expect(popupToggle).toBeChecked();
+    }
+    await expect(optionsSize).toBeEnabled();
+    await expect(popupSize).toBeEnabled();
+    await popupSize.selectOption("small");
+    await expect(optionsSize).toHaveValue("small");
+    await optionsSize.selectOption("medium");
+    await expect(popupSize).toHaveValue("medium");
+    await popupSize.selectOption("large");
+    await expect(optionsSize).toHaveValue("large");
+    expect(await extensionStorage.get()).toMatchObject({
+      ...existingPreferences,
+      cfHideHomeAds: true,
+      cfHideHomePromotions: true,
+      cfCompactHomeGrid: true,
+      cfCompactHomeSize: "large"
+    });
+
+    await extensionPage.reload();
+    await popupPage.reload();
+    await expect(optionsSize).toHaveValue("large");
+    await expect(popupSize).toHaveValue("large");
+    for (const name of labels) {
+      const optionsToggle = extensionPage.getByRole("checkbox", { name, exact: true });
+      const popupToggle = popupPage.getByRole("checkbox", { name, exact: true });
+      await expect(optionsToggle).toBeChecked();
+      await expect(popupToggle).toBeChecked();
+      await optionsToggle.locator("..").click();
+      await expect(optionsToggle).not.toBeChecked();
+      await expect(popupToggle).not.toBeChecked();
+    }
+    await expect(optionsSize).toBeDisabled();
+    await expect(popupSize).toBeDisabled();
+    expect(await extensionStorage.get()).toMatchObject({
+      ...existingPreferences,
+      cfHideHomeAds: false,
+      cfHideHomePromotions: false,
+      cfCompactHomeGrid: false,
+      cfCompactHomeSize: "large"
+    });
+    await popupPage.close();
+  });
+
+  test("an unsupported thumbnail size falls back to medium in both controls", async ({
+    extensionContext, extensionId, extensionPage, extensionStorage
+  }) => {
+    await extensionStorage.set({ cfCompactHomeGrid: true, cfCompactHomeSize: "unsupported" });
+    const options = new OptionsPage(extensionPage, extensionId);
+    await options.open();
+    const popupPage = await extensionContext.newPage();
+    const popup = new PopupPage(popupPage, extensionId);
+    await popup.open();
+    const optionsSize = extensionPage.getByRole("combobox", { name: "Thumbnail size" });
+    const popupSize = popupPage.getByRole("combobox", { name: "Thumbnail size" });
+    await expect(optionsSize).toBeEnabled();
+    await expect(popupSize).toBeEnabled();
+    await expect(optionsSize).toHaveValue("medium");
+    await expect(popupSize).toHaveValue("medium");
+    await optionsSize.selectOption("small");
+    await expect(popupSize).toHaveValue("small");
+    await extensionStorage.set({ cfCompactHomeSize: "unsupported" });
+    await expect(optionsSize).toHaveValue("medium");
+    await expect(popupSize).toHaveValue("medium");
+    await popupPage.close();
+  });
+
   test("options validates and manually blocks a YouTube handle", async ({
     extensionId,
     extensionPage,

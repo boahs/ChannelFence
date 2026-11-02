@@ -23,6 +23,23 @@ for (const locale of allLocales) {
       await options.open();
       await expect(extensionPage.locator("html")).toHaveAttribute("lang", messages.languageCode.message);
       await expect(extensionPage).toHaveTitle(messages.settingsPageTitle.message);
+      for (const [label, help] of [
+        [messages.hideHomeAds, messages.hideHomeAdsHelp],
+        [messages.hideHomePromotions, messages.hideHomePromotionsHelp],
+        [messages.compactHomeGrid, messages.compactHomeGridHelp]
+      ]) {
+        const toggle = extensionPage.getByRole("checkbox", { name: label.message, exact: true });
+        await expect(toggle).not.toBeChecked();
+        await expect(toggle).toHaveAccessibleDescription(help.message);
+      }
+      const optionsSize = extensionPage.getByRole("combobox", { name: messages.compactHomeSize.message });
+      await expect(optionsSize).toBeDisabled();
+      await expect(optionsSize).toHaveValue("medium");
+      await expect(optionsSize.locator("option")).toHaveText([
+        messages.compactHomeSizeSmall.message,
+        messages.compactHomeSizeMedium.message,
+        messages.compactHomeSizeLarge.message
+      ]);
       await extensionPage.getByRole("textbox", { name: messages.manualBlockLabel.message })
         .fill(`@${locale.creator}`);
       await extensionPage.getByRole("button", { name: messages.blockCreator.message, exact: true }).click();
@@ -37,17 +54,47 @@ for (const locale of allLocales) {
       });
 
       const popup = new PopupPage(extensionPage, extensionId);
-      await extensionPage.setViewportSize({ width: 360, height: 800 });
+      await extensionPage.setViewportSize({ width: 360, height: 600 });
       await popup.open();
       await expect(extensionPage.locator("#statusText"))
         .toHaveText(messages.blockedCount.message.replace("$COUNT$", "1"));
       await expect(extensionPage.getByRole("checkbox", { name: messages.hideShortsAccessible.message }))
         .toBeAttached();
+      for (const [label, help] of [
+        [messages.hideHomeAds, messages.hideHomeAdsHelp],
+        [messages.hideHomePromotions, messages.hideHomePromotionsHelp],
+        [messages.compactHomeGrid, messages.compactHomeGridHelp]
+      ]) {
+        const toggle = extensionPage.getByRole("checkbox", { name: label.message, exact: true });
+        await expect(toggle).not.toBeChecked();
+        await expect(toggle).toHaveAccessibleDescription(help.message);
+      }
+      const popupSize = extensionPage.getByRole("combobox", { name: messages.compactHomeSize.message });
+      await expect(popupSize).toBeDisabled();
+      await expect(popupSize).toHaveValue("medium");
+      await expect(popupSize.locator("option")).toHaveText([
+        messages.compactHomeSizeSmall.message,
+        messages.compactHomeSizeMedium.message,
+        messages.compactHomeSizeLarge.message
+      ]);
       await expect(extensionPage.getByRole("button", { name: messages.manageBlockList.message }))
-        .toBeVisible();
+        .toBeInViewport({ ratio: 1 });
+      await expect(extensionPage.locator(".popup__header")).toBeInViewport({ ratio: 1 });
+      await expect(extensionPage.locator(".popup__footer")).toBeInViewport({ ratio: 1 });
       expect(await extensionPage.locator("body").evaluate((body) => body.scrollWidth - body.clientWidth))
         .toBeLessThanOrEqual(1);
+      expect(await extensionPage.locator(".popup__main").evaluate((main) => main.scrollWidth - main.clientWidth))
+        .toBeLessThanOrEqual(1);
       await testInfo.attach(`${locale.catalogCode}-ui-popup`, {
+        body: await extensionPage.locator("body").screenshot(), contentType: "image/png"
+      });
+      await popupSize.scrollIntoViewIfNeeded();
+      await expect(popupSize).toBeInViewport({ ratio: 1 });
+      await expect(extensionPage.locator(".popup__header")).toBeInViewport({ ratio: 1 });
+      await expect(extensionPage.locator(".popup__footer")).toBeInViewport({ ratio: 1 });
+      await expect(extensionPage.getByRole("button", { name: messages.manageBlockList.message }))
+        .toBeInViewport({ ratio: 1 });
+      await testInfo.attach(`${locale.catalogCode}-ui-popup-home-controls`, {
         body: await extensionPage.locator("body").screenshot(), contentType: "image/png"
       });
       await extensionPage.getByRole("button", {

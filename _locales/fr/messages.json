@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Retire les sections et les cartes Shorts de l’accueil, de la recherche et des autres flux. L’onglet Shorts reste accessible."
   },
+  "hideHomeAds": {
+    "message": "Masquer les cartes sponsorisées sur l’accueil"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Masque les cartes de vidéos sponsorisées sur l’accueil de YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "Masquer les bannières à la une sur l’accueil"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Masque les bannières à la une et promotionnelles de YouTube sur l’accueil."
+  },
+  "compactHomeGrid": {
+    "message": "Grille compacte sur l’accueil"
+  },
+  "compactHomeGridHelp": {
+    "message": "Choisissez la taille des miniatures. La grille s’adapte à votre fenêtre."
+  },
+  "compactHomeSize": {
+    "message": "Taille des miniatures"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Petite"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Moyenne"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Grande"
+  },
   "hideComments": {
     "message": "Masquer les commentaires des créateurs bloqués"
   },

@@ -49,7 +49,10 @@
     "ytd-in-feed-ad-layout-renderer",
     "ytd-promoted-video-renderer",
     "ytd-display-ad-renderer",
-    "ytd-banner-promo-renderer"
+    "ytd-banner-promo-renderer",
+    "ytd-statement-banner-renderer",
+    "ytd-brand-video-shelf-renderer",
+    "ytd-brand-video-singleton-renderer"
   ].join(",");
 
   const SHORTS_SHELF_SELECTOR = [
@@ -157,6 +160,10 @@
     enabled: true,
     hideComments: true,
     hideHomeShorts: false,
+    hideHomeAds: false,
+    hideHomePromotions: false,
+    compactHomeGrid: false,
+    compactHomeSize: "medium",
     blocked: [],
     blockedLookup: Shared.createBlockedLookup([]),
     channelPageIdentity: null,
@@ -265,6 +272,11 @@
     state.enabled = values[Shared.STORAGE.enabled] !== false;
     state.hideComments = values[Shared.STORAGE.hideComments] !== false;
     state.hideHomeShorts = values[Shared.STORAGE.hideHomeShorts] === true;
+    state.hideHomeAds = values[Shared.STORAGE.hideHomeAds] === true;
+    state.hideHomePromotions = values[Shared.STORAGE.hideHomePromotions] === true;
+    state.compactHomeGrid = values[Shared.STORAGE.compactHomeGrid] === true;
+    state.compactHomeSize = ["small", "large"].includes(values[Shared.STORAGE.compactHomeSize])
+      ? values[Shared.STORAGE.compactHomeSize] : "medium";
     const storedBlocked = values[Shared.STORAGE.blocked] || [];
     state.blocked = storedBlocked;
     rebuildBlockedLookup();
@@ -2461,6 +2473,19 @@
     processShortsVisibilityWithin(document);
   }
 
+  function syncHomeAppearance() {
+    const active = state.enabled && location.pathname === "/";
+    const root = document.documentElement;
+    root.classList.toggle("cf-hide-home-ads", active && state.hideHomeAds);
+    root.classList.toggle("cf-hide-home-promotions", active && state.hideHomePromotions);
+    root.classList.toggle("cf-compact-home-grid", active && state.compactHomeGrid);
+    if (active && state.compactHomeGrid) {
+      root.setAttribute("data-cf-home-size", state.compactHomeSize);
+    } else {
+      root.removeAttribute("data-cf-home-size");
+    }
+  }
+
   function scan() {
     state.scanScheduled = false;
     state.mutationRoots.clear();
@@ -2468,6 +2493,8 @@
     state.mutationRouteDirty = false;
 
     syncCurrentRoute();
+
+    syncHomeAppearance();
 
     if (!state.enabled) {
       document.querySelectorAll(".cf-hidden-by-channelfence").forEach((item) => {
@@ -2791,6 +2818,19 @@
     if (changes[Shared.STORAGE.hideHomeShorts]) {
       state.hideHomeShorts = changes[Shared.STORAGE.hideHomeShorts].newValue === true;
     }
+    if (changes[Shared.STORAGE.hideHomeAds]) {
+      state.hideHomeAds = changes[Shared.STORAGE.hideHomeAds].newValue === true;
+    }
+    if (changes[Shared.STORAGE.hideHomePromotions]) {
+      state.hideHomePromotions = changes[Shared.STORAGE.hideHomePromotions].newValue === true;
+    }
+    if (changes[Shared.STORAGE.compactHomeGrid]) {
+      state.compactHomeGrid = changes[Shared.STORAGE.compactHomeGrid].newValue === true;
+    }
+    if (changes[Shared.STORAGE.compactHomeSize]) {
+      const size = changes[Shared.STORAGE.compactHomeSize].newValue;
+      state.compactHomeSize = ["small", "large"].includes(size) ? size : "medium";
+    }
     if (changes[Shared.STORAGE.blocked]) {
       const nextBlocked = changes[Shared.STORAGE.blocked].newValue || [];
       if (!blockedListsEqual(state.blocked, nextBlocked)) {
@@ -2803,7 +2843,9 @@
       requestActionUpdate();
     }
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked] ||
-        changes[Shared.STORAGE.hideComments] || changes[Shared.STORAGE.hideHomeShorts]) {
+        changes[Shared.STORAGE.hideComments] || changes[Shared.STORAGE.hideHomeShorts] ||
+        changes[Shared.STORAGE.hideHomeAds] || changes[Shared.STORAGE.hideHomePromotions] ||
+        changes[Shared.STORAGE.compactHomeGrid] || changes[Shared.STORAGE.compactHomeSize]) {
       scheduleStorageScan();
     }
   });

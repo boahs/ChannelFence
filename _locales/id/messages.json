@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Menghapus bagian dan kartu Shorts dari Beranda, penelusuran, dan feed lainnya. Tab Shorts tetap tersedia."
   },
+  "hideHomeAds": {
+    "message": "Sembunyikan kartu bersponsor di Beranda"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Menyembunyikan kartu video bersponsor di Beranda YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "Sembunyikan banner unggulan di Beranda"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Menyembunyikan banner unggulan dan promosi YouTube di Beranda."
+  },
+  "compactHomeGrid": {
+    "message": "Grid ringkas di Beranda"
+  },
+  "compactHomeGridHelp": {
+    "message": "Pilih ukuran thumbnail. Grid menyesuaikan ukuran jendela Anda."
+  },
+  "compactHomeSize": {
+    "message": "Ukuran thumbnail"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Kecil"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Sedang"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Besar"
+  },
   "hideComments": {
     "message": "Sembunyikan komentar dari kreator yang diblokir"
   },

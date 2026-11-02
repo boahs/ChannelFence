@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "হোম, সার্চ ও অন্যান্য ফিড থেকে Shorts বিভাগ ও কার্ড লুকিয়ে দেয়। Shorts ট্যাব ব্যবহার করা যাবে।"
   },
+  "hideHomeAds": {
+    "message": "হোমে স্পনসর করা কার্ড লুকান"
+  },
+  "hideHomeAdsHelp": {
+    "message": "YouTube হোমে স্পনসর করা ভিডিও কার্ড লুকিয়ে দেয়।"
+  },
+  "hideHomePromotions": {
+    "message": "হোমে বিশেষ ব্যানার লুকান"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "হোমে YouTube-এর বিশেষ ও প্রচারমূলক ব্যানার লুকিয়ে দেয়।"
+  },
+  "compactHomeGrid": {
+    "message": "হোমে কমপ্যাক্ট গ্রিড"
+  },
+  "compactHomeGridHelp": {
+    "message": "থাম্বনেইলের আকার বেছে নিন। গ্রিড আপনার উইন্ডোর আকার অনুযায়ী মানিয়ে নেয়।"
+  },
+  "compactHomeSize": {
+    "message": "থাম্বনেইলের আকার"
+  },
+  "compactHomeSizeSmall": {
+    "message": "ছোট"
+  },
+  "compactHomeSizeMedium": {
+    "message": "মাঝারি"
+  },
+  "compactHomeSizeLarge": {
+    "message": "বড়"
+  },
   "hideComments": {
     "message": "ব্লক করা নির্মাতাদের মন্তব্য লুকান"
   },

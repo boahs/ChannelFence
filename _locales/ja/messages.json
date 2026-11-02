@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "ホーム、検索、その他のフィードからショートのセクションとカードを非表示にします。ショートタブは引き続き利用できます。"
   },
+  "hideHomeAds": {
+    "message": "ホームのスポンサー付きカードを非表示"
+  },
+  "hideHomeAdsHelp": {
+    "message": "YouTube のホームでスポンサー付き動画カードを非表示にします。"
+  },
+  "hideHomePromotions": {
+    "message": "ホームの注目バナーを非表示"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "YouTube のホームで注目コンテンツやプロモーションのバナーを非表示にします。"
+  },
+  "compactHomeGrid": {
+    "message": "ホームをコンパクトに表示"
+  },
+  "compactHomeGridHelp": {
+    "message": "サムネイルのサイズを選択します。グリッドはウィンドウに合わせて調整されます。"
+  },
+  "compactHomeSize": {
+    "message": "サムネイルのサイズ"
+  },
+  "compactHomeSizeSmall": {
+    "message": "小"
+  },
+  "compactHomeSizeMedium": {
+    "message": "中"
+  },
+  "compactHomeSizeLarge": {
+    "message": "大"
+  },
   "hideComments": {
     "message": "ブロックしたクリエイターのコメントを非表示"
   },

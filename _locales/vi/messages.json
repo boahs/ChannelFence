@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Ẩn các mục và thẻ Shorts ở trang chủ, tìm kiếm và bảng tin khác. Thẻ Shorts vẫn dùng được."
   },
+  "hideHomeAds": {
+    "message": "Ẩn thẻ được tài trợ trên trang chủ"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Ẩn các thẻ video được tài trợ trên trang chủ YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "Ẩn biểu ngữ nổi bật trên trang chủ"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Ẩn các biểu ngữ nổi bật và quảng bá của YouTube trên trang chủ."
+  },
+  "compactHomeGrid": {
+    "message": "Lưới thu gọn trên trang chủ"
+  },
+  "compactHomeGridHelp": {
+    "message": "Chọn kích thước hình thu nhỏ. Lưới sẽ điều chỉnh theo cửa sổ của bạn."
+  },
+  "compactHomeSize": {
+    "message": "Kích thước hình thu nhỏ"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Nhỏ"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Vừa"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Lớn"
+  },
   "hideComments": {
     "message": "Ẩn bình luận của nhà sáng tạo bị chặn"
   },

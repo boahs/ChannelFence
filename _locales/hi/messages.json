@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "होम, खोज और अन्य फ़ीड से Shorts के सेक्शन और कार्ड हटाता है। Shorts टैब उपलब्ध रहता है।"
   },
+  "hideHomeAds": {
+    "message": "होम पर प्रायोजित कार्ड छिपाएँ"
+  },
+  "hideHomeAdsHelp": {
+    "message": "YouTube होम पर प्रायोजित वीडियो कार्ड छिपाता है।"
+  },
+  "hideHomePromotions": {
+    "message": "होम पर चुनिंदा बैनर छिपाएँ"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "होम पर YouTube के चुनिंदा और प्रचार बैनर छिपाता है।"
+  },
+  "compactHomeGrid": {
+    "message": "होम पर कॉम्पैक्ट ग्रिड"
+  },
+  "compactHomeGridHelp": {
+    "message": "थंबनेल का आकार चुनें। ग्रिड आपकी विंडो के अनुसार ढल जाता है।"
+  },
+  "compactHomeSize": {
+    "message": "थंबनेल का आकार"
+  },
+  "compactHomeSizeSmall": {
+    "message": "छोटा"
+  },
+  "compactHomeSizeMedium": {
+    "message": "मध्यम"
+  },
+  "compactHomeSizeLarge": {
+    "message": "बड़ा"
+  },
   "hideComments": {
     "message": "ब्लॉक किए गए क्रिएटर की टिप्पणियाँ छिपाएँ"
   },

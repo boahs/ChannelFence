@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Entfernt Shorts-Bereiche und -Karten von der Startseite, aus der Suche und aus anderen Feeds. Der Tab „Shorts“ bleibt verfügbar."
   },
+  "hideHomeAds": {
+    "message": "Gesponserte Karten auf der Startseite ausblenden"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Blendet gesponserte Videokarten auf der YouTube-Startseite aus."
+  },
+  "hideHomePromotions": {
+    "message": "Empfehlungsbanner auf der Startseite ausblenden"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Blendet Banner mit hervorgehobenen Inhalten und Werbeaktionen von YouTube auf der Startseite aus."
+  },
+  "compactHomeGrid": {
+    "message": "Kompaktes Raster auf der Startseite"
+  },
+  "compactHomeGridHelp": {
+    "message": "Wähle die Größe der Vorschaubilder. Das Raster passt sich deinem Fenster an."
+  },
+  "compactHomeSize": {
+    "message": "Größe der Vorschaubilder"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Klein"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Mittel"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Groß"
+  },
   "hideComments": {
     "message": "Kommentare blockierter Creator ausblenden"
   },

@@ -78,6 +78,50 @@
 
       <div class="setting-row">
         <div>
+          <div class="setting-row__title" data-i18n="hideHomeAds">Hide sponsored cards on Home</div>
+          <div class="setting-row__copy" id="homeAdsHelp" data-i18n="hideHomeAdsHelp">Hide sponsored video cards on YouTube Home.</div>
+        </div>
+        <label class="switch">
+          <input id="homeAdsToggle" type="checkbox" aria-label="Hide sponsored cards on Home" data-i18n-aria-label="hideHomeAds" aria-describedby="homeAdsHelp">
+          <span class="switch__track" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-row__title" data-i18n="hideHomePromotions">Hide featured banners on Home</div>
+          <div class="setting-row__copy" id="homePromotionsHelp" data-i18n="hideHomePromotionsHelp">Hide YouTube featured and promotional banners on Home.</div>
+        </div>
+        <label class="switch">
+          <input id="homePromotionsToggle" type="checkbox" aria-label="Hide featured banners on Home" data-i18n-aria-label="hideHomePromotions" aria-describedby="homePromotionsHelp">
+          <span class="switch__track" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-row__title" data-i18n="compactHomeGrid">Compact Home grid</div>
+          <div class="setting-row__copy" id="compactHomeGridHelp" data-i18n="compactHomeGridHelp">Choose a thumbnail size. The grid adapts to your window.</div>
+        </div>
+        <label class="switch">
+          <input id="compactHomeGridToggle" type="checkbox" aria-label="Compact Home grid" data-i18n-aria-label="compactHomeGrid" aria-describedby="compactHomeGridHelp">
+          <span class="switch__track" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="setting-row setting-row--language">
+        <div>
+          <label class="setting-row__title" for="compactHomeSizeSelect" data-i18n="compactHomeSize">Thumbnail size</label>
+        </div>
+        <select class="language-select" id="compactHomeSizeSelect" aria-describedby="compactHomeGridHelp" disabled>
+          <option value="small" data-i18n="compactHomeSizeSmall">Small</option>
+          <option value="medium" data-i18n="compactHomeSizeMedium" selected>Medium</option>
+          <option value="large" data-i18n="compactHomeSizeLarge">Large</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <div>
           <div class="setting-row__title" data-i18n="hideComments">Hide comments from blocked creators</div>
           <div class="setting-row__copy" data-i18n="hideCommentsHelp">Also removes comments when ChannelFence can identify the commenter’s channel.</div>
         </div>

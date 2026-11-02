@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Rimuove le sezioni e le schede Shorts dalla Home, dalla ricerca e dagli altri feed. La scheda Shorts resta disponibile."
   },
+  "hideHomeAds": {
+    "message": "Nascondi le schede sponsorizzate nella Home"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Nasconde le schede dei video sponsorizzati nella Home di YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "Nascondi i banner in evidenza nella Home"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Nasconde i banner in evidenza e promozionali di YouTube nella Home."
+  },
+  "compactHomeGrid": {
+    "message": "Griglia compatta nella Home"
+  },
+  "compactHomeGridHelp": {
+    "message": "Scegli la dimensione delle miniature. La griglia si adatta alla finestra."
+  },
+  "compactHomeSize": {
+    "message": "Dimensione delle miniature"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Piccola"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Media"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Grande"
+  },
   "hideComments": {
     "message": "Nascondi commenti dei creator bloccati"
   },

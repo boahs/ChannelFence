@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "يزيل أقسام وبطاقات Shorts من الصفحة الرئيسية والبحث والخلاصات الأخرى. تظل علامة تبويب Shorts متاحة."
   },
+  "hideHomeAds": {
+    "message": "إخفاء البطاقات الإعلانية من الصفحة الرئيسية"
+  },
+  "hideHomeAdsHelp": {
+    "message": "يخفي بطاقات الفيديو الإعلانية من الصفحة الرئيسية في YouTube."
+  },
+  "hideHomePromotions": {
+    "message": "إخفاء لافتات المحتوى المميز من الصفحة الرئيسية"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "يخفي لافتات المحتوى المميز واللافتات الترويجية من YouTube على الصفحة الرئيسية."
+  },
+  "compactHomeGrid": {
+    "message": "شبكة مدمجة للصفحة الرئيسية"
+  },
+  "compactHomeGridHelp": {
+    "message": "اختر حجم الصور المصغرة. تتكيف الشبكة مع حجم نافذتك."
+  },
+  "compactHomeSize": {
+    "message": "حجم الصور المصغرة"
+  },
+  "compactHomeSizeSmall": {
+    "message": "صغير"
+  },
+  "compactHomeSizeMedium": {
+    "message": "متوسط"
+  },
+  "compactHomeSizeLarge": {
+    "message": "كبير"
+  },
   "hideComments": {
     "message": "إخفاء تعليقات منشئي المحتوى المحظورين"
   },

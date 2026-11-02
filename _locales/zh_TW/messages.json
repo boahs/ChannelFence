@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "隱藏首頁、搜尋和其他動態消息中的 Shorts 專區與卡片。Shorts 分頁仍可使用。"
   },
+  "hideHomeAds": {
+    "message": "隱藏首頁的贊助卡片"
+  },
+  "hideHomeAdsHelp": {
+    "message": "隱藏 YouTube 首頁的贊助影片卡片。"
+  },
+  "hideHomePromotions": {
+    "message": "隱藏首頁的精選橫幅"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "隱藏 YouTube 首頁的精選內容和宣傳橫幅。"
+  },
+  "compactHomeGrid": {
+    "message": "緊湊首頁網格"
+  },
+  "compactHomeGridHelp": {
+    "message": "選擇縮圖大小。網格會依視窗大小調整。"
+  },
+  "compactHomeSize": {
+    "message": "縮圖大小"
+  },
+  "compactHomeSizeSmall": {
+    "message": "小"
+  },
+  "compactHomeSizeMedium": {
+    "message": "中"
+  },
+  "compactHomeSizeLarge": {
+    "message": "大"
+  },
   "hideComments": {
     "message": "隱藏已封鎖創作者的留言"
   },

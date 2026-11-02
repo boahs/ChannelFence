@@ -146,6 +146,36 @@
   "hideShortsHelp": {
     "message": "Removes Shorts shelves and cards from Home, search, and other feeds. The Shorts tab remains available."
   },
+  "hideHomeAds": {
+    "message": "Hide sponsored cards on Home"
+  },
+  "hideHomeAdsHelp": {
+    "message": "Hide sponsored video cards on YouTube Home."
+  },
+  "hideHomePromotions": {
+    "message": "Hide featured banners on Home"
+  },
+  "hideHomePromotionsHelp": {
+    "message": "Hide YouTube featured and promotional banners on Home."
+  },
+  "compactHomeGrid": {
+    "message": "Compact Home grid"
+  },
+  "compactHomeGridHelp": {
+    "message": "Choose a thumbnail size. The grid adapts to your window."
+  },
+  "compactHomeSize": {
+    "message": "Thumbnail size"
+  },
+  "compactHomeSizeSmall": {
+    "message": "Small"
+  },
+  "compactHomeSizeMedium": {
+    "message": "Medium"
+  },
+  "compactHomeSizeLarge": {
+    "message": "Large"
+  },
   "hideComments": {
     "message": "Hide comments from blocked creators"
   },
