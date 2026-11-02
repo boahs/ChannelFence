@@ -133,7 +133,11 @@ test("support page publishes contact routes and current software schema", () => 
 
   assert.ok(software, "Support page is missing SoftwareApplication JSON-LD");
   assert.equal(software.softwareVersion, "0.2.1");
-  assert.match(html, /mailto:support@channelfence\.app/i);
+  assert.match(html, /href="https:\/\/x\.com\/GetChannelFence"/);
+  assert.doesNotMatch(html, /mailto:|support@channelfence\.app/i);
+  const privacy = read("PRIVACY.md");
+  assert.match(privacy, /https:\/\/x\.com\/GetChannelFence/);
+  assert.doesNotMatch(privacy, /mailto:|support@channelfence\.app/i);
   assert.match(html, /https:\/\/github\.com\/boahs\/ChannelFence\/issues/i);
   assert.match(read("index.html"), /href=["']support\/["']/i);
 });

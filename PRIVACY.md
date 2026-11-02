@@ -35,4 +35,4 @@ If ChannelFence’s data practices change, this policy and the Chrome Web Store 
 
 ## Contact
 
-Privacy and support questions can be sent to `support@channelfence.app` or submitted through the [ChannelFence issue tracker](https://github.com/boahs/ChannelFence/issues).
+For privacy and support questions, contact [@GetChannelFence on X](https://x.com/GetChannelFence) or use the [ChannelFence issue tracker](https://github.com/boahs/ChannelFence/issues).
