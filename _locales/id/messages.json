@@ -415,16 +415,16 @@
     "message": "Tanggal berlaku:"
   },
   "privacyDate": {
-    "message": "27 Agustus 2026"
+    "message": "1 November 2026"
   },
   "privacyIntro": {
-    "message": "ChannelFence dirancang untuk bekerja tanpa akun, analitik, iklan, atau server yang dikendalikan pengembang. Satu-satunya tujuannya adalah menyediakan kontrol lokal untuk menyembunyikan kreator yang dipilih dan, jika diinginkan, bagian Shorts di feed YouTube."
+    "message": "ChannelFence dirancang untuk bekerja tanpa akun, analitik, iklan, atau server yang dikendalikan pengembang. Satu-satunya tujuannya adalah menyediakan kontrol lokal untuk menyesuaikan feed YouTube dengan menyembunyikan kreator yang dipilih, menyembunyikan konten feed lain secara opsional, dan mengatur tata letak grid Beranda."
   },
   "privacyInformationHeading": {
     "message": "Informasi yang diproses ChannelFence"
   },
   "privacyInformation": {
-    "message": "Saat Anda menggunakan YouTube, ChannelFence hanya membaca konten halaman yang diperlukan untuk mengenali nama kreator dan link channel, memeriksa apakah kreator ada dalam daftar blokir, menambahkan kontrol pemblokiran, dan menyembunyikan konten yang cocok. Jika daftar blokir tidak kosong, kartu Shorts ringkas yang tidak mencantumkan kreatornya diperiksa melalui endpoint oEmbed YouTube agar ChannelFence dapat menentukan apakah kreatornya diblokir. Metadata Shorts ringkas yang diterima hanya disimpan dalam cache di memori dan tidak ditambahkan ke histori penjelajahan atau penyimpanan ekstensi. Saat Anda memilih untuk memblokir kreator, ChannelFence menyimpan nama yang ditampilkan, ID atau nama sebutan channel yang bersifat publik, URL publik channel, dan waktu pemblokiran dibuat. Jika Anda memblokir dari Short ringkas, ChannelFence juga menyimpan path publik Short yang Anda pilih bersama catatan kreator agar kartu yang sama tetap tersembunyi setelah halaman dimuat ulang."
+    "message": "Saat Anda menggunakan YouTube, ChannelFence hanya membaca konten halaman yang diperlukan untuk mengenali nama kreator dan link channel, memeriksa apakah kreator ada dalam daftar blokir, menambahkan kontrol pemblokiran, dan menyembunyikan konten yang cocok. Jika daftar blokir tidak kosong, kartu Shorts ringkas yang tidak mencantumkan kreatornya diperiksa melalui endpoint oEmbed YouTube agar ChannelFence dapat menentukan apakah kreatornya diblokir. Metadata Shorts ringkas yang diterima hanya disimpan dalam cache di memori dan tidak ditambahkan ke histori penjelajahan atau penyimpanan ekstensi. Saat Anda memilih untuk memblokir kreator, ChannelFence menyimpan nama yang ditampilkan, ID atau nama sebutan channel yang bersifat publik, URL publik channel, dan waktu pemblokiran dibuat. Jika Anda memblokir dari Short ringkas, ChannelFence juga menyimpan path publik Short yang Anda pilih bersama catatan kreator agar kartu yang sama tetap tersembunyi setelah halaman dimuat ulang. ChannelFence juga membaca struktur halaman untuk menerapkan preferensi tampilan Beranda yang Anda pilih. Preferensi ini diterapkan secara lokal tanpa permintaan jaringan tambahan."
   },
   "privacyStorageHeading": {
     "message": "Penyimpanan dan pengiriman"
@@ -439,13 +439,13 @@
     "message": "Penyimpanan:"
   },
   "privacyStoragePermission": {
-    "message": "menyimpan status aktif, preferensi bahasa, preferensi komentar dan Shorts di feed, serta daftar kreator yang diblokir secara lokal."
+    "message": "menyimpan status aktif, preferensi bahasa, preferensi komentar dan tampilan feed, serta daftar kreator yang diblokir secara lokal."
   },
   "privacyYouTubeLabel": {
     "message": "Akses ke youtube.com:"
   },
   "privacyYouTubePermission": {
-    "message": "mengenali kreator di halaman YouTube, menambahkan kontrol pemblokiran untuk pengguna, dan menyembunyikan konten dari kreator yang diblokir."
+    "message": "mengenali kreator di halaman YouTube, menambahkan kontrol pemblokiran untuk pengguna, menyembunyikan konten yang cocok, dan menerapkan preferensi tampilan Beranda yang Anda pilih."
   },
   "privacyControlHeading": {
     "message": "Kontrol dan penghapusan data"

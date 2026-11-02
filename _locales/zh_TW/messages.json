@@ -415,16 +415,16 @@
     "message": "生效日期："
   },
   "privacyDate": {
-    "message": "2026年8月27日"
+    "message": "2026年11月1日"
   },
   "privacyIntro": {
-    "message": "ChannelFence 的設計不需要帳戶、使用情況分析、廣告或開發者控管的伺服器。唯一的用途是在本機提供控制功能，讓使用者在 YouTube 動態消息中隱藏選取的創作者，並可選擇隱藏 Shorts 專區。"
+    "message": "ChannelFence 的設計不需要帳戶、使用情況分析、廣告或開發者控管的伺服器。唯一的用途是在本機提供控制功能，讓使用者透過隱藏選取創作者的內容、視需要隱藏動態消息中的其他內容，以及調整首頁網格，自訂 YouTube 動態消息。"
   },
   "privacyInformationHeading": {
     "message": "ChannelFence 處理的資訊"
   },
   "privacyInformation": {
-    "message": "使用 YouTube 時，ChannelFence 僅會讀取必要的有限頁面內容，用來辨識創作者名稱與頻道連結、判斷創作者是否在封鎖清單中、加入封鎖按鈕，以及隱藏符合條件的內容。當封鎖清單不是空的時，對於未顯示創作者的精簡版 Shorts 卡片，ChannelFence 會透過 YouTube 的 oEmbed 端點查詢，以判斷其創作者是否已被封鎖。傳回的 Shorts 中繼資料僅快取於記憶體中，不會加入瀏覽記錄或擴充功能儲存空間。當你選擇封鎖創作者時，ChannelFence 會儲存其顯示名稱、公開頻道識別碼或帳號代碼、公開頻道網址，以及建立封鎖的時間。如果從精簡版 Shorts 卡片進行封鎖，ChannelFence 還會將你所選取的公開 Shorts 路徑儲存於該創作者的記錄中，確保重新整理頁面後，同一卡片仍維持隱藏。"
+    "message": "使用 YouTube 時，ChannelFence 僅會讀取必要的有限頁面內容，用來辨識創作者名稱與頻道連結、判斷創作者是否在封鎖清單中、加入封鎖按鈕，以及隱藏符合條件的內容。當封鎖清單不是空的時，對於未顯示創作者的精簡版 Shorts 卡片，ChannelFence 會透過 YouTube 的 oEmbed 端點查詢，以判斷其創作者是否已被封鎖。傳回的 Shorts 中繼資料僅快取於記憶體中，不會加入瀏覽記錄或擴充功能儲存空間。當你選擇封鎖創作者時，ChannelFence 會儲存其顯示名稱、公開頻道識別碼或帳號代碼、公開頻道網址，以及建立封鎖的時間。如果從精簡版 Shorts 卡片進行封鎖，ChannelFence 還會將你所選取的公開 Shorts 路徑儲存於該創作者的記錄中，確保重新整理頁面後，同一卡片仍維持隱藏。ChannelFence 也會讀取頁面結構，以套用你選擇的首頁外觀偏好設定。這些設定在本機套用，不會產生額外的網路請求。"
   },
   "privacyStorageHeading": {
     "message": "儲存與傳輸"
@@ -439,13 +439,13 @@
     "message": "儲存空間："
   },
   "privacyStoragePermission": {
-    "message": "在本機儲存啟用狀態、語言偏好、留言與動態消息中的 Shorts 偏好設定，以及已封鎖創作者清單。"
+    "message": "在本機儲存啟用狀態、語言偏好、留言與動態消息外觀偏好設定，以及已封鎖創作者清單。"
   },
   "privacyYouTubeLabel": {
     "message": "存取 youtube.com："
   },
   "privacyYouTubePermission": {
-    "message": "辨識 YouTube 頁面中的創作者，加入供使用者操作的封鎖按鈕，並隱藏已封鎖創作者的內容。"
+    "message": "辨識 YouTube 頁面中的創作者，加入供使用者操作的封鎖按鈕，隱藏符合條件的內容，並套用你選擇的首頁外觀偏好設定。"
   },
   "privacyControlHeading": {
     "message": "資料管理與刪除"

@@ -415,16 +415,16 @@
     "message": "Data de vigência:"
   },
   "privacyDate": {
-    "message": "27 de agosto de 2026"
+    "message": "1º de novembro de 2026"
   },
   "privacyIntro": {
-    "message": "O ChannelFence foi desenvolvido para funcionar sem conta, análises de uso, publicidade ou servidor controlado pelo desenvolvedor. Sua única finalidade é oferecer controles locais para ocultar criadores selecionados e, opcionalmente, seções de Shorts nos feeds do YouTube."
+    "message": "O ChannelFence foi desenvolvido para funcionar sem conta, análises de uso, publicidade ou servidor controlado pelo desenvolvedor. Sua única finalidade é oferecer controles locais para personalizar os feeds do YouTube, ocultando criadores selecionados e, opcionalmente, outros conteúdos dos feeds e ajustando a grade da página inicial."
   },
   "privacyInformationHeading": {
     "message": "Informações processadas pelo ChannelFence"
   },
   "privacyInformation": {
-    "message": "Enquanto você usa o YouTube, o ChannelFence lê apenas o conteúdo da página necessário para identificar nomes de criadores e links de canais, verificar se um criador está na sua lista de bloqueio, adicionar controles de bloqueio e ocultar o conteúdo correspondente. Quando sua lista de bloqueio não está vazia, os cartões compactos de Shorts que não mostram seus criadores são consultados pelo endpoint oEmbed do YouTube para que o ChannelFence possa verificar se esses criadores estão bloqueados. Os metadados retornados para esses Shorts são armazenados em cache apenas na memória e não são adicionados ao histórico de navegação nem ao armazenamento da extensão. Quando você bloqueia um criador, o ChannelFence salva o nome exibido, o ID público ou identificador do canal, a URL pública do canal e o momento em que o bloqueio foi criado. Se você bloquear a partir de um Short compacto, o ChannelFence também salva o caminho público desse Short, selecionado por você, junto ao registro do criador, para que o mesmo cartão continue oculto após atualizar a página."
+    "message": "Enquanto você usa o YouTube, o ChannelFence lê apenas o conteúdo da página necessário para identificar nomes de criadores e links de canais, verificar se um criador está na sua lista de bloqueio, adicionar controles de bloqueio e ocultar o conteúdo correspondente. Quando sua lista de bloqueio não está vazia, os cartões compactos de Shorts que não mostram seus criadores são consultados pelo endpoint oEmbed do YouTube para que o ChannelFence possa verificar se esses criadores estão bloqueados. Os metadados retornados para esses Shorts são armazenados em cache apenas na memória e não são adicionados ao histórico de navegação nem ao armazenamento da extensão. Quando você bloqueia um criador, o ChannelFence salva o nome exibido, o ID público ou identificador do canal, a URL pública do canal e o momento em que o bloqueio foi criado. Se você bloquear a partir de um Short compacto, o ChannelFence também salva o caminho público desse Short, selecionado por você, junto ao registro do criador, para que o mesmo cartão continue oculto após atualizar a página. O ChannelFence também lê a estrutura da página para aplicar suas preferências de aparência da página inicial. Essas preferências são aplicadas localmente, sem solicitações de rede adicionais."
   },
   "privacyStorageHeading": {
     "message": "Armazenamento e transmissão"
@@ -439,13 +439,13 @@
     "message": "Armazenamento:"
   },
   "privacyStoragePermission": {
-    "message": "salva localmente o estado de ativação, a preferência de idioma, as preferências de comentários e de Shorts nos feeds e a lista de criadores bloqueados."
+    "message": "salva localmente o estado de ativação, a preferência de idioma, as preferências de comentários e de aparência dos feeds e a lista de criadores bloqueados."
   },
   "privacyYouTubeLabel": {
     "message": "Acesso ao youtube.com:"
   },
   "privacyYouTubePermission": {
-    "message": "identifica criadores nas páginas do YouTube, adiciona controles de bloqueio para o usuário e oculta conteúdo de criadores bloqueados."
+    "message": "identifica criadores nas páginas do YouTube, adiciona controles de bloqueio para o usuário, oculta o conteúdo correspondente e aplica as preferências de aparência da página inicial selecionadas."
   },
   "privacyControlHeading": {
     "message": "Controle e exclusão de dados"

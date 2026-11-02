@@ -415,16 +415,16 @@
     "message": "Gültig ab:"
   },
   "privacyDate": {
-    "message": "27. August 2026"
+    "message": "1. November 2026"
   },
   "privacyIntro": {
-    "message": "ChannelFence ist für die Nutzung ohne Konto, Nutzungsanalyse, Werbung oder einen vom Entwickler kontrollierten Server konzipiert. Der einzige Zweck ist, lokale Bedienelemente bereitzustellen, um ausgewählte Creator und auf Wunsch auch Shorts-Bereiche in YouTube-Feeds auszublenden."
+    "message": "ChannelFence ist für die Nutzung ohne Konto, Nutzungsanalyse, Werbung oder einen vom Entwickler kontrollierten Server konzipiert. Der einzige Zweck ist, lokale Bedienelemente zum Anpassen von YouTube-Feeds bereitzustellen: zum Ausblenden ausgewählter Creator und auf Wunsch weiterer Feed-Inhalte sowie zum Anpassen des Rasters auf der Startseite."
   },
   "privacyInformationHeading": {
     "message": "Von ChannelFence verarbeitete Informationen"
   },
   "privacyInformation": {
-    "message": "Während du YouTube nutzt, liest ChannelFence nur die Seiteninhalte, die erforderlich sind, um Namen von Creatorn und Kanallinks zu erkennen, Einträge in deiner Sperrliste zu prüfen, Schaltflächen zum Blockieren hinzuzufügen und passende Inhalte auszublenden. Wenn deine Sperrliste nicht leer ist, werden kompakte Shorts-Karten ohne Angabe des Creators über den oEmbed-Endpunkt von YouTube geprüft. So kann ChannelFence feststellen, ob ihre Creator blockiert sind. Die zurückgegebenen Metadaten kompakter Shorts werden nur im Arbeitsspeicher zwischengespeichert und weder dem Browserverlauf noch dem Erweiterungsspeicher hinzugefügt. Wenn du einen Creator blockierst, speichert ChannelFence dessen angezeigten Namen, öffentliche Kanal-ID oder öffentlichen Alias, öffentliche Kanal-URL und den Zeitpunkt der Blockierung. Wenn du über ein kompaktes Short blockierst, speichert ChannelFence zusätzlich den von dir ausgewählten öffentlichen Pfad dieses Shorts im Datensatz des Creators, damit genau diese Karte nach dem Neuladen verborgen bleibt."
+    "message": "Während du YouTube nutzt, liest ChannelFence nur die Seiteninhalte, die erforderlich sind, um Namen von Creatorn und Kanallinks zu erkennen, Einträge in deiner Sperrliste zu prüfen, Schaltflächen zum Blockieren hinzuzufügen und passende Inhalte auszublenden. Wenn deine Sperrliste nicht leer ist, werden kompakte Shorts-Karten ohne Angabe des Creators über den oEmbed-Endpunkt von YouTube geprüft. So kann ChannelFence feststellen, ob ihre Creator blockiert sind. Die zurückgegebenen Metadaten kompakter Shorts werden nur im Arbeitsspeicher zwischengespeichert und weder dem Browserverlauf noch dem Erweiterungsspeicher hinzugefügt. Wenn du einen Creator blockierst, speichert ChannelFence dessen angezeigten Namen, öffentliche Kanal-ID oder öffentlichen Alias, öffentliche Kanal-URL und den Zeitpunkt der Blockierung. Wenn du über ein kompaktes Short blockierst, speichert ChannelFence zusätzlich den von dir ausgewählten öffentlichen Pfad dieses Shorts im Datensatz des Creators, damit genau diese Karte nach dem Neuladen verborgen bleibt. ChannelFence liest außerdem die Seitenstruktur, um deine gewählten Einstellungen für die Darstellung der Startseite anzuwenden. Diese Einstellungen werden lokal ohne zusätzliche Netzwerkanfragen angewendet."
   },
   "privacyStorageHeading": {
     "message": "Speicherung und Übertragung"
@@ -439,13 +439,13 @@
     "message": "Speicher:"
   },
   "privacyStoragePermission": {
-    "message": "speichert den Aktivierungsstatus, die Spracheinstellung, die Einstellungen für Kommentare und Shorts in Feeds sowie die Liste blockierter Creator lokal."
+    "message": "speichert den Aktivierungsstatus, die Spracheinstellung, die Einstellungen für Kommentare und die Darstellung der Feeds sowie die Liste blockierter Creator lokal."
   },
   "privacyYouTubeLabel": {
     "message": "Zugriff auf youtube.com:"
   },
   "privacyYouTubePermission": {
-    "message": "erkennt Creator auf YouTube-Seiten, fügt Schaltflächen zum Blockieren hinzu und blendet Inhalte blockierter Creator aus."
+    "message": "erkennt Creator auf YouTube-Seiten, fügt Schaltflächen zum Blockieren hinzu, blendet passende Inhalte aus und wendet die gewählten Einstellungen für die Darstellung der Startseite an."
   },
   "privacyControlHeading": {
     "message": "Daten verwalten und löschen"

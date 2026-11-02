@@ -415,16 +415,16 @@
     "message": "Data di entrata in vigore:"
   },
   "privacyDate": {
-    "message": "27 agosto 2026"
+    "message": "1 novembre 2026"
   },
   "privacyIntro": {
-    "message": "ChannelFence è progettato per funzionare senza account, analisi dell'utilizzo, pubblicità o server controllati dallo sviluppatore. Il suo unico scopo è offrire agli utenti controlli locali per nascondere determinati creator e, facoltativamente, le sezioni Shorts nei feed di YouTube."
+    "message": "ChannelFence è progettato per funzionare senza account, analisi dell'utilizzo, pubblicità o server controllati dallo sviluppatore. Il suo unico scopo è offrire controlli locali per personalizzare i feed di YouTube, nascondendo i creator selezionati e, facoltativamente, altri contenuti dei feed e regolando la griglia della Home."
   },
   "privacyInformationHeading": {
     "message": "Informazioni trattate da ChannelFence"
   },
   "privacyInformation": {
-    "message": "Mentre usi YouTube, ChannelFence legge solo i contenuti della pagina necessari per identificare i nomi dei creator e i link dei canali, verificare se un creator è nell'elenco dei blocchi, aggiungere pulsanti di blocco e nascondere i contenuti corrispondenti. Quando l'elenco dei blocchi non è vuoto, le schede Shorts compatte che non indicano il creator vengono verificate tramite l'endpoint oEmbed di YouTube, così ChannelFence può stabilire se il creator è bloccato. I metadati restituiti per questi Shorts vengono conservati in cache solo in memoria e non vengono aggiunti alla cronologia di navigazione né all'archivio dell'estensione. Quando scegli di bloccare un creator, ChannelFence salva il suo nome visualizzato, l'identificatore pubblico o l'handle del canale, l'URL pubblico del canale e il momento in cui è stato creato il blocco. Se blocchi da uno Short compatto, ChannelFence salva anche il percorso pubblico dello Short che hai selezionato insieme ai dati del creator, affinché quella stessa scheda resti nascosta dopo un aggiornamento della pagina."
+    "message": "Mentre usi YouTube, ChannelFence legge solo i contenuti della pagina necessari per identificare i nomi dei creator e i link dei canali, verificare se un creator è nell'elenco dei blocchi, aggiungere pulsanti di blocco e nascondere i contenuti corrispondenti. Quando l'elenco dei blocchi non è vuoto, le schede Shorts compatte che non indicano il creator vengono verificate tramite l'endpoint oEmbed di YouTube, così ChannelFence può stabilire se il creator è bloccato. I metadati restituiti per questi Shorts vengono conservati in cache solo in memoria e non vengono aggiunti alla cronologia di navigazione né all'archivio dell'estensione. Quando scegli di bloccare un creator, ChannelFence salva il suo nome visualizzato, l'identificatore pubblico o l'handle del canale, l'URL pubblico del canale e il momento in cui è stato creato il blocco. Se blocchi da uno Short compatto, ChannelFence salva anche il percorso pubblico dello Short che hai selezionato insieme ai dati del creator, affinché quella stessa scheda resti nascosta dopo un aggiornamento della pagina. ChannelFence legge anche la struttura della pagina per applicare le preferenze di visualizzazione della Home che hai selezionato. Queste preferenze vengono applicate localmente senza ulteriori richieste di rete."
   },
   "privacyStorageHeading": {
     "message": "Archiviazione e trasmissione"
@@ -439,13 +439,13 @@
     "message": "Archiviazione:"
   },
   "privacyStoragePermission": {
-    "message": "salva localmente lo stato di attivazione, la lingua preferita, le preferenze relative ai commenti e agli Shorts nei feed e l'elenco dei creator bloccati."
+    "message": "salva localmente lo stato di attivazione, la lingua preferita, le preferenze relative ai commenti e alla visualizzazione dei feed e l'elenco dei creator bloccati."
   },
   "privacyYouTubeLabel": {
     "message": "Accesso a youtube.com:"
   },
   "privacyYouTubePermission": {
-    "message": "identifica i creator sulle pagine di YouTube, aggiunge pulsanti di blocco per l'utente e nasconde i contenuti dei creator bloccati."
+    "message": "identifica i creator sulle pagine di YouTube, aggiunge pulsanti di blocco per l'utente, nasconde i contenuti corrispondenti e applica le preferenze di visualizzazione della Home selezionate."
   },
   "privacyControlHeading": {
     "message": "Controllo ed eliminazione dei dati"
