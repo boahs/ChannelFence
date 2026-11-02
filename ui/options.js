@@ -92,10 +92,11 @@ function renderList() {
     name.textContent = Shared.labelForEntry(entry);
     const meta = document.createElement("div");
     meta.className = "block-list__meta";
-    meta.dir = "auto";
+    // Isolate dynamic identifiers and dates so RTL text cannot reorder them.
+    const isolatedKey = `\u2068${entry.key}\u2069`;
     meta.textContent = entry.blockedAt
-      ? I18n.get("blockedEntryDetails", [entry.key, formatDate(entry.blockedAt)])
-      : entry.key;
+      ? I18n.get("blockedEntryDetails", [isolatedKey, `\u2068${formatDate(entry.blockedAt)}\u2069`])
+      : isolatedKey;
     details.append(name, meta);
 
     const unblock = document.createElement("button");

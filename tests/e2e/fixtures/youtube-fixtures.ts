@@ -368,7 +368,7 @@ export function shortsViewer(displayName: string, handle: string): string {
 
 export function youtubeDocument(body: string, language = "en"): string {
   return `<!doctype html>
-    <html lang="${escapeHtml(language)}" style="--yt-spec-text-secondary: #606060">
+    <html lang="${escapeHtml(language)}" style="--yt-spec-text-primary: #0f0f0f; --yt-spec-text-secondary: #606060; --yt-spec-badge-chip-background: rgba(0, 0, 0, 0.05)">
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -383,6 +383,7 @@ export function youtubeDocument(body: string, language = "en"): string {
             border: 1px solid #ddd; display: block; margin: 12px; padding: 12px;
           }
           ytd-channel-name, ytd-menu-renderer { display: inline-block; margin-right: 10px; }
+          reel-action-bar-view-model { display: flex; flex-direction: column; align-items: center; width: 48px; }
           ytd-menu-popup-renderer { background: #202020; display: block; padding: 8px; width: 260px; }
           [role='menuitem'] { align-items: center; display: flex; min-height: 48px; padding: 0 12px; }
         </style>

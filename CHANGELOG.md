@@ -9,6 +9,7 @@
 - Added a language choice in settings. Choose any supported language or return to automatic detection, with open ChannelFence controls updating immediately. YouTube keeps its own language setting.
 - Kept creator names and block-list backups unchanged, with English as the fallback for untranslated browser languages.
 - Fixed long privacy headings overflowing narrow windows.
+- Kept long translated Shorts action labels readable by allowing them to wrap without overlapping the next button.
 - Added right-to-left layouts for Arabic, including mixed-language controls on YouTube and readable creator names and URLs.
 
 <details markdown="1">
@@ -25,7 +26,7 @@
 - Extended shared browser regressions to all eighteen supported interfaces, including Unicode handles, block and Undo controls, import feedback, privacy links, and narrow layouts.
 - Added checks for saved language overrides, switching back to automatic detection, and updates across open extension pages and YouTube controls.
 - Added YouTube fixtures for statistics, creator menus, and collaborator identities in each new language.
-- Extended live YouTube checks to these languages for channel headers, search results, watch recommendations, and compact Shorts. The checks verify both Chrome's interface language and YouTube's rendered language.
+- Extended live YouTube checks to these languages for channel headers, search results, watch recommendations, compact Shorts, and the Shorts viewer action layout. The checks verify both Chrome's interface language and YouTube's rendered language.
 - Attached screenshots of extension pages, blocking controls, and open menus to the browser test reports for visual review.
 - Added mixed-direction checks for Arabic ChannelFence on English YouTube and English ChannelFence on Arabic YouTube.
 

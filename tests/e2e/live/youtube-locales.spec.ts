@@ -163,6 +163,36 @@ for (const locale of allLocales) {
       }).toEqual([expect.arrayContaining(identity!.split("|"))]);
     });
 
+    test("keeps the localized Shorts viewer caption readable within the native action stack", async ({
+      extensionPage
+    }, testInfo) => {
+      await extensionPage.goto(`https://www.youtube.com/shorts/E4PB_V8yZso?hl=${locale.youtubeLanguage}`, {
+        waitUntil: "domcontentloaded", timeout: 30_000
+      });
+      await expect(extensionPage.locator("html")).toHaveAttribute("lang", locale.documentLanguage);
+      const channelBar = extensionPage.locator("ytd-shorts yt-reel-channel-bar-view-model")
+        .filter({ has: extensionPage.locator("a[href*='/@']") }).first();
+      await expect(channelBar).toBeVisible({ timeout: 30_000 });
+      const reel = channelBar.locator("xpath=ancestor::ytd-reel-video-renderer[1]");
+      const action = reel.locator(".cf-shorts-action");
+      const caption = action.locator(".cf-shorts-action__label");
+      await expect(caption).toHaveText(locale.messages.contentBlock.message);
+      await expect(action).toHaveAttribute("dir", locale.catalogCode === "ar" ? "rtl" : "ltr");
+      await captureAction(action, testInfo, `${locale.catalogCode}-live-shorts-viewer-button`);
+      await expect(action).toBeInViewport({ ratio: 1 });
+      expect(await caption.evaluate((element) => element.scrollWidth - element.clientWidth))
+        .toBeLessThanOrEqual(1);
+      expect(await caption.evaluate((element) => element.scrollHeight - element.clientHeight))
+        .toBeLessThanOrEqual(1);
+      const bounds = await action.boundingBox();
+      const captionBounds = await caption.boundingBox();
+      expect(captionBounds!.y + captionBounds!.height).toBeLessThanOrEqual(bounds!.y + bounds!.height);
+      const nextAction = action.locator("xpath=following-sibling::*[1]");
+      await expect(nextAction).toBeVisible();
+      const nextBounds = await nextAction.boundingBox();
+      expect(nextBounds!.y).toBeGreaterThanOrEqual(bounds!.y + bounds!.height - 1);
+    });
+
     test("blocks a compact Short from its menu without leaving search", async ({
       extensionPage,
       extensionStorage

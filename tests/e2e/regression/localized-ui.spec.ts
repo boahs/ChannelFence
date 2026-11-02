@@ -123,10 +123,32 @@ for (const locale of allLocales) {
         locale.youtubeLanguage
       );
       const action = youtube.card("shorts-action-bar").locator(":scope > .cf-shorts-action");
-      await expect(action.getByRole("button", {
+      const blockButton = action.getByRole("button", {
         name: messages.contentBlockWithBrand.message.replace("$CREATOR$", locale.creator), exact: true
-      })).toBeVisible();
+      });
+      await expect(blockButton).toBeVisible();
+      await expect(blockButton).toHaveCSS("width", "48px");
+      await expect(blockButton).toHaveCSS("height", "48px");
       await expect(action.locator(".cf-shorts-action__label")).toHaveText(messages.contentBlock.message);
+      await expect(action).toBeInViewport({ ratio: 1 });
+      const layout = await action.evaluate((element) => {
+        const label = element.querySelector<HTMLElement>(".cf-shorts-action__label")!;
+        const labelBounds = label.getBoundingClientRect();
+        const actionBounds = element.getBoundingClientRect();
+        const buttonBounds = element.querySelector("button")!.getBoundingClientRect();
+        const nextActionBounds = element.nextElementSibling!.getBoundingClientRect();
+        return {
+          captionOverflow: Math.max(label.scrollWidth - label.clientWidth, label.scrollHeight - label.clientHeight),
+          captionWithinAction: labelBounds.left >= actionBounds.left && labelBounds.right <= actionBounds.right &&
+            labelBounds.top >= actionBounds.top && labelBounds.bottom <= actionBounds.bottom,
+          captionAfterButton: labelBounds.top >= buttonBounds.bottom,
+          gapToNextAction: nextActionBounds.top - actionBounds.bottom
+        };
+      });
+      expect(layout.captionOverflow).toBeLessThanOrEqual(1);
+      expect(layout.captionWithinAction).toBe(true);
+      expect(layout.captionAfterButton).toBe(true);
+      expect(layout.gapToNextAction).toBeGreaterThanOrEqual(0);
       await testInfo.attach(`${locale.catalogCode}-fixture-shorts-action`, {
         body: await youtube.card("shorts-viewer").screenshot(), contentType: "image/png"
       });
