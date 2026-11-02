@@ -98,7 +98,10 @@ for (const locale of allLocales) {
       await extensionPage.getByRole("combobox", { name: messages.compactHomeSize.message })
         .selectOption("small");
       await expect(popupSize).toHaveValue("small");
-      await popupSize.scrollIntoViewIfNeeded();
+      // Keep the expanded card clear of fractional scrollport edges for the layout check.
+      await extensionPage.locator(".popup-quick-setting--compact").evaluate((section) => {
+        section.scrollIntoView({ block: "center", inline: "nearest" });
+      });
       await expect(popupSize).toBeInViewport({ ratio: 1 });
       await expect(extensionPage.locator(".popup__header")).toBeInViewport({ ratio: 1 });
       await expect(extensionPage.locator(".popup__footer")).toBeInViewport({ ratio: 1 });
