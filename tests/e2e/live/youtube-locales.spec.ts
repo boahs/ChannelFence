@@ -1,7 +1,16 @@
 import { expect, test } from "../fixtures/extension.fixture";
-import { translatedLocales } from "../fixtures/locales";
+import { allLocales } from "../fixtures/locales";
+import type { Locator, TestInfo } from "@playwright/test";
 
-for (const locale of translatedLocales) {
+async function captureAction(control: Locator, testInfo: TestInfo, name: string) {
+  await control.scrollIntoViewIfNeeded();
+  await expect(control).toBeInViewport();
+  await testInfo.attach(name, {
+    body: await control.page().screenshot(), contentType: "image/png"
+  });
+}
+
+for (const locale of allLocales) {
   test.describe(`${locale.name} live YouTube`, () => {
     test.use({ locale: locale.browserLocale });
     // Live navigation and renderer hydration each have a 30-second allowance.
@@ -45,7 +54,7 @@ for (const locale of translatedLocales) {
     test("blocks the channel header without treating statistics as creators", async ({
       extensionPage,
       extensionStorage
-    }) => {
+    }, testInfo) => {
       await extensionPage.goto(`https://www.youtube.com/@BoahsLoL/videos?hl=${locale.youtubeLanguage}`, {
         waitUntil: "domcontentloaded",
         timeout: 30_000
@@ -63,8 +72,13 @@ for (const locale of translatedLocales) {
       // These are the channel's own videos. Their first metadata row holds views
       // and upload ages, and must never create extra creator controls.
       await expect(cards.locator(".cf-block-button")).toHaveCount(0);
+      await captureAction(headerButton, testInfo, `${locale.catalogCode}-live-channel-block-button`);
       await headerButton.click();
       await expect(extensionPage.locator("#cf-hard-block-overlay")).toBeVisible();
+      await captureAction(
+        extensionPage.locator("#cf-hard-block-overlay"), testInfo,
+        `${locale.catalogCode}-live-channel-blocked-overlay`
+      );
       await expect.poll(async () => {
         const stored = await extensionStorage.get<{
           cfBlockedChannels: Array<{ key: string }>;
@@ -76,7 +90,7 @@ for (const locale of translatedLocales) {
     test("blocks a search result through its overflow menu", async ({
       extensionPage,
       extensionStorage
-    }) => {
+    }, testInfo) => {
       await extensionPage.goto(`https://www.youtube.com/results?search_query=cat+videos&hl=${locale.youtubeLanguage}`, {
         waitUntil: "domcontentloaded",
         timeout: 30_000
@@ -90,11 +104,13 @@ for (const locale of translatedLocales) {
       await expect(blockButton).toHaveCount(1);
       const identity = await blockButton.getAttribute("data-cf-identity");
       expect(identity).toMatch(/^(?:handle|channel):/);
+      await captureAction(blockButton, testInfo, `${locale.catalogCode}-live-search-block-button`);
       await result.locator("ytd-menu-renderer button").first().click();
       const action = extensionPage.locator("ytd-menu-popup-renderer:visible .cf-menu-item");
       await expect(action).toHaveCount(1);
       await expect(action.locator(".cf-menu-item__label"))
         .toHaveText(locale.messages.contentMenuBlock.message);
+      await captureAction(action, testInfo, `${locale.catalogCode}-live-search-block-menu`);
       await action.click();
       await expect(result).toBeHidden();
       await expect.poll(async () => {
@@ -108,7 +124,7 @@ for (const locale of translatedLocales) {
     test("blocks a right-rail creator through the modern overflow menu", async ({
       extensionPage,
       extensionStorage
-    }) => {
+    }, testInfo) => {
       await extensionPage.goto(`https://www.youtube.com/watch?v=dQw4w9WgXcQ&hl=${locale.youtubeLanguage}`, {
         waitUntil: "domcontentloaded",
         timeout: 30_000
@@ -130,11 +146,13 @@ for (const locale of translatedLocales) {
       expect(await blockButton.getAttribute("aria-label")).toContain(creatorName);
       const identity = await blockButton.getAttribute("data-cf-identity");
       expect(identity).toBeTruthy();
+      await captureAction(blockButton, testInfo, `${locale.catalogCode}-live-recommendation-block-button`);
       await recommendation.getByRole("button", { name: locale.moreActions, exact: true }).click();
       const action = extensionPage.locator(".cf-menu-item:visible");
       await expect(action).toHaveCount(1);
       await expect(action.locator(".cf-menu-item__label"))
         .toHaveText(locale.messages.contentMenuBlock.message);
+      await captureAction(action, testInfo, `${locale.catalogCode}-live-recommendation-block-menu`);
       await action.click();
       await expect(recommendation).toBeHidden();
       await expect.poll(async () => {
@@ -148,7 +166,7 @@ for (const locale of translatedLocales) {
     test("blocks a compact Short from its menu without leaving search", async ({
       extensionPage,
       extensionStorage
-    }) => {
+    }, testInfo) => {
       await extensionPage.goto(`https://www.youtube.com/results?search_query=cat+videos&hl=${locale.youtubeLanguage}`, {
         waitUntil: "domcontentloaded",
         timeout: 30_000
@@ -168,11 +186,16 @@ for (const locale of translatedLocales) {
       );
       await expect(layoutItem).toBeVisible();
       const searchUrl = extensionPage.url();
+      await captureAction(
+        selectedCard.locator(".cf-compact-shorts-block"), testInfo,
+        `${locale.catalogCode}-live-compact-short-block-button`
+      );
       await selectedCard.getByRole("button", { name: locale.moreActions, exact: true }).click();
       const action = extensionPage.locator(".cf-menu-item:visible");
       await expect(action).toHaveCount(1);
       await expect(action.locator(".cf-menu-item__label"))
         .toHaveText(locale.messages.contentMenuBlockCreator.message);
+      await captureAction(action, testInfo, `${locale.catalogCode}-live-compact-short-block-menu`);
       await action.click();
       await expect(layoutItem).toBeHidden({ timeout: 15_000 });
       await expect(extensionPage).toHaveURL(searchUrl);

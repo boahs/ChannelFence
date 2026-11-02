@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "nl"
+  },
+  "languageLabel": {
+    "message": "Taal"
+  },
+  "languageHelp": {
+    "message": "Kies de taal voor ChannelFence. De taalinstelling van YouTube blijft ongewijzigd."
+  },
+  "languageAutomatic": {
+    "message": "Automatisch (browsertaal)"
+  },
+  "languageSaveError": {
+    "message": "De taal kon niet worden opgeslagen. Probeer het opnieuw."
+  },
+  "extensionName": {
+    "message": "ChannelFence - YouTube-kanalen blokkeren"
+  },
+  "extensionDescription": {
+    "message": "Blokkeer YouTube-kanalen en makers op Home, in zoekresultaten, aanbevelingen, Shorts, reacties en rechtstreeks geopende pagina's."
+  },
+  "loading": {
+    "message": "Laden…"
+  },
+  "enableChannelFence": {
+    "message": "ChannelFence inschakelen"
+  },
+  "pauseOrEnable": {
+    "message": "ChannelFence pauzeren of inschakelen"
+  },
+  "currentPage": {
+    "message": "Huidige pagina"
+  },
+  "checkingPage": {
+    "message": "Pagina controleren…"
+  },
+  "openCreatorHelp": {
+    "message": "Open een kanaal, video of Short om de maker te blokkeren."
+  },
+  "blockCreator": {
+    "message": "Maker blokkeren"
+  },
+  "unblockCreator": {
+    "message": "Maker deblokkeren"
+  },
+  "hideShorts": {
+    "message": "Shorts in feeds verbergen"
+  },
+  "hideShortsSummary": {
+    "message": "Verwijder Shorts-secties van Home, uit zoekresultaten en uit andere feeds."
+  },
+  "hideOrShowShorts": {
+    "message": "Shorts in YouTube-feeds verbergen of tonen"
+  },
+  "hideShortsAccessible": {
+    "message": "Shorts in YouTube-feeds verbergen"
+  },
+  "recentlyBlocked": {
+    "message": "Onlangs geblokkeerd"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "Er zijn nog geen makers geblokkeerd. Gebruik de knop ⊘ naast een maker op YouTube."
+  },
+  "manageBlockList": {
+    "message": "Blokkeerlijst beheren"
+  },
+  "reportBug": {
+    "message": "Probleem melden"
+  },
+  "reportBugInline": {
+    "message": "meld dan een probleem"
+  },
+  "privacy": {
+    "message": "Privacy"
+  },
+  "unblock": {
+    "message": "Deblokkeren"
+  },
+  "unblockNamed": {
+    "message": "$CREATOR$ deblokkeren",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "$CREATOR$ blokkeren",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "Geen maker gevonden"
+  },
+  "multipleCreators": {
+    "message": "Meerdere makers gevonden"
+  },
+  "chooseCreator": {
+    "message": "Kies welke maker je wilt blokkeren of deblokkeren."
+  },
+  "thisCreator": {
+    "message": "Deze maker"
+  },
+  "creator": {
+    "message": "maker"
+  },
+  "creatorIsBlocked": {
+    "message": "Deze maker is geblokkeerd op alle plekken waar ChannelFence de maker kan herkennen."
+  },
+  "creatorBlockHelp": {
+    "message": "Verberg deze maker in feeds, zoekresultaten, aanbevelingen, Shorts en rechtstreeks geopende pagina's."
+  },
+  "blockedCount": {
+    "message": "$COUNT$ geblokkeerd",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "Gepauzeerd"
+  },
+  "unavailable": {
+    "message": "Niet beschikbaar"
+  },
+  "settingsPageTitle": {
+    "message": "ChannelFence-instellingen"
+  },
+  "settingsTagline": {
+    "message": "Instellingen voor het blokkeren van makers"
+  },
+  "settings": {
+    "message": "Instellingen"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence werkt alleen op YouTube en bewaart je voorkeuren op dit apparaat."
+  },
+  "pauseHelp": {
+    "message": "Pauzeer alle blokkades zonder je lijst te verwijderen."
+  },
+  "hideShortsHelp": {
+    "message": "Verwijdert Shorts-secties en -kaarten van Home, uit zoekresultaten en uit andere feeds. Het tabblad Shorts blijft beschikbaar."
+  },
+  "hideComments": {
+    "message": "Reacties van geblokkeerde makers verbergen"
+  },
+  "hideCommentsHelp": {
+    "message": "Verwijdert ook reacties als ChannelFence het kanaal van de schrijver kan herkennen."
+  },
+  "blockedCreators": {
+    "message": "Geblokkeerde makers"
+  },
+  "blockListHelp": {
+    "message": "Doorzoek je lijst, deblokkeer makers of maak een back-up. Geïmporteerde vermeldingen worden samengevoegd met de huidige lijst."
+  },
+  "manualBlockLabel": {
+    "message": "Blokkeren via handle of kanaal-URL"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@creator of youtube.com/@creator"
+  },
+  "manualBlockHelp": {
+    "message": "Plak een YouTube-handle of kanaal-URL. Deze wordt gecontroleerd en alleen opgeslagen in de lokale extensieopslag van Chrome."
+  },
+  "searchBlocked": {
+    "message": "Geblokkeerde makers zoeken"
+  },
+  "export": {
+    "message": "Exporteren"
+  },
+  "import": {
+    "message": "Importeren"
+  },
+  "clearAll": {
+    "message": "Alles wissen"
+  },
+  "emptyBlockList": {
+    "message": "Je blokkeerlijst is leeg."
+  },
+  "showMore": {
+    "message": "Nog 200 tonen"
+  },
+  "privateByDesign": {
+    "message": "Ontworpen met privacy voorop."
+  },
+  "settingsPrivacy": {
+    "message": "Kanaalnamen, kanaallinks, instellingen en je blokkeerlijst blijven in de lokale extensieopslag van Chrome. ChannelFence stuurt ze niet naar ons of anderen."
+  },
+  "settingsReport": {
+    "message": "Als er iets doorheen glipt, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "Bevalt ChannelFence?"
+  },
+  "reviewHelp": {
+    "message": "Met een eerlijke review in de Chrome Web Store help je anderen de extensie te vinden."
+  },
+  "leaveReview": {
+    "message": "Review schrijven"
+  },
+  "noSearchMatches": {
+    "message": "Geen geblokkeerde makers gevonden voor deze zoekopdracht."
+  },
+  "showingCreators": {
+    "message": "Gevonden makers: $TOTAL$. Getoond: $VISIBLE$.",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · Geblokkeerd op $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "$CREATOR$ gedeblokkeerd",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence ingeschakeld"
+  },
+  "pausedToast": {
+    "message": "ChannelFence gepauzeerd"
+  },
+  "hideCommentsToast": {
+    "message": "Reacties van geblokkeerde makers worden verborgen"
+  },
+  "showCommentsToast": {
+    "message": "Reacties blijven zichtbaar"
+  },
+  "hideShortsToast": {
+    "message": "Shorts worden verborgen in feeds"
+  },
+  "showShortsToast": {
+    "message": "Shorts blijven zichtbaar in feeds"
+  },
+  "invalidHandle": {
+    "message": "Voer een geldige YouTube-handle of kanaal-URL in"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ is al geblokkeerd",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "Deze maker kon niet worden toegevoegd"
+  },
+  "blockedNamed": {
+    "message": "$CREATOR$ geblokkeerd",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "Blokkeerlijst geëxporteerd"
+  },
+  "importedCreatorOne": {
+    "message": "$COUNT$ maker geïmporteerd",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "$COUNT$ makers geïmporteerd",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "Dit bestand is geen geldige ChannelFence-export"
+  },
+  "confirmClearAll": {
+    "message": "Alle makers deblokkeren ($COUNT$)?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "Blokkeerlijst gewist"
+  },
+  "version": {
+    "message": "Versie $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "Instellingen konden niet worden geladen"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence: $COUNT$ geblokkeerd",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: gepauzeerd"
+  },
+  "welcomeTitle": {
+    "message": "Welkom bij ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence is klaar voor gebruik"
+  },
+  "welcomeHeadline": {
+    "message": "Zie die maker nooit meer."
+  },
+  "welcomeLead": {
+    "message": "Blokkeer ongewenste makers op de Home-feed van YouTube, in zoekresultaten, aanbevelingen, Shorts, reacties en rechtstreeks geopende pagina's."
+  },
+  "welcomeOpenYouTube": {
+    "message": "Open YouTube en blokkeer een maker"
+  },
+  "welcomeIconAlt": {
+    "message": "ChannelFence-pictogram voor een geblokkeerde maker"
+  },
+  "welcomeHowItWorks": {
+    "message": "Zo werkt ChannelFence"
+  },
+  "welcomeFindCreator": {
+    "message": "Zoek een maker"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "Gebruik YouTube zoals je gewend bent. ChannelFence voegt een kleine knop ⊘ toe naast de namen van makers."
+  },
+  "welcomeBlockOnce": {
+    "message": "Eén keer blokkeren"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "Selecteer de knop en de maker verdwijnt op alle ondersteunde plekken op YouTube."
+  },
+  "welcomeStayInControl": {
+    "message": "Houd zelf de controle"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "Gebruik het werkbalkpictogram om ChannelFence te pauzeren, een blokkade ongedaan te maken of je volledige lijst te beheren."
+  },
+  "welcomePrivacy": {
+    "message": "Geen account. Geen tracking. Geen server onder beheer van de ontwikkelaar. Je blokkeerlijst blijft in de lokale extensieopslag van Chrome."
+  },
+  "privacyTitle": {
+    "message": "Privacybeleid van ChannelFence"
+  },
+  "privacyEffectiveDate": {
+    "message": "Ingangsdatum:"
+  },
+  "privacyDate": {
+    "message": "27 augustus 2026"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence is ontworpen om te werken zonder account, gebruiksanalyses, advertenties of een server onder beheer van de ontwikkelaar. Het enige doel is gebruikers lokale bedieningselementen te bieden om geselecteerde makers en desgewenst Shorts-secties in YouTube-feeds te verbergen."
+  },
+  "privacyInformationHeading": {
+    "message": "Gegevens die ChannelFence verwerkt"
+  },
+  "privacyInformation": {
+    "message": "Terwijl je YouTube gebruikt, leest ChannelFence alleen de pagina-inhoud die nodig is om namen van makers en kanaallinks te herkennen, te bepalen of een maker op je blokkeerlijst staat, blokkeerknoppen toe te voegen en bijbehorende inhoud te verbergen. Als je blokkeerlijst niet leeg is, worden compacte Shorts-kaarten die hun maker niet vermelden gecontroleerd via het oEmbed-eindpunt van YouTube. Zo kan ChannelFence bepalen of de makers zijn geblokkeerd. De ontvangen metadata van compacte Shorts worden alleen in het werkgeheugen gecachet en niet toegevoegd aan de browsegeschiedenis of extensieopslag. Wanneer je een maker blokkeert, slaat ChannelFence de weergegeven naam van de maker, de openbare kanaal-ID of handle, de openbare kanaal-URL en het tijdstip van blokkeren op. Als je blokkeert via een compacte Short, slaat ChannelFence ook het openbare pad van die door jou gekozen Short op bij de gegevens van de maker, zodat diezelfde kaart na het vernieuwen van de pagina verborgen blijft."
+  },
+  "privacyStorageHeading": {
+    "message": "Opslag en overdracht"
+  },
+  "privacyStorage": {
+    "message": "Instellingen en gegevens van geblokkeerde makers worden alleen bewaard in de lokale extensieopslag van Chrome op je apparaat en nooit naar de ontwikkelaar verstuurd. Bij het opzoeken van compacte Shorts worden alleen openbare Short-URL's naar youtube.com gestuurd, zodat YouTube de openbare namen van makers en kanaal-URL's kan terugsturen. Verzoeken bevatten geen inloggegevens van je account. ChannelFence verstuurt geen verzoeken naar een server onder beheer van de ontwikkelaar of naar diensten buiten YouTube. De extensie verkoopt geen gegevens, gebruikt gegevens niet voor advertenties en staat niet toe dat mensen gebruikersgegevens lezen."
+  },
+  "privacyPermissionsHeading": {
+    "message": "Rechten"
+  },
+  "privacyStorageLabel": {
+    "message": "Opslag:"
+  },
+  "privacyStoragePermission": {
+    "message": "bewaart lokaal of de extensie is ingeschakeld, de taalvoorkeur, de voorkeuren voor reacties en Shorts in feeds en de lijst met geblokkeerde makers."
+  },
+  "privacyYouTubeLabel": {
+    "message": "Toegang tot youtube.com:"
+  },
+  "privacyYouTubePermission": {
+    "message": "herkent makers op YouTube-pagina's, voegt blokkeerknoppen voor gebruikers toe en verbergt inhoud van geblokkeerde makers."
+  },
+  "privacyControlHeading": {
+    "message": "Gegevens beheren en verwijderen"
+  },
+  "privacyControl": {
+    "message": "In de instellingen van ChannelFence kun je geblokkeerde makers bekijken, de lijst exporteren, makers deblokkeren of de lijst wissen. Als je ChannelFence verwijdert, verwijdert Chrome de lokaal opgeslagen gegevens van de extensie."
+  },
+  "privacyLimitedUseHeading": {
+    "message": "Beperkt gebruik"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence gebruikt gegevens uitsluitend om de enige functie voor gebruikers te bieden en te verbeteren. Gegevens worden niet overgedragen voor advertenties, kredietbeslissingen, gegevenshandel of andere, niet-gerelateerde doeleinden."
+  },
+  "privacyChangesHeading": {
+    "message": "Wijzigingen"
+  },
+  "privacyChanges": {
+    "message": "Als de manier waarop ChannelFence met gegevens omgaat verandert, worden dit beleid en de verklaringen in de Chrome Web Store bijgewerkt voordat de wijziging wordt ingevoerd."
+  },
+  "privacyContactHeading": {
+    "message": "Contact"
+  },
+  "privacyContact": {
+    "message": "Vragen over privacy en ondersteuning kun je stellen via de $LINK$ of de ondersteuningslink op de pagina van de extensie in de Chrome Web Store.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "probleemtracker van ChannelFence"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence kon deze Short niet herkennen."
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence kon deze maker niet herkennen. Open eerst de Short en probeer het opnieuw."
+  },
+  "contentBlockShortCreator": {
+    "message": "De maker van deze Short blokkeren met ChannelFence"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: Maker blokkeren"
+  },
+  "contentUnblockWithBrand": {
+    "message": "$CREATOR$ deblokkeren met ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "$CREATOR$ blokkeren met ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "$CREATOR$ blokkeren",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: Deblokkeren"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: Blokkeren"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: $CREATOR$ deblokkeren",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: $CREATOR$ blokkeren",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "$CREATOR$ gedeblokkeerd",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "Blokkeren"
+  },
+  "contentCreatorBlocked": {
+    "message": "Maker geblokkeerd"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ staat op je ChannelFence-blokkeerlijst.",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "Naar Home"
+  },
+  "contentUnblockContinue": {
+    "message": "Deblokkeren en doorgaan"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence kon deze maker nog niet herkennen."
+  },
+  "contentBlocked": {
+    "message": "$CREATOR$ geblokkeerd",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "Ongedaan maken"
+  }
+}

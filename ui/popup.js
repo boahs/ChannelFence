@@ -50,6 +50,7 @@ function renderBlockedList() {
 
     const name = document.createElement("span");
     name.className = "mini-list__name";
+    name.dir = "auto";
     name.textContent = Shared.labelForEntry(entry);
 
     const unblock = document.createElement("button");

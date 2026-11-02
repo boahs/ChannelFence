@@ -1,7 +1,10 @@
 (function () {
   "use strict";
 
-  const languages = ["en", "ko", "ja", "pt_BR", "ru", "es", "fr", "de", "zh_CN", "zh_TW"];
+  const languages = [
+    "en", "ko", "ja", "pt_BR", "ru", "es", "fr", "de", "zh_CN", "zh_TW", "hi",
+    "id", "bn", "tr", "vi", "ar", "it", "nl"
+  ];
   const listeners = new Set();
   const extensionPage = globalThis.document && globalThis.location?.protocol === "chrome-extension:";
   let language = "auto";
@@ -38,6 +41,7 @@
 
   function localize(document) {
     document.documentElement.lang = get("languageCode");
+    document.documentElement.dir = direction();
     for (const element of document.querySelectorAll("[data-i18n]")) {
       const key = element.getAttribute("data-i18n");
       const link = element.querySelector("[data-i18n-link]");
@@ -54,6 +58,10 @@
         element.setAttribute(attribute, get(element.getAttribute(`data-i18n-${attribute}`)));
       }
     }
+  }
+
+  function direction() {
+    return get("languageCode") === "ar" ? "rtl" : "ltr";
   }
 
   async function changeLanguage(preference) {
@@ -108,6 +116,7 @@
     get, localize, loadCatalog,
     get ready() { return ready; },
     get language() { return language; },
+    get direction() { return direction(); },
     onChange(listener) { listeners.add(listener); }
   };
   // Content scripts never change YouTube's document language.

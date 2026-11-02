@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "ar"
+  },
+  "languageLabel": {
+    "message": "اللغة"
+  },
+  "languageHelp": {
+    "message": "اختر لغة ChannelFence. يظل إعداد لغة YouTube كما هو."
+  },
+  "languageAutomatic": {
+    "message": "تلقائي (لغة المتصفح)"
+  },
+  "languageSaveError": {
+    "message": "تعذّر حفظ اللغة. حاول مرة أخرى."
+  },
+  "extensionName": {
+    "message": "ChannelFence - حظر قنوات YouTube"
+  },
+  "extensionDescription": {
+    "message": "احظر قنوات YouTube في الصفحة الرئيسية والبحث والاقتراحات وShorts والتعليقات وعند فتح الصفحات مباشرة."
+  },
+  "loading": {
+    "message": "جارٍ التحميل…"
+  },
+  "enableChannelFence": {
+    "message": "تفعيل ChannelFence"
+  },
+  "pauseOrEnable": {
+    "message": "إيقاف ChannelFence مؤقتًا أو تفعيله"
+  },
+  "currentPage": {
+    "message": "الصفحة الحالية"
+  },
+  "checkingPage": {
+    "message": "جارٍ التحقق من هذه الصفحة…"
+  },
+  "openCreatorHelp": {
+    "message": "افتح قناة أو فيديو أو Short لحظر منشئ المحتوى."
+  },
+  "blockCreator": {
+    "message": "حظر منشئ المحتوى"
+  },
+  "unblockCreator": {
+    "message": "إلغاء حظر منشئ المحتوى"
+  },
+  "hideShorts": {
+    "message": "إخفاء Shorts من الخلاصات"
+  },
+  "hideShortsSummary": {
+    "message": "إزالة أقسام Shorts من الصفحة الرئيسية والبحث والخلاصات الأخرى."
+  },
+  "hideOrShowShorts": {
+    "message": "إخفاء Shorts أو إظهارها في خلاصات YouTube"
+  },
+  "hideShortsAccessible": {
+    "message": "إخفاء Shorts من خلاصات YouTube"
+  },
+  "recentlyBlocked": {
+    "message": "المحظورون مؤخرًا"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "لم تحظر أي منشئ محتوى بعد. استخدم الزر ⊘ بجانب اسم منشئ المحتوى على YouTube."
+  },
+  "manageBlockList": {
+    "message": "إدارة قائمة الحظر"
+  },
+  "reportBug": {
+    "message": "الإبلاغ عن مشكلة"
+  },
+  "reportBugInline": {
+    "message": "أبلغ عن مشكلة"
+  },
+  "privacy": {
+    "message": "الخصوصية"
+  },
+  "unblock": {
+    "message": "إلغاء الحظر"
+  },
+  "unblockNamed": {
+    "message": "إلغاء حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "لم يتم تحديد منشئ المحتوى"
+  },
+  "multipleCreators": {
+    "message": "تم تحديد عدة منشئي محتوى"
+  },
+  "chooseCreator": {
+    "message": "اختر منشئ المحتوى الذي تريد حظره أو إلغاء حظره."
+  },
+  "thisCreator": {
+    "message": "منشئ المحتوى هذا"
+  },
+  "creator": {
+    "message": "منشئ المحتوى"
+  },
+  "creatorIsBlocked": {
+    "message": "هذا المنشئ محظور في كل موضع يستطيع ChannelFence التعرف عليه فيه."
+  },
+  "creatorBlockHelp": {
+    "message": "أخفِ منشئ المحتوى هذا من الخلاصات والبحث والاقتراحات وShorts والصفحات التي تُفتح مباشرة."
+  },
+  "blockedCount": {
+    "message": "عدد المحظورين: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "متوقف مؤقتًا"
+  },
+  "unavailable": {
+    "message": "غير متاح"
+  },
+  "settingsPageTitle": {
+    "message": "إعدادات ChannelFence"
+  },
+  "settingsTagline": {
+    "message": "إعدادات حظر منشئي المحتوى"
+  },
+  "settings": {
+    "message": "الإعدادات"
+  },
+  "settingsIntro": {
+    "message": "يعمل ChannelFence على YouTube فقط ويحتفظ بتفضيلاتك على هذا الجهاز."
+  },
+  "pauseHelp": {
+    "message": "أوقف جميع عمليات الحظر مؤقتًا دون حذف قائمتك."
+  },
+  "hideShortsHelp": {
+    "message": "يزيل أقسام وبطاقات Shorts من الصفحة الرئيسية والبحث والخلاصات الأخرى. تظل علامة تبويب Shorts متاحة."
+  },
+  "hideComments": {
+    "message": "إخفاء تعليقات منشئي المحتوى المحظورين"
+  },
+  "hideCommentsHelp": {
+    "message": "يزيل التعليقات أيضًا عندما يستطيع ChannelFence التعرف على قناة صاحب التعليق."
+  },
+  "blockedCreators": {
+    "message": "منشئو المحتوى المحظورون"
+  },
+  "blockListHelp": {
+    "message": "ابحث في قائمتك، أو ألغِ الحظر، أو أنشئ نسخة احتياطية. تُدمج العناصر المستوردة مع القائمة الحالية."
+  },
+  "manualBlockLabel": {
+    "message": "الحظر بالاسم المعرِّف أو رابط القناة"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@creator أو youtube.com/@creator"
+  },
+  "manualBlockHelp": {
+    "message": "الصق اسمًا معرِّفًا على YouTube أو رابط قناة. يتم التحقق منه وحفظه فقط في مساحة التخزين المحلية للإضافة في Chrome."
+  },
+  "searchBlocked": {
+    "message": "البحث في قائمة الحظر"
+  },
+  "export": {
+    "message": "تصدير"
+  },
+  "import": {
+    "message": "استيراد"
+  },
+  "clearAll": {
+    "message": "مسح الكل"
+  },
+  "emptyBlockList": {
+    "message": "قائمة الحظر فارغة."
+  },
+  "showMore": {
+    "message": "عرض 200 نتيجة أخرى"
+  },
+  "privateByDesign": {
+    "message": "مصمم لحماية الخصوصية."
+  },
+  "settingsPrivacy": {
+    "message": "تبقى أسماء القنوات وروابطها والإعدادات وقائمة الحظر في مساحة التخزين المحلية للإضافة في Chrome. لا يرسلها ChannelFence إلينا أو إلى أي شخص آخر."
+  },
+  "settingsReport": {
+    "message": "إذا ظهر محتوى كان يجب حظره، $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "هل أعجبك ChannelFence؟"
+  },
+  "reviewHelp": {
+    "message": "يساعد تقييم صادق في Chrome Web Store الآخرين على العثور عليه."
+  },
+  "leaveReview": {
+    "message": "كتابة تقييم"
+  },
+  "noSearchMatches": {
+    "message": "لا يوجد منشئ محتوى محظور يطابق هذا البحث."
+  },
+  "showingCreators": {
+    "message": "نتائج مطابقة: $TOTAL$، نتائج معروضة: $VISIBLE$.",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · تاريخ الحظر: $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "تم إلغاء حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "تم تفعيل ChannelFence"
+  },
+  "pausedToast": {
+    "message": "تم إيقاف ChannelFence مؤقتًا"
+  },
+  "hideCommentsToast": {
+    "message": "ستُخفى تعليقات منشئي المحتوى المحظورين"
+  },
+  "showCommentsToast": {
+    "message": "ستظل التعليقات ظاهرة"
+  },
+  "hideShortsToast": {
+    "message": "ستُخفى Shorts من الخلاصات"
+  },
+  "showShortsToast": {
+    "message": "ستظل Shorts ظاهرة في الخلاصات"
+  },
+  "invalidHandle": {
+    "message": "أدخل اسمًا معرِّفًا صالحًا على YouTube أو رابط قناة صالحًا"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ محظور بالفعل",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "تعذّرت إضافة منشئ المحتوى هذا"
+  },
+  "blockedNamed": {
+    "message": "تم حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "تم تصدير قائمة الحظر"
+  },
+  "importedCreatorOne": {
+    "message": "عدد منشئي المحتوى المستوردين: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "عدد منشئي المحتوى المستوردين: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "هذا الملف ليس ملف تصدير صالحًا من ChannelFence"
+  },
+  "confirmClearAll": {
+    "message": "إلغاء الحظر عن الجميع ($COUNT$)؟",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "تم مسح قائمة الحظر"
+  },
+  "version": {
+    "message": "الإصدار $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "تعذّر تحميل الإعدادات"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence · عدد المحظورين: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: متوقف مؤقتًا"
+  },
+  "welcomeTitle": {
+    "message": "مرحبًا بك في ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence جاهز"
+  },
+  "welcomeHeadline": {
+    "message": "لن ترى ذلك المنشئ مجددًا."
+  },
+  "welcomeLead": {
+    "message": "احظر منشئي المحتوى غير المرغوب فيهم من خلاصة الصفحة الرئيسية في YouTube ونتائج البحث والاقتراحات وShorts والتعليقات والصفحات التي تُفتح مباشرة."
+  },
+  "welcomeOpenYouTube": {
+    "message": "افتح YouTube واحظر منشئ محتوى"
+  },
+  "welcomeIconAlt": {
+    "message": "أيقونة منشئ محتوى محظور في ChannelFence"
+  },
+  "welcomeHowItWorks": {
+    "message": "كيف يعمل ChannelFence"
+  },
+  "welcomeFindCreator": {
+    "message": "اعثر على منشئ محتوى"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "تصفح YouTube كالمعتاد. يضيف ChannelFence زر ⊘ صغيرًا بجانب أسماء منشئي المحتوى."
+  },
+  "welcomeBlockOnce": {
+    "message": "احظره مرة واحدة"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "اختر الزر وسيختفي محتوى هذا المنشئ من أقسام YouTube المدعومة."
+  },
+  "welcomeStayInControl": {
+    "message": "تحكّم في قائمتك"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "استخدم أيقونة شريط الأدوات لإيقاف ChannelFence مؤقتًا أو التراجع عن حظر أو إدارة قائمتك بالكامل."
+  },
+  "welcomePrivacy": {
+    "message": "لا حساب. لا تتبّع. لا خادم يتحكم به المطوّر. تبقى قائمة الحظر في مساحة التخزين المحلية للإضافة في Chrome."
+  },
+  "privacyTitle": {
+    "message": "سياسة خصوصية ChannelFence"
+  },
+  "privacyEffectiveDate": {
+    "message": "تاريخ السريان:"
+  },
+  "privacyDate": {
+    "message": "27 أغسطس 2026"
+  },
+  "privacyIntro": {
+    "message": "صُمم ChannelFence ليعمل دون حساب أو تحليلات استخدام أو إعلانات أو خادم يتحكم به المطوّر. غرضه الوحيد هو توفير أدوات تحكم محلية تتيح للمستخدمين إخفاء منشئي المحتوى الذين يختارونهم، وإخفاء أقسام Shorts اختياريًا في خلاصات YouTube."
+  },
+  "privacyInformationHeading": {
+    "message": "المعلومات التي يعالجها ChannelFence"
+  },
+  "privacyInformation": {
+    "message": "أثناء استخدامك YouTube، يقرأ ChannelFence فقط محتوى الصفحة المحدود اللازم للتعرف على أسماء منشئي المحتوى وروابط القنوات، وتحديد ما إذا كان المنشئ ضمن قائمة الحظر، وإضافة أدوات الحظر وإخفاء المحتوى المطابق. عندما لا تكون قائمة الحظر فارغة، يجري التحقق من بطاقات Shorts المصغّرة التي لا تعرض منشئيها عبر نقطة نهاية oEmbed في YouTube، ليتمكن ChannelFence من تحديد ما إذا كان منشئوها محظورين. تُخزّن البيانات الوصفية المُعادة لهذه المقاطع مؤقتًا في الذاكرة فقط، ولا تُضاف إلى سجل التصفح أو مساحة تخزين الإضافة. عندما تختار حظر منشئ محتوى، يحفظ ChannelFence اسمه المعروض، ومعرّف قناته العام أو اسمها المعرِّف العام، ورابط القناة العام، ووقت إنشاء الحظر. إذا حظرت من خلال Short مصغّر، يحفظ ChannelFence أيضًا مسار Short العام الذي اخترته ضمن سجل المنشئ، كي تظل البطاقة نفسها مخفية بعد تحديث الصفحة."
+  },
+  "privacyStorageHeading": {
+    "message": "التخزين والنقل"
+  },
+  "privacyStorage": {
+    "message": "تُحفظ الإعدادات وسجلات منشئي المحتوى المحظورين فقط في مساحة التخزين المحلية للإضافة في Chrome على جهازك، ولا تُنقل أبدًا إلى المطوّر. ترسل استعلامات Shorts المصغّرة فقط روابط Short العامة إلى youtube.com ليعيد YouTube الأسماء العامة لمنشئي المحتوى وروابط قنواتهم. لا تتضمن الطلبات بيانات تسجيل الدخول إلى الحساب. لا يرسل ChannelFence طلبات إلى خادم يتحكم به المطوّر أو إلى أي خدمة خارج YouTube. وهو لا يبيع البيانات ولا يستخدمها للإعلانات ولا يسمح لأشخاص بقراءة بيانات المستخدمين."
+  },
+  "privacyPermissionsHeading": {
+    "message": "الأذونات"
+  },
+  "privacyStorageLabel": {
+    "message": "التخزين:"
+  },
+  "privacyStoragePermission": {
+    "message": "يحفظ محليًا حالة التفعيل وتفضيل اللغة وتفضيلات التعليقات وShorts في الخلاصات وقائمة منشئي المحتوى المحظورين."
+  },
+  "privacyYouTubeLabel": {
+    "message": "الوصول إلى youtube.com:"
+  },
+  "privacyYouTubePermission": {
+    "message": "يتعرف على منشئي المحتوى في صفحات YouTube، ويضيف أدوات حظر للمستخدم، ويخفي محتوى المنشئين المحظورين."
+  },
+  "privacyControlHeading": {
+    "message": "التحكم في البيانات وحذفها"
+  },
+  "privacyControl": {
+    "message": "يمكنك عرض قائمة منشئي المحتوى المحظورين أو تصديرها، أو إلغاء الحظر، أو مسح القائمة من إعدادات ChannelFence. عند إزالة ChannelFence، يحذف Chrome بيانات الإضافة المخزّنة محليًا."
+  },
+  "privacyLimitedUseHeading": {
+    "message": "الاستخدام المحدود"
+  },
+  "privacyLimitedUse": {
+    "message": "يقتصر استخدام ChannelFence للمعلومات على توفير غرضه الوحيد الموجّه للمستخدم وتحسينه. لا تُنقل المعلومات لأغراض الإعلان أو القرارات الائتمانية أو الوساطة في البيانات أو أغراض غير ذات صلة."
+  },
+  "privacyChangesHeading": {
+    "message": "التغييرات"
+  },
+  "privacyChanges": {
+    "message": "إذا تغيّرت ممارسات ChannelFence المتعلقة بالبيانات، فستُحدّث هذه السياسة والإفصاحات في Chrome Web Store قبل تطبيق التغيير."
+  },
+  "privacyContactHeading": {
+    "message": "التواصل"
+  },
+  "privacyContact": {
+    "message": "يمكن إرسال أسئلة الخصوصية والدعم عبر $LINK$ أو رابط الدعم في صفحة الإضافة على Chrome Web Store.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "متتبّع مشكلات ChannelFence"
+  },
+  "contentUnidentifiedShort": {
+    "message": "لم يتمكن ChannelFence من تحديد هذا Short."
+  },
+  "contentOpenShortFirst": {
+    "message": "لم يتمكن ChannelFence من تحديد منشئ المحتوى هذا. جرّب فتح Short أولًا."
+  },
+  "contentBlockShortCreator": {
+    "message": "حظر منشئ هذا Short باستخدام ChannelFence"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: حظر منشئ المحتوى"
+  },
+  "contentUnblockWithBrand": {
+    "message": "إلغاء حظر $CREATOR$ باستخدام ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "حظر $CREATOR$ باستخدام ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: إلغاء الحظر"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: حظر"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: إلغاء حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "تم إلغاء حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "حظر"
+  },
+  "contentCreatorBlocked": {
+    "message": "منشئ المحتوى محظور"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ ضمن قائمة الحظر في ChannelFence.",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "الانتقال للرئيسية"
+  },
+  "contentUnblockContinue": {
+    "message": "إلغاء الحظر والمتابعة"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "لم يتمكن ChannelFence من تحديد منشئ المحتوى هذا بعد."
+  },
+  "contentBlocked": {
+    "message": "تم حظر $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "تراجع"
+  }
+}

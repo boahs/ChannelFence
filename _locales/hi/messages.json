@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "hi"
+  },
+  "languageLabel": {
+    "message": "भाषा"
+  },
+  "languageHelp": {
+    "message": "ChannelFence की भाषा चुनें। YouTube की भाषा की सेटिंग नहीं बदलेगी।"
+  },
+  "languageAutomatic": {
+    "message": "अपने आप (ब्राउज़र की भाषा)"
+  },
+  "languageSaveError": {
+    "message": "भाषा सेव नहीं हो सकी। फिर से कोशिश करें।"
+  },
+  "extensionName": {
+    "message": "ChannelFence - YouTube चैनल ब्लॉकर"
+  },
+  "extensionDescription": {
+    "message": "YouTube पर होम, खोज, सुझाव, Shorts, टिप्पणियों और सीधे पेज खोलने पर चैनल और क्रिएटर ब्लॉक करें।"
+  },
+  "loading": {
+    "message": "लोड हो रहा है…"
+  },
+  "enableChannelFence": {
+    "message": "ChannelFence चालू करें"
+  },
+  "pauseOrEnable": {
+    "message": "ChannelFence रोकें या चालू करें"
+  },
+  "currentPage": {
+    "message": "मौजूदा पेज"
+  },
+  "checkingPage": {
+    "message": "इस पेज की जाँच हो रही है…"
+  },
+  "openCreatorHelp": {
+    "message": "किसी क्रिएटर को ब्लॉक करने के लिए उसका चैनल, वीडियो या Short खोलें।"
+  },
+  "blockCreator": {
+    "message": "क्रिएटर को ब्लॉक करें"
+  },
+  "unblockCreator": {
+    "message": "क्रिएटर को अनब्लॉक करें"
+  },
+  "hideShorts": {
+    "message": "फ़ीड में Shorts छिपाएँ"
+  },
+  "hideShortsSummary": {
+    "message": "होम, खोज और अन्य फ़ीड से Shorts के सेक्शन हटाएँ।"
+  },
+  "hideOrShowShorts": {
+    "message": "YouTube फ़ीड में Shorts छिपाएँ या दिखाएँ"
+  },
+  "hideShortsAccessible": {
+    "message": "YouTube फ़ीड में Shorts छिपाएँ"
+  },
+  "recentlyBlocked": {
+    "message": "हाल ही में ब्लॉक किए गए"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "अभी कोई क्रिएटर ब्लॉक नहीं है। YouTube पर क्रिएटर के नाम के पास मौजूद ⊘ बटन का इस्तेमाल करें।"
+  },
+  "manageBlockList": {
+    "message": "ब्लॉक सूची सँभालें"
+  },
+  "reportBug": {
+    "message": "समस्या बताएँ"
+  },
+  "reportBugInline": {
+    "message": "समस्या बताएँ"
+  },
+  "privacy": {
+    "message": "गोपनीयता"
+  },
+  "unblock": {
+    "message": "अनब्लॉक करें"
+  },
+  "unblockNamed": {
+    "message": "$CREATOR$ को अनब्लॉक करें",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "$CREATOR$ को ब्लॉक करें",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "कोई क्रिएटर नहीं मिला"
+  },
+  "multipleCreators": {
+    "message": "कई क्रिएटर मिले"
+  },
+  "chooseCreator": {
+    "message": "चुनें कि किस क्रिएटर को ब्लॉक या अनब्लॉक करना है।"
+  },
+  "thisCreator": {
+    "message": "यह क्रिएटर"
+  },
+  "creator": {
+    "message": "क्रिएटर"
+  },
+  "creatorIsBlocked": {
+    "message": "यह क्रिएटर उन सभी जगहों पर ब्लॉक है जहाँ ChannelFence उसकी पहचान कर सकता है।"
+  },
+  "creatorBlockHelp": {
+    "message": "इस क्रिएटर को फ़ीड, खोज, सुझावों, Shorts और सीधे खोले गए पेजों में छिपाएँ।"
+  },
+  "blockedCount": {
+    "message": "ब्लॉक किए गए: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "रुका हुआ"
+  },
+  "unavailable": {
+    "message": "उपलब्ध नहीं"
+  },
+  "settingsPageTitle": {
+    "message": "ChannelFence सेटिंग"
+  },
+  "settingsTagline": {
+    "message": "क्रिएटर ब्लॉक करने की सेटिंग"
+  },
+  "settings": {
+    "message": "सेटिंग"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence केवल YouTube पर काम करता है और आपकी पसंद की सेटिंग इसी डिवाइस पर रखता है।"
+  },
+  "pauseHelp": {
+    "message": "अपनी सूची मिटाए बिना सभी ब्लॉक अस्थायी रूप से रोकें।"
+  },
+  "hideShortsHelp": {
+    "message": "होम, खोज और अन्य फ़ीड से Shorts के सेक्शन और कार्ड हटाता है। Shorts टैब उपलब्ध रहता है।"
+  },
+  "hideComments": {
+    "message": "ब्लॉक किए गए क्रिएटर की टिप्पणियाँ छिपाएँ"
+  },
+  "hideCommentsHelp": {
+    "message": "जब ChannelFence टिप्पणी करने वाले का चैनल पहचान सके, तो उसकी टिप्पणियाँ भी हटा देता है।"
+  },
+  "blockedCreators": {
+    "message": "ब्लॉक किए गए क्रिएटर"
+  },
+  "blockListHelp": {
+    "message": "सूची में खोजें, क्रिएटर को अनब्लॉक करें या बैकअप लें। इंपोर्ट की गई एंट्री मौजूदा सूची में जोड़ दी जाती हैं।"
+  },
+  "manualBlockLabel": {
+    "message": "हैंडल या चैनल URL से ब्लॉक करें"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@creator या youtube.com/@creator"
+  },
+  "manualBlockHelp": {
+    "message": "YouTube हैंडल या चैनल URL पेस्ट करें। इसकी जाँच करके इसे केवल Chrome के एक्सटेंशन के लोकल स्टोरेज में सेव किया जाता है।"
+  },
+  "searchBlocked": {
+    "message": "ब्लॉक सूची में खोजें"
+  },
+  "export": {
+    "message": "एक्सपोर्ट करें"
+  },
+  "import": {
+    "message": "इंपोर्ट करें"
+  },
+  "clearAll": {
+    "message": "सब मिटाएँ"
+  },
+  "emptyBlockList": {
+    "message": "आपकी ब्लॉक सूची खाली है।"
+  },
+  "showMore": {
+    "message": "200 और दिखाएँ"
+  },
+  "privateByDesign": {
+    "message": "गोपनीयता को ध्यान में रखकर बनाया गया।"
+  },
+  "settingsPrivacy": {
+    "message": "चैनल के नाम, चैनल लिंक, सेटिंग और आपकी ब्लॉक सूची Chrome के एक्सटेंशन के लोकल स्टोरेज में रहते हैं। ChannelFence इन्हें हमें या किसी और को नहीं भेजता।"
+  },
+  "settingsReport": {
+    "message": "अगर कोई सामग्री ब्लॉक होने से बच जाए, तो $LINK$।",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "ChannelFence पसंद आया?"
+  },
+  "reviewHelp": {
+    "message": "Chrome Web Store पर ईमानदार समीक्षा लिखने से दूसरों को इसे खोजने में मदद मिलती है।"
+  },
+  "leaveReview": {
+    "message": "समीक्षा लिखें"
+  },
+  "noSearchMatches": {
+    "message": "इस खोज से मेल खाने वाला कोई ब्लॉक किया गया क्रिएटर नहीं मिला।"
+  },
+  "showingCreators": {
+    "message": "खोज में मिले $TOTAL$ क्रिएटर में से $VISIBLE$ दिखाए जा रहे हैं।",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · ब्लॉक करने की तारीख: $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "$CREATOR$ को अनब्लॉक किया गया",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence चालू है"
+  },
+  "pausedToast": {
+    "message": "ChannelFence रोक दिया गया"
+  },
+  "hideCommentsToast": {
+    "message": "ब्लॉक किए गए क्रिएटर की टिप्पणियाँ छिपाई जाएँगी"
+  },
+  "showCommentsToast": {
+    "message": "टिप्पणियाँ दिखती रहेंगी"
+  },
+  "hideShortsToast": {
+    "message": "फ़ीड में Shorts छिपाए जाएँगे"
+  },
+  "showShortsToast": {
+    "message": "फ़ीड में Shorts दिखते रहेंगे"
+  },
+  "invalidHandle": {
+    "message": "सही YouTube हैंडल या चैनल URL डालें"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ पहले से ब्लॉक है",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "इस क्रिएटर को जोड़ा नहीं जा सका"
+  },
+  "blockedNamed": {
+    "message": "$CREATOR$ को ब्लॉक किया गया",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "ब्लॉक सूची एक्सपोर्ट हो गई"
+  },
+  "importedCreatorOne": {
+    "message": "$COUNT$ क्रिएटर इंपोर्ट किया गया",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "$COUNT$ क्रिएटर इंपोर्ट किए गए",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "यह फ़ाइल मान्य ChannelFence एक्सपोर्ट नहीं है"
+  },
+  "confirmClearAll": {
+    "message": "सभी क्रिएटर को अनब्लॉक करें ($COUNT$)?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "ब्लॉक सूची मिटा दी गई"
+  },
+  "version": {
+    "message": "वर्शन $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "सेटिंग लोड नहीं हो सकीं"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence · ब्लॉक किए गए: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: रुका हुआ"
+  },
+  "welcomeTitle": {
+    "message": "ChannelFence में आपका स्वागत है"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence तैयार है"
+  },
+  "welcomeHeadline": {
+    "message": "उस क्रिएटर को दोबारा न देखें।"
+  },
+  "welcomeLead": {
+    "message": "YouTube की होम फ़ीड, खोज के नतीजों, सुझावों, Shorts, टिप्पणियों और सीधे खोले गए पेजों में अनचाहे क्रिएटर को ब्लॉक करें।"
+  },
+  "welcomeOpenYouTube": {
+    "message": "YouTube खोलें और किसी क्रिएटर को ब्लॉक करें"
+  },
+  "welcomeIconAlt": {
+    "message": "ChannelFence का ब्लॉक किए गए क्रिएटर का आइकन"
+  },
+  "welcomeHowItWorks": {
+    "message": "ChannelFence कैसे काम करता है"
+  },
+  "welcomeFindCreator": {
+    "message": "क्रिएटर खोजें"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "YouTube को हमेशा की तरह इस्तेमाल करें। ChannelFence क्रिएटर के नाम के पास एक छोटा ⊘ बटन जोड़ता है।"
+  },
+  "welcomeBlockOnce": {
+    "message": "एक बार ब्लॉक करें"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "बटन चुनते ही उस क्रिएटर की सामग्री YouTube के समर्थित हिस्सों से छिप जाती है।"
+  },
+  "welcomeStayInControl": {
+    "message": "नियंत्रण अपने हाथ में रखें"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "टूलबार के आइकन से ChannelFence को रोकें, ब्लॉक हटाएँ या अपनी पूरी सूची सँभालें।"
+  },
+  "welcomePrivacy": {
+    "message": "कोई खाता नहीं। कोई ट्रैकिंग नहीं। डेवलपर के नियंत्रण वाला कोई सर्वर नहीं। आपकी ब्लॉक सूची Chrome के एक्सटेंशन के लोकल स्टोरेज में रहती है।"
+  },
+  "privacyTitle": {
+    "message": "ChannelFence की गोपनीयता नीति"
+  },
+  "privacyEffectiveDate": {
+    "message": "लागू होने की तारीख:"
+  },
+  "privacyDate": {
+    "message": "27 अगस्त 2026"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence को बिना खाते, इस्तेमाल के विश्लेषण, विज्ञापन या डेवलपर के नियंत्रण वाले सर्वर के काम करने के लिए बनाया गया है। इसका एकमात्र उद्देश्य स्थानीय नियंत्रण देना है, ताकि उपयोगकर्ता YouTube फ़ीड में चुने गए क्रिएटर और चाहें तो Shorts के सेक्शन छिपा सकें।"
+  },
+  "privacyInformationHeading": {
+    "message": "ChannelFence किन जानकारियों का इस्तेमाल करता है"
+  },
+  "privacyInformation": {
+    "message": "जब आप YouTube इस्तेमाल करते हैं, तब ChannelFence पेज की केवल उतनी सामग्री पढ़ता है जितनी क्रिएटर के नाम और चैनल लिंक पहचानने, क्रिएटर के ब्लॉक सूची में होने की जाँच करने, ब्लॉक करने के बटन जोड़ने और मेल खाने वाली सामग्री छिपाने के लिए ज़रूरी होती है। जब आपकी ब्लॉक सूची खाली नहीं होती, तब क्रिएटर का नाम न दिखाने वाले छोटे Shorts कार्ड की जाँच YouTube के oEmbed एंडपॉइंट से की जाती है, ताकि ChannelFence पता लगा सके कि उनके क्रिएटर ब्लॉक हैं या नहीं। इन छोटे Shorts के लिए मिला मेटाडेटा केवल मेमोरी में कैश किया जाता है। इसे ब्राउज़िंग इतिहास या एक्सटेंशन के स्टोरेज में नहीं जोड़ा जाता। जब आप किसी क्रिएटर को ब्लॉक करते हैं, तो ChannelFence उसका दिखाया गया नाम, सार्वजनिक चैनल ID या हैंडल, सार्वजनिक चैनल URL और ब्लॉक करने का समय सेव करता है। अगर आप छोटे Shorts कार्ड से ब्लॉक करते हैं, तो ChannelFence आपके चुने हुए उस Short का सार्वजनिक पाथ भी क्रिएटर के रिकॉर्ड के साथ सेव करता है, ताकि पेज रीफ़्रेश करने के बाद भी वही कार्ड छिपा रहे।"
+  },
+  "privacyStorageHeading": {
+    "message": "डेटा कहाँ रखा और भेजा जाता है"
+  },
+  "privacyStorage": {
+    "message": "सेटिंग और ब्लॉक किए गए क्रिएटर के रिकॉर्ड केवल आपके डिवाइस पर Chrome के एक्सटेंशन के लोकल स्टोरेज में रखे जाते हैं और कभी डेवलपर को नहीं भेजे जाते। छोटे Shorts कार्ड की जानकारी माँगते समय केवल सार्वजनिक Short URL youtube.com पर भेजे जाते हैं, ताकि YouTube क्रिएटर के सार्वजनिक नाम और चैनल URL लौटा सके। इन अनुरोधों में खाते के लॉगिन क्रेडेंशियल शामिल नहीं होते। ChannelFence डेवलपर के नियंत्रण वाले किसी सर्वर या YouTube के अलावा किसी अन्य सेवा को अनुरोध नहीं भेजता। यह डेटा नहीं बेचता, विज्ञापन के लिए डेटा का इस्तेमाल नहीं करता और किसी व्यक्ति को उपयोगकर्ताओं का डेटा पढ़ने की अनुमति नहीं देता।"
+  },
+  "privacyPermissionsHeading": {
+    "message": "अनुमतियाँ"
+  },
+  "privacyStorageLabel": {
+    "message": "स्टोरेज:"
+  },
+  "privacyStoragePermission": {
+    "message": "चालू या बंद होने की स्थिति, चुनी गई भाषा, टिप्पणियों और फ़ीड में Shorts की पसंद की सेटिंग, और ब्लॉक किए गए क्रिएटर की सूची स्थानीय रूप से सेव करता है।"
+  },
+  "privacyYouTubeLabel": {
+    "message": "youtube.com का ऐक्सेस:"
+  },
+  "privacyYouTubePermission": {
+    "message": "YouTube पेजों पर क्रिएटर की पहचान करता है, उपयोगकर्ता के लिए ब्लॉक करने के बटन जोड़ता है और ब्लॉक किए गए क्रिएटर की सामग्री छिपाता है।"
+  },
+  "privacyControlHeading": {
+    "message": "डेटा सँभालना और मिटाना"
+  },
+  "privacyControl": {
+    "message": "ChannelFence की सेटिंग में आप ब्लॉक किए गए क्रिएटर की सूची देख या एक्सपोर्ट कर सकते हैं, क्रिएटर को अनब्लॉक कर सकते हैं या सूची मिटा सकते हैं। ChannelFence को अनइंस्टॉल करने पर Chrome एक्सटेंशन का स्थानीय रूप से सेव किया गया डेटा मिटा देता है।"
+  },
+  "privacyLimitedUseHeading": {
+    "message": "सीमित इस्तेमाल"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence जानकारी का इस्तेमाल केवल उपयोगकर्ता के लिए अपने एकमात्र उद्देश्य को पूरा करने और बेहतर बनाने तक सीमित रखता है। जानकारी विज्ञापन, कर्ज़ से जुड़े फ़ैसलों, डेटा की खरीद-बिक्री या असंबंधित उद्देश्यों के लिए नहीं भेजी जाती।"
+  },
+  "privacyChangesHeading": {
+    "message": "बदलाव"
+  },
+  "privacyChanges": {
+    "message": "अगर ChannelFence के डेटा इस्तेमाल करने के तरीके बदलते हैं, तो बदलाव लागू होने से पहले इस नीति और Chrome Web Store पर दी गई जानकारी को अपडेट किया जाएगा।"
+  },
+  "privacyContactHeading": {
+    "message": "संपर्क"
+  },
+  "privacyContact": {
+    "message": "गोपनीयता या सहायता से जुड़े सवाल $LINK$ या Chrome Web Store पर एक्सटेंशन के पेज में मौजूद सहायता लिंक के ज़रिए भेजे जा सकते हैं।",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "ChannelFence के समस्या ट्रैकर"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence इस Short की पहचान नहीं कर सका।"
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence इस क्रिएटर की पहचान नहीं कर सका। पहले Short खोलकर देखें।"
+  },
+  "contentBlockShortCreator": {
+    "message": "ChannelFence से इस Short के क्रिएटर को ब्लॉक करें"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: क्रिएटर को ब्लॉक करें"
+  },
+  "contentUnblockWithBrand": {
+    "message": "ChannelFence से $CREATOR$ को अनब्लॉक करें",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "ChannelFence से $CREATOR$ को ब्लॉक करें",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "$CREATOR$ को ब्लॉक करें",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: अनब्लॉक करें"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: ब्लॉक करें"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: $CREATOR$ को अनब्लॉक करें",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: $CREATOR$ को ब्लॉक करें",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "$CREATOR$ को अनब्लॉक किया गया",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "ब्लॉक करें"
+  },
+  "contentCreatorBlocked": {
+    "message": "क्रिएटर ब्लॉक है"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ आपकी ChannelFence ब्लॉक सूची में है।",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "होम पर जाएँ"
+  },
+  "contentUnblockContinue": {
+    "message": "अनब्लॉक करके आगे बढ़ें"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence अभी इस क्रिएटर की पहचान नहीं कर सका।"
+  },
+  "contentBlocked": {
+    "message": "$CREATOR$ को ब्लॉक किया गया",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "पहले जैसा करें"
+  }
+}

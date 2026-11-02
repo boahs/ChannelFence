@@ -1,11 +1,11 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 import es from "../../../_locales/es/messages.json";
-import { translatedLocales } from "../fixtures/locales";
-import { creatorCard } from "../fixtures/youtube-fixtures";
+import { allLocales } from "../fixtures/locales";
+import { creatorCard, shortsViewer } from "../fixtures/youtube-fixtures";
 import { OptionsPage, PopupPage } from "../pages/extension-ui.page";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
-for (const locale of translatedLocales) {
+for (const locale of allLocales) {
   const messages = locale.messages;
 
   test.describe(`${locale.name} extension UI`, () => {
@@ -31,7 +31,7 @@ for (const locale of translatedLocales) {
       expect((await extensionStorage.get<{ cfBlockedChannels: Array<{ key: string }> }>(
         "cfBlockedChannels"
       )).cfBlockedChannels[0].key).toBe(`handle:@${locale.creator}`);
-      await testInfo.attach(`${locale.youtubeLanguage}-settings`, {
+      await testInfo.attach(`${locale.catalogCode}-ui-settings`, {
         body: await extensionPage.screenshot({ fullPage: true }), contentType: "image/png"
       });
 
@@ -46,7 +46,7 @@ for (const locale of translatedLocales) {
         .toBeVisible();
       expect(await extensionPage.locator("body").evaluate((body) => body.scrollWidth - body.clientWidth))
         .toBeLessThanOrEqual(1);
-      await testInfo.attach(`${locale.youtubeLanguage}-popup`, {
+      await testInfo.attach(`${locale.catalogCode}-ui-popup`, {
         body: await extensionPage.locator("body").screenshot(), contentType: "image/png"
       });
       await extensionPage.getByRole("button", {
@@ -59,18 +59,26 @@ for (const locale of translatedLocales) {
 
     test("translates block and Undo without changing YouTube's language or creator names", async ({
       extensionPage, extensionStorage
-    }) => {
+    }, testInfo) => {
       const youtube = new YouTubeSurfacePage(extensionPage);
       await youtube.open(creatorCard({
         id: "localized-creator", handle: `@${locale.creator}`, displayName: locale.creator
       }));
       await expect(extensionPage.locator("html")).toHaveAttribute("lang", "en");
-      await extensionPage.getByRole("button", {
+      const blockButton = extensionPage.getByRole("button", {
         name: messages.contentBlockNamed.message.replace("$CREATOR$", locale.creator), exact: true
-      }).click();
+      });
+      await expect(blockButton).toBeVisible();
+      await testInfo.attach(`${locale.catalogCode}-fixture-block-button`, {
+        body: await youtube.card("localized-creator").screenshot(), contentType: "image/png"
+      });
+      await blockButton.click();
       await expect(youtube.card("localized-creator")).toBeHidden();
       await expect(extensionPage.locator("#cf-toast"))
         .toContainText(messages.contentBlocked.message.replace("$CREATOR$", locale.creator));
+      await testInfo.attach(`${locale.catalogCode}-fixture-block-confirmation`, {
+        body: await extensionPage.locator("#cf-toast").screenshot(), contentType: "image/png"
+      });
       await extensionPage.getByRole("button", { name: messages.contentUndo.message, exact: true }).click();
       await expect(youtube.card("localized-creator")).toBeVisible();
       expect((await extensionStorage.get<{ cfBlockedChannels: unknown[] }>("cfBlockedChannels"))
@@ -79,7 +87,7 @@ for (const locale of translatedLocales) {
 
     test("translates onboarding and privacy while keeping long text and links usable", async ({
       extensionId, extensionPage
-    }) => {
+    }, testInfo) => {
       await extensionPage.setViewportSize({ width: 390, height: 844 });
       for (const [pageName, heading] of [
         ["welcome", messages.welcomeHeadline.message],
@@ -91,6 +99,9 @@ for (const locale of translatedLocales) {
         await expect(extensionPage.locator("body")).not.toContainText("undefined");
         expect(await extensionPage.evaluate(() => document.documentElement.scrollWidth - innerWidth))
           .toBeLessThanOrEqual(1);
+        await testInfo.attach(`${locale.catalogCode}-ui-${pageName}`, {
+          body: await extensionPage.screenshot({ fullPage: true }), contentType: "image/png"
+        });
       }
       await expect(extensionPage.locator('[data-i18n="privacyInformation"]'))
         .toHaveText(messages.privacyInformation.message);
@@ -100,6 +111,36 @@ for (const locale of translatedLocales) {
         .toHaveAttribute("href", "https://github.com/boahs/ChannelFence/issues");
       await expect(extensionPage.locator('[data-i18n="privacyContact"]'))
         .toHaveText(messages.privacyContact.message.replace("$LINK$", messages.issueTracker.message));
+    });
+
+    test("translates the Shorts viewer action and menu in a fixture", async ({
+      extensionPage, extensionStorage
+    }, testInfo) => {
+      const youtube = new YouTubeSurfacePage(extensionPage);
+      await youtube.open(
+        shortsViewer(locale.creator, `@${locale.creator}`),
+        "/shorts/localized-actions",
+        locale.youtubeLanguage
+      );
+      const action = youtube.card("shorts-action-bar").locator(":scope > .cf-shorts-action");
+      await expect(action.getByRole("button", {
+        name: messages.contentBlockWithBrand.message.replace("$CREATOR$", locale.creator), exact: true
+      })).toBeVisible();
+      await expect(action.locator(".cf-shorts-action__label")).toHaveText(messages.contentBlock.message);
+      await testInfo.attach(`${locale.catalogCode}-fixture-shorts-action`, {
+        body: await youtube.card("shorts-viewer").screenshot(), contentType: "image/png"
+      });
+
+      const menuItem = await youtube.openCreatorMenu("shorts-menu");
+      await expect(menuItem).toHaveAttribute(
+        "aria-label", messages.contentBlockWithBrand.message.replace("$CREATOR$", locale.creator)
+      );
+      await expect(menuItem.locator(".cf-menu-item__label")).toHaveText(messages.contentMenuBlock.message);
+      await testInfo.attach(`${locale.catalogCode}-fixture-shorts-menu`, {
+        body: await extensionPage.locator("ytd-menu-popup-renderer").screenshot(), contentType: "image/png"
+      });
+      expect((await extensionStorage.get<{ cfBlockedChannels: unknown[] }>("cfBlockedChannels"))
+        .cfBlockedChannels).toEqual([]);
     });
 
     test("translates import feedback and counts for one, two and five creators", async ({

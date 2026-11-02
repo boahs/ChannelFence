@@ -14,9 +14,10 @@ ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome
 
 What's new in 0.2.8:
 
-- Added Spanish, French, German, Japanese, Brazilian Portuguese, Russian, Simplified Chinese, and Traditional Chinese interfaces alongside English and Korean.
+- Added Japanese, Brazilian Portuguese, Russian, Spanish, French, German, Simplified Chinese, Traditional Chinese, Hindi, Indonesian, Bengali, Turkish, Vietnamese, Arabic, Italian, and Dutch interfaces alongside English and Korean.
 - Translated settings, the popup, onboarding, privacy information, and blocking controls.
 - ChannelFence follows Chrome's interface language by default, with a language selector in settings for a manual choice. YouTube keeps its own language setting; untranslated browser languages fall back to English.
+- Arabic includes right-to-left layouts for extension pages and ChannelFence controls.
 
 Features:
 

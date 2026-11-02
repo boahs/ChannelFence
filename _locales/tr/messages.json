@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "tr"
+  },
+  "languageLabel": {
+    "message": "Dil"
+  },
+  "languageHelp": {
+    "message": "ChannelFence için bir dil seçin. YouTube'un dil ayarı değişmez."
+  },
+  "languageAutomatic": {
+    "message": "Otomatik (tarayıcı dili)"
+  },
+  "languageSaveError": {
+    "message": "Dil kaydedilemedi. Lütfen tekrar deneyin."
+  },
+  "extensionName": {
+    "message": "ChannelFence - YouTube Kanal Engelleyici"
+  },
+  "extensionDescription": {
+    "message": "YouTube kanallarını ana sayfada, aramada, önerilerde, Shorts'ta, yorumlarda ve doğrudan açılan sayfalarda engelleyin."
+  },
+  "loading": {
+    "message": "Yükleniyor…"
+  },
+  "enableChannelFence": {
+    "message": "ChannelFence'i etkinleştir"
+  },
+  "pauseOrEnable": {
+    "message": "ChannelFence'i duraklat veya etkinleştir"
+  },
+  "currentPage": {
+    "message": "Geçerli sayfa"
+  },
+  "checkingPage": {
+    "message": "Bu sayfa kontrol ediliyor…"
+  },
+  "openCreatorHelp": {
+    "message": "İçerik üreticisini engellemek için bir kanal, video veya Short açın."
+  },
+  "blockCreator": {
+    "message": "İçerik üreticisini engelle"
+  },
+  "unblockCreator": {
+    "message": "Üreticinin engelini kaldır"
+  },
+  "hideShorts": {
+    "message": "Akışlarda Shorts'u gizle"
+  },
+  "hideShortsSummary": {
+    "message": "Ana sayfa, arama ve diğer akışlardaki Shorts bölümlerini kaldırır."
+  },
+  "hideOrShowShorts": {
+    "message": "YouTube akışlarında Shorts'u gizle veya göster"
+  },
+  "hideShortsAccessible": {
+    "message": "YouTube akışlarında Shorts'u gizle"
+  },
+  "recentlyBlocked": {
+    "message": "Son engellenenler"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "Henüz engellenen içerik üreticisi yok. YouTube'da üretici adının yanındaki ⊘ düğmesini kullanın."
+  },
+  "manageBlockList": {
+    "message": "Engel listesini yönet"
+  },
+  "reportBug": {
+    "message": "Hata bildir"
+  },
+  "reportBugInline": {
+    "message": "hata bildirin"
+  },
+  "privacy": {
+    "message": "Gizlilik"
+  },
+  "unblock": {
+    "message": "Engeli kaldır"
+  },
+  "unblockNamed": {
+    "message": "Engeli kaldır: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "Engelle: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "İçerik üreticisi bulunamadı"
+  },
+  "multipleCreators": {
+    "message": "Birden fazla içerik üreticisi bulundu"
+  },
+  "chooseCreator": {
+    "message": "Engellemek veya engelini kaldırmak istediğiniz içerik üreticisini seçin."
+  },
+  "thisCreator": {
+    "message": "Bu içerik üreticisi"
+  },
+  "creator": {
+    "message": "içerik üreticisi"
+  },
+  "creatorIsBlocked": {
+    "message": "Bu içerik üreticisi, ChannelFence'in onu tanıyabildiği her yerde engelleniyor."
+  },
+  "creatorBlockHelp": {
+    "message": "Bu içerik üreticisini akışlarda, aramada, önerilerde, Shorts'ta ve doğrudan açılan sayfalarda gizleyin."
+  },
+  "blockedCount": {
+    "message": "$COUNT$ engellendi",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "Duraklatıldı"
+  },
+  "unavailable": {
+    "message": "Kullanılamıyor"
+  },
+  "settingsPageTitle": {
+    "message": "ChannelFence ayarları"
+  },
+  "settingsTagline": {
+    "message": "İçerik üreticisi engelleme ayarları"
+  },
+  "settings": {
+    "message": "Ayarlar"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence yalnızca YouTube'da çalışır ve tercihlerinizi bu cihazda saklar."
+  },
+  "pauseHelp": {
+    "message": "Listenizi silmeden tüm engellemeleri duraklatın."
+  },
+  "hideShortsHelp": {
+    "message": "Ana sayfa, arama ve diğer akışlardaki Shorts bölümlerini ve kartlarını kaldırır. Shorts sekmesi kullanılabilir durumda kalır."
+  },
+  "hideComments": {
+    "message": "Engellenen üreticilerin yorumlarını gizle"
+  },
+  "hideCommentsHelp": {
+    "message": "ChannelFence yorum yapan kişinin kanalını tanıyabiliyorsa yorumlarını da kaldırır."
+  },
+  "blockedCreators": {
+    "message": "Engellenen içerik üreticileri"
+  },
+  "blockListHelp": {
+    "message": "Listenizde arama yapın, engelleri kaldırın veya yedek alın. İçe aktarılan kayıtlar mevcut listeyle birleştirilir."
+  },
+  "manualBlockLabel": {
+    "message": "Herkese açık kullanıcı adı veya kanal URL'siyle engelle"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@uretici veya youtube.com/@uretici"
+  },
+  "manualBlockHelp": {
+    "message": "Bir YouTube herkese açık kullanıcı adı veya kanal URL'si yapıştırın. Girdi doğrulanır ve yalnızca Chrome'un yerel uzantı depolama alanına kaydedilir."
+  },
+  "searchBlocked": {
+    "message": "Engel listesinde ara"
+  },
+  "export": {
+    "message": "Dışa aktar"
+  },
+  "import": {
+    "message": "İçe aktar"
+  },
+  "clearAll": {
+    "message": "Tümünü temizle"
+  },
+  "emptyBlockList": {
+    "message": "Engel listeniz boş."
+  },
+  "showMore": {
+    "message": "200 tane daha göster"
+  },
+  "privateByDesign": {
+    "message": "Gizlilik gözetilerek tasarlandı."
+  },
+  "settingsPrivacy": {
+    "message": "Kanal adları, kanal bağlantıları, ayarlar ve engel listeniz Chrome'un yerel uzantı depolama alanında kalır. ChannelFence bunları bize veya başka birine göndermez."
+  },
+  "settingsReport": {
+    "message": "Engellenmesi gereken bir içerik görünürse $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "ChannelFence'i beğendiniz mi?"
+  },
+  "reviewHelp": {
+    "message": "Chrome Web Store'da dürüst bir değerlendirme, başkalarının uzantıyı bulmasına yardımcı olur."
+  },
+  "leaveReview": {
+    "message": "Değerlendirme yaz"
+  },
+  "noSearchMatches": {
+    "message": "Bu aramayla eşleşen engellenmiş içerik üreticisi yok."
+  },
+  "showingCreators": {
+    "message": "Eşleşen $TOTAL$ içerik üreticisinden $VISIBLE$ tanesi gösteriliyor.",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · Engelleme tarihi: $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "Engel kaldırıldı: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence etkinleştirildi"
+  },
+  "pausedToast": {
+    "message": "ChannelFence duraklatıldı"
+  },
+  "hideCommentsToast": {
+    "message": "Engellenen üreticilerin yorumları gizlenecek"
+  },
+  "showCommentsToast": {
+    "message": "Yorumlar görünür kalacak"
+  },
+  "hideShortsToast": {
+    "message": "Shorts akışlarda gizlenecek"
+  },
+  "showShortsToast": {
+    "message": "Shorts akışlarda görünür kalacak"
+  },
+  "invalidHandle": {
+    "message": "Geçerli bir YouTube herkese açık kullanıcı adı veya kanal URL'si girin"
+  },
+  "alreadyBlocked": {
+    "message": "Zaten engellendi: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "Bu içerik üreticisi eklenemedi"
+  },
+  "blockedNamed": {
+    "message": "Engellendi: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "Engel listesi dışa aktarıldı"
+  },
+  "importedCreatorOne": {
+    "message": "$COUNT$ içerik üreticisi içe aktarıldı",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "$COUNT$ içerik üreticisi içe aktarıldı",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "Bu dosya geçerli bir ChannelFence dışa aktarma dosyası değil"
+  },
+  "confirmClearAll": {
+    "message": "Tüm engeller kaldırılsın mı ($COUNT$)?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "Engel listesi temizlendi"
+  },
+  "version": {
+    "message": "Sürüm $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "Ayarlar yüklenemedi"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence: $COUNT$ engellendi",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: duraklatıldı"
+  },
+  "welcomeTitle": {
+    "message": "ChannelFence'e hoş geldiniz"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence hazır"
+  },
+  "welcomeHeadline": {
+    "message": "O içerik üreticisini bir daha görmeyin."
+  },
+  "welcomeLead": {
+    "message": "İstemediğiniz içerik üreticilerini YouTube'un ana sayfa akışında, arama sonuçlarında, önerilerde, Shorts'ta, yorumlarda ve doğrudan açılan sayfalarda engelleyin."
+  },
+  "welcomeOpenYouTube": {
+    "message": "YouTube'u açın ve bir içerik üreticisini engelleyin"
+  },
+  "welcomeIconAlt": {
+    "message": "ChannelFence engellenen içerik üreticisi simgesi"
+  },
+  "welcomeHowItWorks": {
+    "message": "ChannelFence nasıl çalışır?"
+  },
+  "welcomeFindCreator": {
+    "message": "Bir içerik üreticisi bulun"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "YouTube'u her zamanki gibi kullanın. ChannelFence, içerik üreticisi adlarının yanına küçük bir ⊘ düğmesi ekler."
+  },
+  "welcomeBlockOnce": {
+    "message": "Bir kez engelleyin"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "Düğmeyi seçin; içerik üreticisi, YouTube'un desteklenen alanlarında gizlenir."
+  },
+  "welcomeStayInControl": {
+    "message": "Kontrol sizde kalsın"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "ChannelFence'i duraklatmak, bir engeli kaldırmak veya tüm listenizi yönetmek için araç çubuğundaki simgeyi kullanın."
+  },
+  "welcomePrivacy": {
+    "message": "Hesap yok. Takip yok. Geliştirici tarafından kontrol edilen sunucu yok. Engel listeniz Chrome'un yerel uzantı depolama alanında kalır."
+  },
+  "privacyTitle": {
+    "message": "ChannelFence Gizlilik Politikası"
+  },
+  "privacyEffectiveDate": {
+    "message": "Yürürlük tarihi:"
+  },
+  "privacyDate": {
+    "message": "27 Ağustos 2026"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence; hesap, kullanım analizi, reklam veya geliştirici tarafından kontrol edilen bir sunucu olmadan çalışacak şekilde tasarlanmıştır. Tek amacı, kullanıcıların YouTube akışlarında seçtikleri içerik üreticilerini ve isteğe bağlı olarak Shorts bölümlerini gizleyebilmeleri için yerel kontroller sağlamaktır."
+  },
+  "privacyInformationHeading": {
+    "message": "ChannelFence'in işlediği bilgiler"
+  },
+  "privacyInformation": {
+    "message": "YouTube'u kullanırken ChannelFence yalnızca içerik üreticisi adlarını ve kanal bağlantılarını belirlemek, üreticinin engel listesinde olup olmadığını kontrol etmek, engelleme düğmeleri eklemek ve eşleşen içerikleri gizlemek için gereken sınırlı sayfa içeriğini okur. Engel listeniz boş değilse, içerik üreticisini göstermeyen kompakt Shorts kartları YouTube'un oEmbed uç noktası üzerinden kontrol edilir. Böylece ChannelFence üreticilerinin engellenip engellenmediğini belirleyebilir. Dönen kompakt Shorts meta verileri yalnızca bellekte önbelleğe alınır; tarama geçmişine veya uzantı depolama alanına eklenmez. Bir içerik üreticisini engellemeyi seçtiğinizde ChannelFence, üreticinin görünen adını, herkese açık kanal kimliğini veya kullanıcı adını, herkese açık kanal URL'sini ve engellemenin oluşturulduğu zamanı kaydeder. Kompakt bir Short üzerinden engellerseniz ChannelFence, sayfa yenilendiğinde aynı kartın gizli kalması için sizin seçtiğiniz herkese açık Short yolunu da üreticinin kaydında saklar."
+  },
+  "privacyStorageHeading": {
+    "message": "Depolama ve aktarım"
+  },
+  "privacyStorage": {
+    "message": "Ayarlar ve engellenen içerik üreticisi kayıtları yalnızca cihazınızdaki Chrome'un yerel uzantı depolama alanında saklanır ve asla geliştiriciye aktarılmaz. Kompakt Shorts sorguları, YouTube'un herkese açık içerik üreticisi adlarını ve kanal URL'lerini döndürebilmesi için yalnızca herkese açık Short URL'lerini youtube.com'a gönderir. İsteklere hesap kimlik bilgileri dahil edilmez. ChannelFence, geliştirici tarafından kontrol edilen bir sunucuya veya YouTube dışındaki herhangi bir hizmete istek göndermez. Veri satmaz, verileri reklam için kullanmaz ve insanların kullanıcı verilerini okumasına izin vermez."
+  },
+  "privacyPermissionsHeading": {
+    "message": "İzinler"
+  },
+  "privacyStorageLabel": {
+    "message": "Depolama:"
+  },
+  "privacyStoragePermission": {
+    "message": "etkinleştirme durumunu, dil tercihini, yorum ve akışlardaki Shorts tercihlerini ve engellenen içerik üreticisi listesini yerel olarak kaydeder."
+  },
+  "privacyYouTubeLabel": {
+    "message": "youtube.com erişimi:"
+  },
+  "privacyYouTubePermission": {
+    "message": "YouTube sayfalarındaki içerik üreticilerini belirler, kullanıcıya yönelik engelleme düğmeleri ekler ve engellenen üreticilerin içeriklerini gizler."
+  },
+  "privacyControlHeading": {
+    "message": "Verileri yönetme ve silme"
+  },
+  "privacyControl": {
+    "message": "ChannelFence ayarlarından engellenen içerik üreticilerini görüntüleyebilir veya dışa aktarabilir, engelleri kaldırabilir ya da listeyi temizleyebilirsiniz. ChannelFence kaldırıldığında Chrome, uzantının yerel olarak saklanan verilerini siler."
+  },
+  "privacyLimitedUseHeading": {
+    "message": "Sınırlı kullanım"
+  },
+  "privacyLimitedUse": {
+    "message": "ChannelFence'in bilgi kullanımı, kullanıcıya yönelik tek amacını sağlamak ve geliştirmekle sınırlıdır. Bilgiler reklam, kredi kararları, veri aracılığı veya ilgisiz amaçlar için aktarılmaz."
+  },
+  "privacyChangesHeading": {
+    "message": "Değişiklikler"
+  },
+  "privacyChanges": {
+    "message": "ChannelFence'in veri işleme uygulamaları değişirse bu politika ve Chrome Web Store açıklamaları, değişiklik uygulanmadan önce güncellenir."
+  },
+  "privacyContactHeading": {
+    "message": "İletişim"
+  },
+  "privacyContact": {
+    "message": "Gizlilik ve destek soruları, $LINK$ veya Chrome Web Store sayfasındaki destek bağlantısı üzerinden iletilebilir.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "ChannelFence sorun takip sistemi"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence bu Short'u tanımlayamadı."
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence bu içerik üreticisini tanımlayamadı. Önce Short'u açmayı deneyin."
+  },
+  "contentBlockShortCreator": {
+    "message": "Bu Short'un üreticisini ChannelFence ile engelle"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: İçerik üreticisini engelle"
+  },
+  "contentUnblockWithBrand": {
+    "message": "ChannelFence ile engeli kaldır: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "ChannelFence ile engelle: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "Engelle: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: Engeli kaldır"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: Engelle"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: Engeli kaldır ($CREATOR$)",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: Engelle ($CREATOR$)",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "Engel kaldırıldı: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "Engelle"
+  },
+  "contentCreatorBlocked": {
+    "message": "İçerik üreticisi engellendi"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$, ChannelFence engel listenizde.",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "Ana sayfaya git"
+  },
+  "contentUnblockContinue": {
+    "message": "Engeli kaldır ve devam et"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence bu içerik üreticisini henüz tanımlayamadı."
+  },
+  "contentBlocked": {
+    "message": "Engellendi: $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "Geri al"
+  }
+}

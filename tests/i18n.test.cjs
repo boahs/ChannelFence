@@ -113,6 +113,7 @@ test("each override loads bundled text through the worker and preserves creator 
     const { i18n, requests, document } = loadI18n({ language });
     await i18n.ready;
     assert.equal(i18n.language, language);
+    assert.equal(i18n.direction, language === "ar" ? "rtl" : "ltr");
     assert.equal(i18n.get("contentUndo"), catalogs[language].contentUndo.message);
     const creator = "作者 $& $1 $name$ <script>";
     const expected = catalogs[language].contentBlockNamed.message.replace(/\$creator\$/i, () => creator);

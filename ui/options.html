@@ -43,6 +43,14 @@
           <option value="de" lang="de">Deutsch</option>
           <option value="zh_CN" lang="zh-CN">简体中文</option>
           <option value="zh_TW" lang="zh-TW">繁體中文</option>
+          <option value="hi" lang="hi">हिन्दी</option>
+          <option value="id" lang="id">Bahasa Indonesia</option>
+          <option value="bn" lang="bn">বাংলা</option>
+          <option value="tr" lang="tr">Türkçe</option>
+          <option value="vi" lang="vi">Tiếng Việt</option>
+          <option value="ar" lang="ar">العربية</option>
+          <option value="it" lang="it">Italiano</option>
+          <option value="nl" lang="nl">Nederlands</option>
         </select>
       </div>
 
@@ -87,7 +95,7 @@
       <form class="manual-block-form" id="manualBlockForm">
         <label class="manual-block-form__label" for="manualBlockInput" data-i18n="manualBlockLabel">Block by handle or channel URL</label>
         <div class="manual-block-form__row">
-          <input class="search-input manual-block-form__input" id="manualBlockInput" type="text"
+          <input class="search-input manual-block-form__input" id="manualBlockInput" type="text" dir="auto"
             placeholder="@creator or youtube.com/@creator" data-i18n-placeholder="manualBlockPlaceholder" autocomplete="off" spellcheck="false"
             aria-describedby="manualBlockHelp">
           <button class="button button--primary" id="manualBlockButton" type="submit" data-i18n="blockCreator">Block creator</button>
@@ -96,7 +104,7 @@
       </form>
 
       <div class="list-toolbar">
-        <input class="search-input" id="searchInput" type="search" placeholder="Search blocked creators" data-i18n-placeholder="searchBlocked" aria-label="Search blocked creators" data-i18n-aria-label="searchBlocked">
+        <input class="search-input" id="searchInput" type="search" dir="auto" placeholder="Search blocked creators" data-i18n-placeholder="searchBlocked" aria-label="Search blocked creators" data-i18n-aria-label="searchBlocked">
         <div class="toolbar-actions">
           <button class="button button--secondary button--small" id="exportButton" type="button" data-i18n="export">Export</button>
           <button class="button button--secondary button--small" id="importButton" type="button" data-i18n="import">Import</button>

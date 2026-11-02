@@ -1551,6 +1551,8 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = "cf-menu-item";
+      button.dir = I18n.direction;
+      button.lang = I18n.get("languageCode");
       button.setAttribute("role", "menuitem");
       button.setAttribute("aria-label", I18n.get("contentBlockShortCreator"));
       if (menuTextColor) {
@@ -1588,6 +1590,8 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = "cf-menu-item";
+      button.dir = I18n.direction;
+      button.lang = I18n.get("languageCode");
       button.setAttribute("role", "menuitem");
       button.setAttribute("aria-label", I18n.get(
         existingEntry ? "contentUnblockWithBrand" : "contentBlockWithBrand",
@@ -1845,6 +1849,8 @@
 
     const existingAction = ownedActions.find((action) => action.dataset.cfIdentity === key);
     if (existingAction) {
+      setAttributeIfChanged(existingAction, "dir", I18n.direction);
+      setAttributeIfChanged(existingAction, "lang", I18n.get("languageCode"));
       const existingButton = existingAction.querySelector(".cf-shorts-action__button");
       existingAction.querySelector(".cf-shorts-action__label").textContent = I18n.get("contentBlock");
       existingButton.title = I18n.get("contentBlockWithBrand", displayName);
@@ -1862,6 +1868,8 @@
 
     const action = document.createElement("div");
     action.className = "cf-shorts-action";
+    action.dir = I18n.direction;
+    action.lang = I18n.get("languageCode");
     action.dataset.cfIdentity = key;
     action.__channelFenceRoot = root;
 
@@ -2051,6 +2059,8 @@
 
     const overlay = document.createElement("section");
     overlay.id = "cf-hard-block-overlay";
+    overlay.dir = I18n.direction;
+    overlay.lang = I18n.get("languageCode");
     overlay.dataset.mode = "creator";
     overlay.dataset.entryKey = entry.key;
     overlay.dataset.language = I18n.get("languageCode");
@@ -2721,6 +2731,8 @@
 
     const toast = document.createElement("div");
     toast.id = "cf-toast";
+    toast.dir = I18n.direction;
+    toast.lang = I18n.get("languageCode");
     toast.setAttribute("role", "status");
 
     const text = document.createElement("span");

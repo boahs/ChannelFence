@@ -10,10 +10,7 @@ import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 test.describe("Localized YouTube creator detection with English extension UI", () => {
   // The structure and Korean labels came from the Korean CI DOM capture.
   // Other labels exercise the same structure without language-specific parsing.
-  for (const locale of [
-    ...translatedLocales,
-    { youtubeLanguage: "ar", creator: "قناةعربية", views: "مشاهدة واحدة", age: "قبل 23 ساعة" }
-  ]) {
+  for (const locale of translatedLocales) {
     test(`does not turn ${locale.youtubeLanguage} channel statistics into creators`, async ({ extensionPage }) => {
       const youtube = new YouTubeSurfacePage(extensionPage);
       const card = channelTabLockup({

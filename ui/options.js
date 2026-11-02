@@ -88,9 +88,11 @@ function renderList() {
     const details = document.createElement("div");
     const name = document.createElement("div");
     name.className = "block-list__name";
+    name.dir = "auto";
     name.textContent = Shared.labelForEntry(entry);
     const meta = document.createElement("div");
     meta.className = "block-list__meta";
+    meta.dir = "auto";
     meta.textContent = entry.blockedAt
       ? I18n.get("blockedEntryDetails", [entry.key, formatDate(entry.blockedAt)])
       : entry.key;

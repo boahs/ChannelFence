@@ -1,0 +1,552 @@
+{
+  "languageCode": {
+    "message": "id"
+  },
+  "languageLabel": {
+    "message": "Bahasa"
+  },
+  "languageHelp": {
+    "message": "Pilih bahasa ChannelFence. YouTube tetap menggunakan pengaturan bahasanya sendiri."
+  },
+  "languageAutomatic": {
+    "message": "Otomatis (bahasa browser)"
+  },
+  "languageSaveError": {
+    "message": "Bahasa tidak dapat disimpan. Coba lagi."
+  },
+  "extensionName": {
+    "message": "ChannelFence - Pemblokir Channel YouTube"
+  },
+  "extensionDescription": {
+    "message": "Blokir channel dan kreator YouTube di Beranda, penelusuran, rekomendasi, Shorts, komentar, dan halaman yang dibuka langsung."
+  },
+  "loading": {
+    "message": "Memuat…"
+  },
+  "enableChannelFence": {
+    "message": "Aktifkan ChannelFence"
+  },
+  "pauseOrEnable": {
+    "message": "Jeda atau aktifkan ChannelFence"
+  },
+  "currentPage": {
+    "message": "Halaman saat ini"
+  },
+  "checkingPage": {
+    "message": "Memeriksa halaman ini…"
+  },
+  "openCreatorHelp": {
+    "message": "Buka channel, video, atau Short untuk memblokir kreatornya."
+  },
+  "blockCreator": {
+    "message": "Blokir kreator"
+  },
+  "unblockCreator": {
+    "message": "Buka blokir kreator"
+  },
+  "hideShorts": {
+    "message": "Sembunyikan Shorts di feed"
+  },
+  "hideShortsSummary": {
+    "message": "Hapus bagian Shorts dari Beranda, penelusuran, dan feed lainnya."
+  },
+  "hideOrShowShorts": {
+    "message": "Sembunyikan atau tampilkan Shorts di feed YouTube"
+  },
+  "hideShortsAccessible": {
+    "message": "Sembunyikan Shorts di feed YouTube"
+  },
+  "recentlyBlocked": {
+    "message": "Baru diblokir"
+  },
+  "recentlyBlockedEmpty": {
+    "message": "Belum ada kreator yang diblokir. Gunakan tombol ⊘ di samping nama kreator di YouTube."
+  },
+  "manageBlockList": {
+    "message": "Kelola daftar blokir"
+  },
+  "reportBug": {
+    "message": "Laporkan masalah"
+  },
+  "reportBugInline": {
+    "message": "laporkan masalah"
+  },
+  "privacy": {
+    "message": "Privasi"
+  },
+  "unblock": {
+    "message": "Buka blokir"
+  },
+  "unblockNamed": {
+    "message": "Buka blokir $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "blockNamed": {
+    "message": "Blokir $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "noCreator": {
+    "message": "Kreator tidak terdeteksi"
+  },
+  "multipleCreators": {
+    "message": "Beberapa kreator terdeteksi"
+  },
+  "chooseCreator": {
+    "message": "Pilih kreator yang ingin diblokir atau dibuka blokirnya."
+  },
+  "thisCreator": {
+    "message": "Kreator ini"
+  },
+  "creator": {
+    "message": "kreator"
+  },
+  "creatorIsBlocked": {
+    "message": "Kreator ini diblokir di semua tempat yang memungkinkan ChannelFence mengenalinya."
+  },
+  "creatorBlockHelp": {
+    "message": "Sembunyikan kreator ini dari feed, penelusuran, rekomendasi, Shorts, dan halaman yang dibuka langsung."
+  },
+  "blockedCount": {
+    "message": "$COUNT$ diblokir",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "paused": {
+    "message": "Dijeda"
+  },
+  "unavailable": {
+    "message": "Tidak tersedia"
+  },
+  "settingsPageTitle": {
+    "message": "Setelan ChannelFence"
+  },
+  "settingsTagline": {
+    "message": "Setelan pemblokir kreator"
+  },
+  "settings": {
+    "message": "Setelan"
+  },
+  "settingsIntro": {
+    "message": "ChannelFence hanya berjalan di YouTube dan menyimpan preferensi Anda di perangkat ini."
+  },
+  "pauseHelp": {
+    "message": "Jeda semua pemblokiran tanpa menghapus daftar Anda."
+  },
+  "hideShortsHelp": {
+    "message": "Menghapus bagian dan kartu Shorts dari Beranda, penelusuran, dan feed lainnya. Tab Shorts tetap tersedia."
+  },
+  "hideComments": {
+    "message": "Sembunyikan komentar dari kreator yang diblokir"
+  },
+  "hideCommentsHelp": {
+    "message": "Juga menghapus komentar saat ChannelFence dapat mengenali channel pemberi komentar."
+  },
+  "blockedCreators": {
+    "message": "Kreator yang diblokir"
+  },
+  "blockListHelp": {
+    "message": "Cari, buka blokir, atau cadangkan daftar Anda. Entri yang diimpor digabungkan dengan daftar saat ini."
+  },
+  "manualBlockLabel": {
+    "message": "Blokir lewat nama sebutan atau URL channel"
+  },
+  "manualBlockPlaceholder": {
+    "message": "@kreator atau youtube.com/@kreator"
+  },
+  "manualBlockHelp": {
+    "message": "Tempel nama sebutan YouTube atau URL channel. Input akan diperiksa dan disimpan hanya di penyimpanan lokal ekstensi Chrome."
+  },
+  "searchBlocked": {
+    "message": "Cari dalam daftar blokir"
+  },
+  "export": {
+    "message": "Ekspor"
+  },
+  "import": {
+    "message": "Impor"
+  },
+  "clearAll": {
+    "message": "Hapus semua"
+  },
+  "emptyBlockList": {
+    "message": "Daftar blokir Anda kosong."
+  },
+  "showMore": {
+    "message": "Tampilkan 200 lagi"
+  },
+  "privateByDesign": {
+    "message": "Dirancang untuk menjaga privasi."
+  },
+  "settingsPrivacy": {
+    "message": "Nama dan link channel, setelan, serta daftar blokir Anda tetap berada di penyimpanan lokal ekstensi Chrome. ChannelFence tidak mengirimkannya kepada kami atau siapa pun."
+  },
+  "settingsReport": {
+    "message": "Jika ada konten yang lolos dari pemblokiran, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "enjoyingChannelFence": {
+    "message": "Suka ChannelFence?"
+  },
+  "reviewHelp": {
+    "message": "Ulasan jujur di Chrome Web Store membantu orang lain menemukannya."
+  },
+  "leaveReview": {
+    "message": "Tulis ulasan"
+  },
+  "noSearchMatches": {
+    "message": "Tidak ada kreator yang diblokir yang cocok dengan pencarian ini."
+  },
+  "showingCreators": {
+    "message": "Menampilkan $VISIBLE$ dari $TOTAL$ kreator yang cocok.",
+    "placeholders": {
+      "visible": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "blockedEntryDetails": {
+    "message": "$KEY$ · Diblokir pada $DATE$",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      },
+      "date": {
+        "content": "$2"
+      }
+    }
+  },
+  "unblockedNamed": {
+    "message": "$CREATOR$ tidak lagi diblokir",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "enabledToast": {
+    "message": "ChannelFence diaktifkan"
+  },
+  "pausedToast": {
+    "message": "ChannelFence dijeda"
+  },
+  "hideCommentsToast": {
+    "message": "Komentar dari kreator yang diblokir akan disembunyikan"
+  },
+  "showCommentsToast": {
+    "message": "Komentar akan tetap terlihat"
+  },
+  "hideShortsToast": {
+    "message": "Shorts akan disembunyikan di feed"
+  },
+  "showShortsToast": {
+    "message": "Shorts akan tetap muncul di feed"
+  },
+  "invalidHandle": {
+    "message": "Masukkan nama sebutan YouTube atau URL channel yang valid"
+  },
+  "alreadyBlocked": {
+    "message": "$CREATOR$ sudah diblokir",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "couldNotAddCreator": {
+    "message": "Kreator tersebut tidak dapat ditambahkan"
+  },
+  "blockedNamed": {
+    "message": "$CREATOR$ diblokir",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "exportedBlockList": {
+    "message": "Daftar blokir diekspor"
+  },
+  "importedCreatorOne": {
+    "message": "$COUNT$ kreator diimpor",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importedCreatorOther": {
+    "message": "$COUNT$ kreator diimpor",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "invalidExport": {
+    "message": "File ini bukan ekspor ChannelFence yang valid"
+  },
+  "confirmClearAll": {
+    "message": "Buka blokir semua kreator ($COUNT$)?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clearedBlockList": {
+    "message": "Daftar blokir dikosongkan"
+  },
+  "version": {
+    "message": "Versi $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingsLoadError": {
+    "message": "Setelan tidak dapat dimuat"
+  },
+  "actionBlockedCount": {
+    "message": "ChannelFence: $COUNT$ diblokir",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionPaused": {
+    "message": "ChannelFence: dijeda"
+  },
+  "welcomeTitle": {
+    "message": "Selamat datang di ChannelFence"
+  },
+  "welcomeReady": {
+    "message": "ChannelFence siap digunakan"
+  },
+  "welcomeHeadline": {
+    "message": "Tak perlu melihat kreator itu lagi."
+  },
+  "welcomeLead": {
+    "message": "Blokir kreator yang tidak diinginkan di feed Beranda YouTube, hasil penelusuran, rekomendasi, Shorts, komentar, dan halaman yang dibuka langsung."
+  },
+  "welcomeOpenYouTube": {
+    "message": "Buka YouTube dan blokir kreator"
+  },
+  "welcomeIconAlt": {
+    "message": "Ikon kreator yang diblokir ChannelFence"
+  },
+  "welcomeHowItWorks": {
+    "message": "Cara kerja ChannelFence"
+  },
+  "welcomeFindCreator": {
+    "message": "Temukan kreator"
+  },
+  "welcomeFindCreatorHelp": {
+    "message": "Jelajahi YouTube seperti biasa. ChannelFence menambahkan tombol ⊘ kecil di samping nama kreator."
+  },
+  "welcomeBlockOnce": {
+    "message": "Cukup blokir sekali"
+  },
+  "welcomeBlockOnceHelp": {
+    "message": "Pilih tombol tersebut dan kreator itu akan disembunyikan di bagian YouTube yang didukung."
+  },
+  "welcomeStayInControl": {
+    "message": "Tetap pegang kendali"
+  },
+  "welcomeStayInControlHelp": {
+    "message": "Gunakan ikon di toolbar untuk menjeda ChannelFence, membatalkan pemblokiran, atau mengelola seluruh daftar."
+  },
+  "welcomePrivacy": {
+    "message": "Tanpa akun. Tanpa pelacakan. Tanpa server yang dikendalikan pengembang. Daftar blokir Anda tetap berada di penyimpanan lokal ekstensi Chrome."
+  },
+  "privacyTitle": {
+    "message": "Kebijakan Privasi ChannelFence"
+  },
+  "privacyEffectiveDate": {
+    "message": "Tanggal berlaku:"
+  },
+  "privacyDate": {
+    "message": "27 Agustus 2026"
+  },
+  "privacyIntro": {
+    "message": "ChannelFence dirancang untuk bekerja tanpa akun, analitik, iklan, atau server yang dikendalikan pengembang. Satu-satunya tujuannya adalah menyediakan kontrol lokal untuk menyembunyikan kreator yang dipilih dan, jika diinginkan, bagian Shorts di feed YouTube."
+  },
+  "privacyInformationHeading": {
+    "message": "Informasi yang diproses ChannelFence"
+  },
+  "privacyInformation": {
+    "message": "Saat Anda menggunakan YouTube, ChannelFence hanya membaca konten halaman yang diperlukan untuk mengenali nama kreator dan link channel, memeriksa apakah kreator ada dalam daftar blokir, menambahkan kontrol pemblokiran, dan menyembunyikan konten yang cocok. Jika daftar blokir tidak kosong, kartu Shorts ringkas yang tidak mencantumkan kreatornya diperiksa melalui endpoint oEmbed YouTube agar ChannelFence dapat menentukan apakah kreatornya diblokir. Metadata Shorts ringkas yang diterima hanya disimpan dalam cache di memori dan tidak ditambahkan ke histori penjelajahan atau penyimpanan ekstensi. Saat Anda memilih untuk memblokir kreator, ChannelFence menyimpan nama yang ditampilkan, ID atau nama sebutan channel yang bersifat publik, URL publik channel, dan waktu pemblokiran dibuat. Jika Anda memblokir dari Short ringkas, ChannelFence juga menyimpan path publik Short yang Anda pilih bersama catatan kreator agar kartu yang sama tetap tersembunyi setelah halaman dimuat ulang."
+  },
+  "privacyStorageHeading": {
+    "message": "Penyimpanan dan pengiriman"
+  },
+  "privacyStorage": {
+    "message": "Setelan dan catatan kreator yang diblokir hanya disimpan di penyimpanan lokal ekstensi Chrome pada perangkat Anda dan tidak pernah dikirim ke pengembang. Pencarian informasi Shorts ringkas hanya mengirim URL publik Short ke youtube.com agar YouTube dapat mengembalikan nama publik kreator dan URL channel. Permintaan tidak menyertakan kredensial akun. ChannelFence tidak mengirim permintaan ke server yang dikendalikan pengembang atau layanan apa pun di luar YouTube. ChannelFence tidak menjual data, menggunakan data untuk iklan, atau mengizinkan orang membaca data pengguna."
+  },
+  "privacyPermissionsHeading": {
+    "message": "Izin"
+  },
+  "privacyStorageLabel": {
+    "message": "Penyimpanan:"
+  },
+  "privacyStoragePermission": {
+    "message": "menyimpan status aktif, preferensi bahasa, preferensi komentar dan Shorts di feed, serta daftar kreator yang diblokir secara lokal."
+  },
+  "privacyYouTubeLabel": {
+    "message": "Akses ke youtube.com:"
+  },
+  "privacyYouTubePermission": {
+    "message": "mengenali kreator di halaman YouTube, menambahkan kontrol pemblokiran untuk pengguna, dan menyembunyikan konten dari kreator yang diblokir."
+  },
+  "privacyControlHeading": {
+    "message": "Kontrol dan penghapusan data"
+  },
+  "privacyControl": {
+    "message": "Anda dapat melihat atau mengekspor daftar kreator yang diblokir, membuka blokir kreator, atau mengosongkan daftar melalui setelan ChannelFence. Saat ChannelFence di-uninstal, Chrome menghapus data ekstensi yang tersimpan secara lokal."
+  },
+  "privacyLimitedUseHeading": {
+    "message": "Penggunaan terbatas"
+  },
+  "privacyLimitedUse": {
+    "message": "Penggunaan informasi oleh ChannelFence terbatas pada penyediaan dan peningkatan satu-satunya fungsi yang ditujukan bagi pengguna. Informasi tidak ditransfer untuk iklan, keputusan kredit, perdagangan data, atau tujuan lain yang tidak terkait."
+  },
+  "privacyChangesHeading": {
+    "message": "Perubahan"
+  },
+  "privacyChanges": {
+    "message": "Jika praktik penggunaan data ChannelFence berubah, kebijakan ini dan pengungkapan di Chrome Web Store akan diperbarui sebelum perubahan diterapkan."
+  },
+  "privacyContactHeading": {
+    "message": "Kontak"
+  },
+  "privacyContact": {
+    "message": "Pertanyaan tentang privasi dan dukungan dapat dikirim melalui $LINK$ atau link dukungan pada halaman ekstensi di Chrome Web Store.",
+    "placeholders": {
+      "link": {
+        "content": "$1"
+      }
+    }
+  },
+  "issueTracker": {
+    "message": "pelacak masalah ChannelFence"
+  },
+  "contentUnidentifiedShort": {
+    "message": "ChannelFence tidak dapat mengenali Short ini."
+  },
+  "contentOpenShortFirst": {
+    "message": "ChannelFence tidak dapat mengenali kreator ini. Coba buka Short terlebih dahulu."
+  },
+  "contentBlockShortCreator": {
+    "message": "Blokir kreator Short ini dengan ChannelFence"
+  },
+  "contentMenuBlockCreator": {
+    "message": "ChannelFence: Blokir kreator"
+  },
+  "contentUnblockWithBrand": {
+    "message": "Buka blokir $CREATOR$ dengan ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockWithBrand": {
+    "message": "Blokir $CREATOR$ dengan ChannelFence",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlockNamed": {
+    "message": "Blokir $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuUnblock": {
+    "message": "ChannelFence: Buka blokir"
+  },
+  "contentMenuBlock": {
+    "message": "ChannelFence: Blokir"
+  },
+  "contentMenuUnblockNamed": {
+    "message": "ChannelFence: Buka blokir $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentMenuBlockNamed": {
+    "message": "ChannelFence: Blokir $CREATOR$",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUnblocked": {
+    "message": "$CREATOR$ tidak lagi diblokir",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentBlock": {
+    "message": "Blokir"
+  },
+  "contentCreatorBlocked": {
+    "message": "Kreator diblokir"
+  },
+  "contentBlockedDescription": {
+    "message": "$CREATOR$ ada dalam daftar blokir ChannelFence Anda.",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentGoHome": {
+    "message": "Ke Beranda"
+  },
+  "contentUnblockContinue": {
+    "message": "Buka blokir dan lanjutkan"
+  },
+  "contentUnidentifiedCreator": {
+    "message": "ChannelFence belum dapat mengenali kreator ini."
+  },
+  "contentBlocked": {
+    "message": "$CREATOR$ diblokir",
+    "placeholders": {
+      "creator": {
+        "content": "$1"
+      }
+    }
+  },
+  "contentUndo": {
+    "message": "Urungkan"
+  }
+}
