@@ -27,7 +27,7 @@ The popup is opened as an extension page for these checks. Firefox's native tool
 
 ## Live YouTube
 
-Use the **Live YouTube Playwright tests** GitHub Actions workflow and select `firefox` in its `browser` input. The separate live job runs four real YouTube checks: channel blocking and search-menu blocking in English and Korean. These run in logged-out Firefox profiles. The current Chrome live schedule is unchanged, and Firefox has no recurring schedule yet.
+The **Live YouTube Playwright tests** GitHub Actions workflow runs Firefox daily at 12:17 in `America/New_York`, following daylight saving time. To validate a branch manually, choose **Run workflow** and select `firefox` in its `browser` input. The Firefox job runs four real YouTube checks: channel blocking and search-menu blocking in English and Korean, using logged-out Firefox profiles. Chromium continues to run at 00:17 and 12:17 daily. Scheduled runs use the latest default-branch commit; GitHub may delay their start. The separate **Firefox extension checks** workflow runs deterministic fixtures on pull requests, pushes to `main`, and manual requests.
 
 Do not count intercepted fixtures as live-site coverage. The live tests are under `tests/firefox/live` and use unmodified YouTube responses.
 

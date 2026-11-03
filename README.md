@@ -1,6 +1,8 @@
 # ChannelFence — Block YouTube Channels and Creators
 
-[![ChannelFence CI](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml/badge.svg)](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml)
+[![ChannelFence CI](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml)
+[![Firefox extension checks](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml/badge.svg?branch=main)](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml)
+[![Scheduled live YouTube checks](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml?query=event%3Aschedule)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=github&utm_medium=organic&utm_campaign=30day_growth&utm_content=readme_badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ce2d8.svg)](LICENSE)
 
@@ -9,6 +11,8 @@ ChannelFence is an open-source, privacy-first Chrome extension that lets you blo
 ## Install
 
 [Install ChannelFence from the Chrome Web Store](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=github&utm_medium=organic&utm_campaign=30day_growth&utm_content=readme_install)
+
+Firefox 0.2.8 has been submitted to Mozilla and is awaiting approval. It is not yet available as a public Firefox Add-ons install. Developers can [test the Firefox package locally](#firefox-preparation).
 
 [Visit the ChannelFence website](https://channelfence.app/) or [report a problem](https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml).
 
@@ -69,7 +73,7 @@ After editing the extension, select **Reload** on its `chrome://extensions` card
 
 ### Firefox preparation
 
-A separate desktop Firefox package is available for testing. It has not been published on Firefox Add-ons. It shares the blocking code and all eighteen languages with Chrome, with a Firefox background page and browser-specific copy.
+A separate desktop Firefox package is available for testing. Version 0.2.8 has been submitted to Mozilla and is awaiting approval. It shares the blocking code and all eighteen languages with Chrome, with a Firefox background page and browser-specific copy.
 
 Use Node.js 22.12 or later (CI uses Node.js 24), then build and validate the package:
 
@@ -136,9 +140,18 @@ npm run test:e2e:ui
 
 The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, collaboration bylines, membership lockups, Shorts controls, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
 
-GitHub Actions runs the complete deterministic suite on pull requests and pushes to `main`. The separate live YouTube workflow runs the full live suite daily at 00:17 and 12:17 in `America/New_York`, following daylight saving time automatically. Scheduled runs use the latest default-branch commit, and **Run workflow** remains available for manual validation. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
+GitHub Actions separates repeatable fixture tests from checks against real YouTube:
 
-Firefox has a separate installed-add-on suite, using Puppeteer with Firefox's WebDriver BiDi support under the Playwright test runner. Set `CHANNELFENCE_FIREFOX_PATH` to your Firefox executable, build the package, and run `npm run test:firefox` for local fixtures. The live YouTube workflow offers a manual browser choice; select `firefox` for its smoke checks. The existing twice-daily schedule still tests Chromium; Firefox does not have a recurring schedule yet.
+| Workflow | When it runs | What it checks |
+| --- | --- | --- |
+| [ChannelFence CI](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml) | Pull requests, pushes to `main`, or manually | Website build, unit tests, typecheck, and Chromium fixture regressions |
+| [Firefox extension checks](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml) | Pull requests, pushes to `main`, or manually | Firefox package validation, typecheck, and installed-add-on fixture tests, including all 18 manual interface language choices |
+| [Live YouTube Playwright tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml): Chromium | Daily at 00:17 and 12:17, or manually | Real YouTube checks, including journeys across all 18 supported languages |
+| [Live YouTube Playwright tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml): Firefox | Daily at 12:17, or manually | Four real YouTube checks: channel blocking and search-menu blocking in English and Korean |
+
+Times use `America/New_York` and follow daylight saving time. Scheduled runs test the latest default-branch commit; GitHub may delay their start. For a manual live run, choose **Run workflow** and select `chromium` or `firefox`. The live badge above shows the latest scheduled workflow on `main`: the midnight run checks Chromium, and the noon run checks both browsers. It does not report each browser's status separately.
+
+Firefox's installed-add-on suite uses Puppeteer with Firefox's WebDriver BiDi support under the Playwright test runner. Set `CHANNELFENCE_FIREFOX_PATH` to your Firefox executable, build the package, and run `npm run test:firefox` for local fixtures. Its 18 language choices are tested through the extension's language selector; automatic language selection is checked against an English Firefox installation. Fixture coverage does not mean every language has been tested on live YouTube in Firefox. See the [Chromium test guide](tests/e2e/README.md) and [Firefox test guide](tests/firefox/README.md) for coverage and release-check limits.
 
 ## Website changelog
 
