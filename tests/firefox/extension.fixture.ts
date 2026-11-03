@@ -7,9 +7,9 @@ import { youtubeDocument } from "../e2e/fixtures/youtube-fixtures";
 type StoredValues = Record<string, unknown>;
 type ExtensionApi = {
   tabs: {
-    create(options: { url: string }): Promise<unknown>;
+    create(options: { url: string }): Promise<{ id: number }>;
     getCurrent(): Promise<{ id: number }>;
-    update(id: number, options: { active: boolean }): Promise<unknown>;
+    update(id: number, options: { active?: boolean; url?: string }): Promise<unknown>;
   };
   storage: { local: {
     get(keys: string | string[] | null): Promise<StoredValues>;
@@ -98,13 +98,18 @@ export const test = base.extend<{ addon: FirefoxAddon; browserLocale: string }>(
         const pages = await browser.pages();
         for (const [index, page] of pages.entries()) {
           try {
-            const url = await page.evaluate(() => location.href);
+            const state = await page.evaluate(() => ({
+              url: location.href,
+              visibility: document.visibilityState,
+              focused: document.hasFocus(),
+              viewport: { width: innerWidth, height: innerHeight }
+            }));
             await testInfo.attach(`firefox-page-${index}-dom`, {
-              body: JSON.stringify({ url, html: await page.content() }), contentType: "application/json"
+              body: JSON.stringify({ ...state, html: await page.content() }), contentType: "application/json"
             });
             // Firefox BiDi cannot capture privileged extension pages. Their
             // actual HTML is retained above; YouTube pages also get screenshots.
-            if (!url.startsWith("moz-extension:")) {
+            if (!state.url.startsWith("moz-extension:")) {
               await testInfo.attach(`firefox-page-${index}`, {
                 body: Buffer.from(await page.screenshot({ fullPage: true })), contentType: "image/png"
               });
@@ -206,19 +211,33 @@ export async function openExtensionPage(page: Page, url: string): Promise<void> 
     document.readyState === "complete" && !document.documentElement.dataset.cfTestNavigation, {}, url);
 }
 
-export async function openExtensionTab(addon: FirefoxAddon, pathname: string): Promise<Page> {
+export async function openExtensionTab(
+  addon: FirefoxAddon, pathname: string, viewport?: { width: number; height: number }
+): Promise<Page> {
   const url = `${addon.origin}${pathname}`;
   const existingTargets = new Set(addon.browser.targets());
   // about:blank scripts cannot navigate to privileged moz-extension pages.
   // Open the real extension tab through Firefox's own extension API.
-  await addon.ui.evaluate((destination) =>
-    (globalThis as unknown as { browser: ExtensionApi }).browser.tabs.create({ url: destination }), url);
+  const tab = await addon.ui.evaluate((destination) =>
+    (globalThis as unknown as { browser: ExtensionApi }).browser.tabs.create({ url: destination }), viewport ? "about:blank" : url);
   const target = await addon.browser.waitForTarget((candidate) =>
     candidate.type() === "page" && !existingTargets.has(candidate));
   const page = await target.page();
   if (!page) throw new Error(`Firefox did not open ${pathname}`);
+  if (viewport) {
+    // BiDi cannot resize privileged pages. Size this real tab before navigating
+    // into the extension; Firefox retains its viewport across navigation.
+    await page.setViewport(viewport);
+    await addon.ui.evaluate((id, destination) =>
+      (globalThis as unknown as { browser: ExtensionApi }).browser.tabs.update(id, { url: destination, active: true }), tab.id, url);
+  }
   await page.waitForFunction((destination) => location.href === destination &&
     document.readyState === "complete", {}, url);
+  if (viewport) {
+    await expect.poll(() => page.evaluate(() => ({ width: innerWidth, height: innerHeight })), {
+      message: `${pathname} actual viewport`
+    }).toEqual(viewport);
+  }
   return page;
 }
 

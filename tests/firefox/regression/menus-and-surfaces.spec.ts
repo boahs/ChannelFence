@@ -311,7 +311,9 @@ test.describe("YouTube surfaces and menus", () => {
       }).browser;
       const [tab] = await extensionApi.tabs.query({ url: "https://www.youtube.com/*" });
       if (!tab?.id) throw new Error("Could not find the YouTube fixture tab");
-      return extensionApi.tabs.sendMessage(tab.id, { type: "CF_GET_PAGE_CONTEXT" });
+      const context = await extensionApi.tabs.sendMessage(tab.id, { type: "CF_GET_PAGE_CONTEXT" });
+      // Puppeteer's BiDi deserializer drops duplicate references to the refs array.
+      return JSON.parse(JSON.stringify(context)) as typeof context;
     });
     expect(response.displayName).toBe("Mylo the Cat");
     expect(response.refs.map((ref) => ref.key)).toEqual(["handle:@hiddentracktv2"]);

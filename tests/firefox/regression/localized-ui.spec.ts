@@ -3,7 +3,7 @@ import { allLocales } from "../../e2e/fixtures/locales";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { creatorCard, shortsViewer } from "../../e2e/fixtures/youtube-fixtures";
 import {
-  expect, expectContainsText, expectAttribute, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionPage, openFixture, openOptions, test
+  expect, expectContainsText, expectAttribute, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionPage, openExtensionTab, openFixture, openOptions, test
 } from "../extension.fixture";
 import {
   captureAction, captureExtensionDom, expectInViewport, expectNativeLanguage,
@@ -59,30 +59,29 @@ for (const locale of allLocales) {
       await expect.poll(() => addon.ui.$eval("#toast", (element) => element.classList.contains("toast--visible"))).toBe(false);
       await captureExtensionDom(addon.ui, testInfo, `${locale.catalogCode}-ui-settings`);
 
-      await addon.ui.setViewport({ width: 360, height: 600 });
-      await openExtensionPage(addon.ui, `${addon.origin}/ui/popup.html`);
-      await expectText(addon.ui, "#statusText", messages.blockedCount.message.replace("$COUNT$", "1"));
-      await expectText(addon.ui, "#openOptions", messages.manageBlockList.message);
-      await expectAttribute(addon.ui, "#shortsToggle", "aria-label", messages.hideShortsAccessible.message);
-      await expectHomeControls(addon.ui, messages);
-      await expectVisible(addon.ui, "#compactHomeSizeSelect", false);
-      await expectPopupLayout(addon.ui);
-      await captureExtensionDom(addon.ui, testInfo, `${locale.catalogCode}-ui-popup`);
-      await addon.ui.locator("label:has(#compactHomeGridToggle)").click();
-      await expectVisible(addon.ui, "#compactHomeSizeSelect");
-      expect(await addon.ui.$eval("#compactHomeSizeSelect", (element) => (element as HTMLSelectElement).disabled)).toBe(false);
-      await addon.ui.select("#compactHomeSizeSelect", "small");
-      await expectValue(addon.ui, "#compactHomeSizeSelect", "small");
-      await addon.ui.$eval(".popup-quick-setting--compact", (element) => element.scrollIntoView({ block: "center", inline: "nearest" }));
-      await expectInViewport(addon.ui, "#compactHomeSizeSelect");
-      await expectPopupLayout(addon.ui);
-      await captureExtensionDom(addon.ui, testInfo, `${locale.catalogCode}-ui-popup-home-controls`);
-      await addon.ui.locator("label:has(#compactHomeGridToggle)").click();
-      await expectVisible(addon.ui, "#compactHomeSizeSelect", false);
-      expect(await addon.ui.$eval("#compactHomeSizeSelect", (element) => (element as HTMLSelectElement).disabled)).toBe(true);
-      await expectAttribute(addon.ui, "#recentList button", "aria-label", messages.unblockNamed.message.replace("$CREATOR$", locale.creator));
-      await addon.ui.locator("#recentList button").click();
-      await expectText(addon.ui, "#blockedCount", "0");
+      const popup = await openExtensionTab(addon, "/ui/popup.html", { width: 360, height: 600 });
+      await expectText(popup, "#statusText", messages.blockedCount.message.replace("$COUNT$", "1"));
+      await expectText(popup, "#openOptions", messages.manageBlockList.message);
+      await expectAttribute(popup, "#shortsToggle", "aria-label", messages.hideShortsAccessible.message);
+      await expectHomeControls(popup, messages);
+      await expectVisible(popup, "#compactHomeSizeSelect", false);
+      await expectPopupLayout(popup);
+      await captureExtensionDom(popup, testInfo, `${locale.catalogCode}-ui-popup`);
+      await popup.locator("label:has(#compactHomeGridToggle)").click();
+      await expectVisible(popup, "#compactHomeSizeSelect");
+      expect(await popup.$eval("#compactHomeSizeSelect", (element) => (element as HTMLSelectElement).disabled)).toBe(false);
+      await popup.select("#compactHomeSizeSelect", "small");
+      await expectValue(popup, "#compactHomeSizeSelect", "small");
+      await popup.$eval(".popup-quick-setting--compact", (element) => element.scrollIntoView({ block: "center", inline: "nearest" }));
+      await expectInViewport(popup, "#compactHomeSizeSelect");
+      await expectPopupLayout(popup);
+      await captureExtensionDom(popup, testInfo, `${locale.catalogCode}-ui-popup-home-controls`);
+      await popup.locator("label:has(#compactHomeGridToggle)").click();
+      await expectVisible(popup, "#compactHomeSizeSelect", false);
+      expect(await popup.$eval("#compactHomeSizeSelect", (element) => (element as HTMLSelectElement).disabled)).toBe(true);
+      await expectAttribute(popup, "#recentList button", "aria-label", messages.unblockNamed.message.replace("$CREATOR$", locale.creator));
+      await popup.locator("#recentList button").click();
+      await expectText(popup, "#blockedCount", "0");
       expect(await addon.getStorage("cfBlockedChannels")).toEqual({ cfBlockedChannels: [] });
     });
 
@@ -103,20 +102,22 @@ for (const locale of allLocales) {
     });
 
     test("translates onboarding and privacy while keeping long text and links usable", async ({ addon }, testInfo) => {
-      await addon.ui.setViewport({ width: 390, height: 844 });
+      const page = await openExtensionTab(addon, "/ui/welcome.html", { width: 390, height: 844 });
       for (const [pageName, heading] of [["welcome", messages.welcomeHeadline.message], ["privacy", messages.privacyTitle.message]]) {
-        await openExtensionPage(addon.ui, `${addon.origin}/ui/${pageName}.html`);
-        await expectAttribute(addon.ui, "html", "lang", messages.languageCode.message);
-        await expectText(addon.ui, "h1", heading);
-        expect(await addon.ui.$eval("body", (element) => element.textContent)).not.toContain("undefined");
-        expect(await addon.ui.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
-        await captureExtensionDom(addon.ui, testInfo, `${locale.catalogCode}-ui-${pageName}`);
+        if (pageName === "privacy") await openExtensionPage(page, `${addon.origin}/ui/privacy.html`);
+        expect(await page.evaluate(() => ({ width: innerWidth, height: innerHeight })))
+          .toEqual({ width: 390, height: 844 });
+        await expectAttribute(page, "html", "lang", messages.languageCode.message);
+        await expectText(page, "h1", heading);
+        expect(await page.$eval("body", (element) => element.textContent)).not.toContain("undefined");
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+        await captureExtensionDom(page, testInfo, `${locale.catalogCode}-ui-${pageName}`);
       }
-      await expectText(addon.ui, '[data-i18n="privacyInformation"]', messages.privacyInformation.message);
-      await expectText(addon.ui, '[data-i18n="privacyStorage"]', messages.privacyStorage.message);
-      await expectAttribute(addon.ui, '[data-i18n="privacyContact"] a', "href", "https://github.com/boahs/ChannelFence/issues");
-      await expectText(addon.ui, '[data-i18n="privacyContact"] a', messages.issueTracker.message);
-      await expectText(addon.ui, '[data-i18n="privacyContact"]', messages.privacyContact.message.replace("$LINK$", messages.issueTracker.message));
+      await expectText(page, '[data-i18n="privacyInformation"]', messages.privacyInformation.message);
+      await expectText(page, '[data-i18n="privacyStorage"]', messages.privacyStorage.message);
+      await expectAttribute(page, '[data-i18n="privacyContact"] a', "href", "https://github.com/boahs/ChannelFence/issues");
+      await expectText(page, '[data-i18n="privacyContact"] a', messages.issueTracker.message);
+      await expectText(page, '[data-i18n="privacyContact"]', messages.privacyContact.message.replace("$LINK$", messages.issueTracker.message));
     });
 
     test("translates the Shorts viewer action and menu in a fixture", async ({ addon }, testInfo) => {

@@ -6,16 +6,25 @@ on:
     - cron: "17 12 * * *"
       timezone: "America/New_York"
   workflow_dispatch:
+    inputs:
+      grep:
+        description: Optional test-title filter; leave blank to run the complete suite
+        type: string
+        default: ""
   workflow_call:
+    inputs:
+      grep:
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 jobs:
   firefox-live:
-    name: Firefox live YouTube checks (all supported languages)
+    name: Firefox live YouTube checks
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 16
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,8 +50,9 @@ jobs:
       - name: Build and lint Firefox package
         run: npm run build:firefox
       - name: Run all live YouTube checks in Firefox
-        run: npm run test:firefox:live
+        run: npm run test:firefox:live -- --grep "$TEST_GREP"
         env:
+          TEST_GREP: ${{ inputs.grep || '' }}
           CHANNELFENCE_FIREFOX_PATH: ${{ steps.firefox.outputs.firefox-path }}
       - name: Upload Firefox live diagnostics
         if: always()

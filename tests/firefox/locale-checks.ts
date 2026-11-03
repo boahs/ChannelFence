@@ -19,17 +19,17 @@ export async function expectNativeLanguage(addon: FirefoxAddon, language: RegExp
   }).browser.i18n.getUILanguage())).toMatch(language);
 }
 
-export async function expectInViewport(page: Page, selector: string): Promise<void> {
+export async function expectInViewport(page: Page, selector: string, ratio = 1): Promise<void> {
   await expectVisible(page, selector);
   await expect.poll(async () => {
     const element = await page.$(selector);
     if (!element) return false;
     try {
-      return await element.isIntersectingViewport({ threshold: 1 });
+      return await element.isIntersectingViewport({ threshold: ratio });
     } finally {
       await element.dispose();
     }
-  }, { message: `${selector} fully in viewport` }).toBe(true);
+  }, { message: `${selector} viewport intersection ${ratio === 1 ? "= 1" : `> ${ratio}`}` }).toBe(true);
 }
 
 export async function captureAction(page: Page, selector: string, testInfo: TestInfo, name: string): Promise<void> {
@@ -41,7 +41,9 @@ export async function captureAction(page: Page, selector: string, testInfo: Test
   } finally {
     await element.dispose();
   }
-  await expectInViewport(page, selector);
+  // Match Chrome's capture assertion: any intersection. Layout checks call
+  // expectInViewport separately and retain the full-visibility requirement.
+  await expectInViewport(page, selector, 0);
   await testInfo.attach(name, { body: Buffer.from(await page.screenshot()), contentType: "image/png" });
 }
 

@@ -37,6 +37,8 @@ Firefox runs the same five live journeys in each of the 18 supported languages: 
 
 The browser appears in workflow, run and job names, including GitHub's native failure notifications. Email delivery depends on the repository owner's GitHub Actions notification preferences. No separate mail service is configured.
 
+Manual runs accept an optional test-title filter for investigating a failure. Leave it blank to run the complete suite. Pull requests, pushes and scheduled runs always use the complete suite. In CI, the runner stops after 14 minutes so it can save reports before the job's 16-minute deadline.
+
 Do not count intercepted fixtures as live-site coverage. The live tests are under `tests/firefox/live` and use unmodified YouTube responses.
 
 Reports are written to `firefox-playwright-report/` and `firefox-test-results/`. Failed tests attach page HTML, page errors and screenshots where Firefox permits capture. Per-language YouTube menu screenshots are included in successful deterministic reports too. Extension pages have DOM and layout assertions; Firefox BiDi currently restricts screenshot capture on these privileged pages. CI retains diagnostics and the unsigned ZIP for 14 days.

@@ -1,7 +1,11 @@
 import { setTimeout as delay } from "node:timers/promises";
 import type { Frame, HTTPRequest } from "puppeteer-core";
+import type { BidiConnection } from "puppeteer-core/internal/bidi/Connection.js";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { expect, expectAttribute, expectCount, expectContainsText, expectVisible, test } from "../extension.fixture";
+
+type ShortsEvent = { type: string; at: number; path: string; visibility: string };
+type ShortsDiagnosticWindow = Window & { __cfFirefoxShortsEvents?: ShortsEvent[] };
 
 test("injects ChannelFence on the live YouTube origin", async ({ addon }) => {
   await addon.page.goto("https://www.youtube.com/@YouTube", { waitUntil: "domcontentloaded", timeout: 30_000 });
@@ -167,6 +171,23 @@ test("quickly skips the requested live Short with a 50-entry block list after Ho
   const page = addon.page;
   const blockedUrl = "https://www.youtube.com/shorts/bUam9LKFIv4";
   const blockedPath = new URL(blockedUrl).pathname;
+  // Observe native navigation and the product's next-button click without
+  // changing YouTube handlers. Retain the current document's events on failure.
+  await page.evaluateOnNewDocument(() => {
+    const events: ShortsEvent[] = [];
+    (window as ShortsDiagnosticWindow).__cfFirefoxShortsEvents = events;
+    const record = (type: string) => events.push({
+      type, at: Date.now(), path: location.pathname, visibility: document.visibilityState
+    });
+    for (const type of ["yt-navigate-start", "yt-navigate-finish", "DOMContentLoaded"]) {
+      document.addEventListener(type, () => record(type), true);
+    }
+    document.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("ytd-shorts #navigation-button-down button")) {
+        record(`next-button-click:${event.isTrusted ? "trusted" : "synthetic"}`);
+      }
+    }, true);
+  });
   await page.goto(blockedUrl, { waitUntil: "domcontentloaded", timeout: 30_000 });
   const owner = await page.waitForSelector("ytd-shorts yt-reel-channel-bar-view-model a[href*='/@']", { visible: true, timeout: 30_000 });
   if (!owner) throw new Error("The Shorts creator was not rendered");
@@ -186,6 +207,8 @@ test("quickly skips the requested live Short with a 50-entry block list after Ho
   const skipBlockedShort = async (reloadBlockedUrl = false) => {
     const observedPaths: string[] = [];
     const navigationPaths: string[] = [];
+    const connection = (addon.browser as unknown as { connection: BidiConnection }).connection;
+    const context = (page.mainFrame() as unknown as { _id: string })._id;
     let targetSeen = false;
     const recordPath = (raw: string) => {
       if (!URL.canParse(raw)) return;
@@ -194,30 +217,45 @@ test("quickly skips the requested live Short with a 50-entry block list after Ho
       if (url.pathname === blockedPath) targetSeen = true;
       if (targetSeen && observedPaths.at(-1) !== url.pathname) observedPaths.push(url.pathname);
     };
-    const onFrame = (frame: Frame) => { if (frame === page.mainFrame()) recordPath(frame.url()); };
+    const onNavigation = (event: { context: string; url: string }) => {
+      if (event.context === context) recordPath(event.url);
+    };
     const onRequest = (request: HTTPRequest) => {
       if (request.isNavigationRequest() && request.frame() === page.mainFrame()) navigationPaths.push(new URL(request.url()).pathname);
     };
-    page.on("framenavigated", onFrame);
+    // Native commit/history events also catch transient Home routes. Puppeteer's
+    // URL cache can still say Home after commit, until DOMContentLoaded arrives.
+    connection.on("browsingContext.navigationCommitted", onNavigation);
+    connection.on("browsingContext.historyUpdated", onNavigation);
     page.on("request", onRequest);
-    // Match Chromium's sampling: detect transient Home/duplicate navigation as
-    // well as the final URL during the product's asynchronous Shorts retries.
-    const sampler = setInterval(() => recordPath(page.url()), 10);
     const startedAt = Date.now();
     let loadedAt = startedAt;
     let completedAt = startedAt;
     let allowedPath = "";
     try {
       if (reloadBlockedUrl) {
-        // Puppeteer's goto waits for BiDi interactive readiness even with an
-        // empty waitUntil. Navigate from the page and wait only for the initial
-        // navigation response so reload targets the blocked URL before hydration.
-        await Promise.all([
-          page.waitForNavigation({ waitUntil: [], timeout: 30_000 }),
-          page.evaluate((url) => { location.assign(url); }, blockedUrl)
-        ]);
-        expect(new URL(page.url()).pathname).toBe(blockedPath);
-        await page.reload({ waitUntil: "domcontentloaded", timeout: 30_000 });
+        // Public Puppeteer navigation waits for interactive readiness; an empty
+        // waitUntil can instead resolve before commit. Use Firefox's native
+        // commit event to match Playwright's goto({ waitUntil: "commit" }).
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        let onCommit: ((event: { context: string; url: string }) => void) | undefined;
+        try {
+          const committedUrl = await new Promise<string>((resolve, reject) => {
+            onCommit = (event) => { if (event.context === context) resolve(event.url); };
+            connection.on("browsingContext.navigationCommitted", onCommit);
+            timer = setTimeout(() => reject(new Error("Blocked Short did not commit within 30000ms")), 30_000);
+            void connection.send("browsingContext.navigate", {
+              context, url: blockedUrl, wait: "none"
+            }, 30_000).catch(reject);
+          });
+          // Puppeteer's cached page.url() updates at DOMContentLoaded, so check
+          // the browser's committed URL before immediately reloading it.
+          expect(new URL(committedUrl).pathname).toBe(blockedPath);
+          await page.reload({ waitUntil: "domcontentloaded", timeout: 30_000 });
+        } finally {
+          clearTimeout(timer);
+          if (onCommit) connection.off("browsingContext.navigationCommitted", onCommit);
+        }
       } else await page.goto(blockedUrl, { waitUntil: "domcontentloaded", timeout: 30_000 });
       loadedAt = Date.now();
       await expect.poll(() => {
@@ -228,9 +266,25 @@ test("quickly skips the requested live Short with a 50-entry block list after Ho
       completedAt = Date.now();
       allowedPath = new URL(page.url()).pathname;
     } finally {
-      clearInterval(sampler);
-      page.off("framenavigated", onFrame);
+      connection.off("browsingContext.navigationCommitted", onNavigation);
+      connection.off("browsingContext.historyUpdated", onNavigation);
       page.off("request", onRequest);
+      const documentState = await page.evaluate(() => {
+        const nextButton = document.querySelector<HTMLButtonElement>("ytd-shorts #navigation-button-down button");
+        return {
+          url: location.href, visibility: document.visibilityState, focused: document.hasFocus(),
+          pending: document.documentElement.classList.contains("cf-watch-pending"),
+          events: (window as ShortsDiagnosticWindow).__cfFirefoxShortsEvents,
+          nextButton: nextButton && { disabled: nextButton.disabled, ariaDisabled: nextButton.getAttribute("aria-disabled") },
+          owners: [...document.querySelectorAll("ytd-shorts yt-reel-channel-bar-view-model a[href]")]
+            .map((element) => element.getAttribute("href"))
+        };
+      }).catch((error) => ({ captureError: String(error) }));
+      await testInfo.attach(`firefox-shorts-skip-${reloadBlockedUrl ? "reload" : "initial"}`, {
+        body: JSON.stringify({ blockedPath, handle, startedAt, loadedAt, completedAt, allowedPath,
+          observedPaths, navigationPaths, documentState }, null, 2),
+        contentType: "application/json"
+      });
     }
     expect(observedPaths).not.toContain("/");
     if (reloadBlockedUrl) expect(navigationPaths.filter((path) => path === blockedPath)).toHaveLength(2);
