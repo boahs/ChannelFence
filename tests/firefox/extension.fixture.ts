@@ -178,6 +178,7 @@ export async function openCreatorMenu(page: Page, trigger: string): Promise<void
   await page.evaluate(() => {
     document.querySelector("ytd-menu-popup-renderer")?.remove();
     const popup = document.createElement("ytd-menu-popup-renderer");
+    popup.style.color = "#f1f1f1";
     popup.innerHTML = '<div id="items" role="menu"><div role="menuitem"><span class="label">Report</span></div></div>';
     document.body.append(popup);
   });

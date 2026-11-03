@@ -44,6 +44,8 @@ for (const locale of allLocales) {
       .toBe(messages.contentBlockNamed.message.replace("$CREATOR$", locale.creator));
     await openCreatorMenu(addon.page, '[data-testid="localized-menu"]');
     await expectText(addon.page, ".cf-menu-item__label", messages.contentMenuBlock.message);
+    await expect.poll(() => addon.page.$eval(".cf-menu-item__label", (element) => getComputedStyle(element).color))
+      .toBe("rgb(241, 241, 241)");
     await testInfo.attach(`${locale.catalogCode}-firefox-content-menu`, {
       body: Buffer.from(await addon.page.screenshot()), contentType: "image/png"
     });
