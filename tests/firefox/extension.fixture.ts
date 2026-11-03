@@ -102,7 +102,8 @@ export const test = base.extend<{ addon: FirefoxAddon; browserLocale: string }>(
               url: location.href,
               visibility: document.visibilityState,
               focused: document.hasFocus(),
-              viewport: { width: innerWidth, height: innerHeight }
+              viewport: { width: innerWidth, height: innerHeight },
+              shortsEvents: (window as Window & { __cfFirefoxShortsEvents?: unknown }).__cfFirefoxShortsEvents
             }));
             await testInfo.attach(`firefox-page-${index}-dom`, {
               body: JSON.stringify({ ...state, html: await page.content() }), contentType: "application/json"

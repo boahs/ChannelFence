@@ -1,11 +1,41 @@
 import { setTimeout as delay } from "node:timers/promises";
-import type { Frame, HTTPRequest } from "puppeteer-core";
+import type { Frame, HTTPRequest, Page } from "puppeteer-core";
 import type { BidiConnection } from "puppeteer-core/internal/bidi/Connection.js";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { expect, expectAttribute, expectCount, expectContainsText, expectVisible, test } from "../extension.fixture";
 
-type ShortsEvent = { type: string; at: number; path: string; visibility: string };
+type ShortsEvent = {
+  type: string; at: number; path: string; visibility: string; readyState: string;
+  nextButton: string | null; rendererCount: number;
+};
 type ShortsDiagnosticWindow = Window & { __cfFirefoxShortsEvents?: ShortsEvent[] };
+
+async function observeShortsNavigation(page: Page): Promise<void> {
+  // Observe clicks and native navigation without changing YouTube handlers.
+  // The fixture retains this current-document timeline when a test fails.
+  await page.evaluateOnNewDocument(() => {
+    const events: ShortsEvent[] = [];
+    (window as ShortsDiagnosticWindow).__cfFirefoxShortsEvents = events;
+    const record = (type: string) => events.push({
+      type, at: Date.now(), path: location.pathname, visibility: document.visibilityState,
+      readyState: document.readyState,
+      nextButton: document.querySelector("ytd-shorts #navigation-button-down button")?.outerHTML ?? null,
+      rendererCount: document.querySelectorAll("ytd-shorts ytd-reel-video-renderer").length
+    });
+    for (const type of ["yt-navigate-start", "yt-navigate-finish", "DOMContentLoaded"]) {
+      document.addEventListener(type, () => record(type), true);
+    }
+    document.addEventListener("click", (event) => {
+      const button = event.target instanceof Element && event.target.closest(
+        ".cf-shorts-action__button, ytd-shorts #navigation-button-down button"
+      );
+      if (button) {
+        const action = button.matches(".cf-shorts-action__button") ? "block" : "next";
+        record(`${action}-button-click:${event.isTrusted ? "trusted" : "synthetic"}`);
+      }
+    }, true);
+  });
+}
 
 test("injects ChannelFence on the live YouTube origin", async ({ addon }) => {
   await addon.page.goto("https://www.youtube.com/@YouTube", { waitUntil: "domcontentloaded", timeout: 30_000 });
@@ -129,6 +159,7 @@ test("blocks a compact live Short from its three-dot menu without leaving search
 });
 
 test("advances after blocking the current live Shorts creator", async ({ addon }) => {
+  await observeShortsNavigation(addon.page);
   await addon.setStorage({ cfHideHomeShorts: true });
   await addon.page.goto("https://www.youtube.com/shorts/E4PB_V8yZso", { waitUntil: "domcontentloaded", timeout: 30_000 });
   const channel = await addon.page.waitForSelector("ytd-shorts yt-reel-channel-bar-view-model:has(a[href*='/@'])", { visible: true, timeout: 30_000 });
@@ -148,6 +179,7 @@ test("advances after blocking the current live Shorts creator", async ({ addon }
 });
 
 test("advances instead of returning Home when a live Short opens pre-blocked", async ({ addon }) => {
+  await observeShortsNavigation(addon.page);
   const blockedUrl = "https://www.youtube.com/shorts/E4PB_V8yZso";
   await addon.page.goto(blockedUrl, { waitUntil: "domcontentloaded", timeout: 30_000 });
   const owner = await addon.page.waitForSelector("ytd-shorts yt-reel-channel-bar-view-model a[href*='/@']", { visible: true, timeout: 30_000 });
@@ -171,23 +203,7 @@ test("quickly skips the requested live Short with a 50-entry block list after Ho
   const page = addon.page;
   const blockedUrl = "https://www.youtube.com/shorts/bUam9LKFIv4";
   const blockedPath = new URL(blockedUrl).pathname;
-  // Observe native navigation and the product's next-button click without
-  // changing YouTube handlers. Retain the current document's events on failure.
-  await page.evaluateOnNewDocument(() => {
-    const events: ShortsEvent[] = [];
-    (window as ShortsDiagnosticWindow).__cfFirefoxShortsEvents = events;
-    const record = (type: string) => events.push({
-      type, at: Date.now(), path: location.pathname, visibility: document.visibilityState
-    });
-    for (const type of ["yt-navigate-start", "yt-navigate-finish", "DOMContentLoaded"]) {
-      document.addEventListener(type, () => record(type), true);
-    }
-    document.addEventListener("click", (event) => {
-      if (event.target instanceof Element && event.target.closest("ytd-shorts #navigation-button-down button")) {
-        record(`next-button-click:${event.isTrusted ? "trusted" : "synthetic"}`);
-      }
-    }, true);
-  });
+  await observeShortsNavigation(page);
   await page.goto(blockedUrl, { waitUntil: "domcontentloaded", timeout: 30_000 });
   const owner = await page.waitForSelector("ytd-shorts yt-reel-channel-bar-view-model a[href*='/@']", { visible: true, timeout: 30_000 });
   if (!owner) throw new Error("The Shorts creator was not rendered");
