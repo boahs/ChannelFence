@@ -131,7 +131,10 @@ export { blockedCreator, legacyBlockedCreator } from "../e2e/fixtures/extension.
 export async function visible(page: Page, selector: string): Promise<boolean> {
   return page.evaluate((query) => {
     const element = document.querySelector(query);
-    return element?.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) ?? false;
+    if (!element?.checkVisibility({ checkVisibilityCSS: true })) return false;
+    // Match Playwright's rendered-box check; opacity alone does not hide a box.
+    const { width, height } = element.getBoundingClientRect();
+    return width > 0 && height > 0;
   }, selector);
 }
 

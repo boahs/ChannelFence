@@ -36,6 +36,7 @@ test.describe("extension language override", () => {
       await expectText(privacy, "h1", messages.privacyTitle.message);
       await expectText(privacy, '[data-i18n="privacyContact"]', messages.privacyContact.message.replace("$LINK$", messages.issueTracker.message));
       await expectAttribute(privacy, '[data-i18n="privacyContact"] a', "href", "https://github.com/boahs/ChannelFence/issues");
+      await expectVisible(privacy, '[data-i18n="privacyContact"] a');
       expect(await addon.getStorage("cfLanguage")).toEqual({ cfLanguage: value });
       await openExtensionPage(addon.ui, `${addon.origin}/ui/options.html`);
       await expectValue(addon.ui, "#languageSelect", value);

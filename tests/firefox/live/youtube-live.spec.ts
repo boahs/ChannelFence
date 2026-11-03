@@ -251,7 +251,9 @@ test("quickly skips the requested live Short with a 50-entry block list after Ho
           // Puppeteer's cached page.url() updates at DOMContentLoaded, so check
           // the browser's committed URL before immediately reloading it.
           expect(new URL(committedUrl).pathname).toBe(blockedPath);
-          await page.reload({ waitUntil: "domcontentloaded", timeout: 30_000 });
+          // Await this reload's readiness, rather than Puppeteer's navigation
+          // waiter which can resolve on the first document still finishing.
+          await connection.send("browsingContext.reload", { context, wait: "interactive" }, 30_000);
         } finally {
           clearTimeout(timer);
           if (onCommit) connection.off("browsingContext.navigationCommitted", onCommit);

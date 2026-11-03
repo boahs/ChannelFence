@@ -117,6 +117,7 @@ for (const locale of allLocales) {
       await expectText(page, '[data-i18n="privacyStorage"]', messages.privacyStorage.message);
       await expectAttribute(page, '[data-i18n="privacyContact"] a', "href", "https://github.com/boahs/ChannelFence/issues");
       await expectText(page, '[data-i18n="privacyContact"] a', messages.issueTracker.message);
+      await expectVisible(page, '[data-i18n="privacyContact"] a');
       await expectText(page, '[data-i18n="privacyContact"]', messages.privacyContact.message.replace("$LINK$", messages.issueTracker.message));
     });
 
@@ -191,8 +192,10 @@ for (const scenario of [
       await openExtensionPage(addon.ui, `${addon.origin}/ui/popup.html`);
       await expectAttribute(addon.ui, "html", "lang", messages.languageCode.message);
       await expectText(addon.ui, "#openOptions", messages.manageBlockList.message);
+      await expectVisible(addon.ui, "#openOptions");
       await expectText(addon.ui, "#statusText", messages.blockedCount.message.replace("$COUNT$", "1"));
       await expectAttribute(addon.ui, "#recentList button", "aria-label", messages.unblockNamed.message.replace("$CREATOR$", "example"));
+      await expectVisible(addon.ui, "#recentList button");
     });
   });
 }

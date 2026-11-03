@@ -1,6 +1,6 @@
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { creatorCard } from "../../e2e/fixtures/youtube-fixtures";
-import { expect, expectCount, expectVisible, openFixture, test } from "../extension.fixture";
+import { expect, expectCount, expectText, expectVisible, openFixture, test } from "../extension.fixture";
 
 test.describe("feed blocking", () => {
   test("blocks a creator, hides every matching card, and supports Undo", async ({ addon }) => {
@@ -23,6 +23,7 @@ test.describe("feed blocking", () => {
     expect(entries[0]).toMatchObject({ aliases: ["handle:@alpha"], displayName: "alpha" });
     expect(entries[0].displayName).not.toBe("8:41");
 
+    await expectText(page, "#cf-toast button", "Undo");
     await page.locator("#cf-toast button").click();
     await expectVisible(page, '[data-testid="alpha-one"]');
     await expectVisible(page, '[data-testid="alpha-two"]');

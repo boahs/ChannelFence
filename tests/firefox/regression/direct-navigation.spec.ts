@@ -1,6 +1,6 @@
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { channelHeader, watchOwner } from "../../e2e/fixtures/youtube-fixtures";
-import { expect, expectContainsText, expectCount, expectVisible, openFixture, test } from "../extension.fixture";
+import { expect, expectContainsText, expectCount, expectText, expectVisible, openFixture, test } from "../extension.fixture";
 
 test.describe("direct navigation guard", () => {
   test("stops a direct visit to a blocked channel and can unblock it", async ({ addon }) => {
@@ -8,6 +8,7 @@ test.describe("direct navigation guard", () => {
     await openFixture(addon.page, channelHeader("Alpha Creator", "@alpha"), "/@alpha");
     await expectVisible(addon.page, "#cf-hard-block-overlay");
     await expectContainsText(addon.page, "#cf-hard-block-overlay", "alpha is on your ChannelFence block list.");
+    await expectText(addon.page, "#cf-hard-block-overlay .cf-hard-block-actions button:last-child", "Unblock and continue");
     await addon.page.locator("#cf-hard-block-overlay .cf-hard-block-actions button:last-child").click();
     await expectCount(addon.page, "#cf-hard-block-overlay", 0);
     expect((await addon.getStorage("cfBlockedChannels")).cfBlockedChannels).toEqual([]);
