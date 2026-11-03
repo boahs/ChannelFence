@@ -22,12 +22,14 @@ export type FirefoxAddon = {
   ui: Page;
   page: Page;
   origin: string;
-  getStorage(keys?: string | string[]): Promise<StoredValues>;
+  downloadsPath: string;
+  getStorage<T extends StoredValues = StoredValues>(keys?: string | string[]): Promise<T>;
   setStorage(values: StoredValues): Promise<void>;
 };
 
-export const test = base.extend<{ addon: FirefoxAddon }>({
-  addon: async ({}, use, testInfo) => {
+export const test = base.extend<{ addon: FirefoxAddon; browserLocale: string }>({
+  browserLocale: ["en-US", { option: true }],
+  addon: async ({ browserLocale }, use, testInfo) => {
     const executablePath = process.env.CHANNELFENCE_FIREFOX_PATH;
     if (!executablePath) {
       throw new Error("Set CHANNELFENCE_FIREFOX_PATH to the stock Firefox executable. See tests/firefox/README.md.");
@@ -43,6 +45,11 @@ export const test = base.extend<{ addon: FirefoxAddon }>({
       env: { ...process.env, MOZ_REMOTE_ALLOW_SYSTEM_ACCESS: "1" },
       args: ["--remote-allow-system-access"],
       extraPrefsFirefox: {
+        // Puppeteer disables distribution add-ons by default. CI's signed
+        // language packs must load before automatic localization is exercised.
+        "extensions.installDistroAddons": true,
+        "intl.locale.requested": browserLocale,
+        "intl.accept_languages": browserLocale,
         "browser.download.dir": testInfo.outputPath("downloads"),
         "browser.download.folderList": 2,
         "browser.download.useDownloadDir": true,
@@ -72,9 +79,9 @@ export const test = base.extend<{ addon: FirefoxAddon }>({
         observedPage.on("pageerror", (error) => errors.push(String(error)));
       }
       const addon: FirefoxAddon = {
-        browser, ui, page, origin,
-        getStorage: (keys) => ui.evaluate((requested) =>
-          (globalThis as unknown as { browser: ExtensionApi }).browser.storage.local.get(requested), keys ?? null),
+        browser, ui, page, origin, downloadsPath: testInfo.outputPath("downloads"),
+        getStorage: <T extends StoredValues = StoredValues>(keys?: string | string[]) => ui.evaluate((requested) =>
+          (globalThis as unknown as { browser: ExtensionApi }).browser.storage.local.get(requested), keys ?? null) as Promise<T>,
         setStorage: (values) => ui.evaluate((next) =>
           (globalThis as unknown as { browser: ExtensionApi }).browser.storage.local.set(next), values)
       };
@@ -114,6 +121,7 @@ export const test = base.extend<{ addon: FirefoxAddon }>({
 });
 
 export { expect } from "@playwright/test";
+export { blockedCreator, legacyBlockedCreator } from "../e2e/fixtures/extension.fixture";
 
 export async function visible(page: Page, selector: string): Promise<boolean> {
   return page.evaluate((query) => {
@@ -130,6 +138,41 @@ export async function expectText(page: Page, selector: string, text: string): Pr
   await expect.poll(() => page.evaluate((query) => document.querySelector(query)?.textContent?.trim(), selector), {
     message: `${selector} text`
   }).toBe(text);
+}
+
+export async function expectCount(page: Page, selector: string, count: number): Promise<void> {
+  await expect.poll(() => page.$$eval(selector, (elements) => elements.length), {
+    message: `${selector} count`
+  }).toBe(count);
+}
+
+export async function expectAttribute(page: Page, selector: string, name: string, value: string | RegExp): Promise<void> {
+  const assertion = expect.poll(() => page.evaluate((query, attribute) =>
+    document.querySelector(query)?.getAttribute(attribute), selector, name), {
+    message: `${selector} attribute ${name}`
+  });
+  if (value instanceof RegExp) await assertion.toMatch(value);
+  else await assertion.toBe(value);
+}
+
+export async function expectContainsText(page: Page, selector: string, text: string): Promise<void> {
+  await expect.poll(() => page.evaluate((query) => document.querySelector(query)?.textContent, selector), {
+    message: `${selector} contains text`
+  }).toContain(text);
+}
+
+export async function expectCSS(page: Page, selector: string, property: string, value: string): Promise<void> {
+  await expect.poll(() => page.evaluate((query, name) => {
+    const element = document.querySelector(query);
+    return element ? getComputedStyle(element).getPropertyValue(name) : undefined;
+  }, selector, property), { message: `${selector} CSS ${property}` }).toBe(value);
+}
+
+export async function expectValue(page: Page, selector: string, value: string): Promise<void> {
+  await expect.poll(() => page.evaluate((query) =>
+    document.querySelector<HTMLInputElement | HTMLSelectElement>(query)?.value, selector), {
+    message: `${selector} value`
+  }).toBe(value);
 }
 
 export async function openOptions(addon: FirefoxAddon): Promise<void> {
@@ -173,15 +216,16 @@ export async function openExtensionTab(addon: FirefoxAddon, pathname: string): P
   return page;
 }
 
-export async function openCreatorMenu(page: Page, trigger: string): Promise<void> {
+export async function openCreatorMenu(page: Page, trigger: string, nativeColor = "rgb(238, 238, 238)"): Promise<void> {
+  await page.$eval(trigger, (element) => element.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true })));
   await page.locator(trigger).click();
-  await page.evaluate(() => {
+  await page.evaluate((color) => {
     document.querySelector("ytd-menu-popup-renderer")?.remove();
     const popup = document.createElement("ytd-menu-popup-renderer");
-    popup.style.color = "#f1f1f1";
     popup.innerHTML = '<div id="items" role="menu"><div role="menuitem"><span class="label">Report</span></div></div>';
+    popup.querySelector<HTMLElement>(".label")!.style.color = color;
     document.body.append(popup);
-  });
+  }, nativeColor);
   await expectVisible(page, ".cf-menu-item");
 }
 
@@ -191,7 +235,7 @@ export type MetadataRequest = { url: string; headers: Record<string, string> };
 // BiDi supplies our existing fixture HTML before any request reaches YouTube.
 export async function openFixture(
   page: Page, body: string, pathname = "/", language = "en",
-  metadata?: { requests: MetadataRequest[]; creator: string }
+  metadata?: { requests: MetadataRequest[]; creator: string } | ((request: HTTPRequest) => Promise<void>)
 ): Promise<void> {
   await page.bringToFront();
   page.removeAllListeners("request");
@@ -202,6 +246,7 @@ export async function openFixture(
     if (url.origin === "https://www.youtube.com" && request.isNavigationRequest()) {
       return request.respond({ status: 200, contentType: "text/html", body: html });
     }
+    if (typeof metadata === "function") return metadata(request);
     if (metadata && url.origin === "https://www.youtube.com" && url.pathname === "/oembed") {
       metadata.requests.push({ url: request.url(), headers: request.headers() });
       const compactOne = url.searchParams.get("url")?.endsWith("/shorts/compact-one");

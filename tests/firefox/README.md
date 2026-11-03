@@ -21,13 +21,21 @@ Each test gets a fresh temporary browser profile. No personal Firefox profile is
 
 Coverage includes background defaults and messaging, local storage, manual blocking, real JSON backup downloads and import, popup/settings synchronization, block/Undo and direct visits, Home cleanup, responsive compact layouts, Shorts controls, and credential-free/referrer-free compact Shorts metadata requests. Firefox BiDi cannot set file inputs on extension pages, so import tests supply a File and dispatch the input's change event. The backup test uses the downloaded file's actual contents and the extension's real import handler.
 
-All 18 manual interface choices are exercised on settings, popup, onboarding, privacy, feed buttons, menus, Shorts and blocked-page controls, including Arabic direction. The Automatic setting is checked against the actual English Firefox UI language. This suite does not claim that setting Accept-Language alone tests automatic selection in 18 localized Firefox installations; those require the corresponding browser builds or language packs.
+The `regression/` and `smoke/` specs mirror the Chromium scenarios, including collaboration identity, reused renderers, late metadata, themed menus, feed packing, settings synchronization, and delayed Shorts navigation. Existing Firefox installation/background tests remain alongside them. Shared fixture builders and locale data describe the same YouTube markup in both browsers.
+
+All 18 interface languages are exercised on settings, popup, onboarding, privacy, feed buttons, menus, Shorts and blocked-page controls, including Arabic direction. CI installs signed language packs matching the stock Firefox version through `scripts/install-firefox-locales.mjs`. The fixture enables distribution add-ons in its temporary profiles, selects the requested browser locale, and tests the real `browser.i18n.getUILanguage()` result before asserting automatic translations. It also covers regional Spanish fallback and an untranslated Polish browser. The separate settings tests exercise all manual language choices and returning to Automatic.
+
+Running the complete suite locally requires those Firefox language packs too. The installer targets CI's Linux x64 build; an English-only local investigation can select a spec that does not require additional native locales, for example `npm run test:firefox -- tests/firefox/extension.spec.ts`.
 
 The popup is opened as an extension page for these checks. Firefox's native toolbar popup placement and permission dialogs still need a manual release check.
 
 ## Live YouTube
 
-The **Live YouTube Playwright tests** GitHub Actions workflow runs Firefox daily at 12:17 in `America/New_York`, following daylight saving time. To validate a branch manually, choose **Run workflow** and select `firefox` in its `browser` input. The Firefox job runs four real YouTube checks: channel blocking and search-menu blocking in English and Korean, using logged-out Firefox profiles. Chromium continues to run at 00:17 and 12:17 daily. Scheduled runs use the latest default-branch commit; GitHub may delay their start. The separate **Firefox extension checks** workflow runs deterministic fixtures on pull requests, pushes to `main`, and manual requests.
+The **Firefox live YouTube tests** workflow runs daily at 12:17 in `America/New_York`, following daylight saving time. Choose **Run workflow** to validate a branch manually. **Firefox regression tests** also exposes a `live` suite choice that calls the same job. Chrome live checks have their own workflow at 00:17 and 12:17 daily. Scheduled runs use the latest default-branch commit; GitHub may delay their start.
+
+Firefox runs the same five live journeys in each of the 18 supported languages: channel headers without false creator controls on statistics, search-menu blocking, watch recommendations, compact Shorts menus, and Shorts viewer controls. The 11 general live checks cover injection, blocking, navigation and Shorts stress behavior. Every test uses a fresh, logged-out Firefox profile and real YouTube responses. Native Firefox and rendered YouTube languages are both asserted; setting an HTTP header alone does not establish language coverage.
+
+The browser appears in workflow, run and job names, including GitHub's native failure notifications. Email delivery depends on the repository owner's GitHub Actions notification preferences. No separate mail service is configured.
 
 Do not count intercepted fixtures as live-site coverage. The live tests are under `tests/firefox/live` and use unmodified YouTube responses.
 
