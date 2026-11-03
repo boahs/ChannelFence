@@ -2,7 +2,7 @@ import type { Page } from "puppeteer-core";
 import type { TestInfo } from "@playwright/test";
 import overrides from "../../scripts/firefox-locales.json";
 import { allLocales } from "../e2e/fixtures/locales";
-import { expect, expectVisible, type FirefoxAddon } from "./extension.fixture";
+import { expect, expectVisible, test, type FirefoxAddon } from "./extension.fixture";
 
 export type Locale = (typeof allLocales)[number];
 
@@ -21,15 +21,47 @@ export async function expectNativeLanguage(addon: FirefoxAddon, language: RegExp
 
 export async function expectInViewport(page: Page, selector: string, ratio = 1): Promise<void> {
   await expectVisible(page, selector);
-  await expect.poll(async () => {
-    const element = await page.$(selector);
-    if (!element) return false;
-    try {
-      return await element.isIntersectingViewport({ threshold: ratio });
-    } finally {
-      await element.dispose();
-    }
-  }, { message: `${selector} viewport intersection ${ratio === 1 ? "= 1" : `> ${ratio}`}` }).toBe(true);
+  let lastIntersection: unknown = null;
+  try {
+    await expect.poll(async () => {
+      const intersection = await page.evaluate(async (query) => {
+        const element = document.querySelector(query);
+        if (!element) return null;
+        const entry = await new Promise<IntersectionObserverEntry>((resolve) => {
+          const observer = new IntersectionObserver(([observed]) => {
+            observer.disconnect();
+            resolve(observed);
+          });
+          observer.observe(element);
+          requestAnimationFrame(() => {});
+        });
+        return {
+          ratio: entry.intersectionRatio,
+          bounds: entry.boundingClientRect.toJSON(),
+          intersection: entry.intersectionRect.toJSON(),
+          root: entry.rootBounds?.toJSON(),
+          viewport: { width: innerWidth, height: innerHeight, scrollX, scrollY },
+          ancestors: [document.body, document.documentElement].map((ancestor) => ({
+            tag: ancestor.tagName, bounds: ancestor.getBoundingClientRect().toJSON(),
+            clientWidth: ancestor.clientWidth, scrollWidth: ancestor.scrollWidth,
+            clientHeight: ancestor.clientHeight, scrollHeight: ancestor.scrollHeight,
+            direction: getComputedStyle(ancestor).direction,
+            overflow: getComputedStyle(ancestor).overflow
+          }))
+        };
+      }, selector);
+      lastIntersection = intersection;
+      return intersection?.ratio ?? 0;
+    }, { message: `${selector} viewport intersection >= ${ratio}` })
+      // Match Playwright's toBeInViewport: positive intersection, allowing only
+      // its 1e-9 floating-point tolerance at the requested ratio.
+      .toBeGreaterThan(Math.max(0, ratio - 1e-9));
+  } catch (error) {
+    await test.info().attach(`viewport-${selector}`, {
+      body: JSON.stringify(lastIntersection), contentType: "application/json"
+    });
+    throw error;
+  }
 }
 
 export async function captureAction(page: Page, selector: string, testInfo: TestInfo, name: string): Promise<void> {

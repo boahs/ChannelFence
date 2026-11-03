@@ -7,6 +7,13 @@ import { expect, expectAttribute, expectCount, expectContainsText, expectVisible
 type ShortsEvent = {
   type: string; at: number; path: string; visibility: string; readyState: string;
   nextButton: string | null; rendererCount: number;
+  scroller: { scrollTop: number; clientHeight: number; scrollHeight: number; overflowY: string } | null;
+  sequence: Array<{ id: string; top: number; bottom: number; height: number }>;
+  controller: ShortsController | null;
+};
+type ShortsController = {
+  index?: number; currentPlayerIndex?: number; itemHeight?: number;
+  shouldUpdateItemHeight?: boolean; isShortsInitialized?: boolean;
 };
 type ShortsDiagnosticWindow = Window & { __cfFirefoxShortsEvents?: ShortsEvent[] };
 
@@ -16,12 +23,32 @@ async function observeShortsNavigation(page: Page): Promise<void> {
   await page.evaluateOnNewDocument(() => {
     const events: ShortsEvent[] = [];
     (window as ShortsDiagnosticWindow).__cfFirefoxShortsEvents = events;
-    const record = (type: string) => events.push({
-      type, at: Date.now(), path: location.pathname, visibility: document.visibilityState,
-      readyState: document.readyState,
-      nextButton: document.querySelector("ytd-shorts #navigation-button-down button")?.outerHTML ?? null,
-      rendererCount: document.querySelectorAll("ytd-shorts ytd-reel-video-renderer").length
-    });
+    const record = (type: string) => {
+      const scroller = document.querySelector<HTMLElement>("ytd-shorts #shorts-container");
+      const shorts = document.querySelector<HTMLElement & ShortsController & { polymerController?: ShortsController }>("ytd-shorts");
+      const controller = shorts?.polymerController ?? shorts;
+      events.push({
+        type, at: Date.now(), path: location.pathname, visibility: document.visibilityState,
+        readyState: document.readyState,
+        nextButton: document.querySelector("ytd-shorts #navigation-button-down button")?.outerHTML ?? null,
+        rendererCount: document.querySelectorAll("ytd-shorts ytd-reel-video-renderer").length,
+        scroller: scroller && {
+          scrollTop: scroller.scrollTop, clientHeight: scroller.clientHeight,
+          scrollHeight: scroller.scrollHeight, overflowY: getComputedStyle(scroller).overflowY
+        },
+        sequence: [...document.querySelectorAll("ytd-shorts .reel-video-in-sequence-new")].map((element) => {
+          const rect = element.getBoundingClientRect();
+          return { id: element.id, top: rect.top, bottom: rect.bottom, height: rect.height };
+        }),
+        // Only read primitive state. YouTube's computed sequence getter can
+        // schedule layout work, so use the DOM sequence above for its count.
+        controller: controller && {
+          index: controller.index, currentPlayerIndex: controller.currentPlayerIndex,
+          itemHeight: controller.itemHeight, shouldUpdateItemHeight: controller.shouldUpdateItemHeight,
+          isShortsInitialized: controller.isShortsInitialized
+        }
+      });
+    };
     for (const type of ["yt-navigate-start", "yt-navigate-finish", "DOMContentLoaded"]) {
       document.addEventListener(type, () => record(type), true);
     }
@@ -34,6 +61,10 @@ async function observeShortsNavigation(page: Page): Promise<void> {
         record(`${action}-button-click:${event.isTrusted ? "trusted" : "synthetic"}`);
       }
     }, true);
+    document.addEventListener("scroll", (event) => {
+      if (event.target instanceof Element && event.target.matches("ytd-shorts #shorts-container")) record("shorts-scroll");
+    }, true);
+    window.addEventListener("resize", () => record("window-resize"));
   });
 }
 
