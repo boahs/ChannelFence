@@ -29,7 +29,7 @@ Before public submission, manually check toolbar-popup behavior, automatic brows
 
 The Firefox manifest declares required `websiteContent` under `browser_specific_settings.gecko.data_collection_permissions`. Public compact Short links are visible website content that ChannelFence sends directly to YouTube's oEmbed endpoint to identify creators. This can happen while the block list is nonempty, not only when a lookup button is clicked.
 
-The request omits account credentials and the page referrer. Returned creator metadata is held in memory. Settings and the block list stay in local extension storage; the developer receives none of this data. There is no extension analytics or developer server.
+The request omits account credentials and the page referrer. ChannelFence keeps parsed creator metadata in memory and does not write it to extension storage. Firefox may also cache the HTTP response. Settings and the block list stay in local extension storage; the developer receives none of this data. There is no extension analytics or developer server.
 
 This declaration reflects Mozilla's definition of transmission outside the browser, including data sent to services other than the developer. Do not select “no data transmitted” just because no developer server is involved. `websiteContent` is our classification of the public link payload using Mozilla's taxonomy, subject to Mozilla's review.
 
@@ -57,7 +57,7 @@ ChannelFence is a free, open-source YouTube channel blocker for Firefox. Block a
 
 Home appearance options are off by default. ChannelFence does not skip ads during video playback or sponsored Shorts. Blocking depends on the creator information YouTube exposes.
 
-No account, extension analytics, tracking, advertising, remote code, or developer-controlled server. Settings and the block list stay in Firefox's local extension storage. Compact Shorts creator lookups send public Short URLs directly to YouTube, without account credentials or the current page referrer. Responses are cached only in memory.
+No account, extension analytics, tracking, advertising, remote code, or developer-controlled server. Settings and the block list stay in Firefox's local extension storage. Compact Shorts creator lookups send public Short URLs directly to YouTube, without account credentials or the current page referrer. ChannelFence keeps parsed creator metadata in memory, without adding it to extension storage.
 
 Source code: https://github.com/boahs/ChannelFence
 
@@ -73,7 +73,7 @@ ChannelFence is independent software and is not affiliated with, endorsed by, or
 
 ChannelFence stores settings, creator identifiers, creator names, channel links, and the user's block list in Firefox's local extension storage. These records are never transmitted to the developer.
 
-When the block list is nonempty, ChannelFence may send public compact Short URLs directly to YouTube's oEmbed endpoint to identify creators and apply blocks. These requests omit account credentials and the current page referrer. Returned public creator names and channel URLs are cached only in memory.
+When the block list is nonempty, ChannelFence may send public compact Short URLs directly to YouTube's oEmbed endpoint to identify creators and apply blocks. These requests omit account credentials and the current page referrer. ChannelFence keeps parsed public creator names and channel URLs in memory and does not write them to extension storage. Firefox may also cache the HTTP response.
 
 ChannelFence makes no requests to a developer-controlled server or a non-YouTube service. It has no account system, extension analytics, tracking, advertising, or remote code. It does not sell data or use it for advertising.
 

@@ -46,16 +46,16 @@ body:
     id: extension-version
     attributes:
       label: ChannelFence version
-      description: Find this on chrome://extensions or at the bottom of ChannelFence settings.
-      placeholder: 0.1.9
+      description: Find this at the bottom of ChannelFence settings, on chrome://extensions, or in Firefox's about:addons.
+      placeholder: 0.2.8
     validations:
       required: true
   - type: input
-    id: chrome-version
+    id: browser-version
     attributes:
-      label: Chrome version
-      description: Find this on chrome://settings/help.
-      placeholder: 140.0.0.0
+      label: Browser and version
+      description: Find this on chrome://settings/help or in Firefox's Help > About Firefox.
+      placeholder: Chrome 142 or Firefox 158
   - type: textarea
     id: public-example
     attributes:

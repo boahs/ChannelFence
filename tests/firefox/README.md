@@ -17,9 +17,9 @@ npm run test:firefox
 
 On Linux, set `CHANNELFENCE_FIREFOX_PATH` to the installed Firefox executable. `CHANNELFENCE_FIREFOX_EXTENSION_PATH` can optionally identify another generated package directory. The default is `dist/ChannelFence-<manifest version>-firefox`.
 
-Each test gets a fresh temporary browser profile. No personal Firefox profile is used, and no signing preference is changed. Temporary installation is the same development lifecycle as loading an unsigned add-on in `about:debugging`; it does not prove signed installation or persistence across a browser restart.
+Each test gets a fresh temporary browser profile. No personal Firefox profile is used, and no signing preference is changed. The test process allows automation access to extension pages and saves downloads in that test's output directory. Temporary installation is the same development lifecycle as loading an unsigned add-on in `about:debugging`; it does not prove signed installation or persistence across a browser restart.
 
-Coverage includes background defaults and messaging, local storage, manual blocking and import, popup/settings synchronization, block/Undo and direct visits, Home cleanup, responsive compact layouts, Shorts controls, and credential-free/referrer-free compact Shorts metadata requests.
+Coverage includes background defaults and messaging, local storage, manual blocking, real JSON backup downloads and import, popup/settings synchronization, block/Undo and direct visits, Home cleanup, responsive compact layouts, Shorts controls, and credential-free/referrer-free compact Shorts metadata requests. Firefox BiDi cannot set file inputs on extension pages, so import tests supply a File and dispatch the input's change event. The backup test uses the downloaded file's actual contents and the extension's real import handler.
 
 All 18 manual interface choices are exercised on settings, popup, onboarding, privacy, feed buttons, menus, Shorts and blocked-page controls, including Arabic direction. The Automatic setting is checked against the actual English Firefox UI language. This suite does not claim that setting Accept-Language alone tests automatic selection in 18 localized Firefox installations; those require the corresponding browser builds or language packs.
 
@@ -31,6 +31,6 @@ Use the **Live YouTube Playwright tests** GitHub Actions workflow and select `fi
 
 Do not count intercepted fixtures as live-site coverage. The live tests are under `tests/firefox/live` and use unmodified YouTube responses.
 
-Reports are written to `firefox-playwright-report/` and `firefox-test-results/`. Failed tests attach screenshots, page HTML and page errors. Per-language popup screenshots are included in successful deterministic reports too. CI retains diagnostics and the unsigned ZIP for 14 days.
+Reports are written to `firefox-playwright-report/` and `firefox-test-results/`. Failed tests attach page HTML, page errors and screenshots where Firefox permits capture. Per-language YouTube menu screenshots are included in successful deterministic reports too. Extension pages have DOM and layout assertions; Firefox BiDi currently restricts screenshot capture on these privileged pages. CI retains diagnostics and the unsigned ZIP for 14 days.
 
 References: [Puppeteer Firefox/BiDi support](https://pptr.dev/webdriver-bidi), [runtime extension installation](https://pptr.dev/api/puppeteer.browser.installextension), and [Mozilla temporary installation](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/).

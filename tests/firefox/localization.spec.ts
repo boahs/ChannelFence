@@ -1,6 +1,6 @@
 import { allLocales } from "../e2e/fixtures/locales";
 import { channelHeader, creatorCard, shortsViewer } from "../e2e/fixtures/youtube-fixtures";
-import { expect, expectText, expectVisible, openCreatorMenu, openFixture, openOptions, test } from "./extension.fixture";
+import { expect, expectText, expectVisible, openCreatorMenu, openExtensionPage, openExtensionTab, openFixture, openOptions, test } from "./extension.fixture";
 
 for (const locale of allLocales) {
   test(`${locale.name}: manual language selection, extension pages, blocking controls, and direction`, async ({ addon }, testInfo) => {
@@ -10,7 +10,7 @@ for (const locale of allLocales) {
     await addon.ui.select("#languageSelect", locale.catalogCode);
     await expectText(addon.ui, "#settingsHeading", messages.settings.message);
     await expect.poll(() => addon.getStorage("cfLanguage")).toEqual({ cfLanguage: locale.catalogCode });
-    await addon.ui.reload();
+    await openOptions(addon);
     await expect.poll(() => addon.ui.$eval("html", (element) => ({
       language: element.getAttribute("lang"), direction: element.getAttribute("dir")
     }))).toEqual({ language: messages.languageCode.message, direction });
@@ -19,22 +19,17 @@ for (const locale of allLocales) {
     await expect.poll(() => addon.ui.$eval("#homeAdsToggle", (element) => element.getAttribute("aria-label")))
       .toBe(messages.hideHomeAds.message);
 
-    const popup = await addon.browser.newPage();
-    await popup.setViewport({ width: 360, height: 600 });
-    await popup.goto(`${addon.origin}/ui/popup.html`);
+    const popup = await openExtensionTab(addon, "/ui/popup.html");
     await expectText(popup, "#openOptions", messages.manageBlockList.message);
     await expectText(popup, "#homePromotionsSettingTitle", messages.hideHomePromotions.message);
     await expect.poll(() => popup.$eval("html", (element) => element.getAttribute("dir"))).toBe(direction);
     expect(await popup.evaluate(() => document.body.scrollWidth - document.body.clientWidth)).toBeLessThanOrEqual(1);
-    await testInfo.attach(`${locale.catalogCode}-firefox-popup`, {
-      body: Buffer.from(await popup.screenshot()), contentType: "image/png"
-    });
     await popup.close();
 
     for (const [pageName, heading] of [
       ["welcome", messages.welcomeHeadline.message], ["privacy", messages.privacyTitle.message]
     ]) {
-      await addon.ui.goto(`${addon.origin}/ui/${pageName}.html`);
+      await openExtensionPage(addon.ui, `${addon.origin}/ui/${pageName}.html`);
       await expectText(addon.ui, "h1", heading);
       await expect.poll(() => addon.ui.$eval("html", (element) => element.getAttribute("dir"))).toBe(direction);
     }
@@ -49,6 +44,9 @@ for (const locale of allLocales) {
       .toBe(messages.contentBlockNamed.message.replace("$CREATOR$", locale.creator));
     await openCreatorMenu(addon.page, '[data-testid="localized-menu"]');
     await expectText(addon.page, ".cf-menu-item__label", messages.contentMenuBlock.message);
+    await testInfo.attach(`${locale.catalogCode}-firefox-content-menu`, {
+      body: Buffer.from(await addon.page.screenshot()), contentType: "image/png"
+    });
     await expect.poll(() => addon.page.$eval(".cf-menu-item", (element) => element.getAttribute("dir"))).toBe(direction);
     await addon.page.locator(".cf-menu-item").click();
     await expectVisible(addon.page, '[data-testid="localized"]', false);

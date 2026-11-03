@@ -1,6 +1,5 @@
-import { writeFile } from "node:fs/promises";
 import {
-  expect, expectText, expectVisible, openCreatorMenu, openFixture, openOptions, test,
+  expect, expectText, expectVisible, openCreatorMenu, openExtensionTab, openFixture, openOptions, test,
   type MetadataRequest
 } from "./extension.fixture";
 import { blockedCreator } from "../e2e/fixtures/extension.fixture";
@@ -20,7 +19,7 @@ test("installs the real package, initializes defaults, and serves background mes
   await expectVisible(addon.ui, "h1");
 });
 
-test("saves manual blocks, imports a backup, and synchronizes popup and settings", async ({ addon }, testInfo) => {
+test("saves manual blocks, imports a backup, and synchronizes popup and settings", async ({ addon }) => {
   await openOptions(addon);
   await addon.ui.locator("#manualBlockInput").fill("https://www.youtube.com/@FirefoxCreator");
   await addon.ui.locator("#manualBlockButton").click();
@@ -28,11 +27,10 @@ test("saves manual blocks, imports a backup, and synchronizes popup and settings
   await expect.poll(() => addon.getStorage("cfBlockedChannels")).toMatchObject({
     cfBlockedChannels: [{ key: "handle:@firefoxcreator" }]
   });
-  await addon.ui.reload();
+  await openOptions(addon);
   await expectText(addon.ui, "#blockedCount", "1");
 
-  const popup = await addon.browser.newPage();
-  await popup.goto(`${addon.origin}/ui/popup.html`);
+  const popup = await openExtensionTab(addon, "/ui/popup.html");
   await expectText(popup, "#blockedCount", "1");
   for (const id of ["shortsToggle", "homeAdsToggle", "homePromotionsToggle", "compactHomeGridToggle"]) {
     await popup.locator(`label:has(#${id})`).click();
@@ -49,14 +47,17 @@ test("saves manual blocks, imports a backup, and synchronizes popup and settings
   await popup.locator("#recentList button").click();
   await expectText(addon.ui, "#blockedCount", "0");
 
-  const backupPath = testInfo.outputPath("import.json");
-  await writeFile(backupPath, JSON.stringify({
+  // BiDi cannot setFiles on privileged extension pages. Supply a real File to
+  // the native input and exercise the extension's unchanged import handler.
+  await addon.ui.$eval("input#importFile", (input, backup) => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File([backup], "import.json", { type: "application/json" }));
+    input.files = transfer.files;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }, JSON.stringify({
     product: "ChannelFence", formatVersion: 1,
     blockedChannels: [blockedCreator("@imported", "Imported Creator")]
   }));
-  const fileInput = await addon.ui.$("input#importFile");
-  if (!fileInput) throw new Error("Missing backup import input");
-  await fileInput.uploadFile(backupPath);
   await expectText(addon.ui, "#blockedCount", "1");
   await expectText(popup, "#blockedCount", "1");
   await expect.poll(() => addon.getStorage("cfBlockedChannels")).toMatchObject({
@@ -96,7 +97,7 @@ test("Home cleanup controls act independently and restore content when paused", 
   const body = `<ytd-browse page-subtype="home"><ytd-rich-grid-renderer>
     ${promotedHomeCard("Advertiser", "home-ad")}
     <ytd-rich-section-renderer data-testid="featured"><ytd-statement-banner-renderer>Featured banner</ytd-statement-banner-renderer></ytd-rich-section-renderer>
-    <ytd-rich-section-renderer data-testid="topics"><ytd-rich-shelf-renderer><yt-chips-shelf-view-model>もっと見る</yt-chips-shelf-view-model></ytd-rich-shelf-renderer></ytd-rich-section-renderer>
+    <ytd-rich-section-renderer data-testid="topics"><ytd-rich-shelf-renderer><yt-chips-shelf-view-model class="ytChipsShelfViewModelHost">もっと見る</yt-chips-shelf-view-model></ytd-rich-shelf-renderer></ytd-rich-section-renderer>
     <ytd-rich-section-renderer data-testid="playables"><mini-game-card-view-model>Play</mini-game-card-view-model></ytd-rich-section-renderer>
     ${shortsShelf()}
   </ytd-rich-grid-renderer></ytd-browse>`;

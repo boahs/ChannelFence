@@ -6,6 +6,11 @@ import { youtubeDocument } from "../e2e/fixtures/youtube-fixtures";
 
 type StoredValues = Record<string, unknown>;
 type ExtensionApi = {
+  tabs: {
+    create(options: { url: string }): Promise<unknown>;
+    getCurrent(): Promise<{ id: number }>;
+    update(id: number, options: { active: boolean }): Promise<unknown>;
+  };
   storage: { local: {
     get(keys: string | string[] | null): Promise<StoredValues>;
     set(values: StoredValues): Promise<void>;
@@ -33,18 +38,34 @@ export const test = base.extend<{ addon: FirefoxAddon }>({
     const manifest = JSON.parse(await readFile(path.join(extensionPath, "manifest.json"), "utf8"));
     const browser = await puppeteer.launch({
       browser: "firefox", executablePath, headless: true,
+      // Firefox requires explicit automation access to its extension pages.
+      // This is scoped to the disposable test process, never a user's profile.
+      env: { ...process.env, MOZ_REMOTE_ALLOW_SYSTEM_ACCESS: "1" },
+      args: ["--remote-allow-system-access"],
+      extraPrefsFirefox: {
+        "browser.download.dir": testInfo.outputPath("downloads"),
+        "browser.download.folderList": 2,
+        "browser.download.useDownloadDir": true,
+        "browser.helperApps.neverAsk.saveToDisk": "application/json"
+      },
       defaultViewport: { width: 1280, height: 900 }
     });
     const errors: string[] = [];
+    let setupFailed = false;
     try {
+      const initialTargets = new Set(browser.targets());
       const installedId = await browser.installExtension(extensionPath);
       expect(installedId).toBe(manifest.browser_specific_settings.gecko.id);
       const welcomeTarget = await browser.waitForTarget((target) =>
-        target.url().startsWith("moz-extension://") && target.url().endsWith("/ui/welcome.html"),
+        target.type() === "page" && !initialTargets.has(target),
       { timeout: 15_000 });
       const ui = await welcomeTarget.page();
       if (!ui) throw new Error("The installed Firefox extension did not open its onboarding page.");
-      const extensionUrl = new URL(ui.url());
+      // Firefox BiDi does not report extension navigation events consistently,
+      // so target.url() can remain about:blank after onboarding has loaded.
+      await ui.waitForFunction(() => location.protocol === "moz-extension:" &&
+        location.pathname === "/ui/welcome.html" && document.readyState === "complete");
+      const extensionUrl = new URL(await ui.evaluate(() => location.href));
       const origin = `${extensionUrl.protocol}//${extensionUrl.host}`;
       const page = await browser.newPage();
       for (const observedPage of [ui, page]) {
@@ -61,17 +82,26 @@ export const test = base.extend<{ addon: FirefoxAddon }>({
       // here: an installation/background failure must fail the Firefox tests.
       await expect.poll(() => addon.getStorage("cfEnabled")).toMatchObject({ cfEnabled: true });
       await use(addon);
+    } catch (error) {
+      setupFailed = true;
+      errors.push(String(error));
+      throw error;
     } finally {
-      if (testInfo.status !== testInfo.expectedStatus) {
+      if (setupFailed || testInfo.status !== testInfo.expectedStatus) {
         const pages = await browser.pages();
         for (const [index, page] of pages.entries()) {
           try {
-            await testInfo.attach(`firefox-page-${index}`, {
-              body: Buffer.from(await page.screenshot({ fullPage: true })), contentType: "image/png"
-            });
+            const url = await page.evaluate(() => location.href);
             await testInfo.attach(`firefox-page-${index}-dom`, {
-              body: JSON.stringify({ url: page.url(), html: await page.content() }), contentType: "application/json"
+              body: JSON.stringify({ url, html: await page.content() }), contentType: "application/json"
             });
+            // Firefox BiDi cannot capture privileged extension pages. Their
+            // actual HTML is retained above; YouTube pages also get screenshots.
+            if (!url.startsWith("moz-extension:")) {
+              await testInfo.attach(`firefox-page-${index}`, {
+                body: Buffer.from(await page.screenshot({ fullPage: true })), contentType: "image/png"
+              });
+            }
           } catch (error) {
             errors.push(`Could not capture page ${index}: ${error}`);
           }
@@ -103,8 +133,44 @@ export async function expectText(page: Page, selector: string, text: string): Pr
 }
 
 export async function openOptions(addon: FirefoxAddon): Promise<void> {
-  await addon.ui.goto(`${addon.origin}/ui/options.html`);
-  await addon.ui.waitForFunction(() => !document.querySelector<HTMLSelectElement>("#languageSelect")?.disabled);
+  await openExtensionPage(addon.ui, `${addon.origin}/ui/options.html`);
+  await addon.ui.waitForFunction(() => {
+    const select = document.querySelector<HTMLSelectElement>("#languageSelect");
+    return select && !select.disabled;
+  });
+}
+
+export async function openExtensionPage(page: Page, url: string): Promise<void> {
+  // Use the loaded document because Firefox omits the extension-page events
+  // that Puppeteer's goto/reload wait for. The marker also proves same-URL
+  // reloads completed instead of accepting the previous document as ready.
+  await page.evaluate(async () => {
+    const api = (globalThis as unknown as { browser: ExtensionApi }).browser;
+    const tab = await api.tabs.getCurrent();
+    await api.tabs.update(tab.id, { active: true });
+  });
+  await page.evaluate((destination) => {
+    document.documentElement.dataset.cfTestNavigation = "pending";
+    location.assign(destination);
+  }, url);
+  await page.waitForFunction((destination) => location.href === destination &&
+    document.readyState === "complete" && !document.documentElement.dataset.cfTestNavigation, {}, url);
+}
+
+export async function openExtensionTab(addon: FirefoxAddon, pathname: string): Promise<Page> {
+  const url = `${addon.origin}${pathname}`;
+  const existingTargets = new Set(addon.browser.targets());
+  // about:blank scripts cannot navigate to privileged moz-extension pages.
+  // Open the real extension tab through Firefox's own extension API.
+  await addon.ui.evaluate((destination) =>
+    (globalThis as unknown as { browser: ExtensionApi }).browser.tabs.create({ url: destination }), url);
+  const target = await addon.browser.waitForTarget((candidate) =>
+    candidate.type() === "page" && !existingTargets.has(candidate));
+  const page = await target.page();
+  if (!page) throw new Error(`Firefox did not open ${pathname}`);
+  await page.waitForFunction((destination) => location.href === destination &&
+    document.readyState === "complete", {}, url);
+  return page;
 }
 
 export async function openCreatorMenu(page: Page, trigger: string): Promise<void> {
@@ -126,6 +192,7 @@ export async function openFixture(
   page: Page, body: string, pathname = "/", language = "en",
   metadata?: { requests: MetadataRequest[]; creator: string }
 ): Promise<void> {
+  await page.bringToFront();
   page.removeAllListeners("request");
   await page.setRequestInterception(true);
   const html = youtubeDocument(body, language);
