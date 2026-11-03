@@ -183,15 +183,21 @@ export async function openOptions(addon: FirefoxAddon): Promise<void> {
   });
 }
 
-export async function openExtensionPage(page: Page, url: string): Promise<void> {
-  // Use the loaded document because Firefox omits the extension-page events
-  // that Puppeteer's goto/reload wait for. The marker also proves same-URL
-  // reloads completed instead of accepting the previous document as ready.
+export async function activateExtensionPage(page: Page): Promise<void> {
+  // Privileged tabs need Firefox's real tab API; activating also keeps the
+  // animation frames used by locator stability checks running.
   await page.evaluate(async () => {
     const api = (globalThis as unknown as { browser: ExtensionApi }).browser;
     const tab = await api.tabs.getCurrent();
     await api.tabs.update(tab.id, { active: true });
   });
+}
+
+export async function openExtensionPage(page: Page, url: string): Promise<void> {
+  // Use the loaded document because Firefox omits the extension-page events
+  // that Puppeteer's goto/reload wait for. The marker also proves same-URL
+  // reloads completed instead of accepting the previous document as ready.
+  await activateExtensionPage(page);
   await page.evaluate((destination) => {
     document.documentElement.dataset.cfTestNavigation = "pending";
     location.assign(destination);

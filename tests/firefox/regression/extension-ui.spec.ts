@@ -3,7 +3,7 @@ import path from "node:path";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import {
   expect, expectAttribute, expectContainsText, expectCount, expectText, expectValue, expectVisible,
-  openExtensionPage, openExtensionTab, openOptions, test
+  activateExtensionPage, openExtensionPage, openExtensionTab, openOptions, test
 } from "../extension.fixture";
 
 test.describe("extension UI", () => {
@@ -89,6 +89,7 @@ test.describe("extension UI", () => {
     await popup.locator("label:has(#shortsToggle)").click();
     await expect.poll(() => popup.$eval("input#shortsToggle", (input) => input.checked)).toBe(true);
     await expect.poll(() => addon.ui.$eval("input#shortsToggle", (input) => input.checked)).toBe(true);
+    await activateExtensionPage(addon.ui);
     await addon.ui.locator("label:has(#shortsToggle)").click();
     await expect.poll(() => addon.ui.$eval("input#shortsToggle", (input) => input.checked)).toBe(false);
     await expect.poll(() => popup.$eval("input#shortsToggle", (input) => input.checked)).toBe(false);
@@ -136,6 +137,7 @@ test.describe("extension UI", () => {
     await expectVisible(popup, "#compactHomeSizeSelect");
     await expectValue(addon.ui, "#compactHomeSizeSelect", "large");
     await expectValue(popup, "#compactHomeSizeSelect", "large");
+    await activateExtensionPage(addon.ui);
     for (const id of toggles) {
       await expect.poll(() => addon.ui.$eval(`input#${id}`, (input) => input.checked)).toBe(true);
       await expect.poll(() => popup.$eval(`input#${id}`, (input) => input.checked)).toBe(true);

@@ -3,7 +3,7 @@ import { allLocales } from "../../e2e/fixtures/locales";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { creatorCard, shortsViewer } from "../../e2e/fixtures/youtube-fixtures";
 import {
-  expect, expectAttribute, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionPage, openFixture, openOptions, test
+  expect, expectContainsText, expectAttribute, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionPage, openFixture, openOptions, test
 } from "../extension.fixture";
 import {
   captureAction, captureExtensionDom, expectInViewport, expectNativeLanguage,
@@ -94,7 +94,7 @@ for (const locale of allLocales) {
       await captureAction(addon.page, `${card} .cf-block-button`, testInfo, `${locale.catalogCode}-fixture-block-button`);
       await addon.page.locator(`${card} .cf-block-button`).click();
       await expectVisible(addon.page, card, false);
-      await expect.poll(() => addon.page.$eval("#cf-toast", (element) => element.textContent)).toContain(messages.contentBlocked.message.replace("$CREATOR$", locale.creator));
+      await expectContainsText(addon.page, "#cf-toast", messages.contentBlocked.message.replace("$CREATOR$", locale.creator));
       await captureAction(addon.page, "#cf-toast", testInfo, `${locale.catalogCode}-fixture-block-confirmation`);
       await expectText(addon.page, "#cf-toast button", messages.contentUndo.message);
       await addon.page.locator("#cf-toast button").click();

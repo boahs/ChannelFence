@@ -4,7 +4,7 @@ import { allLocales } from "../../e2e/fixtures/locales";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { channelHeader, creatorCard } from "../../e2e/fixtures/youtube-fixtures";
 import {
-  expect, expectAttribute, expectCount, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionPage, openExtensionTab,
+  expect, expectContainsText, expectAttribute, expectCount, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionPage, openExtensionTab,
   openFixture, openOptions, test
 } from "../extension.fixture";
 import { expectNativeLanguage, firefoxMessages } from "../locale-checks";
@@ -67,7 +67,7 @@ test.describe("extension language override", () => {
     await expectText(addon.page, `${card} ytd-channel-name a`, creator);
     await addon.page.locator(".cf-menu-item").click();
     await expectVisible(addon.page, card, false);
-    await expect.poll(() => addon.page.$eval("#cf-toast", (element) => element.textContent)).toContain(ja.contentBlocked.message.replace("$CREATOR$", creator));
+    await expectContainsText(addon.page, "#cf-toast", ja.contentBlocked.message.replace("$CREATOR$", creator));
     await expectText(addon.page, "#cf-toast button", ja.contentUndo.message);
     await expectVisible(addon.page, "#cf-toast button");
     expect(((await addon.getStorage("cfBlockedChannels")).cfBlockedChannels as Array<{ key: string }>).map((entry) => entry.key)).toEqual([`handle:@${creator}`]);
@@ -85,8 +85,7 @@ test.describe("extension language override", () => {
     await addon.ui.select("#languageSelect", "ru");
     await channel.bringToFront();
     await expectText(channel, "#cf-hard-block-title", ru.contentCreatorBlocked.message);
-    await expect.poll(() => channel.$eval("#cf-hard-block-overlay", (element) => element.textContent))
-      .toContain(ru.contentBlockedDescription.message.replace("$CREATOR$", creator));
+    await expectContainsText(channel, "#cf-hard-block-overlay", ru.contentBlockedDescription.message.replace("$CREATOR$", creator));
     await expectText(channel, ".cf-hard-block-actions button:first-child", ru.contentGoHome.message);
     await expectVisible(channel, ".cf-hard-block-actions button:first-child");
     await expectAttribute(channel, "html", "lang", "ko");

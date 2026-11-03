@@ -20,26 +20,27 @@ export async function expectNativeLanguage(addon: FirefoxAddon, language: RegExp
 }
 
 export async function expectInViewport(page: Page, selector: string): Promise<void> {
-  await expect.poll(() => page.$eval(selector, (element) => {
-    const rect = element.getBoundingClientRect();
-    if (!element.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) ||
-      rect.width === 0 || rect.height === 0 || rect.top < -1 || rect.left < -1 ||
-      rect.bottom > innerHeight + 1 || rect.right > innerWidth + 1) return false;
-    for (let parent = element.parentElement; parent; parent = parent.parentElement) {
-      const style = getComputedStyle(parent);
-      const bounds = parent.getBoundingClientRect();
-      if (/auto|scroll|hidden|clip/.test(style.overflowY) &&
-        (rect.top < bounds.top - 1 || rect.bottom > bounds.bottom + 1)) return false;
-      if (/auto|scroll|hidden|clip/.test(style.overflowX) &&
-        (rect.left < bounds.left - 1 || rect.right > bounds.right + 1)) return false;
+  await expectVisible(page, selector);
+  await expect.poll(async () => {
+    const element = await page.$(selector);
+    if (!element) return false;
+    try {
+      return await element.isIntersectingViewport({ threshold: 1 });
+    } finally {
+      await element.dispose();
     }
-    return true;
-  }), { message: `${selector} fully in viewport` }).toBe(true);
+  }, { message: `${selector} fully in viewport` }).toBe(true);
 }
 
 export async function captureAction(page: Page, selector: string, testInfo: TestInfo, name: string): Promise<void> {
   await expectVisible(page, selector);
-  await page.$eval(selector, (element) => element.scrollIntoView({ block: "center", inline: "nearest" }));
+  const element = await page.$(selector);
+  if (!element) throw new Error(`The capture control disappeared: ${selector}`);
+  try {
+    if (!await element.isIntersectingViewport({ threshold: 1 })) await element.scrollIntoView();
+  } finally {
+    await element.dispose();
+  }
   await expectInViewport(page, selector);
   await testInfo.attach(name, { body: Buffer.from(await page.screenshot()), contentType: "image/png" });
 }

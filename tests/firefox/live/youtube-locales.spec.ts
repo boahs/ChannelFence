@@ -67,7 +67,7 @@ for (const locale of allLocales) {
       const recommendation = await addon.page.waitForSelector(selector, { visible: true, timeout: 30_000 });
       if (!recommendation) throw new Error("No supported right-rail recommendation was rendered");
       const creatorSelector = ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataText";
-      await expect.poll(() => recommendation.$eval(creatorSelector, (element) => element.textContent)).toMatch(/\S/);
+      await expect.poll(() => recommendation.evaluate((element, selector) => element.querySelector(selector)?.textContent, creatorSelector)).toMatch(/\S/);
       const creator = await recommendation.$eval(creatorSelector, (element) => (element as HTMLElement).innerText.normalize("NFKC").trim());
       await expect.poll(() => recommendation.$$eval(".cf-block-button", (elements) => elements.length)).toBe(1);
       expect(await recommendation.$eval(".cf-block-button", (element) => element.getAttribute("aria-label"))).toContain(creator);

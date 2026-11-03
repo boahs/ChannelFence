@@ -1,4 +1,5 @@
 name: Firefox live YouTube tests
+run-name: Firefox live YouTube tests
 
 on:
   schedule:

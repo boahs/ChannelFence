@@ -2,7 +2,7 @@ import en from "../../../_locales/en/messages.json";
 import ar from "../../../_locales/ar/messages.json";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { channelHeader, creatorCard } from "../../e2e/fixtures/youtube-fixtures";
-import { expect, expectAttribute, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionTab, openFixture, openOptions, test } from "../extension.fixture";
+import { expect, expectContainsText, expectAttribute, expectValue, expectText, expectVisible, openCreatorMenu, openExtensionTab, openFixture, openOptions, test } from "../extension.fixture";
 import { captureAction, expectNativeLanguage } from "../locale-checks";
 
 for (const scenario of [
@@ -58,8 +58,7 @@ for (const scenario of [
       await addon.page.locator(".cf-menu-item").click();
       await expectVisible(addon.page, '[data-testid="mixed-creator"]', false);
       await expectAttribute(addon.page, "#cf-toast", "dir", scenario.direction);
-      await expect.poll(() => addon.page.$eval("#cf-toast", (element) => element.textContent))
-        .toContain(scenario.messages.contentBlocked.message.replace("$CREATOR$", "mixed123"));
+      await expectContainsText(addon.page, "#cf-toast", scenario.messages.contentBlocked.message.replace("$CREATOR$", "mixed123"));
       expect(((await addon.getStorage("cfBlockedChannels")).cfBlockedChannels as Array<{ key: string }>).map((entry) => entry.key))
         .toEqual(["handle:@mixed123", "handle:@blocked456"]);
       await expectText(addon.page, "#cf-toast button", scenario.messages.contentUndo.message);
@@ -70,8 +69,7 @@ for (const scenario of [
       await expectAttribute(channel, "#cf-hard-block-overlay", "dir", scenario.direction);
       expect(await channel.$eval("#cf-hard-block-overlay", (element) => getComputedStyle(element).direction)).toBe(scenario.direction);
       await expectText(channel, "#cf-hard-block-title", scenario.messages.contentCreatorBlocked.message);
-      await expect.poll(() => channel.$eval("#cf-hard-block-overlay", (element) => element.textContent))
-        .toContain(scenario.messages.contentBlockedDescription.message.replace("$CREATOR$", "blocked456"));
+      await expectContainsText(channel, "#cf-hard-block-overlay", scenario.messages.contentBlockedDescription.message.replace("$CREATOR$", "blocked456"));
       await expectAttribute(channel, "html", "lang", scenario.youtubeLanguage);
       await expectAttribute(channel, "html", "dir", scenario.originalDirection);
       await captureAction(channel, "#cf-hard-block-overlay", testInfo, `${scenario.selectedLanguage}-extra-rtl-overlay`);

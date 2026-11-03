@@ -42,7 +42,7 @@ for (const locale of allLocales) {
     await expectVisible(addon.page, ".cf-block-button");
     await expect.poll(() => addon.page.$eval(".cf-block-button", (element) => element.getAttribute("aria-label")))
       .toBe(messages.contentBlockNamed.message.replace("$CREATOR$", locale.creator));
-    await openCreatorMenu(addon.page, '[data-testid="localized-menu"]');
+    await openCreatorMenu(addon.page, '[data-testid="localized-menu"]', "rgb(241, 241, 241)");
     await expectText(addon.page, ".cf-menu-item__label", messages.contentMenuBlock.message);
     await expect.poll(() => addon.page.$eval(".cf-menu-item__label", (element) => getComputedStyle(element).color))
       .toBe("rgb(241, 241, 241)");
