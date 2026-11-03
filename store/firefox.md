@@ -1,6 +1,6 @@
 # Firefox preparation
 
-Status: desktop Firefox port for review and testing, not a published Firefox Add-ons release. Version 0.2.8 matches the Chrome feature set. No Firefox listing URL has been assigned.
+Status: desktop Firefox version 0.2.8 has been submitted to Mozilla and is awaiting approval. It matches the Chrome feature set and is available for temporary local testing. A public Firefox Add-ons install link will be added after publication.
 
 ## Build and load
 
@@ -21,9 +21,9 @@ The package keeps the original Chrome manifest and catalogs unchanged. The build
 
 Set `CHANNELFENCE_FIREFOX_PATH` to an installed Firefox executable and run `npm run test:firefox` after building. This suite installs the actual Firefox package into a temporary browser profile and uses intercepted YouTube fixtures. It does not inject a replacement extension API. Reports and screenshots are kept as local test artifacts.
 
-The Firefox GitHub Actions workflow runs the deterministic tests. For live validation, manually run the existing live YouTube workflow with `browser` set to `firefox`. The Chrome twice-daily schedule is unchanged; passing the Firefox smoke checks does not mean every existing Chromium test has run in Firefox.
+The Firefox GitHub Actions workflow runs the deterministic tests on pull requests, pushes to `main`, and manual requests. The live YouTube workflow runs Firefox daily at 12:17 in `America/New_York`; manual runs also accept `browser` set to `firefox`. Chromium continues to run at 00:17 and 12:17 daily. Firefox's live checks cover channel blocking and search-menu blocking in English and Korean; passing them does not mean every existing Chromium test has run in Firefox.
 
-Before public submission, manually check toolbar-popup behavior, automatic browser-language selection, all three compact thumbnail sizes, JSON import/export between Chrome and Firefox, site-access permissions, and representative real Home/search/watch/Shorts pages. Test the signed build's restart/update behavior after Mozilla signs it. The automatic suite and Mozilla validation complement these checks.
+For each release, manually check toolbar-popup behavior, automatic browser-language selection, all three compact thumbnail sizes, JSON import/export between Chrome and Firefox, site-access permissions, and representative real Home/search/watch/Shorts pages. Test the signed build's restart/update behavior after Mozilla signs it. The automatic suite and Mozilla validation complement these checks.
 
 ## Mozilla data declaration
 
