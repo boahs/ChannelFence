@@ -443,6 +443,23 @@ footer {
 
 .article-card li + li { margin-top: 12px; }
 
+.article-figure { margin: 38px 0; }
+
+.article-figure img {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.article-figure figcaption {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
 .article-cta,
 .article-note {
   background: linear-gradient(145deg, #17275d, #102047);

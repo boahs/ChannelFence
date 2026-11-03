@@ -11,6 +11,7 @@ All final PNGs are composited as 24-bit RGB images without alpha. The Store imag
 
 ## Real product sources
 
+- `channelfence-0.2.8-home-settings.png` is a capture of the real unpacked 0.2.8 settings page on November 3, 2026. It shows the first settings card in a 1000px-wide browser window, with English selected, the optional Home and Shorts controls enabled, and Small thumbnails. These are example choices, not the defaults. The image contains no personal block-list data.
 - `source/menu-frame-v2.png`, `source/blocked-frame.png`, and `source/shorts-frame.png` were selected from the locally recorded ChannelFence demo footage.
 - `source/options-0.2.1-1280x800.png` and `source/popup-hide-shorts-0.2.1.png` are deterministic captures of the real unpacked extension at version 0.2.1.
 - The existing ChannelFence icon is composited from `../../assets/icons/channelfence-512.png`.

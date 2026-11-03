@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChannelFence vs. BlockTube: YouTube Blockers Compared</title>
-  <meta name="description" content="A factual comparison of ChannelFence and BlockTube for blocking YouTube creators, Shorts, comments, keywords, and other content. Reviewed August 29, 2026.">
+  <meta name="description" content="Compare ChannelFence 0.2.8 with BlockTube: creator blocking, Shorts, Home cleanup, languages, privacy, advanced filters, and public YouTube tests. Reviewed November 2026.">
   <link rel="canonical" href="https://channelfence.app/channelfence-vs-blocktube/">
   <link rel="icon" href="../assets/icons/channelfence-32.png" sizes="32x32">
   <link rel="stylesheet" href="../site/styles.css">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="ChannelFence">
   <meta property="og:title" content="ChannelFence vs. BlockTube">
-  <meta property="og:description" content="Choose between a focused persistent creator list and a broad YouTube filtering toolkit.">
+  <meta property="og:description" content="Creator blocking and Home cleanup, or advanced content rules? A comparison from ChannelFence's developer, with official sources and public test results.">
   <meta property="og:url" content="https://channelfence.app/channelfence-vs-blocktube/">
   <meta property="og:image" content="https://channelfence.app/site/assets/youtube-thumbnail-1280x720-v2.png">
   <meta property="og:image:width" content="1280">
@@ -20,7 +20,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@GetChannelFence">
   <meta name="twitter:title" content="ChannelFence vs. BlockTube">
-  <meta name="twitter:description" content="Choose between a focused persistent creator list and a broad YouTube filtering toolkit.">
+  <meta name="twitter:description" content="Creator blocking and Home cleanup, or advanced content rules? A comparison from ChannelFence's developer, with official sources and public test results.">
   <meta name="twitter:image" content="https://channelfence.app/site/assets/youtube-thumbnail-1280x720-v2.png">
   <meta name="twitter:image:alt" content="ChannelFence: A real YouTube block list">
   <script type="application/ld+json">
@@ -28,9 +28,9 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "ChannelFence vs. BlockTube: YouTube Blockers Compared",
-    "description": "A neutral feature comparison of ChannelFence and BlockTube based on current official public documentation.",
+    "description": "ChannelFence's developer compares creator blocking, Home cleanup, languages, privacy, and advanced filtering using official documentation and public test workflows.",
     "datePublished": "2026-08-29",
-    "dateModified": "2026-08-29",
+    "dateModified": "2026-11-03",
     "mainEntityOfPage": "https://channelfence.app/channelfence-vs-blocktube/",
     "author": { "@type": "Organization", "name": "ChannelFence" },
     "publisher": { "@type": "Organization", "name": "ChannelFence", "url": "https://channelfence.app/" }
@@ -57,50 +57,72 @@
       <header>
         <p class="eyebrow">Feature comparison</p>
         <h1>ChannelFence vs. BlockTube</h1>
-        <p class="article-lead">ChannelFence is a focused persistent creator block list. BlockTube is a broader YouTube filtering toolkit with keyword, regular expression, runtime, and advanced JavaScript rules.</p>
-        <p class="article-meta">Last reviewed August 29, 2026. Features can change after this date.</p>
+        <p class="article-lead">ChannelFence combines a persistent creator block list with optional Home cleanup and smaller thumbnails. BlockTube offers more advanced filtering rules. Here is how to choose the right fit for the YouTube feed you want.</p>
+        <p class="article-meta">Last reviewed November 3, 2026 · ChannelFence 0.2.8 and BlockTube 0.4.8. Features can change after this date.</p>
+        <p class="article-meta">ChannelFence's live YouTube checks are scheduled twice daily. <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">See the public test results</a>.</p>
       </header>
 
+      <div class="article-note">
+        <strong>From the developer of ChannelFence</strong>
+        <p>I built ChannelFence, so this is my perspective on why you might choose it. The comparison uses ChannelFence's source and tests, and BlockTube's official documentation. It is a comparison of documented features, not a head-to-head performance or live compatibility benchmark.</p>
+      </div>
+
+      <h2>ChannelFence and BlockTube at a glance</h2>
+      <p>The BlockTube column summarizes its <a href="https://chromewebstore.google.com/detail/blocktube/bbeaicapbccfllodepmimpkgecanonai?hl=en-US">Chrome Web Store listing</a> and <a href="https://github.com/amitbl/blocktube/blob/master/README.md">official README</a>.</p>
       <div class="comparison-wrap" role="region" aria-label="ChannelFence and BlockTube feature comparison" tabindex="0">
         <table class="comparison-table">
           <thead>
-            <tr><th>Feature</th><th>ChannelFence 0.2.1</th><th>BlockTube 0.4.8</th></tr>
+            <tr><th scope="col">Feature</th><th scope="col">ChannelFence 0.2.8</th><th scope="col">BlockTube 0.4.8</th></tr>
           </thead>
           <tbody>
-            <tr><td>Primary focus</td><td>A simple, explicit creator block list</td><td>Broad rules for filtering YouTube content</td></tr>
+            <tr><td>Primary focus</td><td>Creator blocking and optional feed cleanup</td><td>Broad rules for filtering YouTube content</td></tr>
             <tr><td>Creator blocking</td><td>Inline controls, supported video and compact Shorts menus, Shorts viewer, or manual handle/channel URL</td><td>Channel name or ID, plus integrated YouTube context menus</td></tr>
             <tr><td>Video filters</td><td>Filters videos belonging to blocked creators</td><td>Video title, video ID, runtime, keywords, and regular expressions</td></tr>
             <tr><td>Shorts controls</td><td>Block individual Shorts creators or optionally hide supported Shorts shelves and cards from feeds</td><td>Provides an option to block YouTube Shorts</td></tr>
             <tr><td>Comment controls</td><td>Hide comments from blocked creators</td><td>Block comments by user or comment-content keywords</td></tr>
+            <tr><td>Feed appearance</td><td>Optional Home sponsored-card and promotional-insert hiding; compact Home grid with three thumbnail sizes</td><td>Options include hiding Movies, Explore, and automatically generated playlists</td></tr>
             <tr><td>Advanced custom rules</td><td>No custom JavaScript or regular expression editor</td><td>Regular expressions and an advanced JavaScript blocking function</td></tr>
+            <tr><td>Interface languages</td><td>18 languages, with automatic selection or a manual choice in settings</td><td>Store listing lists English (United States)</td></tr>
             <tr><td>Browsers documented by the project</td><td>Chrome</td><td>Chrome and Firefox</td></tr>
-            <tr><td>Privacy claims</td><td>Local extension storage, no account, extension analytics, ads, or developer-controlled server</td><td>Official listing states no analytics/tracking, no requests to a "3rd party server," and local settings storage</td></tr>
-            <tr><td>Source availability</td><td>Open source under the MIT License</td><td>Open source on GitHub</td></tr>
+            <tr><td>Privacy</td><td>Settings and block list stay on your device; no account or extension analytics</td><td>Listing declares local settings and no data collection or tracking</td></tr>
+            <tr><td>Source availability</td><td>MIT License</td><td>Open source on GitHub</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2>Choose ChannelFence if...</h2>
+      <h2>Why I would choose ChannelFence for everyday blocking</h2>
+      <p>ChannelFence is designed around a simple action: block a creator where you encounter them, then keep browsing. Your saved list applies across supported Home feeds, search, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.</p>
       <ul>
-        <li>You mainly want to name a creator once and keep that creator on a visible block list.</li>
-        <li>You prefer controls that appear directly beside supported creator names, video menus, and the Shorts viewer.</li>
-        <li>You want a small settings surface without keyword, regular expression, or custom-code rules.</li>
+        <li><strong>Block without leaving the feed.</strong> Use inline creator controls or supported video and compact Shorts menus. In the Shorts viewer, block the current creator and continue to the next Short.</li>
+        <li><strong>Keep control of your list.</strong> Undo a block, manage creators in settings, pause blocking, or export and import a private backup. Collaboration videos can be hidden when YouTube identifies a blocked creator.</li>
+        <li><strong>Make Home less cluttered.</strong> Hide supported sponsored cards, promotional banners, Explore more topics, and other optional inserts. Choose Small, Medium, or Large thumbnails for the compact grid.</li>
+        <li><strong>Use a familiar language.</strong> ChannelFence has 18 interface languages, including Korean, Japanese, Brazilian Portuguese, and Arabic with right-to-left layouts. YouTube keeps its own language setting.</li>
       </ul>
+      <p>The Home controls start off, so you choose what changes. They do not skip video ads or sponsored Shorts in the Shorts viewer. See the <a href="../how-to-customize-youtube-home/">Home cleanup guide</a> and <a href="../how-to-change-channelfence-language/">language guide</a> for the exact controls.</p>
 
-      <h2>Choose BlockTube if...</h2>
+      <figure class="article-figure">
+        <img src="../site/assets/channelfence-0.2.8-home-settings.png" width="932" height="832" loading="lazy" alt="ChannelFence 0.2.8 settings with language selection, optional feed hiding, and Small thumbnail size">
+        <figcaption>Actual ChannelFence 0.2.8 settings, with the optional Home and Shorts controls enabled for this example. Those options start off. <a href="../site/assets/channelfence-0.2.8-home-settings.png">View full size</a>.</figcaption>
+      </figure>
+
+      <h2>When BlockTube is the better fit</h2>
+      <p>BlockTube's documented strengths matter if you want rules that go beyond identifying creators:</p>
       <ul>
         <li>You need to filter video titles, runtime, keywords, video IDs, or comments by content.</li>
         <li>You want regular expressions or custom JavaScript-based blocking rules.</li>
         <li>You need the project's documented Firefox version.</li>
       </ul>
+      <p>Those capabilities are described in the <a href="https://chromewebstore.google.com/detail/blocktube/bbeaicapbccfllodepmimpkgecanonai?hl=en-US">official BlockTube listing</a> and <a href="https://github.com/amitbl/blocktube/blob/master/README.md">README</a>. ChannelFence does not provide those advanced rule editors.</p>
 
-      <div class="article-note">
-        <strong>Neither choice is universally better</strong>
-        <p>BlockTube has a wider rule set. ChannelFence deliberately focuses on a persistent creator list and direct YouTube controls. The better fit depends on whether you want a focused workflow or advanced filtering.</p>
-      </div>
+      <h2>YouTube changes. ChannelFence is tested to keep up.</h2>
+      <p>ChannelFence schedules automated checks against real YouTube twice a day, alongside regression tests for updates. When a covered workflow breaks, a failed test gives me a signal to investigate. You can inspect the <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">public live YouTube test runs</a> and <a href="https://github.com/boahs/ChannelFence/actions/workflows/ci.yml">regression results</a>.</p>
+      <p>My aim is to catch and fix compatibility problems before you notice them. Tests cannot cover every YouTube layout or account variation, and a fix still needs to reach users through an extension update. If something slips through, <a href="../support/">report the example</a> so it can be investigated.</p>
+
+      <h2>Privacy without an account</h2>
+      <p>ChannelFence is free and open source. Your settings and block list stay in Chrome's local extension storage, with no extension analytics or developer-controlled server. When a nonempty block list needs a compact Short's creator, ChannelFence may request public metadata directly from YouTube without account credentials. See the <a href="../PRIVACY.html">privacy policy</a> for details.</p>
 
       <div class="article-cta">
-        <p><strong>Try the focused creator-blocking option.</strong><br>ChannelFence is free, open source, and local-only.</p>
+        <p><strong>Block creators. Make room for the videos you want.</strong><br>Try ChannelFence's creator controls, optional Home cleanup, and private block list.</p>
         <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=comparison_blocktube">Add ChannelFence to Chrome</a>
       </div>
 
@@ -117,6 +139,8 @@
           <li><a href="../how-to-block-youtube-channels-in-chrome/">How to block YouTube channels in Chrome</a></li>
           <li><a href="../youtube-dont-recommend-channel-vs-block/">"Don't recommend channel" vs. blocking a creator</a></li>
           <li><a href="../how-to-hide-youtube-shorts-in-chrome/">How to hide YouTube Shorts in Chrome</a></li>
+          <li><a href="../channelfence-vs-channel-blocker/">ChannelFence vs. Channel Blocker</a></li>
+          <li><a href="../channelfence-vs-unhook/">ChannelFence vs. Unhook</a></li>
         </ul>
       </section>
     </article>

@@ -36,6 +36,14 @@ const publicPages = [
     canonical: `${siteOrigin}/channelfence-vs-blocktube/`
   },
   {
+    file: "channelfence-vs-channel-blocker/index.html",
+    canonical: `${siteOrigin}/channelfence-vs-channel-blocker/`
+  },
+  {
+    file: "channelfence-vs-unhook/index.html",
+    canonical: `${siteOrigin}/channelfence-vs-unhook/`
+  },
+  {
     file: "blog/the-tests-passed-the-extension-was-still-broken/index.html",
     canonical: `${siteOrigin}/blog/the-tests-passed-the-extension-was-still-broken/`
   },
