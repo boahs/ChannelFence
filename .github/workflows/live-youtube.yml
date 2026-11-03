@@ -6,6 +6,11 @@ on:
     - cron: "17 0,12 * * *"
       timezone: "America/New_York"
   workflow_dispatch:
+    inputs:
+      grep:
+        description: Optional test-title filter; leave blank to run the complete suite
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -32,8 +37,10 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run all live YouTube Playwright tests
-        run: npm run test:e2e:live
+      - name: Run live YouTube checks in Chrome
+        run: npm run test:e2e:live -- --grep "$TEST_GREP"
+        env:
+          TEST_GREP: ${{ inputs.grep || '' }}
 
       - name: Upload Playwright diagnostics
         if: always()

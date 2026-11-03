@@ -182,6 +182,7 @@
     blockedShortSkipTimer: null,
     blockedShortAdvanceAttempted: false,
     blockedShortScrollAttempted: false,
+    blockedShortScrollRecovery: null,
     blockedShortFailedOpenKey: "",
     shortsRouteSettleUntil: 0,
     shortsRouteSettleTimer: null,
@@ -2126,6 +2127,56 @@
     state.blockedShortSkipKey = "";
     state.blockedShortAdvanceAttempted = false;
     state.blockedShortScrollAttempted = false;
+    clearBlockedShortScrollRecovery();
+  }
+
+  function clearBlockedShortScrollRecovery() {
+    state.blockedShortScrollRecovery?.cleanup();
+    state.blockedShortScrollRecovery = null;
+  }
+
+  function observeBlockedShortScrollReset(sourceRouteIdentity) {
+    const scroller = document.querySelector("ytd-shorts #shorts-container");
+    if (!scroller) {
+      return;
+    }
+    const origin = scroller.scrollTop;
+    const inputEvents = ["pointerdown", "wheel", "keydown"];
+    let moved = false;
+    const onScroll = () => {
+      if (state.navigationInProgress || currentShortsRouteIdentity() !== sourceRouteIdentity) {
+        return;
+      }
+      const distance = Math.abs(scroller.scrollTop - origin);
+      // Ignore fractional-pixel rounding around the original scroll position.
+      if (distance > 2) {
+        moved = true;
+        observation.resetAt = 0;
+      } else if (moved) {
+        // YouTube can consume its first Next scroll while initializing layout.
+        // Only an actual move and reset warrants one recovery, never a slow route.
+        observation.resetAt = Date.now();
+      }
+    };
+    const cancelOnInput = (event) => {
+      if (event.isTrusted) {
+        clearBlockedShortScrollRecovery();
+      }
+    };
+    const observation = {
+      resetAt: 0,
+      cleanup: () => {
+        scroller.removeEventListener("scroll", onScroll);
+        for (const type of inputEvents) {
+          document.removeEventListener(type, cancelOnInput, true);
+        }
+      }
+    };
+    state.blockedShortScrollRecovery = observation;
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    for (const type of inputEvents) {
+      document.addEventListener(type, cancelOnInput, { capture: true, passive: true });
+    }
   }
 
   function clearBlockedShortFailedOpen() {
@@ -2296,6 +2347,12 @@
       state.blockedShortScrollAttempted;
     if (!advanceAlreadyAttempted && nextButtonEnabled) {
       state.blockedShortAdvanceAttempted = true;
+      observeBlockedShortScrollReset(sourceRouteIdentity);
+      nextButton.click();
+    } else if (nextButtonEnabled && state.blockedShortScrollRecovery?.resetAt &&
+      Date.now() - state.blockedShortScrollRecovery.resetAt >= BLOCKED_SHORT_RETRY_MS) {
+      // Leave YouTube a full retry interval to finish the observed layout reset.
+      clearBlockedShortScrollRecovery();
       nextButton.click();
     } else if (!advanceAlreadyAttempted && waitedForControls &&
       scrollTowardNextShort()) {
@@ -2841,6 +2898,10 @@
       }
     }
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked]) {
+      if (!state.enabled || !state.blocked.some((entry) =>
+        state.blockedShortSkipKey === `${currentShortsRouteIdentity()}|${entry.key}`)) {
+        clearBlockedShortSkip();
+      }
       requestActionUpdate();
     }
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked] ||
@@ -2926,6 +2987,7 @@
 
   document.addEventListener("yt-navigate-start", () => {
     state.navigationInProgress = true;
+    clearBlockedShortScrollRecovery();
     state.channelPageIdentity = null;
     state.pendingMenuContext = null;
     removeOverlay();
