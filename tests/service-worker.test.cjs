@@ -37,7 +37,7 @@ function loadWorker(options = {}) {
       setTitle: async (details) => calls.push(["title", details])
     },
     runtime: {
-      getURL: (value) => `chrome-extension://test/${value}`,
+      getURL: (value) => `${options.eventPage ? "moz-extension" : "chrome-extension"}://test/${value}`,
       onInstalled: events.installed,
       onMessage: events.message,
       onStartup: events.startup
@@ -49,13 +49,14 @@ function loadWorker(options = {}) {
       }
     },
     tabs: {
-      create: async () => undefined,
+      create: async (details) => calls.push(["tab", details]),
       onUpdated: events.tabUpdated
     }
   };
   const sandbox = {
     ChannelFenceI18n: {
-      get: (key) => key
+      get: (key) => key,
+      loadCatalog: async (language) => ({ language })
     },
     ChannelFenceShared: {
       DEFAULTS: values,
@@ -65,15 +66,40 @@ function loadWorker(options = {}) {
       },
       sanitizeBlockedEntries: options.sanitizeBlockedEntries || ((entries) => entries || [])
     },
-    chrome,
-    importScripts: () => undefined
+    chrome
   };
+  if (!options.eventPage) {
+    sandbox.importScripts = (...scripts) => calls.push(["imports", scripts]);
+  }
 
   vm.runInNewContext(
     fs.readFileSync(path.join(root, "src", "service-worker.js"), "utf8"),
     sandbox
   );
   return { calls, events };
+}
+
+for (const eventPage of [false, true]) {
+  test(`${eventPage ? "event page" : "service worker"} starts and serves extension messages`, async () => {
+    const { calls, events } = loadWorker({ eventPage });
+    const imports = calls.filter(([type]) => type === "imports");
+    assert.deepEqual(imports, eventPage ? [] : [["imports", ["shared.js", "i18n.js"]]]);
+
+    await events.startup.listener();
+    assert.ok(calls.some(([type, details]) => type === "badge" && details.text === ""));
+    await events.installed.listener({ reason: "install" });
+    assert.equal(calls.find(([type]) => type === "tab")[1].url,
+      `${eventPage ? "moz-extension" : "chrome-extension"}://test/ui/welcome.html`);
+
+    const catalog = await new Promise((resolve) => {
+      assert.equal(events.message.listener({ type: "CF_GET_MESSAGES", language: "ar" }, {}, resolve), true);
+    });
+    assert.deepEqual(catalog, { language: "ar" });
+    events.message.listener({ type: "CF_SYNC_ACTION" }, { tab: { id: 42 } });
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.ok(calls.some(([type, details]) =>
+      type === "badge" && details.text === "1" && details.tabId === 42));
+  });
 }
 
 test("uses a blank global badge and a count only for a YouTube sender tab", async () => {

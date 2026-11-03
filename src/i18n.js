@@ -6,7 +6,8 @@
     "id", "bn", "tr", "vi", "ar", "it", "nl"
   ];
   const listeners = new Set();
-  const extensionPage = globalThis.document && globalThis.location?.protocol === "chrome-extension:";
+  const extensionPage = globalThis.document &&
+    ["chrome-extension:", "moz-extension:"].includes(globalThis.location?.protocol);
   let language = "auto";
   let messages = null;
   let revision = 0;

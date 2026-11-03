@@ -67,6 +67,21 @@ These preferences are saved locally and work with an empty block list. Regular r
 
 After editing the extension, select **Reload** on its `chrome://extensions` card and refresh open YouTube tabs.
 
+### Firefox preparation
+
+A separate desktop Firefox package is available for testing. It has not been published on Firefox Add-ons. It shares the blocking code and all eighteen languages with Chrome, with a Firefox background page and browser-specific copy.
+
+Use Node.js 22.12 or later (CI uses Node.js 24), then build and validate the package:
+
+```powershell
+npm ci
+npm run build:firefox
+```
+
+The build produces `dist/ChannelFence-0.2.8-firefox/` and `dist/ChannelFence-0.2.8-firefox.zip`. In Firefox 142 or later, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select the generated folder's `manifest.json`. Temporary installation ends when Firefox closes. The ZIP is an unsigned package for Mozilla submission, not a signed public download.
+
+See [Firefox preparation and listing copy](store/firefox.md) for testing, privacy disclosures, and submission details. Chrome packages continue to use the original manifest and catalogs.
+
 ### Test version 0.2.8 in Chrome Canary
 
 1. Extract `dist/ChannelFence-0.2.8.zip` to a folder.
@@ -122,6 +137,8 @@ npm run test:e2e:ui
 The Playwright suite launches the real unpacked extension in an isolated Chromium profile. Its normal CI tests use deterministic, local YouTube-shaped pages served on the YouTube origin, covering feeds, collaboration bylines, membership lockups, Shorts controls, comments, direct navigation, menus, the popup, and settings without depending on YouTube's current recommendations or experiments. Run `npm run test:e2e:live` for the separate live-origin smoke check.
 
 GitHub Actions runs the complete deterministic suite on pull requests and pushes to `main`. The separate live YouTube workflow runs the full live suite daily at 00:17 and 12:17 in `America/New_York`, following daylight saving time automatically. Scheduled runs use the latest default-branch commit, and **Run workflow** remains available for manual validation. See [`tests/e2e/README.md`](tests/e2e/README.md) for the test layout and extension fixture details.
+
+Firefox has a separate installed-add-on suite, using Puppeteer with Firefox's WebDriver BiDi support under the Playwright test runner. Set `CHANNELFENCE_FIREFOX_PATH` to your Firefox executable, build the package, and run `npm run test:firefox` for local fixtures. The live YouTube workflow offers a manual browser choice; select `firefox` for its smoke checks. The existing twice-daily schedule still tests Chromium; Firefox does not have a recurring schedule yet.
 
 ## Website changelog
 

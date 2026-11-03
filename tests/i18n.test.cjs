@@ -57,13 +57,13 @@ test("runtime and page message references exist in the default catalog", () => {
 function loadI18n(options = {}) {
   const requests = [];
   let storageListener;
-  const document = {
-    documentElement: { lang: "ko" },
+  const document = options.document || {
+    documentElement: { lang: "ko", dir: "ltr" },
     querySelectorAll() { assert.fail("YouTube must not be localized as an extension page"); }
   };
   const sandbox = {
     document: options.worker ? undefined : document,
-    location: { protocol: "https:" },
+    location: { protocol: options.protocol || "https:" },
     fetch: async (url) => {
       requests.push(url);
       if (options.fetch) {
@@ -75,7 +75,7 @@ function loadI18n(options = {}) {
     chrome: {
       i18n: { getMessage: (key) => catalogs[options.browserLanguage || "en"][key]?.message || "" },
       runtime: {
-        getURL: (path) => `chrome-extension://test/${path}`,
+        getURL: (path) => `${options.protocol || "chrome-extension:"}//test/${path}`,
         sendMessage: async (message) => {
           requests.push(message);
           return catalogs[message.language];
@@ -103,6 +103,7 @@ test("automatic language uses Chrome without loading catalogs or changing YouTub
   const { i18n, document, requests } = loadI18n();
   await i18n.ready;
   assert.equal(document.documentElement.lang, "ko");
+  assert.equal(document.documentElement.dir, "ltr");
   assert.equal(i18n.get("contentUndo"), "Undo");
   assert.equal(i18n.language, "auto");
   assert.deepEqual(requests, []);
@@ -122,11 +123,42 @@ test("each override loads bundled text through the worker and preserves creator 
       .replace(/\$visible\$/i, "2").replace(/\$total\$/i, "5");
     assert.equal(i18n.get("showingCreators", ["2", "5"]), expectedCounts);
     assert.equal(document.documentElement.lang, "ko");
+    assert.equal(document.documentElement.dir, "ltr");
     assert.equal(requests.length, 1);
     assert.equal(requests[0].type, "CF_GET_MESSAGES");
     assert.equal(requests[0].language, language);
   }
 });
+
+for (const protocol of ["chrome-extension:", "moz-extension:"]) {
+  test(`${protocol} pages localize automatically and load overrides without messaging`, async () => {
+    const label = {
+      textContent: "",
+      getAttribute: () => "contentUndo",
+      querySelector: () => null
+    };
+    const document = {
+      documentElement: {},
+      querySelectorAll: (selector) => selector === "[data-i18n]" ? [label] : []
+    };
+    const { i18n, change, requests } = loadI18n({ protocol, document, browserLanguage: "ko" });
+    await i18n.ready;
+    assert.equal(document.documentElement.lang, "ko");
+    assert.equal(label.textContent, catalogs.ko.contentUndo.message);
+    assert.deepEqual(requests, []);
+
+    await change("ar");
+    assert.equal(document.documentElement.lang, "ar");
+    assert.equal(document.documentElement.dir, "rtl");
+    assert.equal(label.textContent, catalogs.ar.contentUndo.message);
+    assert.deepEqual(requests, [`${protocol}//test/_locales/ar/messages.json`]);
+
+    await change("auto");
+    assert.equal(document.documentElement.lang, "ko");
+    assert.equal(document.documentElement.dir, "ltr");
+    assert.equal(label.textContent, catalogs.ko.contentUndo.message);
+  });
+}
 
 test("switching back to automatic restores Chrome's language and notifies open surfaces", async () => {
   const { i18n, change } = loadI18n({ browserLanguage: "ko", language: "ja" });

@@ -1343,7 +1343,8 @@
         endpoint.searchParams.set("format", "json");
         const response = await fetch(endpoint, {
           cache: "force-cache",
-          credentials: "omit"
+          credentials: "omit",
+          referrerPolicy: "no-referrer"
         });
         if (!response.ok) {
           throw new Error(`YouTube metadata request failed with ${response.status}`);

@@ -1,6 +1,9 @@
 "use strict";
 
-importScripts("shared.js", "i18n.js");
+// Firefox loads these dependencies through the background scripts manifest.
+if (typeof importScripts === "function") {
+  importScripts("shared.js", "i18n.js");
+}
 
 const Shared = globalThis.ChannelFenceShared;
 const I18n = globalThis.ChannelFenceI18n;

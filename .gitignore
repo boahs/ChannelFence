@@ -4,6 +4,10 @@ node_modules/
 playwright-report/
 test-results/
 blob-report/
+firefox-playwright-report/
+firefox-test-results/
+dist/*-firefox/
+dist/*-firefox.zip
 
 # Local environment variables and credentials
 .env
