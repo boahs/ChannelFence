@@ -1,6 +1,6 @@
 # ChannelFence — Block YouTube Channels and Creators
 
-[![Chrome regression and shared checks](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml)
+[![Chrome regression tests](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml)
 [![Firefox regression tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml/badge.svg?branch=main&event=push)](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml)
 [![Chrome live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml?query=event%3Aschedule)
 [![Firefox live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml?query=event%3Aschedule)
@@ -145,7 +145,7 @@ GitHub Actions separates repeatable fixture tests from checks against real YouTu
 
 | Workflow | When it runs | What it checks |
 | --- | --- | --- |
-| [Chrome regression and shared checks](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml) | Pull requests, pushes to `main`, or manually | Website build, unit tests, typecheck, and Chromium fixture regressions |
+| [Chrome regression tests](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml) | Pull requests, pushes to `main`, or manually | Website build, unit tests, typecheck, and Chromium fixture regressions |
 | [Firefox regression tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml) | Pull requests, pushes to `main`, or manually | Firefox package validation, typecheck, and equivalent installed-add-on fixture regressions, including all 18 native and manually selected interface languages |
 | [Chrome live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml) | Daily at 00:17 and 12:17, or manually | Real YouTube checks in Chromium, including channel headers, search menus, watch recommendations, compact Shorts, and the Shorts viewer across all 18 supported languages |
 | [Firefox live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml) | Daily at 12:17, or manually | Equivalent real YouTube journeys in Firefox across all 18 supported languages, plus the general blocking and Shorts stress checks |
