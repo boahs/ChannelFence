@@ -1,5 +1,5 @@
-name: Chrome regression and shared checks
-run-name: Chrome regression and shared checks
+name: Chrome regression tests
+run-name: Chrome regression tests
 
 on:
   push:
