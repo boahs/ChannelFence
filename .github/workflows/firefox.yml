@@ -1,19 +1,31 @@
-name: Firefox extension checks
+name: Firefox regression tests
+run-name: Firefox ${{ inputs.suite == 'live' && 'live YouTube tests' || 'regression tests' }}
 
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      suite:
+        description: Firefox suite to validate
+        type: choice
+        options: [regression, live]
+        default: regression
+      grep:
+        description: Optional test-title filter; leave blank to run the complete suite
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 jobs:
   firefox:
-    name: Installed Firefox extension and all manual interface languages
+    name: Firefox regression checks
+    if: inputs.suite != 'live'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 16
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -33,11 +45,17 @@ jobs:
           firefox-version: latest
       - name: Build and lint Firefox package
         run: npm run build:firefox
+      - name: Install matching Firefox language packs
+        run: node scripts/install-firefox-locales.mjs
+        env:
+          CHANNELFENCE_FIREFOX_PATH: ${{ steps.firefox.outputs.firefox-path }}
+          CHANNELFENCE_FIREFOX_VERSION: ${{ steps.firefox.outputs.firefox-version }}
       - name: Typecheck tests
         run: npm run typecheck
       - name: Test the installed extension against deterministic YouTube fixtures
-        run: npm run test:firefox
+        run: npm run test:firefox -- --grep "$TEST_GREP"
         env:
+          TEST_GREP: ${{ inputs.grep || '' }}
           CHANNELFENCE_FIREFOX_PATH: ${{ steps.firefox.outputs.firefox-path }}
       - name: Upload Firefox diagnostics
         if: always()
@@ -56,3 +74,10 @@ jobs:
           path: dist/ChannelFence-*-firefox.zip
           if-no-files-found: error
           retention-days: 14
+
+  firefox-live:
+    name: Firefox live YouTube checks
+    if: github.event_name == 'workflow_dispatch' && inputs.suite == 'live'
+    uses: ./.github/workflows/firefox-live.yml
+    with:
+      grep: ${{ inputs.grep || '' }}

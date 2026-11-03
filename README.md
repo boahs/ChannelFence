@@ -1,8 +1,9 @@
 # ChannelFence — Block YouTube Channels and Creators
 
-[![ChannelFence CI](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml)
-[![Firefox extension checks](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml/badge.svg?branch=main)](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml)
-[![Scheduled live YouTube checks](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml?query=event%3Aschedule)
+[![Chrome regression and shared checks](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml)
+[![Firefox regression tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml/badge.svg?branch=main&event=push)](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml)
+[![Chrome live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml?query=event%3Aschedule)
+[![Firefox live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml?query=event%3Aschedule)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=github&utm_medium=organic&utm_campaign=30day_growth&utm_content=readme_badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ce2d8.svg)](LICENSE)
 
@@ -144,14 +145,18 @@ GitHub Actions separates repeatable fixture tests from checks against real YouTu
 
 | Workflow | When it runs | What it checks |
 | --- | --- | --- |
-| [ChannelFence CI](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml) | Pull requests, pushes to `main`, or manually | Website build, unit tests, typecheck, and Chromium fixture regressions |
-| [Firefox extension checks](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml) | Pull requests, pushes to `main`, or manually | Firefox package validation, typecheck, and installed-add-on fixture tests, including all 18 manual interface language choices |
-| [Live YouTube Playwright tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml): Chromium | Daily at 00:17 and 12:17, or manually | Real YouTube checks, including journeys across all 18 supported languages |
-| [Live YouTube Playwright tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml): Firefox | Daily at 12:17, or manually | Four real YouTube checks: channel blocking and search-menu blocking in English and Korean |
+| [Chrome regression and shared checks](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml) | Pull requests, pushes to `main`, or manually | Website build, unit tests, typecheck, and Chromium fixture regressions |
+| [Firefox regression tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml) | Pull requests, pushes to `main`, or manually | Firefox package validation, typecheck, and equivalent installed-add-on fixture regressions, including all 18 native and manually selected interface languages |
+| [Chrome live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml) | Daily at 00:17 and 12:17, or manually | Real YouTube checks in Chromium, including channel headers, search menus, watch recommendations, compact Shorts, and the Shorts viewer across all 18 supported languages |
+| [Firefox live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml) | Daily at 12:17, or manually | Equivalent real YouTube journeys in Firefox across all 18 supported languages, plus the general blocking and Shorts stress checks |
 
-Times use `America/New_York` and follow daylight saving time. Scheduled runs test the latest default-branch commit; GitHub may delay their start. For a manual live run, choose **Run workflow** and select `chromium` or `firefox`. The live badge above shows the latest scheduled workflow on `main`: the midnight run checks Chromium, and the noon run checks both browsers. It does not report each browser's status separately.
+Times use `America/New_York` and follow daylight saving time. Scheduled runs test the latest default-branch commit; GitHub may delay their start. For a manual live run, open the workflow for the intended browser and choose **Run workflow**. Leave the optional `grep` filter blank for the complete suite, or enter a test-title pattern for a focused investigation. Scheduled runs always use the complete suite. **Firefox regression tests** also offers a `live` suite choice that calls the same Firefox live workflow. Each browser has a separate scheduled status badge and workflow name, so a successful Chrome run cannot replace the Firefox badge's failure status.
 
-Firefox's installed-add-on suite uses Puppeteer with Firefox's WebDriver BiDi support under the Playwright test runner. Set `CHANNELFENCE_FIREFOX_PATH` to your Firefox executable, build the package, and run `npm run test:firefox` for local fixtures. Its 18 language choices are tested through the extension's language selector; automatic language selection is checked against an English Firefox installation. Fixture coverage does not mean every language has been tested on live YouTube in Firefox. See the [Chromium test guide](tests/e2e/README.md) and [Firefox test guide](tests/firefox/README.md) for coverage and release-check limits.
+Firefox's installed-add-on suite uses Puppeteer with Firefox's WebDriver BiDi support under the Playwright test runner. Both browsers share YouTube fixture markup, locale data, and the behavior scenarios. CI installs matching signed Firefox language packs and asserts the actual browser UI language before checking automatic translations. Manual language overrides and YouTube's independent language setting are tested separately. See the [Chromium test guide](tests/e2e/README.md) and [Firefox test guide](tests/firefox/README.md) for setup, coverage and release-check limits.
+
+CI also runs `node scripts/check-browser-coverage.mjs` to compare the discovered fixture and live scenarios. Adding a Chrome scenario without a corresponding Firefox scenario fails this check. Browser execution and assertion review remain necessary; matching test names alone does not prove equivalent behavior.
+
+Failure notifications use GitHub's native Actions notifications. Workflow and job names identify Chrome or Firefox. Enable **Email** under Actions in [GitHub notification settings](https://github.com/settings/notifications); **Send notifications for failed workflows only** is optional. Delivery and the recipient for scheduled workflows follow [GitHub's notification rules](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs). ChannelFence does not send a separate email or require mail credentials.
 
 ## Website changelog
 

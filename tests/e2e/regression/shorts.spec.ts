@@ -1,6 +1,7 @@
 import type { Page } from "@playwright/test";
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 import { shortsShelf, shortsViewer } from "../fixtures/youtube-fixtures";
+import { installConsumedShortsScroll } from "../fixtures/shorts-scroll-reset";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
 async function mockCompactShortMetadata(page: Page): Promise<string[]> {
@@ -623,6 +624,106 @@ test.describe("YouTube Shorts controls", () => {
     });
     await expect(extensionPage.locator("#navigation-button-down button")).toBeEnabled();
     await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+    await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+  });
+
+  test("recovers once when YouTube resets the first native next scroll", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(shortsViewer("Reset Blocked Creator", "@resetblocked"), "/shorts/reset-blocked");
+    await extensionPage.evaluate(installConsumedShortsScroll, false);
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@resetblocked", "Reset Blocked Creator")]
+    });
+
+    await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/reset-allowed", { timeout: 6_000 });
+    const nextButton = extensionPage.locator("#navigation-button-down button");
+    await expect(nextButton).toHaveAttribute("data-click-count", "2");
+    await expect(youtube.card("shorts-action-bar").getByRole("button", {
+      name: "Block Reset Allowed Creator with ChannelFence"
+    })).toBeVisible();
+    const positions = await extensionPage.locator("#shorts-container").evaluate((element) =>
+      JSON.parse((element as HTMLElement).dataset.scrollPositions!) as number[]);
+    expect(positions[0]).toBe(0);
+    expect(Math.max(...positions)).toBeGreaterThan(2);
+    expect(positions.at(-1)).toBe(0);
+    await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+    await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+
+    // Observe several existing retry ticks after success. A stale recovery must
+    // not click again and skip the allowed creator to the sentinel route.
+    await extensionPage.waitForTimeout(750);
+    await expect(nextButton).toBeEnabled();
+    await expect(nextButton).toHaveAttribute("data-click-count", "2");
+    await expect(nextButton).toHaveAttribute("data-paths", JSON.stringify([
+      "/shorts/reset-blocked", "/shorts/reset-allowed"
+    ]));
+    await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/reset-allowed");
+  });
+
+  test("fails open without repeated clicks when YouTube resets native next scrolling again", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(shortsViewer("Reset Blocked Creator", "@resetblocked"), "/shorts/reset-blocked");
+    await extensionPage.evaluate(installConsumedShortsScroll, true);
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@resetblocked", "Reset Blocked Creator")]
+    });
+    const nextButton = extensionPage.locator("#navigation-button-down button");
+    await expect(nextButton).toHaveAttribute("data-click-count", "2");
+    await expect(extensionPage.locator("#shorts-container")).toHaveAttribute("data-reset-count", "2");
+    await expect(extensionPage.locator("html")).toHaveClass(/cf-watch-pending/);
+
+    // The original ten-second deadline must still release the player even when
+    // YouTube consumes the recovery click too. Later updates cannot rearm it.
+    await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/, { timeout: 10_500 });
+    await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/reset-blocked");
+    await expect(nextButton).toBeEnabled();
+    await expect(nextButton).toHaveAttribute("data-click-count", "2");
+    await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+    await expect(youtube.card("shorts-action-bar")).toBeVisible();
+    await extensionPage.evaluate(() => {
+      document.dispatchEvent(new Event("yt-page-data-updated", { bubbles: true }));
+    });
+    await extensionPage.waitForTimeout(750);
+    await expect(nextButton).toHaveAttribute("data-click-count", "2");
+    await expect(nextButton).toHaveAttribute("data-paths", JSON.stringify(["/shorts/reset-blocked"]));
+    await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+  });
+
+  test("does not retry a reset native scroll after trusted keyboard input", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(shortsViewer("Reset Blocked Creator", "@resetblocked"), "/shorts/reset-blocked");
+    await extensionPage.evaluate(installConsumedShortsScroll, false);
+    const nextButton = extensionPage.locator("#navigation-button-down button");
+    // Keep the recovery unavailable until trusted input arrives, so automation
+    // latency cannot race the product's next retry tick.
+    await nextButton.evaluate((element) => {
+      element.addEventListener("click", () => {
+        (element as HTMLButtonElement).disabled = true;
+      }, { once: true });
+    });
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@resetblocked", "Reset Blocked Creator")]
+    });
+    await expect(extensionPage.locator("#shorts-container")).toHaveAttribute("data-reset-count", "1");
+    await expect(nextButton).toBeDisabled();
+    await extensionPage.keyboard.press("Escape");
+    await nextButton.evaluate((element) => { (element as HTMLButtonElement).disabled = false; });
+
+    // Several retry ticks must not replay an advance after the user's input.
+    await extensionPage.waitForTimeout(750);
+    await expect(nextButton).toBeEnabled();
+    await expect(nextButton).toHaveAttribute("data-click-count", "1");
+    await expect(nextButton).toHaveAttribute("data-paths", JSON.stringify(["/shorts/reset-blocked"]));
+    await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/reset-blocked");
     await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
   });
 
