@@ -1,0 +1,14 @@
+{
+  "background": {
+    "scripts": ["src/shared.js", "src/i18n.js", "src/service-worker.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "channelfence@channelfence.app",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["websiteContent"]
+      }
+    }
+  }
+}

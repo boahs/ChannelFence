@@ -1,0 +1,182 @@
+{
+  "ar": {
+    "manualBlockHelp": "الصق اسمًا معرِّفًا على YouTube أو رابط قناة. يتم التحقق منه وحفظه فقط في مساحة التخزين المحلية للإضافة في Firefox.",
+    "settingsPrivacy": "تبقى أسماء القنوات وروابطها والإعدادات وقائمة الحظر في مساحة التخزين المحلية للإضافة في Firefox. لا يرسلها ChannelFence إلينا أو إلى أي شخص آخر.",
+    "reviewHelp": "يساعد تقييم صادق على Firefox Add-ons الآخرين على العثور عليه.",
+    "welcomePrivacy": "لا حساب. لا تتبّع. لا خادم يتحكم به المطوّر. تبقى قائمة الحظر في مساحة التخزين المحلية للإضافة في Firefox.",
+    "privacyStorage": "تُحفظ الإعدادات وسجلات منشئي المحتوى المحظورين فقط في مساحة التخزين المحلية للإضافة في Firefox على جهازك، ولا تُنقل أبدًا إلى المطوّر. ترسل استعلامات Shorts المصغّرة فقط روابط Short العامة إلى youtube.com ليعيد YouTube الأسماء العامة لمنشئي المحتوى وروابط قنواتهم. لا تتضمن الطلبات بيانات تسجيل الدخول إلى الحساب. لا يرسل ChannelFence طلبات إلى خادم يتحكم به المطوّر أو إلى أي خدمة خارج YouTube. وهو لا يبيع البيانات ولا يستخدمها للإعلانات ولا يسمح لأشخاص بقراءة بيانات المستخدمين.",
+    "privacyControl": "يمكنك عرض قائمة منشئي المحتوى المحظورين أو تصديرها، أو إلغاء الحظر، أو مسح القائمة من إعدادات ChannelFence. عند إزالة ChannelFence، يحذف Firefox بيانات الإضافة المخزّنة محليًا.",
+    "privacyChanges": "إذا تغيّرت ممارسات ChannelFence المتعلقة بالبيانات، فستُحدّث هذه السياسة والإفصاحات على Firefox Add-ons قبل تطبيق التغيير.",
+    "privacyContact": "يمكن إرسال أسئلة الخصوصية والدعم عبر $LINK$."
+  },
+  "bn": {
+    "manualBlockHelp": "YouTube হ্যান্ডেল বা চ্যানেলের URL পেস্ট করুন। যাচাই করে এটি শুধু Firefox-এর এক্সটেনশনের লোকাল স্টোরেজে সেভ করা হয়।",
+    "settingsPrivacy": "চ্যানেলের নাম, লিঙ্ক, সেটিংস ও ব্লক তালিকা Firefox-এর এক্সটেনশনের লোকাল স্টোরেজেই থাকে। ChannelFence এগুলো আমাদের বা অন্য কারও কাছে পাঠায় না।",
+    "reviewHelp": "Firefox Add-ons-এ সৎ রিভিউ দিলে অন্যরা এক্সটেনশনটি খুঁজে পেতে পারেন।",
+    "welcomePrivacy": "অ্যাকাউন্ট লাগে না। ট্র্যাকিং নেই। ডেভেলপারের নিয়ন্ত্রণাধীন সার্ভার নেই। আপনার ব্লক তালিকা Firefox-এর এক্সটেনশনের লোকাল স্টোরেজেই থাকে।",
+    "privacyStorage": "সেটিংস ও ব্লক করা নির্মাতাদের রেকর্ড শুধু আপনার ডিভাইসে Firefox-এর এক্সটেনশনের লোকাল স্টোরেজে থাকে এবং কখনও ডেভেলপারের কাছে পাঠানো হয় না। ছোট Shorts কার্ডের তথ্য খোঁজার সময় শুধু প্রকাশ্য Shorts URL youtube.com-এ পাঠানো হয়, যাতে YouTube প্রকাশ্য নির্মাতার নাম ও চ্যানেলের URL ফেরত দিতে পারে। এই অনুরোধে অ্যাকাউন্টে প্রবেশের তথ্য থাকে না। ChannelFence ডেভেলপারের নিয়ন্ত্রণাধীন সার্ভার বা YouTube ছাড়া অন্য কোনো পরিষেবায় অনুরোধ পাঠায় না। এটি ডেটা বিক্রি করে না, বিজ্ঞাপনে ব্যবহার করে না এবং কোনো ব্যক্তিকে ব্যবহারকারীর ডেটা পড়ার অনুমতি দেয় না।",
+    "privacyControl": "ChannelFence সেটিংস থেকে ব্লক করা নির্মাতাদের দেখতে, তালিকা এক্সপোর্ট করতে, কাউকে আনব্লক করতে বা পুরো তালিকা খালি করতে পারবেন। ChannelFence আনইনস্টল করলে Firefox এক্সটেনশনের লোকাল স্টোরেজের ডেটা মুছে দেয়।",
+    "privacyChanges": "ChannelFence-এর ডেটা ব্যবহারের পদ্ধতি বদলালে, সেই পরিবর্তন চালু হওয়ার আগেই এই নীতি ও Firefox Add-ons-এ প্রকাশিত তথ্য হালনাগাদ করা হবে।",
+    "privacyContact": "গোপনীয়তা ও সহায়তা সংক্রান্ত প্রশ্ন $LINK$ দিয়ে জমা দিতে পারবেন।"
+  },
+  "de": {
+    "manualBlockHelp": "Füge einen YouTube-Alias oder eine Kanal-URL ein. Die Eingabe wird geprüft und nur im lokalen Erweiterungsspeicher von Firefox gespeichert.",
+    "settingsPrivacy": "Kanalnamen, Kanallinks, Einstellungen und deine Sperrliste bleiben im lokalen Erweiterungsspeicher von Firefox. ChannelFence sendet sie weder an uns noch an andere.",
+    "reviewHelp": "Eine ehrliche Bewertung auf Firefox Add-ons hilft anderen, die Erweiterung zu finden.",
+    "welcomePrivacy": "Kein Konto. Kein Tracking. Kein Server unter Kontrolle des Entwicklers. Deine Sperrliste bleibt im lokalen Erweiterungsspeicher von Firefox.",
+    "privacyStorage": "Einstellungen und Datensätze blockierter Creator werden ausschließlich im lokalen Erweiterungsspeicher von Firefox auf deinem Gerät gespeichert und niemals an den Entwickler übertragen. Abfragen kompakter Shorts senden nur öffentliche Shorts-URLs an youtube.com, damit YouTube die öffentlichen Namen der Creator und ihre Kanal-URLs zurückgeben kann. Die Anfragen enthalten keine Kontozugangsdaten. ChannelFence sendet keine Anfragen an einen vom Entwickler kontrollierten Server oder an andere Dienste als YouTube. Es verkauft keine Daten, nutzt keine Daten für Werbung und erlaubt Menschen nicht, Nutzerdaten zu lesen.",
+    "privacyControl": "In den ChannelFence-Einstellungen kannst du blockierte Creator ansehen und exportieren, einzelne Creator entsperren oder die gesamte Liste leeren. Bei der Deinstallation von ChannelFence entfernt Firefox die lokal gespeicherten Daten der Erweiterung.",
+    "privacyChanges": "Falls sich der Umgang von ChannelFence mit Daten ändert, werden diese Datenschutzerklärung und die Angaben auf Firefox Add-ons aktualisiert, bevor die Änderungen eingeführt werden.",
+    "privacyContact": "Fragen zu Datenschutz und Support können über den $LINK$ gestellt werden."
+  },
+  "en": {
+    "manualBlockHelp": "Paste a YouTube handle or channel URL. It is validated and saved only in Firefox's local extension storage.",
+    "settingsPrivacy": "Channel names, channel links, settings, and your block list stay in Firefox’s local extension storage. ChannelFence does not send them to us or anyone else.",
+    "reviewHelp": "An honest review on Firefox Add-ons helps other people find it.",
+    "welcomePrivacy": "No account. No tracking. No developer-controlled server. Your block list stays in Firefox’s local extension storage.",
+    "privacyStorage": "Settings and blocked-creator records are stored only in Firefox’s local extension storage on your device and are never transmitted to the developer. Compact Shorts lookups send only public Short URLs to youtube.com so YouTube can return their public creator names and channel URLs. Requests omit account credentials. ChannelFence makes no requests to a developer-controlled server or any non-YouTube service. It does not sell data, use data for advertising, or permit humans to read user data.",
+    "privacyControl": "You can view, export, unblock, or clear blocked creators from ChannelFence settings. Uninstalling ChannelFence causes Firefox to remove the extension’s locally stored data.",
+    "privacyChanges": "If ChannelFence’s data practices change, this policy and the disclosures on Firefox Add-ons will be updated before the changed practice is introduced.",
+    "privacyContact": "Privacy and support questions can be submitted through the $LINK$."
+  },
+  "es": {
+    "manualBlockHelp": "Pega un identificador o una URL de canal de YouTube. Se valida y se guarda únicamente en el almacenamiento local de extensiones de Firefox.",
+    "settingsPrivacy": "Los nombres y enlaces de los canales, la configuración y tu lista de bloqueos se guardan en el almacenamiento local de extensiones de Firefox. ChannelFence no nos los envía a nosotros ni a nadie más.",
+    "reviewHelp": "Una reseña sincera en Firefox Add-ons ayuda a otras personas a encontrarlo.",
+    "welcomePrivacy": "Sin cuenta. Sin seguimiento. Sin servidor controlado por el desarrollador. Tu lista de bloqueos se guarda en el almacenamiento local de extensiones de Firefox.",
+    "privacyStorage": "La configuración y los registros de creadores bloqueados se guardan únicamente en el almacenamiento local de extensiones de Firefox en tu dispositivo y nunca se transmiten al desarrollador. Las consultas de tarjetas compactas de Shorts solo envían URL públicas de Shorts a youtube.com para que YouTube pueda devolver los nombres públicos de sus creadores y las URL de sus canales. Las solicitudes no incluyen credenciales de la cuenta. ChannelFence no realiza solicitudes a ningún servidor controlado por el desarrollador ni a servicios ajenos a YouTube. No vende datos, no los utiliza con fines publicitarios ni permite que personas lean los datos de los usuarios.",
+    "privacyControl": "Puedes consultar, exportar, desbloquear o borrar los creadores bloqueados desde la configuración de ChannelFence. Al desinstalar ChannelFence, Firefox elimina los datos almacenados localmente por la extensión.",
+    "privacyChanges": "Si cambian las prácticas de tratamiento de datos de ChannelFence, esta política y las declaraciones en Firefox Add-ons se actualizarán antes de introducir el cambio.",
+    "privacyContact": "Puedes enviar preguntas sobre privacidad o soporte a través del $LINK$."
+  },
+  "fr": {
+    "manualBlockHelp": "Collez un identifiant YouTube ou une URL de chaîne. Il sera vérifié et enregistré uniquement dans le stockage local de l’extension dans Firefox.",
+    "settingsPrivacy": "Les noms et les liens des chaînes, les paramètres et votre liste de blocage restent dans le stockage local de l’extension dans Firefox. ChannelFence ne les transmet ni à nous ni à qui que ce soit.",
+    "reviewHelp": "Un avis sincère sur Firefox Add-ons aide d’autres personnes à le découvrir.",
+    "welcomePrivacy": "Sans compte. Sans suivi. Sans serveur contrôlé par le développeur. Votre liste de blocage reste dans le stockage local de l’extension dans Firefox.",
+    "privacyStorage": "Les paramètres et les fiches des créateurs bloqués sont enregistrés uniquement dans le stockage local de l’extension dans Firefox, sur votre appareil, et ne sont jamais transmis au développeur. Les recherches de Shorts compacts envoient uniquement des URL publiques de Shorts à youtube.com afin que YouTube puisse renvoyer les noms publics des créateurs et les URL de leurs chaînes. Les requêtes ne contiennent pas d’identifiants de connexion au compte. ChannelFence n’envoie aucune requête à un serveur contrôlé par le développeur ni à un service autre que YouTube. Il ne vend pas de données, ne les utilise pas à des fins publicitaires et ne permet pas à des personnes de lire les données des utilisateurs.",
+    "privacyControl": "Vous pouvez consulter ou exporter la liste des créateurs bloqués, débloquer des créateurs ou effacer la liste depuis les paramètres de ChannelFence. Lorsque vous désinstallez ChannelFence, Firefox supprime les données de l’extension enregistrées localement.",
+    "privacyChanges": "Si les pratiques de ChannelFence en matière de données changent, cette politique et les déclarations sur Firefox Add-ons seront mises à jour avant l’introduction de ces changements.",
+    "privacyContact": "Les questions relatives à la confidentialité et à l’assistance peuvent être envoyées via le $LINK$."
+  },
+  "hi": {
+    "manualBlockHelp": "YouTube हैंडल या चैनल URL पेस्ट करें। इसकी जाँच करके इसे केवल Firefox के एक्सटेंशन के लोकल स्टोरेज में सेव किया जाता है।",
+    "settingsPrivacy": "चैनल के नाम, चैनल लिंक, सेटिंग और आपकी ब्लॉक सूची Firefox के एक्सटेंशन के लोकल स्टोरेज में रहते हैं। ChannelFence इन्हें हमें या किसी और को नहीं भेजता।",
+    "reviewHelp": "Firefox Add-ons पर ईमानदार समीक्षा लिखने से दूसरों को इसे खोजने में मदद मिलती है।",
+    "welcomePrivacy": "कोई खाता नहीं। कोई ट्रैकिंग नहीं। डेवलपर के नियंत्रण वाला कोई सर्वर नहीं। आपकी ब्लॉक सूची Firefox के एक्सटेंशन के लोकल स्टोरेज में रहती है।",
+    "privacyStorage": "सेटिंग और ब्लॉक किए गए क्रिएटर के रिकॉर्ड केवल आपके डिवाइस पर Firefox के एक्सटेंशन के लोकल स्टोरेज में रखे जाते हैं और कभी डेवलपर को नहीं भेजे जाते। छोटे Shorts कार्ड की जानकारी माँगते समय केवल सार्वजनिक Short URL youtube.com पर भेजे जाते हैं, ताकि YouTube क्रिएटर के सार्वजनिक नाम और चैनल URL लौटा सके। इन अनुरोधों में खाते के लॉगिन क्रेडेंशियल शामिल नहीं होते। ChannelFence डेवलपर के नियंत्रण वाले किसी सर्वर या YouTube के अलावा किसी अन्य सेवा को अनुरोध नहीं भेजता। यह डेटा नहीं बेचता, विज्ञापन के लिए डेटा का इस्तेमाल नहीं करता और किसी व्यक्ति को उपयोगकर्ताओं का डेटा पढ़ने की अनुमति नहीं देता।",
+    "privacyControl": "ChannelFence की सेटिंग में आप ब्लॉक किए गए क्रिएटर की सूची देख या एक्सपोर्ट कर सकते हैं, क्रिएटर को अनब्लॉक कर सकते हैं या सूची मिटा सकते हैं। ChannelFence को अनइंस्टॉल करने पर Firefox एक्सटेंशन का स्थानीय रूप से सेव किया गया डेटा मिटा देता है।",
+    "privacyChanges": "अगर ChannelFence के डेटा इस्तेमाल करने के तरीके बदलते हैं, तो बदलाव लागू होने से पहले इस नीति और Firefox Add-ons पर दी गई जानकारी को अपडेट किया जाएगा।",
+    "privacyContact": "गोपनीयता या सहायता से जुड़े सवाल $LINK$ के ज़रिए भेजे जा सकते हैं।"
+  },
+  "id": {
+    "manualBlockHelp": "Tempel nama sebutan YouTube atau URL channel. Input akan diperiksa dan disimpan hanya di penyimpanan lokal ekstensi Firefox.",
+    "settingsPrivacy": "Nama dan link channel, setelan, serta daftar blokir Anda tetap berada di penyimpanan lokal ekstensi Firefox. ChannelFence tidak mengirimkannya kepada kami atau siapa pun.",
+    "reviewHelp": "Ulasan jujur di Firefox Add-ons membantu orang lain menemukannya.",
+    "welcomePrivacy": "Tanpa akun. Tanpa pelacakan. Tanpa server yang dikendalikan pengembang. Daftar blokir Anda tetap berada di penyimpanan lokal ekstensi Firefox.",
+    "privacyStorage": "Setelan dan catatan kreator yang diblokir hanya disimpan di penyimpanan lokal ekstensi Firefox pada perangkat Anda dan tidak pernah dikirim ke pengembang. Pencarian informasi Shorts ringkas hanya mengirim URL publik Short ke youtube.com agar YouTube dapat mengembalikan nama publik kreator dan URL channel. Permintaan tidak menyertakan kredensial akun. ChannelFence tidak mengirim permintaan ke server yang dikendalikan pengembang atau layanan apa pun di luar YouTube. ChannelFence tidak menjual data, menggunakan data untuk iklan, atau mengizinkan orang membaca data pengguna.",
+    "privacyControl": "Anda dapat melihat atau mengekspor daftar kreator yang diblokir, membuka blokir kreator, atau mengosongkan daftar melalui setelan ChannelFence. Saat ChannelFence di-uninstal, Firefox menghapus data ekstensi yang tersimpan secara lokal.",
+    "privacyChanges": "Jika praktik penggunaan data ChannelFence berubah, kebijakan ini dan pengungkapan di Firefox Add-ons akan diperbarui sebelum perubahan diterapkan.",
+    "privacyContact": "Pertanyaan tentang privasi dan dukungan dapat dikirim melalui $LINK$."
+  },
+  "it": {
+    "manualBlockHelp": "Incolla un handle YouTube o l'URL di un canale. Viene verificato e salvato solo nello spazio di archiviazione locale dell'estensione in Firefox.",
+    "settingsPrivacy": "Nomi e link dei canali, impostazioni ed elenco dei blocchi restano nello spazio di archiviazione locale dell'estensione in Firefox. ChannelFence non li invia a noi né ad altri.",
+    "reviewHelp": "Una recensione sincera su Firefox Add-ons aiuta altre persone a scoprirlo.",
+    "welcomePrivacy": "Nessun account. Nessun tracciamento. Nessun server controllato dallo sviluppatore. L'elenco dei blocchi resta nello spazio di archiviazione locale dell'estensione in Firefox.",
+    "privacyStorage": "Le impostazioni e i dati dei creator bloccati vengono conservati solo nello spazio di archiviazione locale dell'estensione in Firefox sul tuo dispositivo e non vengono mai trasmessi allo sviluppatore. Le ricerche relative agli Shorts compatti inviano a youtube.com solo gli URL pubblici degli Shorts, affinché YouTube possa restituire i nomi pubblici dei creator e gli URL dei canali. Le richieste non includono le credenziali dell'account. ChannelFence non invia richieste a server controllati dallo sviluppatore né a servizi diversi da YouTube. Non vende dati, non li usa per la pubblicità e non consente a persone di leggere i dati degli utenti.",
+    "privacyControl": "Nelle impostazioni di ChannelFence puoi visualizzare o esportare l'elenco dei creator bloccati, sbloccare creator o cancellare l'elenco. Quando disinstalli ChannelFence, Firefox elimina i dati dell'estensione salvati localmente.",
+    "privacyChanges": "Se le modalità di trattamento dei dati di ChannelFence cambiano, questa informativa e le dichiarazioni su Firefox Add-ons verranno aggiornate prima che le nuove modalità vengano introdotte.",
+    "privacyContact": "Puoi inviare domande sulla privacy o richieste di assistenza tramite il $LINK$."
+  },
+  "ja": {
+    "manualBlockHelp": "YouTube のハンドルまたはチャンネル URL を貼り付けてください。入力内容を検証し、Firefox の拡張機能用ローカルストレージにのみ保存します。",
+    "settingsPrivacy": "チャンネル名、チャンネルのリンク、設定、ブロックリストは Firefox の拡張機能用ローカルストレージに保存されます。ChannelFence がこれらを開発者や第三者に送信することはありません。",
+    "reviewHelp": "Firefox Add-ons での率直なレビューは、他の方がこの拡張機能を見つけるきっかけになります。",
+    "welcomePrivacy": "アカウント不要。追跡なし。開発者が管理するサーバーなし。ブロックリストは Firefox の拡張機能用ローカルストレージに保存されます。",
+    "privacyStorage": "設定とブロックしたクリエイターの記録は、お使いのデバイスの Firefox 拡張機能用ローカルストレージにのみ保存され、開発者に送信されることはありません。小型のショートカードの情報を取得する際は、公開ショート URL のみを youtube.com に送信し、YouTube から公開クリエイター名とチャンネル URL を取得します。このリクエストにアカウントの認証情報は含まれません。ChannelFence は、開発者が管理するサーバーや YouTube 以外のサービスにリクエストを送信しません。データを販売したり、広告に利用したり、人によるユーザーデータの閲覧を認めたりすることはありません。",
+    "privacyControl": "ChannelFence の設定から、ブロックしたクリエイターの確認、エクスポート、ブロック解除、リスト全体の消去ができます。ChannelFence をアンインストールすると、Firefox が拡張機能のローカル保存データを削除します。",
+    "privacyChanges": "ChannelFence のデータの取り扱いを変更する場合は、変更を実施する前に、このポリシーと Firefox Add-ons の開示情報を更新します。",
+    "privacyContact": "プライバシーやサポートに関するご質問は、$LINK$ からお寄せください。"
+  },
+  "ko": {
+    "manualBlockHelp": "YouTube 핸들 또는 채널 URL을 붙여 넣으세요. 입력값을 확인한 후 Firefox의 로컬 확장 프로그램 저장소에만 저장합니다.",
+    "settingsPrivacy": "채널 이름, 채널 링크, 설정 및 차단 목록은 Firefox의 로컬 확장 프로그램 저장소에 보관됩니다. ChannelFence는 이 정보를 개발자나 다른 사람에게 전송하지 않습니다.",
+    "reviewHelp": "솔직한 Firefox Add-ons 리뷰는 다른 사람들이 ChannelFence를 찾는 데 도움이 됩니다.",
+    "welcomePrivacy": "계정, 추적 또는 개발자가 운영하는 서버가 없습니다. 차단 목록은 Firefox의 로컬 확장 프로그램 저장소에 보관됩니다.",
+    "privacyStorage": "설정과 차단한 크리에이터 기록은 기기의 Firefox 로컬 확장 프로그램 저장소에만 저장되며 개발자에게 전송되지 않습니다. 작은 Shorts 카드 조회 시 YouTube가 공개 크리에이터 이름과 채널 URL을 반환할 수 있도록 공개 Shorts URL만 youtube.com으로 전송합니다. 요청에는 계정 인증 정보가 포함되지 않습니다. ChannelFence는 개발자가 운영하는 서버나 YouTube 이외의 서비스에 요청을 보내지 않습니다. 데이터를 판매하거나 광고에 사용하지 않으며 사람이 사용자 데이터를 열람하도록 허용하지 않습니다.",
+    "privacyControl": "ChannelFence 설정에서 차단한 크리에이터를 확인하거나 내보내고, 차단을 해제하거나 목록을 지울 수 있습니다. ChannelFence를 제거하면 Firefox이 확장 프로그램의 로컬 저장 데이터를 삭제합니다.",
+    "privacyChanges": "ChannelFence의 데이터 처리 방식이 변경되면 변경된 방식이 적용되기 전에 이 방침과 Firefox Add-ons의 공개 내용을 업데이트합니다.",
+    "privacyContact": "개인정보 및 지원 관련 질문은 $LINK$를 통해 제출할 수 있습니다."
+  },
+  "nl": {
+    "manualBlockHelp": "Plak een YouTube-handle of kanaal-URL. Deze wordt gecontroleerd en alleen opgeslagen in de lokale extensieopslag van Firefox.",
+    "settingsPrivacy": "Kanaalnamen, kanaallinks, instellingen en je blokkeerlijst blijven in de lokale extensieopslag van Firefox. ChannelFence stuurt ze niet naar ons of anderen.",
+    "reviewHelp": "Met een eerlijke review op Firefox Add-ons help je anderen de extensie te vinden.",
+    "welcomePrivacy": "Geen account. Geen tracking. Geen server onder beheer van de ontwikkelaar. Je blokkeerlijst blijft in de lokale extensieopslag van Firefox.",
+    "privacyStorage": "Instellingen en gegevens van geblokkeerde makers worden alleen bewaard in de lokale extensieopslag van Firefox op je apparaat en nooit naar de ontwikkelaar verstuurd. Bij het opzoeken van compacte Shorts worden alleen openbare Short-URL's naar youtube.com gestuurd, zodat YouTube de openbare namen van makers en kanaal-URL's kan terugsturen. Verzoeken bevatten geen inloggegevens van je account. ChannelFence verstuurt geen verzoeken naar een server onder beheer van de ontwikkelaar of naar diensten buiten YouTube. De extensie verkoopt geen gegevens, gebruikt gegevens niet voor advertenties en staat niet toe dat mensen gebruikersgegevens lezen.",
+    "privacyControl": "In de instellingen van ChannelFence kun je geblokkeerde makers bekijken, de lijst exporteren, makers deblokkeren of de lijst wissen. Als je ChannelFence verwijdert, verwijdert Firefox de lokaal opgeslagen gegevens van de extensie.",
+    "privacyChanges": "Als de manier waarop ChannelFence met gegevens omgaat verandert, worden dit beleid en de verklaringen op Firefox Add-ons bijgewerkt voordat de wijziging wordt ingevoerd.",
+    "privacyContact": "Vragen over privacy en ondersteuning kun je stellen via de $LINK$."
+  },
+  "pt_BR": {
+    "manualBlockHelp": "Cole um identificador ou URL de canal do YouTube. Ele será validado e salvo apenas no armazenamento local da extensão no Firefox.",
+    "settingsPrivacy": "Nomes e links de canais, configurações e sua lista de bloqueio ficam no armazenamento local da extensão no Firefox. O ChannelFence não envia esses dados para nós nem para outras pessoas.",
+    "reviewHelp": "Uma avaliação sincera no Firefox Add-ons ajuda outras pessoas a encontrá-lo.",
+    "welcomePrivacy": "Sem conta. Sem rastreamento. Sem servidor controlado pelo desenvolvedor. Sua lista de bloqueio fica no armazenamento local da extensão no Firefox.",
+    "privacyStorage": "As configurações e os registros de criadores bloqueados são armazenados apenas no armazenamento local da extensão no Firefox, no seu dispositivo, e nunca são transmitidos ao desenvolvedor. As consultas de Shorts compactos enviam apenas URLs públicas de Shorts ao youtube.com, para que o YouTube retorne os nomes públicos dos criadores e as URLs dos canais. As solicitações não incluem credenciais de conta. O ChannelFence não faz solicitações a servidores controlados pelo desenvolvedor nem a serviços externos ao YouTube. Ele não vende dados, não usa dados para publicidade e não permite que pessoas leiam os dados dos usuários.",
+    "privacyControl": "Você pode visualizar, exportar, desbloquear ou remover todos os criadores bloqueados nas configurações do ChannelFence. Ao desinstalar o ChannelFence, o Firefox remove os dados armazenados localmente pela extensão.",
+    "privacyChanges": "Se as práticas de uso de dados do ChannelFence mudarem, esta política e as declarações no Firefox Add-ons serão atualizadas antes da adoção das novas práticas.",
+    "privacyContact": "Dúvidas sobre privacidade e suporte podem ser enviadas pelo $LINK$."
+  },
+  "ru": {
+    "manualBlockHelp": "Вставьте псевдоним YouTube или URL канала. Он будет проверен и сохранён только в локальном хранилище расширения в Firefox.",
+    "settingsPrivacy": "Названия и ссылки каналов, настройки и список блокировки остаются в локальном хранилище расширения в Firefox. ChannelFence не отправляет их ни нам, ни кому-либо ещё.",
+    "reviewHelp": "Честный отзыв на Firefox Add-ons поможет другим найти расширение.",
+    "welcomePrivacy": "Без аккаунта. Без отслеживания. Без сервера под управлением разработчика. Ваш список блокировки остаётся в локальном хранилище расширения в Firefox.",
+    "privacyStorage": "Настройки и записи заблокированных авторов хранятся только в локальном хранилище расширения в Firefox на вашем устройстве и никогда не передаются разработчику. При проверке компактных Shorts на youtube.com отправляются только общедоступные URL роликов, чтобы YouTube мог вернуть общедоступные имена авторов и URL каналов. Запросы не содержат учётных данных аккаунта. ChannelFence не отправляет запросы на сервер под управлением разработчика или в какие-либо сервисы, кроме YouTube. Расширение не продаёт данные, не использует их для рекламы и не предоставляет людям доступ для чтения данных пользователей.",
+    "privacyControl": "В настройках ChannelFence можно просмотреть и экспортировать список заблокированных авторов, снять отдельные блокировки или очистить весь список. При удалении ChannelFence браузер Firefox удаляет локально сохранённые данные расширения.",
+    "privacyChanges": "Если правила работы ChannelFence с данными изменятся, эта политика и сведения на Firefox Add-ons будут обновлены до вступления изменений в силу.",
+    "privacyContact": "Вопросы о конфиденциальности и поддержке можно отправить через $LINK$."
+  },
+  "tr": {
+    "manualBlockHelp": "Bir YouTube herkese açık kullanıcı adı veya kanal URL'si yapıştırın. Girdi doğrulanır ve yalnızca Firefox'un yerel uzantı depolama alanına kaydedilir.",
+    "settingsPrivacy": "Kanal adları, kanal bağlantıları, ayarlar ve engel listeniz Firefox'un yerel uzantı depolama alanında kalır. ChannelFence bunları bize veya başka birine göndermez.",
+    "reviewHelp": "Firefox Add-ons'ta dürüst bir değerlendirme, başkalarının uzantıyı bulmasına yardımcı olur.",
+    "welcomePrivacy": "Hesap yok. Takip yok. Geliştirici tarafından kontrol edilen sunucu yok. Engel listeniz Firefox'un yerel uzantı depolama alanında kalır.",
+    "privacyStorage": "Ayarlar ve engellenen içerik üreticisi kayıtları yalnızca cihazınızdaki Firefox'un yerel uzantı depolama alanında saklanır ve asla geliştiriciye aktarılmaz. Kompakt Shorts sorguları, YouTube'un herkese açık içerik üreticisi adlarını ve kanal URL'lerini döndürebilmesi için yalnızca herkese açık Short URL'lerini youtube.com'a gönderir. İsteklere hesap kimlik bilgileri dahil edilmez. ChannelFence, geliştirici tarafından kontrol edilen bir sunucuya veya YouTube dışındaki herhangi bir hizmete istek göndermez. Veri satmaz, verileri reklam için kullanmaz ve insanların kullanıcı verilerini okumasına izin vermez.",
+    "privacyControl": "ChannelFence ayarlarından engellenen içerik üreticilerini görüntüleyebilir veya dışa aktarabilir, engelleri kaldırabilir ya da listeyi temizleyebilirsiniz. ChannelFence kaldırıldığında Firefox, uzantının yerel olarak saklanan verilerini siler.",
+    "privacyChanges": "ChannelFence'in veri işleme uygulamaları değişirse bu politika ve Firefox Add-ons açıklamaları, değişiklik uygulanmadan önce güncellenir.",
+    "privacyContact": "Gizlilik ve destek soruları, $LINK$ üzerinden iletilebilir."
+  },
+  "vi": {
+    "manualBlockHelp": "Dán tên người dùng YouTube hoặc URL kênh. Dữ liệu này được kiểm tra và chỉ lưu trong bộ nhớ cục bộ của tiện ích trên Firefox.",
+    "settingsPrivacy": "Tên kênh, liên kết kênh, cài đặt và danh sách chặn nằm trong bộ nhớ cục bộ của tiện ích trên Firefox. ChannelFence không gửi các dữ liệu này cho chúng tôi hay bất kỳ ai khác.",
+    "reviewHelp": "Đánh giá chân thực trên Firefox Add-ons giúp người khác tìm thấy tiện ích.",
+    "welcomePrivacy": "Không cần tài khoản. Không theo dõi. Không có máy chủ do nhà phát triển kiểm soát. Danh sách chặn nằm trong bộ nhớ cục bộ của tiện ích trên Firefox.",
+    "privacyStorage": "Cài đặt và hồ sơ nhà sáng tạo bị chặn chỉ được lưu trong bộ nhớ cục bộ của tiện ích trên Firefox trên thiết bị của bạn, và không bao giờ được truyền cho nhà phát triển. Việc tra cứu các thẻ Shorts nhỏ gọn chỉ gửi URL Shorts công khai đến youtube.com để YouTube trả về tên nhà sáng tạo và URL kênh công khai. Các yêu cầu không chứa thông tin xác thực tài khoản. ChannelFence không gửi yêu cầu đến máy chủ do nhà phát triển kiểm soát hay bất kỳ dịch vụ nào ngoài YouTube. Tiện ích không bán dữ liệu, không dùng dữ liệu cho quảng cáo và không cho phép con người đọc dữ liệu người dùng.",
+    "privacyControl": "Bạn có thể xem, xuất, bỏ chặn hoặc xóa danh sách nhà sáng tạo bị chặn trong cài đặt ChannelFence. Khi gỡ cài đặt ChannelFence, Firefox sẽ xóa dữ liệu được lưu cục bộ của tiện ích.",
+    "privacyChanges": "Nếu cách ChannelFence xử lý dữ liệu thay đổi, chính sách này và thông tin công bố trên Firefox Add-ons sẽ được cập nhật trước khi áp dụng thay đổi.",
+    "privacyContact": "Bạn có thể gửi câu hỏi về quyền riêng tư và hỗ trợ qua $LINK$."
+  },
+  "zh_CN": {
+    "manualBlockHelp": "粘贴 YouTube 标识名或频道网址。验证后，仅保存在 Firefox 的扩展程序本地存储中。",
+    "settingsPrivacy": "频道名称、频道链接、设置和屏蔽列表均保存在 Firefox 的扩展程序本地存储中。ChannelFence 不会将这些数据发送给我们或任何其他人。",
+    "reviewHelp": "在 Firefox Add-ons 留下真实评价，可以帮助更多人发现它。",
+    "welcomePrivacy": "无需账号。不进行跟踪。没有开发者控制的服务器。屏蔽列表保存在 Firefox 的扩展程序本地存储中。",
+    "privacyStorage": "设置和已屏蔽创作者的记录仅保存在你设备上的 Firefox 扩展程序本地存储中，绝不会传输给开发者。查询小型 Shorts 卡片时，仅向 youtube.com 发送公开的 Shorts 网址，以便 YouTube 返回公开的创作者名称和频道网址。请求不包含账号凭据。ChannelFence 不会向开发者控制的服务器或任何非 YouTube 服务发送请求。它不会出售数据、将数据用于广告，也不会允许人员读取用户数据。",
+    "privacyControl": "你可以在 ChannelFence 设置中查看、导出、解除屏蔽或清空已屏蔽创作者列表。卸载 ChannelFence 后，Firefox 会删除扩展程序在本地保存的数据。",
+    "privacyChanges": "如果 ChannelFence 的数据处理方式发生变更，我们会在实施变更前更新本政策及 Firefox Add-ons 中的披露信息。",
+    "privacyContact": "有关隐私和支持的问题，可通过 $LINK$ 提交。"
+  },
+  "zh_TW": {
+    "manualBlockHelp": "貼上 YouTube 帳號代碼或頻道網址。驗證後，僅儲存於 Firefox 的擴充功能本機儲存空間。",
+    "settingsPrivacy": "頻道名稱、頻道連結、設定與封鎖清單都保存在 Firefox 的擴充功能本機儲存空間。ChannelFence 不會將這些資料傳送給我們或任何其他人。",
+    "reviewHelp": "在 Firefox Add-ons 留下真實評論，可以幫助更多人找到它。",
+    "welcomePrivacy": "不需帳戶。不進行追蹤。沒有開發者控管的伺服器。封鎖清單保存在 Firefox 的擴充功能本機儲存空間。",
+    "privacyStorage": "設定與已封鎖創作者的記錄，僅儲存在你裝置上的 Firefox 擴充功能本機儲存空間，絕不會傳送給開發者。查詢精簡版 Shorts 卡片時，只會將公開的 Shorts 網址傳送至 youtube.com，讓 YouTube 傳回公開的創作者名稱與頻道網址。這些要求不包含帳戶憑證。ChannelFence 不會向開發者控管的伺服器或任何非 YouTube 服務發送要求。它不會販售資料、將資料用於廣告，也不會允許人員讀取使用者資料。",
+    "privacyControl": "你可以在 ChannelFence 設定中查看、匯出、解除封鎖或清除已封鎖創作者清單。解除安裝 ChannelFence 後，Firefox 會刪除擴充功能儲存在本機的資料。",
+    "privacyChanges": "如果 ChannelFence 的資料處理方式有變更，我們會在實施前更新本政策及 Firefox Add-ons 中的揭露資訊。",
+    "privacyContact": "隱私權與支援相關問題，可透過 $LINK$ 提交。"
+  }
+}

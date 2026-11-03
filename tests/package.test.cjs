@@ -153,6 +153,7 @@ test("compact Shorts metadata stays on YouTube and excludes account credentials"
   const privacyPolicy = fs.readFileSync(path.join(root, "PRIVACY.md"), "utf8");
   assert.match(contentScript, /new URL\("\/oembed", location\.origin\)/);
   assert.match(contentScript, /credentials: "omit"/);
+  assert.match(contentScript, /referrerPolicy: "no-referrer"/);
   assert.match(contentScript, /cache: "force-cache"/);
   assert.match(privacyPolicy, /YouTube's oEmbed endpoint/);
 });
