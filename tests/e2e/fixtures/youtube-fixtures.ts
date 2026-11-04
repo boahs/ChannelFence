@@ -55,11 +55,13 @@ export function rightRailLockup({
   displayName,
   id,
   menu = true,
-  title = `A recommendation from ${displayName}`
-}: Omit<CreatorCardOptions, "handle" | "tag">): string {
+  title = `A recommendation from ${displayName}`,
+  metadataText = displayName
+}: Omit<CreatorCardOptions, "handle" | "tag"> & { metadataText?: string }): string {
   const safeId = escapeHtml(id);
   const safeName = escapeHtml(displayName);
   const safeTitle = escapeHtml(title);
+  const safeMetadata = escapeHtml(metadataText);
   const menuMarkup = menu
     ? `<div class="ytLockupViewModelMenuButton">
         <button-view-model>
@@ -82,7 +84,7 @@ export function rightRailLockup({
             <h3>${safeTitle}</h3>
             <div class="ytLockupMetadataViewModelMetadata">
               <div class="ytContentMetadataViewModelMetadataRow">
-                <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextLastPart" role="text">${safeName}</span>
+                <span class="ytContentMetadataViewModelMetadataText ytContentMetadataViewModelMetadataTextLastPart" role="text">${safeMetadata}</span>
               </div>
               <div class="ytContentMetadataViewModelMetadataRow"><span role="text">274K views · 21 hours ago</span></div>
             </div>

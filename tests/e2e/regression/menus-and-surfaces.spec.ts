@@ -18,6 +18,7 @@ import {
   watchOwners
 } from "../fixtures/youtube-fixtures";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
+import { readNativeLockupCreator } from "../fixtures/native-lockup-creator";
 
 test.describe("YouTube surfaces and menus", () => {
   test("does not report a search result as the current page creator", async ({
@@ -850,6 +851,41 @@ test.describe("YouTube surfaces and menus", () => {
       aliases: ["name:right rail creator"],
       displayName: "Right Rail Creator"
     });
+  });
+
+  test("blocks movie recommendations by their native creator instead of genre metadata", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open([
+      rightRailLockup({ displayName: "YouTube Movies", metadataText: "Music 2024", id: "movie-one" }),
+      rightRailLockup({ displayName: "YouTube Movies", metadataText: "Drama 2023", id: "movie-two" }),
+      rightRailLockup({ displayName: "Other Movie Channel", metadataText: "Music 2024", id: "other-movie" })
+    ].join(""), "/watch?v=fixture-video");
+
+    const firstMovie = youtube.card("movie-one");
+    await expect(firstMovie.locator(".ytContentMetadataViewModelMetadataText")).toHaveText("Music 2024");
+    expect(await firstMovie.evaluate(readNativeLockupCreator, {
+      creator: "Example Creator", goToChannel: "Go to channel Example Creator"
+    })).toBe("YouTube Movies");
+    await expect(youtube.blockButton("movie-one")).toHaveCount(1);
+    await expect(youtube.blockButton("movie-one")).toBeVisible();
+    await expect(youtube.blockButton("movie-one")).toHaveAttribute("aria-label", "Block YouTube Movies");
+
+    const menuItem = await youtube.openCreatorMenu("movie-one-menu");
+    await expect(menuItem).toHaveAttribute("aria-label", "Block YouTube Movies with ChannelFence");
+    await menuItem.click();
+    await expect(firstMovie).toBeHidden();
+    await expect(youtube.card("movie-two")).toBeHidden();
+    await expect(youtube.card("other-movie")).toBeVisible();
+
+    const stored = await extensionStorage.get<{
+      cfBlockedChannels: Array<{ key: string; aliases: string[]; displayName: string }>;
+    }>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([expect.objectContaining({
+      key: "name:youtube movies", aliases: ["name:youtube movies"], displayName: "YouTube Movies"
+    })]);
   });
 
   test("identifies and blocks the creator of a YouTube Course card", async ({

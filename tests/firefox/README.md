@@ -41,6 +41,8 @@ Manual runs accept an optional test-title filter for investigating a failure. Le
 
 Do not count intercepted fixtures as live-site coverage. The live tests are under `tests/firefox/live` and use unmodified YouTube responses.
 
+Watch-page checks report `[YOUTUBE_ACCESS_BLOCKED]` when Google redirects the runner to its unusual-traffic/CAPTCHA page. That result remains a failure: the affected watch-page behavior was not verified. Inspect the saved URL and screenshot before attributing a language or selector failure to the extension. Recommendation creator assertions use the native avatar's channel label instead of movie genre/year metadata.
+
 Reports are written to `firefox-playwright-report/` and `firefox-test-results/`. Failed tests attach page HTML, page errors and screenshots where Firefox permits capture. Per-language YouTube menu screenshots are included in successful deterministic reports too. Extension pages have DOM and layout assertions; Firefox BiDi currently restricts screenshot capture on these privileged pages. CI retains diagnostics and the unsigned ZIP for 14 days.
 
 References: [Puppeteer Firefox/BiDi support](https://pptr.dev/webdriver-bidi), [runtime extension installation](https://pptr.dev/api/puppeteer.browser.installextension), and [Mozilla temporary installation](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/).
