@@ -40,7 +40,6 @@ jobs:
       PACKAGE_SUFFIX: ${{ matrix.suffix }}
       PLAYWRIGHT_CONFIG: ${{ matrix.config }}
       PLAYWRIGHT_PROJECT: ${{ matrix.project }}
-      RELEASE_REPORTS: ${{ runner.temp }}/channelfence-reports
       STABILITY_GREP: ${{ inputs.stability_grep || 'keeps collaborators separate in|does not invent owners from unsupported Chinese|blocks movie recommendations by their native creator|linkless creator through the structural overflow menu|linkless right-rail three-dot menu' }}
     steps:
       - name: Check out repository
@@ -101,6 +100,7 @@ jobs:
           if ($manifest.version -ne $version) { throw 'Extracted package version does not match the release.' }
           $pathVariable = if ($env:RELEASE_BROWSER -eq 'Firefox') { 'CHANNELFENCE_FIREFOX_EXTENSION_PATH' } else { 'CHANNELFENCE_EXTENSION_PATH' }
           "$pathVariable=$extracted" >> $env:GITHUB_ENV
+          "RELEASE_REPORTS=$(Join-Path $env:RUNNER_TEMP 'channelfence-reports')" >> $env:GITHUB_ENV
           "path=$archive" >> $env:GITHUB_OUTPUT
           "version=$version" >> $env:GITHUB_OUTPUT
           "sha256=$((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash)" >> $env:GITHUB_OUTPUT
