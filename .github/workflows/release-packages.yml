@@ -1,0 +1,178 @@
+name: Release package checks
+run-name: Release package checks
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/release-packages.yml
+      - scripts/package.ps1
+      - scripts/build-firefox.mjs
+  workflow_dispatch:
+    inputs:
+      stability_grep:
+        description: Test-title pattern to repeat three times after the complete suites
+        type: string
+        required: true
+        default: keeps collaborators separate in|does not invent owners from unsupported Chinese|blocks movie recommendations by their native creator|linkless creator through the structural overflow menu|linkless right-rail three-dot menu
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: ${{ matrix.browser }} release package
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - browser: Chrome
+            config: playwright.config.ts
+            project: extension
+            suffix: ""
+          - browser: Firefox
+            config: playwright.firefox.config.ts
+            project: firefox
+            suffix: -firefox
+    env:
+      RELEASE_BROWSER: ${{ matrix.browser }}
+      PACKAGE_SUFFIX: ${{ matrix.suffix }}
+      PLAYWRIGHT_CONFIG: ${{ matrix.config }}
+      PLAYWRIGHT_PROJECT: ${{ matrix.project }}
+      RELEASE_REPORTS: ${{ runner.temp }}/channelfence-reports
+      STABILITY_GREP: ${{ inputs.stability_grep || 'keeps collaborators separate in|does not invent owners from unsupported Chinese|blocks movie recommendations by their native creator|linkless creator through the structural overflow menu|linkless right-rail three-dot menu' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Validate stability filter
+        run: node -e 'if (!process.env.STABILITY_GREP.trim()) throw new Error("The stability filter must not be blank"); new RegExp(process.env.STABILITY_GREP);'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Chromium
+        if: matrix.browser == 'Chrome'
+        run: npx playwright install --with-deps chromium
+      - name: Install fonts for all supported Firefox interface languages
+        if: matrix.browser == 'Firefox'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-core fonts-noto-cjk fonts-noto-color-emoji
+      - name: Install stock Firefox
+        if: matrix.browser == 'Firefox'
+        id: firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+      - name: Install matching Firefox language packs
+        if: matrix.browser == 'Firefox'
+        run: node scripts/install-firefox-locales.mjs
+        env:
+          CHANNELFENCE_FIREFOX_PATH: ${{ steps.firefox.outputs.firefox-path }}
+          CHANNELFENCE_FIREFOX_VERSION: ${{ steps.firefox.outputs.firefox-version }}
+      - name: Run unit tests and check browser scenario coverage
+        if: matrix.browser == 'Chrome'
+        run: |
+          npm run test:unit
+          node scripts/check-browser-coverage.mjs
+      - name: Typecheck tests
+        run: npm run typecheck
+      - name: Build Chrome upload ZIP
+        if: matrix.browser == 'Chrome'
+        shell: pwsh
+        run: ./scripts/package.ps1
+      - name: Build and lint Firefox upload ZIP
+        if: matrix.browser == 'Firefox'
+        run: npm run build:firefox
+      - name: Extract the finished upload ZIP for testing
+        id: archive
+        shell: pwsh
+        run: |
+          $version = (Get-Content -Raw -LiteralPath manifest.json | ConvertFrom-Json).version
+          $archive = (Resolve-Path -LiteralPath "dist/ChannelFence-$version$env:PACKAGE_SUFFIX.zip").Path
+          $extracted = Join-Path $env:RUNNER_TEMP "channelfence-release-$env:RELEASE_BROWSER"
+          New-Item -ItemType Directory -Path $extracted | Out-Null
+          Expand-Archive -LiteralPath $archive -DestinationPath $extracted
+          $manifest = Get-Content -Raw -LiteralPath (Join-Path $extracted 'manifest.json') | ConvertFrom-Json
+          if ($manifest.version -ne $version) { throw 'Extracted package version does not match the release.' }
+          $pathVariable = if ($env:RELEASE_BROWSER -eq 'Firefox') { 'CHANNELFENCE_FIREFOX_EXTENSION_PATH' } else { 'CHANNELFENCE_EXTENSION_PATH' }
+          "$pathVariable=$extracted" >> $env:GITHUB_ENV
+          "path=$archive" >> $env:GITHUB_OUTPUT
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "sha256=$((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash)" >> $env:GITHUB_OUTPUT
+      - name: Run the complete suite against the extracted package without retries
+        run: >-
+          npx playwright test --config="$PLAYWRIGHT_CONFIG" --project="$PLAYWRIGHT_PROJECT"
+          --retries=0 --workers=2 --reporter=line,html,junit --output="$RELEASE_REPORTS/full/results"
+        env:
+          CHANNELFENCE_FIREFOX_PATH: ${{ steps.firefox.outputs.firefox-path }}
+          PLAYWRIGHT_HTML_OUTPUT_DIR: ${{ runner.temp }}/channelfence-reports/full/html
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: ${{ runner.temp }}/channelfence-reports/full/junit.xml
+      - name: Repeat the focused checks three times without retries
+        run: >-
+          npx playwright test --config="$PLAYWRIGHT_CONFIG" --project="$PLAYWRIGHT_PROJECT"
+          --grep "$STABILITY_GREP" --repeat-each=3 --retries=0 --workers=2
+          --reporter=line,html,junit --output="$RELEASE_REPORTS/repeated/results"
+        env:
+          CHANNELFENCE_FIREFOX_PATH: ${{ steps.firefox.outputs.firefox-path }}
+          PLAYWRIGHT_HTML_OUTPUT_DIR: ${{ runner.temp }}/channelfence-reports/repeated/html
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: ${{ runner.temp }}/channelfence-reports/repeated/junit.xml
+      - name: Upload full-suite and repeated-check reports
+        if: always()
+        id: reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.browser }}-reports
+          path: ${{ runner.temp }}/channelfence-reports/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Verify the tested ZIP and record release evidence
+        shell: pwsh
+        env:
+          ARCHIVE_PATH: ${{ steps.archive.outputs.path }}
+          ARCHIVE_SHA256: ${{ steps.archive.outputs.sha256 }}
+          RELEASE_VERSION: ${{ steps.archive.outputs.version }}
+        run: |
+          $hash = (Get-FileHash -LiteralPath $env:ARCHIVE_PATH -Algorithm SHA256).Hash
+          if ($hash -ne $env:ARCHIVE_SHA256) { throw 'The upload ZIP changed after extraction.' }
+          $evidence = @(
+            "Browser: $env:RELEASE_BROWSER"
+            "Version: $env:RELEASE_VERSION"
+            "Commit: $env:GITHUB_SHA"
+            "Archive: $([System.IO.Path]::GetFileName($env:ARCHIVE_PATH))"
+            "SHA256: $hash"
+            "Run: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+            'Retries: 0; focused repeat count: 3'
+            "Focused filter: $env:STABILITY_GREP"
+          )
+          foreach ($stage in @('full', 'repeated')) {
+            [xml]$report = Get-Content -Raw -LiteralPath (Join-Path $env:RELEASE_REPORTS "$stage/junit.xml")
+            $results = $report.testsuites
+            if ([int]$results.tests -le 0 -or [int]$results.failures -ne 0 -or [int]$results.errors -ne 0 -or [int]$results.skipped -ne 0) {
+              throw "$stage checks did not all pass."
+            }
+            $evidence += "${stage}: $($results.tests) passed; $($results.time) seconds"
+          }
+          $evidence | Set-Content -LiteralPath "$env:ARCHIVE_PATH.validation.txt"
+          $evidence | ForEach-Object { "    $_" } >> $env:GITHUB_STEP_SUMMARY
+      - name: Upload the tested store package and validation evidence
+        id: package
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.browser }}-${{ steps.archive.outputs.version }}
+          path: |
+            ${{ steps.archive.outputs.path }}
+            ${{ steps.archive.outputs.path }}.validation.txt
+          if-no-files-found: error
+          retention-days: 14
+      - name: Link the package and test reports
+        shell: pwsh
+        env:
+          PACKAGE_URL: ${{ steps.package.outputs.artifact-url }}
+          REPORT_URL: ${{ steps.reports.outputs.artifact-url }}
+        run: |
+          "`n[Tested $env:RELEASE_BROWSER package]($env:PACKAGE_URL) | [Full and repeated test reports]($env:REPORT_URL)" >> $env:GITHUB_STEP_SUMMARY

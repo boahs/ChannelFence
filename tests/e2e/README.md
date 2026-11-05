@@ -46,6 +46,8 @@ try { npm run test:e2e } finally { Remove-Item Env:CHANNELFENCE_EXTENSION_PATH }
 
 Without this override, the fixture loads the extension from the project directory.
 
+For pre-upload validation, use [Release package checks](../../README.md#create-the-web-store-zip). Its Chrome job loads a fresh extraction of the final ZIP, runs the complete fixture suite with `--retries=0`, then runs the selected `stability_grep` cases with `--repeat-each=3 --retries=0`. Each stage has a separate HTML/JUnit report and test-output directory. The uploaded package is the same ZIP that was extracted for testing.
+
 When a YouTube DOM change causes a bug, first represent the smallest relevant markup in `youtube-fixtures.ts`, then add a focused spec named after the user-visible behavior. Keep the live suite small; behavior belongs in the deterministic suite whenever possible.
 
 For release testing against the current YouTube layout, follow the [Chrome Canary steps in the README](../../README.md#test-version-028-in-chrome-canary) and the [collaboration and feed layout acceptance checks](../../store/submission-checklist.md#collaboration-and-feed-layout-checks-for-026). Test two- and three-creator bylines, collapsed `A and 2 more` labels, existing individual blocks, Undo, and persistence after refresh. Confirm remaining videos fill blocked grid slots across rows, including after pausing and resuming filtering, and that full-width shelves keep their position. A collapsed label can identify unnamed collaborators only if YouTube also exposes their full names or channel links.
