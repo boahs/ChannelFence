@@ -6,14 +6,28 @@ Status: desktop Firefox version 0.2.8 has been submitted to Mozilla and is await
 
 Use Node.js 22.12 or later and run `npm ci`, then `npm run build:firefox`.
 
-- Temporary testing folder: `dist/ChannelFence-0.2.8-firefox/`.
-- Unsigned Mozilla upload package: `dist/ChannelFence-0.2.8-firefox.zip`.
+- Temporary testing folder: `dist/ChannelFence-0.2.9-firefox/`.
+- Unsigned Mozilla upload package: `dist/ChannelFence-0.2.9-firefox.zip`.
 - Firefox minimum: 142.0. Desktop only; Android has not been validated.
 - Add-on ID: `channelfence@channelfence.app`. This identifies the add-on; it is not a contact email address. Keep it stable for future updates.
 
 In a separate Firefox test profile, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select the generated folder's `manifest.json`. Allow YouTube access if Firefox prompts, then refresh existing YouTube tabs. Temporary add-ons are removed when Firefox closes. After rebuilding, use **Reload** in `about:debugging` and refresh YouTube.
 
 The package keeps the original Chrome manifest and catalogs unchanged. The build applies `manifest.firefox.json` and `scripts/firefox-locales.json`, removes the Chrome review link, validates the generated package using Mozilla's linter, and archives only runtime files and the license. No compilation, minification, remote code, or runtime dependencies are added.
+
+## Source package for Mozilla review
+
+The Firefox build preprocesses the manifest, translations, and HTML. Select **Yes** when Mozilla asks whether source code is needed, and attach the matching source archive under its source-code field, separately from the installable Firefox ZIP.
+
+Create the source archive from the exact commit recorded in the tested ZIP's `.validation.txt` file. With that commit checked out, run:
+
+```powershell
+git archive --format=zip --output=dist/ChannelFence-0.2.9-firefox-source.zip HEAD LICENSE package.json package-lock.json manifest.json manifest.firefox.json scripts/build-firefox.mjs scripts/firefox-locales.json src ui _locales assets/icons store/firefox.md
+```
+
+Reviewer build instructions: extract the source archive, use Node.js 24, and run `npm ci` followed by `npm run build:firefox` from its root. The build downloads the locked developer dependencies and writes `dist/ChannelFence-0.2.9-firefox.zip`. No credentials or private files are required. The release package workflow builds on Ubuntu; its validation record identifies the commit and tested archive. ZIP timestamps may differ when rebuilding, so compare extracted file contents.
+
+See [Mozilla's source-code submission requirements](https://extensionworkshop.com/documentation/publish/source-code-submission/).
 
 ## Validation
 

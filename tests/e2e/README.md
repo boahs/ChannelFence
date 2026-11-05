@@ -37,10 +37,10 @@ npm run test:e2e:live
 npm run test:report
 ```
 
-To test an extracted release ZIP, set `CHANNELFENCE_EXTENSION_PATH` to the extracted folder containing `manifest.json`. For example, after extracting to `dist/ChannelFence-0.2.8`:
+To test an extracted release ZIP, set `CHANNELFENCE_EXTENSION_PATH` to the extracted folder containing `manifest.json`. For example, after extracting to `dist/ChannelFence-0.2.9`:
 
 ```powershell
-$env:CHANNELFENCE_EXTENSION_PATH = (Resolve-Path .\dist\ChannelFence-0.2.8).Path
+$env:CHANNELFENCE_EXTENSION_PATH = (Resolve-Path .\dist\ChannelFence-0.2.9).Path
 try { npm run test:e2e } finally { Remove-Item Env:CHANNELFENCE_EXTENSION_PATH }
 ```
 

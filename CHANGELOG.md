@@ -1,5 +1,25 @@
 # Changelog
 
+<a id="v0-2-9"></a>
+
+## [0.2.9](#v0-2-9) - 2026-11-05
+
+- Fixed creator detection on supported Chinese collaboration cards so identified creators remain separate and individual blocks can hide matching videos.
+- Improved advancing past blocked Shorts when YouTube resets its first navigation scroll.
+- Fixed the popup extending beyond narrow Firefox windows in right-to-left layouts.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
+
+- Expanded Firefox regression coverage to match Chrome's blocking scenarios, including all eighteen supported interface languages.
+- Added checks for Chinese collaboration identities, Shorts scroll recovery, and narrow right-to-left popup layouts.
+- Added release checks against the extracted Chrome and Firefox upload ZIPs, with no retries and selected checks repeated three times. The tested archives include separate validation records with their commit and checksum.
+- Improved live YouTube diagnostics to distinguish access challenges from blocking failures. Live YouTube checks remain separate from the repeatable package tests.
+
+There are no new permissions, additional network requests, remote code, or extension analytics in this release.
+
+</details>
+
 <a id="v0-2-8"></a>
 
 ## [0.2.8](#v0-2-8) - 2026-11-01
