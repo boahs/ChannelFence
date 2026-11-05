@@ -66,7 +66,8 @@ for (const locale of allLocales) {
 
     test("blocks a right-rail creator through the modern overflow menu", async ({ addon }, testInfo) => {
       await openYouTube(addon, "/watch?v=dQw4w9WgXcQ", locale);
-      const selector = "ytd-watch-next-secondary-results-renderer yt-lockup-view-model:has(.ytLockupMetadataViewModelAvatar)";
+      // Collaboration journeys assert each owner's identity separately.
+      const selector = "ytd-watch-next-secondary-results-renderer yt-lockup-view-model:has(.ytLockupMetadataViewModelAvatar):not(:has(yt-avatar-stack-view-model))";
       const recommendation = await addon.page.waitForSelector(selector, { visible: true, timeout: 30_000 });
       if (!recommendation) throw new Error("No supported right-rail recommendation was rendered");
       const creatorLabel = { creator: locale.creator, goToChannel: locale.goToChannel };

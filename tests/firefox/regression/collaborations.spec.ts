@@ -24,13 +24,15 @@ function collaborationLockup({
   label = expandedByline,
   fullLabelAttribute,
   linkedOwners = [],
-  stackLabel = "Collaboration channels"
+  stackLabel = "Collaboration channels",
+  groupedFields
 }: {
   id?: string;
   label?: string;
   fullLabelAttribute?: "title" | "aria-label";
   linkedOwners?: Array<{ handle: string; displayName: string }>;
   stackLabel?: string | null;
+  groupedFields?: string[];
 } = {}): string {
   const byline = linkedOwners.length > 0
     ? linkedOwners.map((owner) =>
@@ -56,8 +58,11 @@ function collaborationLockup({
           <div class="ytLockupMetadataViewModelTextContainer">
             <h3>A video made by three creators</h3>
             <div class="ytLockupMetadataViewModelMetadata">
-              <div class="ytContentMetadataViewModelMetadataRow">
-                <span class="ytContentMetadataViewModelMetadataText" data-testid="${escapeHtml(id)}-byline" role="text"${fullLabel}>${byline}</span>
+              <div class="ytContentMetadataViewModelMetadataRow"${groupedFields ? ' role="group"' : ""}>
+                ${groupedFields ? groupedFields.map((field) =>
+                  `<span class="ytContentMetadataViewModelMetadataText" role="text">${escapeHtml(field)}</span>`
+                ).join('<span class="ytContentMetadataViewModelDelimiter" aria-hidden="true"></span>') :
+                  `<span class="ytContentMetadataViewModelMetadataText" data-testid="${escapeHtml(id)}-byline" role="text"${fullLabel}>${byline}</span>`}
               </div>
               <div class="ytContentMetadataViewModelMetadataRow">
                 <span role="text">125K views &middot; 2 days ago</span>
@@ -176,6 +181,82 @@ test.describe("Collaboration creator identities", () => {
       })
     ]);
     expect(JSON.stringify(stored.cfBlockedChannels)).not.toContain("2 more");
+  });
+
+  for (const scenario of [
+    { title: "the captured Chinese byline", names: ["Muetzel Aveni", "achenbach Showalte"] },
+    { title: "Chinese names containing 和 and punctuation", names: ["Muetzel和Aveni, and Co.", "和achenbach和Showalte & Co."] }
+  ]) {
+    test(`keeps collaborators separate in ${scenario.title}`, async ({ addon }) => {
+      const page = addon.page;
+      const [lead, guest] = scenario.names;
+      await openFixture(page, collaborationLockup({
+        stackLabel: "合作拍片參與頻道", groupedFields: [lead, `和${guest}`]
+      }) + rightRailLockup({ id: "solo-lead", displayName: lead }) +
+        rightRailLockup({ id: "solo-guest", displayName: guest }), "/watch?v=fixture-video", "zh-TW");
+
+      const card = '[data-testid="collaboration"]';
+      const expectedLabels = scenario.names.map((name) => `Block ${name}`);
+      await expectCount(page, card + " .cf-block-button", 2);
+      expect(await page.$$eval(card + " .cf-block-button", (buttons) =>
+        buttons.map((button) => button.getAttribute("aria-label")))).toEqual(expectedLabels);
+      // Reprocess native text with existing controls nested inside its field.
+      // Their icon/text must not turn a valid creator field into an unknown shape.
+      await page.$eval(card, (root) => {
+        const field = root.querySelector(".ytContentMetadataViewModelMetadataText")!;
+        field.append(...root.querySelectorAll(".cf-block-button"), document.createTextNode(" "));
+      });
+      await expectCount(page, card + " .cf-block-button", 2);
+      expect(await page.$$eval(card + " .cf-block-button", (buttons) =>
+        buttons.map((button) => button.getAttribute("aria-label")))).toEqual(expectedLabels);
+
+      await openCreatorMenu(page, '[data-testid="collaboration-menu"]');
+      await expectCount(page, ".cf-menu-item", 2);
+      expect(await page.$$eval(".cf-menu-item", (items) => items.map((item) => item.getAttribute("aria-label"))))
+        .toEqual(scenario.names.map((name) => `Block ${name} with ChannelFence`));
+      await page.locator(`[role="menuitem"][aria-label="Block ${guest} with ChannelFence"]`).click();
+      await expectVisible(page, card, false);
+      await expectVisible(page, '[data-testid="solo-guest"]', false);
+      await expectVisible(page, '[data-testid="solo-lead"]');
+      const stored = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+      expect(stored.cfBlockedChannels).toEqual([expect.objectContaining({
+        key: `name:${guest.toLowerCase()}`, aliases: [`name:${guest.toLowerCase()}`], displayName: guest
+      })]);
+    });
+  }
+
+  test("does not invent owners from unsupported Chinese groups and preserves linked identities", async ({ addon }) => {
+    const page = addon.page;
+    const nested = collaborationLockup({
+      id: "nested-group", stackLabel: "合作拍片參與頻道", groupedFields: ["Lead", "和Guest"]
+    }).replace(">和Guest</span>", '><span title="Verified">和Guest</span></span>');
+    const linked = collaborationLockup({
+      id: "linked-group", stackLabel: "合作拍片參與頻道", groupedFields: ["Lead", "和Guest"]
+    }).replace(">Lead</span>", '><a href="/@linked-lead">Lead</a></span>')
+      .replace(">和Guest</span>", '>和<a href="/@linked-guest">Guest</a></span>');
+    await openFixture(page, collaborationLockup({
+      id: "missing-connector", stackLabel: "合作拍片參與頻道", groupedFields: ["Lead", "Guest"]
+    }) + collaborationLockup({
+      id: "joined-field", stackLabel: "合作拍片參與頻道", groupedFields: ["甲和乙"]
+    }) + collaborationLockup({
+      id: "three-fields", stackLabel: "合作拍片參與頻道", groupedFields: ["Lead", "和Guest", "和Third"]
+    }) + nested + linked, "/watch?v=fixture-video", "zh-TW");
+
+    for (const id of ["missing-connector", "joined-field", "three-fields", "nested-group"]) {
+      await expectVisible(page, `[data-testid="${id}"]`);
+      await expectCount(page, `[data-testid="${id}"] .cf-block-button`, 0);
+    }
+    await expectCount(page, '[data-testid="linked-group"] .cf-block-button', 2);
+    await page.locator('[data-testid="linked-group"] button[aria-label="Block Guest"]').click();
+    await expectVisible(page, '[data-testid="linked-group"]', false);
+    await expectVisible(page, '[data-testid="missing-connector"]');
+    await expectVisible(page, '[data-testid="joined-field"]');
+    await expectVisible(page, '[data-testid="three-fields"]');
+    await expectVisible(page, '[data-testid="nested-group"]');
+    const stored = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([expect.objectContaining({
+      key: "handle:@linked-guest", aliases: ["handle:@linked-guest"], displayName: "linked-guest"
+    })]);
   });
 
   for (const fullLabelAttribute of ["title", "aria-label"] as const) {
