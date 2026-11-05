@@ -1,6 +1,6 @@
 {
   "name": "channelfence",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "private": true,
   "description": "Automated tests and developer tooling for the ChannelFence browser extension.",
   "license": "MIT",

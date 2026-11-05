@@ -12,14 +12,10 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
-What's new in 0.2.8:
+What's new in 0.2.9:
 
-- Added Japanese, Brazilian Portuguese, Russian, Spanish, French, German, Simplified Chinese, Traditional Chinese, Hindi, Indonesian, Bengali, Turkish, Vietnamese, Arabic, Italian, and Dutch interfaces alongside English and Korean.
-- Translated settings, the popup, onboarding, privacy information, and blocking controls.
-- ChannelFence follows Chrome's interface language by default, with a language selector in settings for a manual choice. YouTube keeps its own language setting; untranslated browser languages fall back to English.
-- Arabic includes right-to-left layouts for extension pages and ChannelFence controls.
-- Added optional Home controls to hide sponsored cards and annoying YouTube features, including supported Explore more topics and Playables shelves, featured or promotional banners, Premium/Primetime offers, recommendation prompts, and feedback surveys.
-- Added a compact Home grid with Small, Medium, and Large thumbnails that adapt to your window. The new Home controls are off by default and translated into all eighteen supported languages.
+- Improved blocking for supported Chinese collaboration cards by keeping identified creators separate.
+- Improved advancing past blocked Shorts when YouTube resets its first navigation scroll.
 
 Features:
 
@@ -33,6 +29,7 @@ Features:
 - Undo a block immediately or manage your complete block list at any time.
 - Pause blocking without deleting your list.
 - Import or export a private block-list backup.
+- Use eighteen interface languages, including Arabic with right-to-left layouts. Follow Chrome's interface language or choose a language in settings; YouTube keeps its own language setting.
 - No account, extension analytics, tracking, advertising, remote code, or developer-controlled server.
 
 Privacy by design:
