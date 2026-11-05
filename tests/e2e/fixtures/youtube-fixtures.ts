@@ -56,10 +56,11 @@ export function rightRailLockup({
   id,
   menu = true,
   title = `A recommendation from ${displayName}`,
-  metadataText = displayName
-}: Omit<CreatorCardOptions, "handle" | "tag"> & { metadataText?: string }): string {
+  metadataText = displayName,
+  avatarLabel = `Go to channel ${displayName}`
+}: Omit<CreatorCardOptions, "handle" | "tag"> & { metadataText?: string; avatarLabel?: string }): string {
   const safeId = escapeHtml(id);
-  const safeName = escapeHtml(displayName);
+  const safeAvatarLabel = escapeHtml(avatarLabel);
   const safeTitle = escapeHtml(title);
   const safeMetadata = escapeHtml(metadataText);
   const menuMarkup = menu
@@ -78,7 +79,7 @@ export function rightRailLockup({
       <div class="ytLockupViewModelMetadata">
         <yt-lockup-metadata-view-model>
           <div class="ytLockupMetadataViewModelAvatar">
-            <div role="button" aria-label="Go to channel ${safeName}"></div>
+            <div role="button" aria-label="${safeAvatarLabel}"></div>
           </div>
           <div class="ytLockupMetadataViewModelTextContainer">
             <h3>${safeTitle}</h3>

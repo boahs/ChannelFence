@@ -30,7 +30,7 @@ export const translatedLocales = [
     name: "Japanese", catalogCode: "ja", browserLocale: "ja-JP", uiLanguage: /^ja(?:-|$)/,
     youtubeLanguage: "ja", documentLanguage: /^ja(?:-|$)/, messages: ja,
     creator: "日本の料理", collaborators: ["最初のチャンネル", "次のチャンネル"],
-    goToChannel: "日本の料理 のチャンネルに移動", moreActions: "その他の操作",
+    goToChannel: "チャンネル「日本の料理」に移動します", moreActions: "その他の操作",
     views: "1回視聴", age: "23時間前", conjunction: "と"
   },
   {
@@ -44,7 +44,7 @@ export const translatedLocales = [
     name: "Russian", catalogCode: "ru", browserLocale: "ru-RU", uiLanguage: /^ru(?:-|$)/,
     youtubeLanguage: "ru", documentLanguage: /^ru(?:-|$)/, messages: ru,
     creator: "русскаякухня", collaborators: ["первыйканал", "второйканал"],
-    goToChannel: "Перейти на канал русскаякухня", moreActions: "Ещё",
+    goToChannel: 'Перейти на канал "русскаякухня"', moreActions: "Ещё",
     views: "1 просмотр", age: "23 часа назад", conjunction: "и"
   },
   {
@@ -58,7 +58,7 @@ export const translatedLocales = [
     name: "French", catalogCode: "fr", browserLocale: "fr-FR", uiLanguage: /^fr(?:-|$)/,
     youtubeLanguage: "fr", documentLanguage: /^fr(?:-|$)/, messages: fr,
     creator: "cuisinefrançaise", collaborators: ["premièrechaîne", "deuxièmechaîne"],
-    goToChannel: "cuisinefrançaise. Accéder à la chaîne.", moreActions: "Autres actions",
+    goToChannel: "Accéder à la chaîne cuisinefrançaise", moreActions: "Autres actions",
     views: "1 vue", age: "il y a 23 heures", conjunction: "et"
   },
   {
@@ -88,42 +88,42 @@ export const translatedLocales = [
     name: "Hindi", catalogCode: "hi", browserLocale: "hi-IN", uiLanguage: /^hi(?:-|$)/,
     youtubeLanguage: "hi", documentLanguage: /^hi(?:-|$)/, messages: hi,
     creator: "भारतीयरसोई", collaborators: ["पहलाचैनल", "दूसराचैनल"],
-    goToChannel: "भारतीयरसोई. चैनल पर जाएं.", moreActions: "ज़्यादा कार्रवाईयां",
+    goToChannel: "भारतीयरसोई पर जाएं", moreActions: "ज़्यादा कार्रवाईयां",
     views: "1 व्यू", age: "23 घंटे पहले", conjunction: "और"
   },
   {
     name: "Indonesian", catalogCode: "id", browserLocale: "id-ID", uiLanguage: /^id(?:-|$)/,
     youtubeLanguage: "id", documentLanguage: /^id(?:-|$)/, messages: id,
     creator: "dapurindonesia", collaborators: ["kanalpertama", "kanalkedua"],
-    goToChannel: "dapurindonesia. Buka channel.", moreActions: "Tindakan lainnya",
+    goToChannel: "Buka channel dapurindonesia", moreActions: "Tindakan lainnya",
     views: "1 kali ditonton", age: "23 jam yang lalu", conjunction: "dan"
   },
   {
     name: "Bengali", catalogCode: "bn", browserLocale: "bn-BD", uiLanguage: /^bn(?:-|$)/,
     youtubeLanguage: "bn", documentLanguage: /^bn(?:-|$)/, messages: bn,
     creator: "বাংলারান্না", collaborators: ["চ্যানেলএক", "চ্যানেলদুই"],
-    goToChannel: "বাংলারান্না. চ্যানেলে যাওয়ার বোতাম।", moreActions: "আরও ক্রিয়া",
+    goToChannel: "বাংলারান্না চ্যানেলে যান", moreActions: "আরও ক্রিয়া",
     views: "১ বার দেখা হয়েছে", age: "২৩ ঘণ্টা আগে", conjunction: "ও"
   },
   {
     name: "Turkish", catalogCode: "tr", browserLocale: "tr-TR", uiLanguage: /^tr(?:-|$)/,
     youtubeLanguage: "tr", documentLanguage: /^tr(?:-|$)/, messages: tr,
     creator: "türkmutfağı", collaborators: ["birincikanal", "ikincikanal"],
-    goToChannel: "türkmutfağı kanalına git", moreActions: "Daha fazla işlem",
+    goToChannel: "Kanala git: türkmutfağı", moreActions: "Daha fazla işlem",
     views: "1 görüntüleme", age: "23 saat önce", conjunction: "ve"
   },
   {
     name: "Vietnamese", catalogCode: "vi", browserLocale: "vi-VN", uiLanguage: /^vi(?:-|$)/,
     youtubeLanguage: "vi", documentLanguage: /^vi(?:-|$)/, messages: vi,
     creator: "bếpviệt", collaborators: ["kênhđầutiên", "kênhthứhai"],
-    goToChannel: "Kênh bếpviệt. Chuyển đến kênh.", moreActions: "Thao tác khác",
+    goToChannel: "Chuyển đến kênh bếpviệt", moreActions: "Thao tác khác",
     views: "1 lượt xem", age: "23 giờ trước", conjunction: "và"
   },
   {
     name: "Arabic", catalogCode: "ar", browserLocale: "ar", uiLanguage: /^ar(?:-|$)/,
     youtubeLanguage: "ar", documentLanguage: /^ar(?:-|$)/, messages: ar,
     creator: "المطبخالعربي", collaborators: ["القناةالأولى", "القناةالثانية"],
-    goToChannel: "الانتقال إلى قناة المطبخالعربي", moreActions: "مزيد من الإجراءات",
+    goToChannel: 'الانتقال إلى قناة "المطبخالعربي"', moreActions: "مزيد من الإجراءات",
     views: "مشاهدة واحدة", age: "قبل 23 ساعة", conjunction: "و"
   },
   {
@@ -137,7 +137,7 @@ export const translatedLocales = [
     name: "Dutch", catalogCode: "nl", browserLocale: "nl-NL", uiLanguage: /^nl(?:-|$)/,
     youtubeLanguage: "nl", documentLanguage: /^nl(?:-|$)/, messages: nl,
     creator: "nederlandsekeuken", collaborators: ["eerstekanaal", "tweedekanaal"],
-    goToChannel: "Ga naar kanaal nederlandsekeuken", moreActions: "Meer acties",
+    goToChannel: "Naar kanaal nederlandsekeuken", moreActions: "Meer acties",
     views: "1 weergave", age: "23 uur geleden", conjunction: "en"
   }
 ];

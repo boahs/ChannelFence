@@ -8,8 +8,8 @@ import {
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
 test.describe("Localized YouTube creator detection with English extension UI", () => {
-  // The structure and Korean labels came from the Korean CI DOM capture.
-  // Other labels exercise the same structure without language-specific parsing.
+  // The structure came from the Korean CI DOM capture. Native avatar labels
+  // are shared with the live checks and updated from captured YouTube DOM.
   for (const locale of translatedLocales) {
     test(`does not turn ${locale.youtubeLanguage} channel statistics into creators`, async ({ extensionPage }) => {
       const youtube = new YouTubeSurfacePage(extensionPage);
@@ -46,8 +46,7 @@ test.describe("Localized YouTube creator detection with English extension UI", (
       extensionStorage
     }) => {
       const youtube = new YouTubeSurfacePage(extensionPage);
-      const card = rightRailLockup({ displayName: locale.creator, id: "localized-rail" })
-        .replace(`Go to channel ${locale.creator}`, locale.goToChannel)
+      const card = rightRailLockup({ displayName: locale.creator, id: "localized-rail", avatarLabel: locale.goToChannel })
         .replace("ytLockupViewModelMenuButton", "ytLockupMetadataViewModelMenuButton")
         .replace('aria-label="More actions"', `aria-label="${locale.moreActions}"`);
       await youtube.open(card, "/watch?v=localized-menu", locale.youtubeLanguage);

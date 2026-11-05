@@ -21,8 +21,7 @@ test.describe("Localized YouTube creator detection with English extension UI", (
     });
 
     test(`blocks a ${locale.name} linkless creator through the structural overflow menu`, async ({ addon }) => {
-      const card = rightRailLockup({ displayName: locale.creator, id: "localized-rail" })
-        .replace(`Go to channel ${locale.creator}`, locale.goToChannel)
+      const card = rightRailLockup({ displayName: locale.creator, id: "localized-rail", avatarLabel: locale.goToChannel })
         .replace("ytLockupViewModelMenuButton", "ytLockupMetadataViewModelMenuButton")
         .replace('aria-label="More actions"', `aria-label="${locale.moreActions}"`);
       await openFixture(addon.page, card, "/watch?v=localized-menu", locale.youtubeLanguage);
