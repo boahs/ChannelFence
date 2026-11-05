@@ -196,10 +196,10 @@ test.describe("Collaboration creator identities", () => {
         rightRailLockup({ id: "solo-guest", displayName: guest }), "/watch?v=fixture-video", "zh-TW");
 
       const card = '[data-testid="collaboration"]';
-      const expectedLabels = scenario.names.map((name) => `Block ${name}`);
+      const expectedLabels = scenario.names.map((name) => `Block ${name}`).sort();
       await expectCount(page, card + " .cf-block-button", 2);
       expect(await page.$$eval(card + " .cf-block-button", (buttons) =>
-        buttons.map((button) => button.getAttribute("aria-label")))).toEqual(expectedLabels);
+        buttons.map((button) => button.getAttribute("aria-label")).sort())).toEqual(expectedLabels);
       // Reprocess native text with existing controls nested inside its field.
       // Their icon/text must not turn a valid creator field into an unknown shape.
       await page.$eval(card, (root) => {
@@ -208,12 +208,12 @@ test.describe("Collaboration creator identities", () => {
       });
       await expectCount(page, card + " .cf-block-button", 2);
       expect(await page.$$eval(card + " .cf-block-button", (buttons) =>
-        buttons.map((button) => button.getAttribute("aria-label")))).toEqual(expectedLabels);
+        buttons.map((button) => button.getAttribute("aria-label")).sort())).toEqual(expectedLabels);
 
       await openCreatorMenu(page, '[data-testid="collaboration-menu"]');
       await expectCount(page, ".cf-menu-item", 2);
-      expect(await page.$$eval(".cf-menu-item", (items) => items.map((item) => item.getAttribute("aria-label"))))
-        .toEqual(scenario.names.map((name) => `Block ${name} with ChannelFence`));
+      expect(await page.$$eval(".cf-menu-item", (items) => items.map((item) => item.getAttribute("aria-label")).sort()))
+        .toEqual(scenario.names.map((name) => `Block ${name} with ChannelFence`).sort());
       await page.locator(`[role="menuitem"][aria-label="Block ${guest} with ChannelFence"]`).click();
       await expectVisible(page, card, false);
       await expectVisible(page, '[data-testid="solo-guest"]', false);

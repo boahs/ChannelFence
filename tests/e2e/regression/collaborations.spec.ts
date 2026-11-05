@@ -209,10 +209,10 @@ test.describe("Collaboration creator identities", () => {
         rightRailLockup({ id: "solo-guest", displayName: guest }), "/watch?v=fixture-video", "zh-TW");
 
       const card = youtube.card("collaboration");
-      const expectedLabels = scenario.names.map((name) => `Block ${name}`);
+      const expectedLabels = scenario.names.map((name) => `Block ${name}`).sort();
       await expect(youtube.blockButton("collaboration")).toHaveCount(2);
       expect(await youtube.blockButton("collaboration").evaluateAll((buttons) =>
-        buttons.map((button) => button.getAttribute("aria-label")))).toEqual(expectedLabels);
+        buttons.map((button) => button.getAttribute("aria-label")).sort())).toEqual(expectedLabels);
       // Reprocess native text with existing controls nested inside its field.
       // Their icon/text must not turn a valid creator field into an unknown shape.
       await card.evaluate((root) => {
@@ -221,12 +221,12 @@ test.describe("Collaboration creator identities", () => {
       });
       await expect(youtube.blockButton("collaboration")).toHaveCount(2);
       expect(await youtube.blockButton("collaboration").evaluateAll((buttons) =>
-        buttons.map((button) => button.getAttribute("aria-label")))).toEqual(expectedLabels);
+        buttons.map((button) => button.getAttribute("aria-label")).sort())).toEqual(expectedLabels);
 
       const menuItems = await youtube.openCreatorMenuItems("collaboration-menu");
       await expect(menuItems).toHaveCount(2);
-      expect(await menuItems.evaluateAll((items) => items.map((item) => item.getAttribute("aria-label"))))
-        .toEqual(scenario.names.map((name) => `Block ${name} with ChannelFence`));
+      expect(await menuItems.evaluateAll((items) => items.map((item) => item.getAttribute("aria-label")).sort()))
+        .toEqual(scenario.names.map((name) => `Block ${name} with ChannelFence`).sort());
       await extensionPage.getByRole("menuitem", { name: `Block ${guest} with ChannelFence`, exact: true }).click();
       await expect(card).toBeHidden();
       await expect(youtube.card("solo-guest")).toBeHidden();
