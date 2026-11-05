@@ -147,6 +147,7 @@ GitHub Actions separates repeatable fixture tests from checks against real YouTu
 | --- | --- | --- |
 | [Chrome regression tests](https://github.com/boahs/ChannelFence/actions/workflows/ci.yml) | Pull requests, pushes to `main`, or manually | Website build, unit tests, typecheck, and Chromium fixture regressions |
 | [Firefox regression tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox.yml) | Pull requests, pushes to `main`, or manually | Firefox package validation, typecheck, and equivalent installed-add-on fixture regressions, including all 18 native and manually selected interface languages |
+| [Release package checks](https://github.com/boahs/ChannelFence/actions/workflows/release-packages.yml) | Manually before upload, and on pull requests changing this workflow or the packaging scripts | Complete fixture suites against extracted Chrome and Firefox ZIPs with no retries, followed by three runs of selected stability checks |
 | [Chrome live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml) | Daily at 00:17 and 12:17, or manually | Real YouTube checks in Chromium, including channel headers, search menus, watch recommendations, compact Shorts, and the Shorts viewer across all 18 supported languages |
 | [Firefox live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml) | Daily at 12:17, or manually | Equivalent real YouTube journeys in Firefox across all 18 supported languages, plus the general blocking and Shorts stress checks |
 
@@ -175,6 +176,12 @@ powershell -ExecutionPolicy Bypass -File scripts/package.ps1
 ```
 
 The uploadable archive is written to `dist/`. Store listing materials and tests are deliberately excluded from the runtime ZIP.
+
+Before a store upload, run **Release package checks** in GitHub Actions on the intended release branch. Set `stability_grep` to a test-title pattern covering the changed or previously failing behavior; the default covers localized recommendation menus, movie creators, and Chinese collaboration identities. The full regression suites always run first. The filter only selects the cases repeated three times afterward, and both stages disable retries.
+
+Each browser job builds its final ZIP, extracts it into a fresh directory, and loads that extracted extension for every browser test. Firefox runs on Linux with matching native language packs, so all supported interface languages are checked. Full-suite and repeat reports are saved separately, including test durations and failure diagnostics.
+
+Download the successful browser job's package artifact for upload. It contains the tested ZIP and its SHA-256 checksum and commit details. Upload that ZIP to keep the store submission tied to the recorded test result. A failed full or repeated check prevents that browser's package artifact from being published. These are deterministic package checks, so scheduled live YouTube tests and manual browser/store installation checks are still necessary. The workflow uses the manifest's current version and does not bump it or submit either store listing.
 
 ## Project structure
 
