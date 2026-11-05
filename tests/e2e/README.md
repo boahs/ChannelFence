@@ -23,6 +23,8 @@ The deterministic tests fulfill navigation requests at `https://www.youtube.com/
 
 Successful locale tests attach action-named screenshots for visual review. Names beginning with the catalog code and `ui` show extension pages, `live` shows the real YouTube site, and `fixture` shows controls on deterministic test pages. These generated images stay in the ignored Playwright reports and are not source assets.
 
+Watch-page checks report `[YOUTUBE_ACCESS_BLOCKED]` if Google redirects to its unusual-traffic/CAPTCHA page. This remains a failed live check because the requested behavior was not verified. Saved URLs and screenshots distinguish access challenges from changes to YouTube's markup. Recommendation creator assertions use the native avatar's channel label; a movie's genre and release year are not its creator name.
+
 Tests can set `test.use({ locale: "ko-KR" })` to select the browser and extension interface language. `YouTubeSurfacePage.open(body, path, "ko")` selects the fixture document's language independently. Translated catalogs alone do not establish compatibility with every YouTube locale.
 
 ## Commands

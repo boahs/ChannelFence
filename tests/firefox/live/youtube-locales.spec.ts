@@ -1,4 +1,6 @@
 import { allLocales } from "../../e2e/fixtures/locales";
+import { assertLiveYouTubeAccess } from "../../e2e/fixtures/live-youtube-access";
+import { readNativeLockupCreator } from "../../e2e/fixtures/native-lockup-creator";
 import { expect, expectAttribute, expectCount, expectText, expectVisible, test, type FirefoxAddon } from "../extension.fixture";
 import { captureAction, expectInViewport, expectNativeLanguage, type Locale } from "../locale-checks";
 
@@ -6,6 +8,7 @@ async function openYouTube(addon: FirefoxAddon, pathname: string, locale: Locale
   await addon.page.goto(`https://www.youtube.com${pathname}${pathname.includes("?") ? "&" : "?"}hl=${locale.youtubeLanguage}`, {
     waitUntil: "domcontentloaded", timeout: 30_000
   });
+  assertLiveYouTubeAccess(addon.page.url());
   await expect.poll(() => addon.page.$eval("html", (element) => element.lang)).toMatch(locale.documentLanguage);
 }
 
@@ -63,12 +66,13 @@ for (const locale of allLocales) {
 
     test("blocks a right-rail creator through the modern overflow menu", async ({ addon }, testInfo) => {
       await openYouTube(addon, "/watch?v=dQw4w9WgXcQ", locale);
-      const selector = "ytd-watch-next-secondary-results-renderer yt-lockup-view-model:has(.ytLockupMetadataViewModelAvatar)";
+      // Collaboration journeys assert each owner's identity separately.
+      const selector = "ytd-watch-next-secondary-results-renderer yt-lockup-view-model:has(.ytLockupMetadataViewModelAvatar):not(:has(yt-avatar-stack-view-model))";
       const recommendation = await addon.page.waitForSelector(selector, { visible: true, timeout: 30_000 });
       if (!recommendation) throw new Error("No supported right-rail recommendation was rendered");
-      const creatorSelector = ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataText";
-      await expect.poll(() => recommendation.evaluate((element, selector) => element.querySelector(selector)?.textContent, creatorSelector)).toMatch(/\S/);
-      const creator = await recommendation.$eval(creatorSelector, (element) => (element as HTMLElement).innerText.normalize("NFKC").trim());
+      const creatorLabel = { creator: locale.creator, goToChannel: locale.goToChannel };
+      await expect.poll(() => recommendation.evaluate(readNativeLockupCreator, creatorLabel)).toMatch(/\S/);
+      const creator = await recommendation.evaluate(readNativeLockupCreator, creatorLabel);
       await expect.poll(() => recommendation.$$eval(".cf-block-button", (elements) => elements.length)).toBe(1);
       expect(await recommendation.$eval(".cf-block-button", (element) => element.getAttribute("aria-label"))).toContain(creator);
       const identity = await recommendation.$eval(".cf-block-button", (element) => element.getAttribute("data-cf-identity"));

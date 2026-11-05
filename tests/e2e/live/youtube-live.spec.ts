@@ -1,4 +1,5 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
+import { assertLiveYouTubeAccess } from "../fixtures/live-youtube-access";
 import type { Frame, Request } from "@playwright/test";
 
 test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }) => {
@@ -126,6 +127,7 @@ test("adds block controls to a live watch-page right-rail lockup", async ({ exte
     waitUntil: "domcontentloaded",
     timeout: 30_000
   });
+  assertLiveYouTubeAccess(extensionPage.url());
 
   const recommendation = extensionPage.locator(
     "ytd-watch-next-secondary-results-renderer yt-lockup-view-model"

@@ -1,5 +1,7 @@
 import { expect, test } from "../fixtures/extension.fixture";
 import { allLocales } from "../fixtures/locales";
+import { assertLiveYouTubeAccess } from "../fixtures/live-youtube-access";
+import { readNativeLockupCreator } from "../fixtures/native-lockup-creator";
 import type { Locator, TestInfo } from "@playwright/test";
 
 async function captureAction(control: Locator, testInfo: TestInfo, name: string) {
@@ -129,18 +131,19 @@ for (const locale of allLocales) {
         waitUntil: "domcontentloaded",
         timeout: 30_000
       });
+      assertLiveYouTubeAccess(extensionPage.url());
       await expect(extensionPage.locator("html")).toHaveAttribute("lang", locale.documentLanguage);
+      // Collaboration journeys assert each owner's identity separately.
       const recommendation = extensionPage.locator(
         "ytd-watch-next-secondary-results-renderer yt-lockup-view-model"
       ).filter({
-        has: extensionPage.locator(".ytLockupMetadataViewModelAvatar")
+        has: extensionPage.locator(".ytLockupMetadataViewModelAvatar"),
+        hasNot: extensionPage.locator("yt-avatar-stack-view-model")
       }).first();
       await expect(recommendation).toBeVisible({ timeout: 30_000 });
-      const creator = recommendation.locator(
-        ".ytContentMetadataViewModelMetadataRow:first-child .ytContentMetadataViewModelMetadataText"
-      ).first();
-      await expect(creator).toHaveText(/\S/);
-      const creatorName = (await creator.innerText()).normalize("NFKC").trim();
+      const creatorLabel = { creator: locale.creator, goToChannel: locale.goToChannel };
+      await expect.poll(() => recommendation.evaluate(readNativeLockupCreator, creatorLabel)).toMatch(/\S/);
+      const creatorName = await recommendation.evaluate(readNativeLockupCreator, creatorLabel);
       const blockButton = recommendation.locator(".cf-block-button");
       await expect(blockButton).toHaveCount(1);
       expect(await blockButton.getAttribute("aria-label")).toContain(creatorName);

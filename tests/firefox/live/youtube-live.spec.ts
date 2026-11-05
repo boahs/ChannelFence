@@ -2,6 +2,7 @@ import { setTimeout as delay } from "node:timers/promises";
 import type { Frame, HTTPRequest, Page } from "puppeteer-core";
 import type { BidiConnection } from "puppeteer-core/internal/bidi/Connection.js";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
+import { assertLiveYouTubeAccess } from "../../e2e/fixtures/live-youtube-access";
 import { expect, expectAttribute, expectCount, expectContainsText, expectVisible, test } from "../extension.fixture";
 
 type ShortsEvent = {
@@ -125,6 +126,7 @@ test("keeps live channel-card controls singular and ignores video statistics", a
 
 test("adds block controls to a live watch-page right-rail lockup", async ({ addon }) => {
   await addon.page.goto("https://www.youtube.com/watch?v=dQw4w9WgXcQ", { waitUntil: "domcontentloaded", timeout: 30_000 });
+  assertLiveYouTubeAccess(addon.page.url());
   const recommendation = await addon.page.waitForSelector("ytd-watch-next-secondary-results-renderer yt-lockup-view-model:has([aria-label^='Go to channel '])", { visible: true, timeout: 30_000 });
   if (!recommendation) throw new Error("No supported recommendation was rendered");
   await recommendation.waitForSelector(".cf-block-button", { visible: true, timeout: 15_000 });

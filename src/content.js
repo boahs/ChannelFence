@@ -536,6 +536,31 @@
   function collaborationNamesFromElement(root) {
     let names = [];
     for (const byline of collaborationBylineElements(root)) {
+      if (/^zh(?:-|$)/i.test(document.documentElement.lang) &&
+          root.querySelector("yt-avatar-stack-view-model") &&
+          byline.matches(".ytContentMetadataViewModelMetadataRow[role='group']")) {
+        const copy = byline.cloneNode(true);
+        copy.querySelectorAll(".cf-block-button, .cf-shorts-action, .cf-menu-item")
+          .forEach((control) => control.remove());
+        const fields = [...copy.querySelectorAll(
+          ":scope > .ytContentMetadataViewModelMetadataText[role='text']"
+        )];
+        // The captured two-owner shape puts the connector in the second field.
+        // Keep internal 和 and punctuation inside each creator's complete name.
+        const labels = fields.map((field) => field.childElementCount === 0
+          ? field.textContent.trim() : "");
+        if (labels.length === 2 && labels[1].startsWith("和")) {
+          const candidates = [labels[0], labels[1].slice(1)]
+            .map(cleanLinklessLockupCreatorName);
+          if (candidates.every((name) => name && !/(?:\.{3}|\u2026)$/.test(name)) &&
+              candidates.length > names.length) {
+            names = candidates;
+          }
+        }
+        // Unknown grouped shapes must not become one invented owner. Linked
+        // creators remain available through the existing stable-owner path.
+        continue;
+      }
       const elements = [byline, ...byline.querySelectorAll("[title], [aria-label]")];
       for (const element of elements) {
         if (isChannelFenceNode(element)) {
