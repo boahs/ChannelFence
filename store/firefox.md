@@ -22,7 +22,7 @@ The Firefox build preprocesses the manifest, translations, and HTML. Select **Ye
 Create the source archive from the exact commit recorded in the tested ZIP's `.validation.txt` file. With that commit checked out, run:
 
 ```powershell
-git archive --format=zip --output=dist/ChannelFence-0.2.9-firefox-source.zip HEAD LICENSE package.json package-lock.json manifest.json manifest.firefox.json scripts/build-firefox.mjs scripts/firefox-locales.json src ui _locales assets/icons store/firefox.md
+git -c core.autocrlf=false archive --format=zip --output=dist/ChannelFence-0.2.9-firefox-source.zip HEAD LICENSE package.json package-lock.json manifest.json manifest.firefox.json scripts/build-firefox.mjs scripts/firefox-locales.json src ui _locales assets/icons store/firefox.md
 ```
 
 Reviewer build instructions: extract the source archive, use Node.js 24, and run `npm ci` followed by `npm run build:firefox` from its root. The build downloads the locked developer dependencies and writes `dist/ChannelFence-0.2.9-firefox.zip`. No credentials or private files are required. The release package workflow builds on Ubuntu; its validation record identifies the commit and tested archive. ZIP timestamps may differ when rebuilding, so compare extracted file contents.
