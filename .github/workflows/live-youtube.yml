@@ -19,7 +19,7 @@ jobs:
   live-smoke:
     name: Chrome live YouTube checks (all supported languages)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
       - name: Check out repository
@@ -38,7 +38,8 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run live YouTube checks in Chrome
-        run: npm run test:e2e:live -- --grep "$TEST_GREP"
+        # Allow sequential live checks to finish and leave time to upload diagnostics.
+        run: npm run test:e2e:live -- --global-timeout=1200000 --grep "$TEST_GREP"
         env:
           TEST_GREP: ${{ inputs.grep || '' }}
 
