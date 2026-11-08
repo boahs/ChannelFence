@@ -30,7 +30,7 @@
     "headline": "ChannelFence vs. Unhook: Block Creators or Hide YouTube Feeds?",
     "description": "ChannelFence's developer compares selective creator blocking with Unhook's documented YouTube distraction controls.",
     "datePublished": "2026-11-03",
-    "dateModified": "2026-11-03",
+    "dateModified": "2026-11-08",
     "mainEntityOfPage": "https://channelfence.app/channelfence-vs-unhook/",
     "author": { "@type": "Organization", "name": "ChannelFence" },
     "publisher": { "@type": "Organization", "name": "ChannelFence", "url": "https://channelfence.app/" }
@@ -59,7 +59,8 @@
         <h1>ChannelFence vs. Unhook</h1>
         <p class="article-lead">Want a better YouTube feed while keeping recommendations? ChannelFence lets you block specific creators and tidy up Home. Unhook focuses on hiding sections of YouTube and reducing distractions.</p>
         <p class="article-meta">Reviewed November 3, 2026 · ChannelFence 0.2.8 and Unhook 1.6.9</p>
-        <p class="article-meta">ChannelFence's live YouTube checks are scheduled twice daily. <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">See the public test results</a>.</p>
+        <p class="article-meta">Firefox availability updated November 8, 2026: ChannelFence 0.2.9 is now available for desktop Firefox.</p>
+        <p class="article-meta">ChannelFence's live YouTube checks run on separate schedules: <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">Chrome twice daily</a> and <a href="https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml">Firefox daily</a>.</p>
       </header>
 
       <p>I built ChannelFence for people who still enjoy discovering videos but want control over the creators appearing in their feeds. That is the perspective behind this comparison. Unhook's <a href="https://chromewebstore.google.com/detail/unhook-remove-youtube-rec/khncfooichmfjbepaaaebmommgaepoid?hl=en">official Chrome listing</a> showed 1,000,000 users when reviewed.</p>
@@ -68,7 +69,7 @@
       <div class="comparison-wrap" role="region" aria-label="ChannelFence and Unhook feature comparison" tabindex="0">
         <table class="comparison-table">
           <thead>
-            <tr><th scope="col">What you want to do</th><th scope="col">ChannelFence 0.2.8</th><th scope="col">Unhook 1.6.9</th></tr>
+            <tr><th scope="col">What you want to do</th><th scope="col">ChannelFence</th><th scope="col">Unhook 1.6.9</th></tr>
           </thead>
           <tbody>
             <tr><th scope="row">Keep recommendations, remove certain creators</th><td>A persistent creator list applied across supported YouTube pages</td><td>A creator block list is not documented in the reviewed listing</td></tr>
@@ -77,7 +78,7 @@
             <tr><th scope="row">Manage comments</th><td>Hide comments from blocked creators</td><td>Can hide the entire comments section</td></tr>
             <tr><th scope="row">Limit playback distractions</th><td>No autoplay or end-screen controls</td><td>Autoplay, annotations, and end-screen controls</td></tr>
             <tr><th scope="row">Choose an interface language</th><td>18 interface options, with automatic selection or a manual setting</td><td>English listed</td></tr>
-            <tr><th scope="row">Use other browsers</th><td>Chrome is the supported browser</td><td>Chrome, Edge, Firefox, and Android Firefox documented</td></tr>
+            <tr><th scope="row">Use other browsers</th><td>Chrome and desktop Firefox</td><td>Chrome, Edge, Firefox, and Android Firefox documented</td></tr>
           </tbody>
         </table>
       </div>
@@ -106,7 +107,7 @@
       <p>If you want an empty Home feed, no recommendation sidebar, no comments, or playback distraction controls, Unhook's documented options suit that goal. Its listing also describes embedded-video support. Choose around the browsing experience you want.</p>
 
       <h2>YouTube changes. We test for that.</h2>
-      <p>ChannelFence schedules automated checks against real YouTube twice a day, alongside regression checks for updates. My aim is to catch compatibility problems early and fix them before you notice. You can <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">see the public live test results</a> and inspect the <a href="https://github.com/boahs/ChannelFence">source and test code</a>.</p>
+      <p>ChannelFence schedules automated checks against real YouTube twice a day for Chrome and daily for Firefox, alongside regression checks for updates. My aim is to catch compatibility problems early and fix them before you notice. You can see the public <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">Chrome live test results</a> and <a href="https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml">Firefox live test results</a>, and inspect the <a href="https://github.com/boahs/ChannelFence">source and test code</a>.</p>
       <p>Tests cover specific scenarios; a passing run cannot prove every account, layout, or YouTube experiment works. If something slips through, <a href="../support/">send a reproducible example</a> so it can be investigated.</p>
 
       <h2>Privacy and how this comparison was checked</h2>
@@ -116,7 +117,10 @@
 
       <div class="article-cta">
         <p><strong>Keep your feed. Choose who appears in it.</strong><br>Try ChannelFence's creator list and optional Home controls.</p>
-        <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=comparison_unhook">Add ChannelFence to Chrome</a>
+        <div class="actions">
+          <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=comparison_unhook">Add ChannelFence to Chrome</a>
+          <a class="button button--secondary" href="https://addons.mozilla.org/addon/channelfence/">Add to Firefox</a>
+        </div>
       </div>
 
       <section class="related-guides" aria-labelledby="related-heading">

@@ -1,6 +1,6 @@
-# Firefox preparation
+# Firefox build and listing guidance
 
-Status: desktop Firefox version 0.2.8 has been submitted to Mozilla and is awaiting approval. It matches the Chrome feature set and is available for temporary local testing. A public Firefox Add-ons install link will be added after publication.
+Desktop Firefox version 0.2.9 is publicly available from [Firefox Add-ons](https://addons.mozilla.org/addon/channelfence/). It shares the Chrome feature set and all eighteen interface languages. Use the store listing for normal installation; the packages below are for development and Mozilla submission.
 
 ## Build and load
 
@@ -49,9 +49,9 @@ This declaration reflects Mozilla's definition of transmission outside the brows
 
 References: [built-in data consent](https://extensionworkshop.com/documentation/develop/firefox-builtin-data-consent/), [manifest settings](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/browser_specific_settings), [porting guide](https://extensionworkshop.com/documentation/develop/porting-a-google-chrome-extension/).
 
-## Draft listing
+## Listing copy
 
-Name: ChannelFence - YouTube Channel Blocker
+Name: ChannelFence
 
 Summary: Block unwanted YouTube creators, hide Shorts, and tidy your Home feed. Free, open source, with no account or tracking.
 
@@ -103,4 +103,4 @@ Firefox uses an MV3 event page instead of Chrome's service worker. Content scrip
 
 No account is required. Load desktop YouTube, use the ChannelFence control beside a creator or the supported three-dot menu, and confirm matching cards disappear. Use Undo to restore them. Settings also allow manually adding a handle, changing language, and enabling optional Home controls.
 
-Choose **On this site** when submitting for a public Mozilla listing. Upload the Firefox ZIP, complete the privacy declaration and listing, and review before final submission. Uploading this source package does not itself make it a signed downloadable release. Add a Firefox review link only after Mozilla assigns and publishes the real listing URL.
+Choose **On this site** when submitting for a public Mozilla listing. Upload the Firefox ZIP, complete the privacy declaration and listing, and review before final submission. Uploading this source package does not itself make it a signed downloadable release.

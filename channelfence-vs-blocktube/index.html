@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChannelFence vs. BlockTube: YouTube Blockers Compared</title>
-  <meta name="description" content="Compare ChannelFence 0.2.8 with BlockTube: creator blocking, Shorts, Home cleanup, languages, privacy, advanced filters, and public YouTube tests. Reviewed November 2026.">
+  <meta name="description" content="Compare ChannelFence with BlockTube: creator blocking, Shorts, Home cleanup, languages, privacy, advanced filters, and public YouTube tests. Both support Chrome and Firefox.">
   <link rel="canonical" href="https://channelfence.app/channelfence-vs-blocktube/">
   <link rel="icon" href="../assets/icons/channelfence-32.png" sizes="32x32">
   <link rel="stylesheet" href="../site/styles.css">
@@ -30,7 +30,7 @@
     "headline": "ChannelFence vs. BlockTube: YouTube Blockers Compared",
     "description": "ChannelFence's developer compares creator blocking, Home cleanup, languages, privacy, and advanced filtering using official documentation and public test workflows.",
     "datePublished": "2026-08-29",
-    "dateModified": "2026-11-03",
+    "dateModified": "2026-11-08",
     "mainEntityOfPage": "https://channelfence.app/channelfence-vs-blocktube/",
     "author": { "@type": "Organization", "name": "ChannelFence" },
     "publisher": { "@type": "Organization", "name": "ChannelFence", "url": "https://channelfence.app/" }
@@ -59,7 +59,8 @@
         <h1>ChannelFence vs. BlockTube</h1>
         <p class="article-lead">ChannelFence combines a persistent creator block list with optional Home cleanup and smaller thumbnails. BlockTube offers more advanced filtering rules. Here is how to choose the right fit for the YouTube feed you want.</p>
         <p class="article-meta">Last reviewed November 3, 2026 · ChannelFence 0.2.8 and BlockTube 0.4.8. Features can change after this date.</p>
-        <p class="article-meta">ChannelFence's live YouTube checks are scheduled twice daily. <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">See the public test results</a>.</p>
+        <p class="article-meta">Firefox availability updated November 8, 2026: ChannelFence 0.2.9 is now available for desktop Firefox.</p>
+        <p class="article-meta">ChannelFence's live YouTube checks run on separate schedules: <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">Chrome twice daily</a> and <a href="https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml">Firefox daily</a>.</p>
       </header>
 
       <div class="article-note">
@@ -72,7 +73,7 @@
       <div class="comparison-wrap" role="region" aria-label="ChannelFence and BlockTube feature comparison" tabindex="0">
         <table class="comparison-table">
           <thead>
-            <tr><th scope="col">Feature</th><th scope="col">ChannelFence 0.2.8</th><th scope="col">BlockTube 0.4.8</th></tr>
+            <tr><th scope="col">Feature</th><th scope="col">ChannelFence</th><th scope="col">BlockTube 0.4.8</th></tr>
           </thead>
           <tbody>
             <tr><td>Primary focus</td><td>Creator blocking and optional feed cleanup</td><td>Broad rules for filtering YouTube content</td></tr>
@@ -83,7 +84,7 @@
             <tr><td>Feed appearance</td><td>Optional Home sponsored-card and promotional-insert hiding; compact Home grid with three thumbnail sizes</td><td>Options include hiding Movies, Explore, and automatically generated playlists</td></tr>
             <tr><td>Advanced custom rules</td><td>No custom JavaScript or regular expression editor</td><td>Regular expressions and an advanced JavaScript blocking function</td></tr>
             <tr><td>Interface languages</td><td>18 languages, with automatic selection or a manual choice in settings</td><td>Store listing lists English (United States)</td></tr>
-            <tr><td>Browsers documented by the project</td><td>Chrome</td><td>Chrome and Firefox</td></tr>
+            <tr><td>Browsers documented by the project</td><td>Chrome and desktop Firefox</td><td>Chrome and Firefox</td></tr>
             <tr><td>Privacy</td><td>Settings and block list stay on your device; no account or extension analytics</td><td>Listing declares local settings and no data collection or tracking</td></tr>
             <tr><td>Source availability</td><td>MIT License</td><td>Open source on GitHub</td></tr>
           </tbody>
@@ -110,20 +111,22 @@
       <ul>
         <li>You need to filter video titles, runtime, keywords, video IDs, or comments by content.</li>
         <li>You want regular expressions or custom JavaScript-based blocking rules.</li>
-        <li>You need the project's documented Firefox version.</li>
       </ul>
       <p>Those capabilities are described in the <a href="https://chromewebstore.google.com/detail/blocktube/bbeaicapbccfllodepmimpkgecanonai?hl=en-US">official BlockTube listing</a> and <a href="https://github.com/amitbl/blocktube/blob/master/README.md">README</a>. ChannelFence does not provide those advanced rule editors.</p>
 
       <h2>YouTube changes. ChannelFence is tested to keep up.</h2>
-      <p>ChannelFence schedules automated checks against real YouTube twice a day, alongside regression tests for updates. When a covered workflow breaks, a failed test gives me a signal to investigate. You can inspect the <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">public live YouTube test runs</a> and <a href="https://github.com/boahs/ChannelFence/actions/workflows/ci.yml">regression results</a>.</p>
+      <p>ChannelFence schedules automated checks against real YouTube twice a day for Chrome and daily for Firefox, alongside regression tests for updates. When a covered workflow breaks, a failed test gives me a signal to investigate. You can inspect the <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">Chrome live YouTube test runs</a>, <a href="https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml">Firefox live YouTube test runs</a>, and <a href="https://github.com/boahs/ChannelFence/actions">regression results</a>.</p>
       <p>My aim is to catch and fix compatibility problems before you notice them. Tests cannot cover every YouTube layout or account variation, and a fix still needs to reach users through an extension update. If something slips through, <a href="../support/">report the example</a> so it can be investigated.</p>
 
       <h2>Privacy without an account</h2>
-      <p>ChannelFence is free and open source. Your settings and block list stay in Chrome's local extension storage, with no extension analytics or developer-controlled server. When a nonempty block list needs a compact Short's creator, ChannelFence may request public metadata directly from YouTube without account credentials. See the <a href="../PRIVACY.html">privacy policy</a> for details.</p>
+      <p>ChannelFence is free and open source. Your settings and block list stay in your browser's local extension storage, with no extension analytics or developer-controlled server. When a nonempty block list needs a compact Short's creator, ChannelFence may request public metadata directly from YouTube without account credentials. See the <a href="../PRIVACY.html">privacy policy</a> for details.</p>
 
       <div class="article-cta">
         <p><strong>Block creators. Make room for the videos you want.</strong><br>Try ChannelFence's creator controls, optional Home cleanup, and private block list.</p>
-        <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=comparison_blocktube">Add ChannelFence to Chrome</a>
+        <div class="actions">
+          <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=comparison_blocktube">Add ChannelFence to Chrome</a>
+          <a class="button button--secondary" href="https://addons.mozilla.org/addon/channelfence/">Add to Firefox</a>
+        </div>
       </div>
 
       <h2>Official sources reviewed</h2>

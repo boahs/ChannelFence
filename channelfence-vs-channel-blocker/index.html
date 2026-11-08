@@ -30,7 +30,7 @@
     "headline": "ChannelFence vs. Channel Blocker: YouTube Blocking Compared",
     "description": "A developer-written comparison of ChannelFence and Channel Blocker based on official documentation, with links to ChannelFence's public compatibility tests.",
     "datePublished": "2026-11-03",
-    "dateModified": "2026-11-03",
+    "dateModified": "2026-11-08",
     "mainEntityOfPage": "https://channelfence.app/channelfence-vs-channel-blocker/",
     "author": { "@type": "Organization", "name": "ChannelFence", "url": "https://channelfence.app/" },
     "publisher": { "@type": "Organization", "name": "ChannelFence", "url": "https://channelfence.app/" }
@@ -59,7 +59,8 @@
         <h1>ChannelFence vs. Channel Blocker</h1>
         <p class="article-lead">Want a creator to stop appearing on YouTube? Both extensions address that problem. ChannelFence combines a saved creator block list with Shorts controls, optional Home cleanup, and public compatibility checks. Channel Blocker also offers regular-expression filtering.</p>
         <p class="article-meta">Reviewed November 3, 2026 · ChannelFence 0.2.8 and Channel Blocker 3.0.5</p>
-        <p class="article-meta">ChannelFence's live YouTube checks are scheduled twice daily. <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">See the public test results</a>.</p>
+        <p class="article-meta">Firefox availability updated November 8, 2026: ChannelFence 0.2.9 is now available for desktop Firefox.</p>
+        <p class="article-meta">ChannelFence's live YouTube checks run on separate schedules: <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">Chrome twice daily</a> and <a href="https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml">Firefox daily</a>.</p>
       </header>
 
       <div class="article-note">
@@ -75,7 +76,7 @@
       <div class="comparison-wrap" role="region" aria-label="ChannelFence and Channel Blocker feature comparison" tabindex="0">
         <table class="comparison-table">
           <thead>
-            <tr><th scope="col">Feature</th><th scope="col">ChannelFence 0.2.8</th><th scope="col">Channel Blocker 3.0.5</th></tr>
+            <tr><th scope="col">Feature</th><th scope="col">ChannelFence</th><th scope="col">Channel Blocker 3.0.5</th></tr>
           </thead>
           <tbody>
             <tr><th scope="row">Creator blocking</th><td>Saved creator list, inline controls, supported menus, and manual handles or channel URLs</td><td>One-click blocking of users and channels</td></tr>
@@ -105,7 +106,7 @@
       </figure>
 
       <h2>YouTube changes. We test for that.</h2>
-      <p>ChannelFence's <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">public live YouTube checks</a> are scheduled twice a day, alongside regression tests for updates. Live checks cover selected creator controls across all 18 supported interface languages. The <a href="https://github.com/boahs/ChannelFence/blob/main/CHANGELOG.md">changelog</a> records fixes and the coverage added with them.</p>
+      <p>ChannelFence's public live YouTube checks are scheduled <a href="https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml">twice a day for Chrome</a> and <a href="https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml">daily for Firefox</a>, alongside regression tests for updates. Live checks cover selected creator controls across all 18 supported interface languages. The <a href="https://github.com/boahs/ChannelFence/blob/main/CHANGELOG.md">changelog</a> records fixes and the coverage added with them.</p>
       <p>Our aim is to catch compatibility problems early and patch them before you notice. A failure in a covered workflow can flag a YouTube change without waiting for a user report. Tests cannot catch every layout or account experiment, and releasing a fix still takes time. Public results let you inspect that maintenance work yourself.</p>
 
       <h2>When Channel Blocker may fit better</h2>
@@ -114,7 +115,10 @@
 
       <div class="article-cta">
         <p><strong>Block the creator. Keep the rest of your feed.</strong><br>ChannelFence is free and open source, with no account required.</p>
-        <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=comparison_channel_blocker">Add ChannelFence to Chrome</a>
+        <div class="actions">
+          <a class="button button--primary" href="https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=website&amp;utm_medium=organic&amp;utm_campaign=30day_growth&amp;utm_content=comparison_channel_blocker">Add ChannelFence to Chrome</a>
+          <a class="button button--secondary" href="https://addons.mozilla.org/addon/channelfence/">Add to Firefox</a>
+        </div>
       </div>
 
       <section class="related-guides" aria-labelledby="related-heading">
