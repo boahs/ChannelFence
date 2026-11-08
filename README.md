@@ -5,15 +5,16 @@
 [![Chrome live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/live-youtube.yml?query=event%3Aschedule)
 [![Firefox live YouTube tests](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml/badge.svg?branch=main&event=schedule)](https://github.com/boahs/ChannelFence/actions/workflows/firefox-live.yml?query=event%3Aschedule)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=github&utm_medium=organic&utm_campaign=30day_growth&utm_content=readme_badge)
+[![Firefox Add-ons](https://img.shields.io/badge/Firefox_Add--ons-Install-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/addon/channelfence/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ce2d8.svg)](LICENSE)
 
-ChannelFence is an open-source, privacy-first Chrome extension that lets you block YouTube channels and creators across Home, search, recommendations, Shorts, comments, channel pages, and supported direct video pages. Block a creator once and their matching content disappears wherever ChannelFence can identify the channel.
+ChannelFence is an open-source, privacy-first extension for Chrome and desktop Firefox that lets you block YouTube channels and creators across Home, search, recommendations, Shorts, comments, channel pages, and supported direct video pages. Block a creator once and their matching content disappears wherever ChannelFence can identify the channel.
 
 ## Install
 
 [Install ChannelFence from the Chrome Web Store](https://chromewebstore.google.com/detail/channelfence-%E2%80%93-youtube-ch/koeingndpmmgabfoihkcoikiopgkjenm?utm_source=github&utm_medium=organic&utm_campaign=30day_growth&utm_content=readme_install)
 
-Firefox 0.2.8 has been submitted to Mozilla and is awaiting approval. It is not yet available as a public Firefox Add-ons install. Developers can [test the Firefox package locally](#firefox-preparation).
+[Install ChannelFence from Firefox Add-ons](https://addons.mozilla.org/addon/channelfence/) (desktop Firefox 142 or later).
 
 [Visit the ChannelFence website](https://channelfence.app/) or [report a problem](https://github.com/boahs/ChannelFence/issues/new?template=bug_report.yml).
 
@@ -21,7 +22,7 @@ Firefox 0.2.8 has been submitted to Mozilla and is awaiting approval. It is not 
 
 YouTube's "Don't recommend channel" control changes recommendations. It is not a persistent creator block list across Home, search, Watch Next, Shorts, comments, and direct visits. ChannelFence is for people who want an explicit list they can view, edit, back up, and apply across supported YouTube surfaces.
 
-## How to block a YouTube channel in Chrome
+## How to block a YouTube channel
 
 1. Install ChannelFence.
 2. Open YouTube and find the creator you want to block.
@@ -58,11 +59,11 @@ These preferences are saved locally and work with an empty block list. Regular r
 
 - Uses only the `storage` extension permission.
 - Runs content scripts only on `www.youtube.com` and `m.youtube.com`.
-- Stores settings and the user’s block list in `chrome.storage.local`.
+- Stores settings and the user's block list in the browser's local extension storage.
 - Makes no requests outside youtube.com and contains no analytics, advertising, remote code, or account integration.
 - The complete source is available in this repository under the MIT License.
 
-## Load locally
+## Load locally in Chrome
 
 1. Open `chrome://extensions`.
 2. Enable **Developer mode**.
@@ -72,9 +73,9 @@ These preferences are saved locally and work with an empty block list. Regular r
 
 After editing the extension, select **Reload** on its `chrome://extensions` card and refresh open YouTube tabs.
 
-### Firefox preparation
+### Load locally in Firefox
 
-A separate desktop Firefox package is available for testing. Version 0.2.8 has been submitted to Mozilla and is awaiting approval. It shares the blocking code and all eighteen languages with Chrome, with a Firefox background page and browser-specific copy.
+The desktop Firefox release is available from [Firefox Add-ons](https://addons.mozilla.org/addon/channelfence/). For development, build a separate package using the instructions below. It shares the blocking code and all eighteen languages with Chrome, with a Firefox background page and browser-specific copy.
 
 Use Node.js 22.12 or later (CI uses Node.js 24), then build and validate the package:
 
@@ -85,7 +86,7 @@ npm run build:firefox
 
 The build produces `dist/ChannelFence-0.2.9-firefox/` and `dist/ChannelFence-0.2.9-firefox.zip`. In Firefox 142 or later, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select the generated folder's `manifest.json`. Temporary installation ends when Firefox closes. The ZIP is an unsigned package for Mozilla submission, not a signed public download.
 
-See [Firefox preparation and listing copy](store/firefox.md) for testing, privacy disclosures, and submission details. Chrome packages continue to use the original manifest and catalogs.
+See [Firefox build and listing guidance](store/firefox.md) for testing, privacy disclosures, and submission details. Chrome packages continue to use the original manifest and catalogs.
 
 ### Test version 0.2.9 in Chrome Canary
 
@@ -109,11 +110,11 @@ After your Canary checks, upload the same `dist/ChannelFence-0.2.9.zip` through 
 
 ## Languages
 
-ChannelFence's interface is available in English, Korean, Japanese, Brazilian Portuguese, Russian, Spanish, French, German, Simplified Chinese, Traditional Chinese, Hindi, Indonesian, Bengali, Turkish, Vietnamese, Arabic, Italian, and Dutch. By default, it follows Chrome's interface language; unsupported languages fall back to English. The Language setting lets you choose any supported language or return to Automatic. The choice stays on this device and updates open ChannelFence controls. Arabic uses a right-to-left layout. YouTube keeps its own language and direction settings. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
+ChannelFence's interface is available in English, Korean, Japanese, Brazilian Portuguese, Russian, Spanish, French, German, Simplified Chinese, Traditional Chinese, Hindi, Indonesian, Bengali, Turkish, Vietnamese, Arabic, Italian, and Dutch. By default, it follows your browser's interface language; unsupported languages fall back to English. The Language setting lets you choose any supported language or return to Automatic. The choice stays on this device and updates open ChannelFence controls. Arabic uses a right-to-left layout. YouTube keeps its own language and direction settings. Creator names, channel identifiers, and block-list backups are preserved rather than translated.
 
-Translations are bundled locally in `_locales/<language>/messages.json`. Automatic mode uses Chrome's built-in internationalization; manual choices read the same bundled catalogs. Chrome still selects the extension name and description shown in its own extension manager. No translation service or additional permission is needed. To add another Chrome-supported locale, translate the English catalog, preserve its message keys and placeholders, and add the locale to the language selector, runtime allowlist, and shared browser tests. Validate the interface, long text, count wording, and live YouTube behavior before advertising support. Native-speaker review is still welcome; automated tests verify completeness and behavior, not fluency.
+Translations are bundled locally in `_locales/<language>/messages.json`. Automatic mode uses the browser's built-in internationalization; manual choices read the same bundled catalogs. The browser still selects the extension name and description shown in its own extension manager. No translation service or additional permission is needed. To add another supported locale, translate the English catalog, preserve its message keys and placeholders, and add the locale to the language selector, runtime allowlist, Firefox copy, and shared browser tests. Validate the interface, long text, count wording, and live YouTube behavior in both browsers before advertising support. Native-speaker review is still welcome; automated tests verify completeness and behavior, not fluency.
 
-The regression suite checks each translated interface, English fallback, and localized YouTube markup. A separate CI suite checks real YouTube pages in every supported language. Store descriptions and screenshots are localized separately in the Chrome Web Store dashboard. The website is currently English; visitors can use their browser's translation feature, but bundled extension translations do not translate the website.
+The regression suite checks each translated interface, English fallback, and localized YouTube markup. A separate CI suite checks real YouTube pages in every supported language. Store descriptions and screenshots are localized separately in each store's dashboard. The website is currently English; visitors can use their browser's translation feature, but bundled extension translations do not translate the website.
 
 ## Tests
 
@@ -124,7 +125,7 @@ npm install
 npx playwright install chromium
 ```
 
-Run the complete unit, type, and browser suite:
+Run the unit tests, typecheck, and Chromium browser suite:
 
 ```powershell
 npm test

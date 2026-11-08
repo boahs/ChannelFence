@@ -360,6 +360,7 @@ h1 {
 
 .final-cta h2 { font-size: 27px; margin-bottom: 5px; }
 .final-cta p { color: #5a6489; margin: 0; }
+.final-cta .button--secondary { background: #111a47; color: #fff; }
 
 footer {
   color: #b4bde0;
@@ -553,6 +554,7 @@ footer {
   .why-section { gap: 12px; }
   .privacy-section { gap: 15px; grid-template-columns: 1fr; padding: 32px; }
   .guide-grid { grid-template-columns: 1fr; }
+  .article-cta { align-items: stretch; flex-direction: column; }
 }
 
 @media (max-width: 600px) {
@@ -571,7 +573,6 @@ footer {
   .article-card .article-lead { font-size: 18px; }
   .article-card p,
   .article-card li { font-size: 16px; }
-  .article-cta { align-items: stretch; flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
