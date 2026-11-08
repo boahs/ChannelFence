@@ -132,6 +132,10 @@ h1 {
 .button--primary:hover { background: #ff806d; }
 .button--secondary { background: rgba(255,255,255,0.07); border-color: var(--line); }
 .button--secondary:hover { background: rgba(255,255,255,0.12); }
+.button--chrome { background: #4285f4; color: #fff; }
+.button--chrome:hover { background: #3975dc; }
+.button--firefox { background: #ff7139; color: #fff; }
+.button--firefox:hover { background: #e75e27; }
 
 .trust-line {
   color: #bac4e9;
