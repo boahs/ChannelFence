@@ -47,9 +47,16 @@ test("defaults appearance settings and updates open tabs while preserving saved 
   await new YouTubeSurfacePage(first).open(appearanceFeed(), "/");
   await new YouTubeSurfacePage(second).open(appearanceFeed(), "/");
   await expectPlacement(first, "before");
+  const firstTabId = await serviceWorker.evaluate<number>(
+    "chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => tab.id)"
+  );
   await expectPlacement(second, "before");
-  const badges = () => serviceWorker.evaluate<string[]>("chrome.tabs.query({url: 'https://www.youtube.com/*'})" +
-    ".then(tabs => Promise.all(tabs.map(tab => chrome.action.getBadgeText({tabId: tab.id}))))");
+  const secondTabId = await serviceWorker.evaluate<number>(
+    "chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => tab.id)"
+  );
+  const badges = () => serviceWorker.evaluate<string[]>(
+    `Promise.all([${firstTabId}, ${secondTabId}].map(tabId => chrome.action.getBadgeText({ tabId })))`
+  );
   await expect.poll(badges).toEqual(["", ""]);
 
   await extensionPage.locator("#blockButtonPositionSelect").selectOption("after");

@@ -3,7 +3,7 @@ import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { appearanceFeed, creatorCard } from "../../e2e/fixtures/youtube-fixtures";
 import {
   activateExtensionPage, expect, expectAttribute, expectCount, expectCSS, expectValue, expectVisible,
-  openExtensionPage, openFixture, openOptions, test
+  openFixture, openOptions, test
 } from "../extension.fixture";
 import { captureExtensionDom } from "../locale-checks";
 
@@ -47,9 +47,16 @@ test("defaults appearance settings and updates open tabs while preserving saved 
   await openFixture(first, appearanceFeed(), "/");
   await openFixture(second, appearanceFeed(), "/");
   await expectPlacement(first, "before");
+  const firstTabId = await addon.ui.evaluate(
+    "browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => tab.id)"
+  );
   await expectPlacement(second, "before");
-  const badges = () => addon.ui.evaluate<string[]>("browser.tabs.query({url: 'https://www.youtube.com/*'})" +
-    ".then(tabs => Promise.all(tabs.map(tab => browser.action.getBadgeText({tabId: tab.id}))))");
+  const secondTabId = await addon.ui.evaluate(
+    "browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => tab.id)"
+  );
+  const badges = () => addon.ui.evaluate<string[]>(
+    `Promise.all([${firstTabId}, ${secondTabId}].map(tabId => browser.action.getBadgeText({ tabId })))`
+  );
   await expect.poll(badges).toEqual(["", ""]);
 
   await addon.ui.select("#blockButtonPositionSelect", "after");
@@ -64,7 +71,7 @@ test("defaults appearance settings and updates open tabs while preserving saved 
   ] });
   await expect.poll(badges).toEqual(["2", "2"]);
 
-  await openExtensionPage(addon.ui, `${addon.origin}/ui/options.html`);
+  await openOptions(addon);
   await expectValue(addon.ui, "#blockButtonPositionSelect", "after");
   expect(await addon.ui.$eval("#showBlockCountToggle", (input) => (input as HTMLInputElement).checked)).toBe(true);
   await first.reload();
@@ -73,7 +80,7 @@ test("defaults appearance settings and updates open tabs while preserving saved 
   await activateExtensionPage(addon.ui);
   await addon.ui.locator("label:has(#showBlockCountToggle)").click();
   await expect.poll(badges).toEqual(["", ""]);
-  await openExtensionPage(addon.ui, `${addon.origin}/ui/options.html`);
+  await openOptions(addon);
   expect(await addon.ui.$eval("#showBlockCountToggle", (input) => (input as HTMLInputElement).checked)).toBe(false);
   expect(await addon.getStorage(["cfBlockButtonPosition", "cfShowBlockCount"]))
     .toEqual({ cfBlockButtonPosition: "after", cfShowBlockCount: false });
