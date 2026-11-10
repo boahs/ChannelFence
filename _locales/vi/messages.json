@@ -189,7 +189,7 @@
     "message": "Vị trí nút chặn"
   },
   "blockButtonPositionHelp": {
-    "message": "Đặt nút trước hoặc sau tên nhà sáng tạo, theo hướng đọc của YouTube."
+    "message": "Di chuyển nút bên cạnh tên nhà sáng tạo trong các thẻ video và bình luận được hỗ trợ, theo hướng đọc của YouTube. Các nút điều khiển ở đầu trang, trong trình đơn và Shorts giữ nguyên vị trí."
   },
   "blockButtonPositionBefore": {
     "message": "Trước tên nhà sáng tạo"

@@ -189,7 +189,7 @@
     "message": "Engelleme düğmesinin konumu"
   },
   "blockButtonPositionHelp": {
-    "message": "Düğmeyi YouTube'un okuma yönüne göre içerik üreticisinin adından önce veya sonra yerleştirin."
+    "message": "Desteklenen video kartlarında ve yorumlarda içerik üreticisinin adının yanındaki düğmeleri YouTube'un okuma yönüne göre taşır. Sayfa başlıklarındaki, menülerdeki ve Shorts'taki kontrollerin konumu değişmez."
   },
   "blockButtonPositionBefore": {
     "message": "İsimden önce"

@@ -189,7 +189,7 @@
     "message": "Posizione del pulsante di blocco"
   },
   "blockButtonPositionHelp": {
-    "message": "Posiziona il pulsante prima o dopo il nome dei creator, seguendo la direzione di lettura di YouTube."
+    "message": "Sposta i pulsanti accanto ai nomi dei creator nelle schede video e nei commenti supportati, seguendo la direzione di lettura di YouTube. I controlli nelle intestazioni delle pagine, nei menu e negli Shorts mantengono la loro posizione."
   },
   "blockButtonPositionBefore": {
     "message": "Prima del nome del creator"

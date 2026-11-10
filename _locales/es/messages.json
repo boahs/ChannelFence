@@ -189,7 +189,7 @@
     "message": "Posición del botón de bloqueo"
   },
   "blockButtonPositionHelp": {
-    "message": "Coloca el botón antes o después del nombre del creador, siguiendo la dirección de lectura de YouTube."
+    "message": "Mueve los botones junto al nombre del creador en las tarjetas de vídeo y los comentarios compatibles, siguiendo la dirección de lectura de YouTube. Los controles de las cabeceras de página, los menús y Shorts mantienen su posición."
   },
   "blockButtonPositionBefore": {
     "message": "Antes del nombre"

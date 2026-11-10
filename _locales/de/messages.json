@@ -189,7 +189,7 @@
     "message": "Position der Blockieren-Schaltfläche"
   },
   "blockButtonPositionHelp": {
-    "message": "Platziert die Schaltfläche vor oder nach dem Namen des Creators, entsprechend der Leserichtung von YouTube."
+    "message": "Verschiebt die Schaltflächen neben den Namen der Creator in unterstützten Videokarten und Kommentaren entsprechend der Leserichtung von YouTube. Schaltflächen in Seitenköpfen, Menüs und Shorts behalten ihre Position."
   },
   "blockButtonPositionBefore": {
     "message": "Vor dem Namen"

@@ -189,7 +189,7 @@
     "message": "Position du bouton de blocage"
   },
   "blockButtonPositionHelp": {
-    "message": "Placez le bouton avant ou après le nom des créateurs, dans le sens de lecture de YouTube."
+    "message": "Déplace les boutons à côté du nom des créateurs dans les fiches vidéo et les commentaires pris en charge, dans le sens de lecture de YouTube. Les commandes des en-têtes de page, des menus et de Shorts gardent leur position."
   },
   "blockButtonPositionBefore": {
     "message": "Avant le nom du créateur"

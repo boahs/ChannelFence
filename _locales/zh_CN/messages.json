@@ -189,7 +189,7 @@
     "message": "屏蔽按钮位置"
   },
   "blockButtonPositionHelp": {
-    "message": "按照 YouTube 的阅读方向，将按钮放在创作者名称之前或之后。"
+    "message": "按照 YouTube 的阅读方向，调整支持的视频卡片和评论中创作者名称旁的按钮位置。页面顶部、菜单和 Shorts 中的控件位置保持不变。"
   },
   "blockButtonPositionBefore": {
     "message": "创作者名称之前"

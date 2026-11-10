@@ -189,7 +189,7 @@
     "message": "Posisi tombol blokir"
   },
   "blockButtonPositionHelp": {
-    "message": "Letakkan tombol sebelum atau sesudah nama kreator, mengikuti arah baca YouTube."
+    "message": "Memindahkan tombol di samping nama kreator pada kartu video dan komentar yang didukung, mengikuti arah baca YouTube. Kontrol di header halaman, menu, dan Shorts tetap di tempatnya."
   },
   "blockButtonPositionBefore": {
     "message": "Sebelum nama kreator"

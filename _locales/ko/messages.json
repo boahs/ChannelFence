@@ -189,7 +189,7 @@
     "message": "차단 버튼 위치"
   },
   "blockButtonPositionHelp": {
-    "message": "YouTube의 읽기 방향에 따라 크리에이터 이름 앞이나 뒤에 버튼을 배치합니다."
+    "message": "지원되는 동영상 카드와 댓글에서 YouTube의 읽기 방향에 따라 크리에이터 이름 옆 버튼의 위치를 바꿉니다. 페이지 헤더, 메뉴, Shorts의 버튼 위치는 그대로 유지됩니다."
   },
   "blockButtonPositionBefore": {
     "message": "크리에이터 이름 앞"

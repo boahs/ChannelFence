@@ -189,7 +189,7 @@
     "message": "ブロックボタンの位置"
   },
   "blockButtonPositionHelp": {
-    "message": "YouTubeの表示方向に合わせて、クリエイター名の前または後にボタンを配置します。"
+    "message": "対応する動画カードやコメントで、YouTubeの表示方向に合わせてクリエイター名の横にあるボタンの位置を変えます。ページヘッダー、メニュー、ショートの操作ボタンの位置は変わりません。"
   },
   "blockButtonPositionBefore": {
     "message": "クリエイター名の前"

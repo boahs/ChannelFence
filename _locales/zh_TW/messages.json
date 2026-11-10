@@ -189,7 +189,7 @@
     "message": "封鎖按鈕位置"
   },
   "blockButtonPositionHelp": {
-    "message": "依照 YouTube 的閱讀方向，將按鈕放在創作者名稱之前或之後。"
+    "message": "依照 YouTube 的閱讀方向，調整支援的影片卡片和留言中創作者名稱旁的按鈕位置。頁面頂部、選單和 Shorts 中的控制項位置維持不變。"
   },
   "blockButtonPositionBefore": {
     "message": "創作者名稱之前"

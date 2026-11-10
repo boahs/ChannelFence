@@ -189,7 +189,7 @@
     "message": "Positie van de blokkeerknop"
   },
   "blockButtonPositionHelp": {
-    "message": "Plaats de knop voor of na de naam van de maker, volgens de leesrichting van YouTube."
+    "message": "Verplaatst knoppen naast de naam van de maker in ondersteunde videokaarten en reacties, volgens de leesrichting van YouTube. Knoppen in paginakoppen, menu's en Shorts blijven op hun plek."
   },
   "blockButtonPositionBefore": {
     "message": "Voor de naam van de maker"

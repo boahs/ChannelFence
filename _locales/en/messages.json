@@ -189,7 +189,7 @@
     "message": "Block button position"
   },
   "blockButtonPositionHelp": {
-    "message": "Place the button before or after creator names, following YouTube's reading direction."
+    "message": "Moves buttons beside creator names on supported video cards and comments, following YouTube's reading direction. Page headers, menus, and Shorts controls keep their positions."
   },
   "blockButtonPositionBefore": {
     "message": "Before creator name"
