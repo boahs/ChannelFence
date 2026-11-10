@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>How to Hide YouTube Shorts in Chrome | ChannelFence</title>
-  <meta name="description" content="Hide supported YouTube Shorts shelves and cards from feeds in Chrome while keeping the Shorts tab and viewer available when you choose to use them.">
+  <meta name="description" content="Hide supported YouTube Shorts shelves and cards from feeds in Chrome while keeping YouTube's Shorts navigation and viewer available when you choose to use them.">
   <link rel="canonical" href="https://channelfence.app/how-to-hide-youtube-shorts-in-chrome/">
   <link rel="icon" href="../assets/icons/channelfence-32.png" sizes="32x32">
   <link rel="stylesheet" href="../site/styles.css">
@@ -29,7 +29,7 @@
     "@type": "HowTo",
     "name": "How to hide YouTube Shorts in Chrome",
     "description": "Use ChannelFence to hide supported YouTube Shorts shelves and cards from feeds while keeping the Shorts viewer available.",
-    "dateModified": "2026-11-08",
+    "dateModified": "2026-11-10",
     "mainEntityOfPage": "https://channelfence.app/how-to-hide-youtube-shorts-in-chrome/",
     "step": [
       { "@type": "HowToStep", "name": "Install ChannelFence", "text": "Install ChannelFence from the Chrome Web Store and refresh open YouTube tabs." },
@@ -59,8 +59,9 @@
       <header>
         <p class="eyebrow">Chrome guide</p>
         <h1>How to hide YouTube Shorts in Chrome</h1>
-        <p class="article-lead">ChannelFence can remove supported Shorts shelves and cards from Home, search, and other feeds without removing the Shorts tab or preventing you from opening the Shorts viewer.</p>
-        <p class="article-meta">Updated November 8, 2026 · For ChannelFence 0.2.9. These steps use the English labels.</p>
+        <p class="article-lead">ChannelFence can remove supported Shorts shelves and cards from Home, channel Home, search, and other feeds without removing YouTube's Shorts navigation item or preventing you from opening the Shorts viewer.</p>
+        <p class="article-meta">Updated November 10, 2026 · Chrome and desktop Firefox. These steps use the English labels.</p>
+        <p>The channel Shorts tab fix below is part of <a href="../changelog/#v0-2-10">0.2.10, prepared for store submission</a>. It will reach store users after each store's review.</p>
       </header>
 
       <p>Using desktop Firefox? <a href="https://addons.mozilla.org/addon/channelfence/">Install ChannelFence from Firefox Add-ons</a> and open it from Firefox's extensions menu. The Shorts controls below work there too.</p>
@@ -76,10 +77,14 @@
       <p>This option is off by default and does not need any blocked creators to work. It is also available by choosing <strong>Manage block list</strong> at the bottom of the popup and finding <strong>Hide Shorts in feeds</strong> under <strong>Settings</strong>. Changes are saved automatically and appear in both places for the same browser profile.</p>
 
       <div class="article-note">
-        <strong>The Shorts tab remains available</strong>
+        <strong>The Shorts viewer remains available</strong>
         <p>This option is meant to make regular feeds less intrusive. It does not remove YouTube's Shorts navigation item or disable the direct Shorts viewer.</p>
       </div>
       <p>It does not skip sponsored Shorts playing in the viewer or remove ads inside the video player. <strong>Hide sponsored cards on Home</strong> is a separate option for sponsored cards in the Home feed.</p>
+
+      <h2>Channel Shorts tabs in 0.2.10</h2>
+      <p>Starting with 0.2.10, selecting a creator's dedicated <strong>Shorts</strong> tab keeps that tab's Shorts visible even when <strong>Hide Shorts in feeds</strong> is on. Opening that tab is an explicit choice to browse their Shorts. Supported Shorts shelves on the creator's <strong>Home</strong> tab stay hidden.</p>
+      <p>Your creator block list still applies. This change does not unblock creators or bypass a blocked channel's page.</p>
 
       <h2>Block one Shorts creator instead</h2>
       <p>Creator blocking and hiding Shorts shelves are separate choices. To keep Shorts in your feeds but remove a specific creator, leave <strong>Hide Shorts in feeds</strong> off and use one of these methods:</p>

@@ -93,16 +93,16 @@ npm ci
 npm run build:firefox
 ```
 
-The build produces `dist/ChannelFence-0.2.9-firefox/` and `dist/ChannelFence-0.2.9-firefox.zip`. In Firefox 142 or later, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select the generated folder's `manifest.json`. Temporary installation ends when Firefox closes. The ZIP is an unsigned package for Mozilla submission, not a signed public download.
+The build produces `dist/ChannelFence-0.2.10-firefox/` and `dist/ChannelFence-0.2.10-firefox.zip`. In Firefox 142 or later, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select the generated folder's `manifest.json`. Temporary installation ends when Firefox closes. The ZIP is an unsigned package for Mozilla submission, not a signed public download.
 
 See [Firefox build and listing guidance](store/firefox.md) for testing, privacy disclosures, and submission details. Chrome packages continue to use the original manifest and catalogs.
 
-### Test version 0.2.9 in Chrome Canary
+### Test version 0.2.10 in Chrome Canary
 
-1. Extract `dist/ChannelFence-0.2.9.zip` to a folder.
+1. Extract `dist/ChannelFence-0.2.10.zip` to a folder.
 2. In Chrome Canary, open `chrome://extensions` and disable any other ChannelFence copy in that Canary profile to avoid duplicate controls and filtering.
 3. Enable **Developer mode**, select **Load unpacked**, and choose the extracted folder containing `manifest.json`.
-4. Confirm the extension shows version **0.2.9**. To reuse your block list from another Chrome profile, export it from ChannelFence settings there and import it into the Canary copy.
+4. Confirm the extension shows version **0.2.10**. To reuse your block list from another Chrome profile, export it from ChannelFence settings there and import it into the Canary copy.
 5. Refresh open YouTube tabs. Test a two-creator and a three-creator collaboration with one identified collaborator blocked at a time, including the second or third creator when their name is available.
 6. Block from a collaboration card and check that the saved entry names the selected creator. Use **Undo**, confirm the card returns when no other collaborator is blocked, then block again and refresh to check persistence.
 7. Test an `A and 2 more` card: blocking A should hide it. Other collaborators can match only when YouTube exposes their names or channel links on the card.
@@ -115,7 +115,7 @@ See [Firefox build and listing guidance](store/firefox.md) for testing, privacy 
 12. On Home, try **Hide sponsored cards on Home** and **Hide annoying YouTube features** separately, including with an empty block list. Check available Explore more topics, Playables, promotional offers, prompts, and surveys. Regular videos, courses, mixes, and the top category filters should remain; Shorts follow their own preference. An attached survey should disappear without hiding its video. Turn each option off to restore its content.
 13. Enable the compact Home grid and try each thumbnail size at wide and narrow window sizes. Confirm cards stay readable and in order, shelves keep their place, and disabling the option restores YouTube's layout. Reopen the popup and settings to check that your choices are saved.
 
-After your Canary checks, upload the same `dist/ChannelFence-0.2.9.zip` through the Chrome Web Store Developer Dashboard.
+After your Canary checks, upload the same `dist/ChannelFence-0.2.10.zip` through the Chrome Web Store Developer Dashboard.
 
 ### Appearance and Shorts checks in Chrome and Firefox
 
@@ -185,6 +185,8 @@ For each version, add a dated entry with a permanent `vX-Y-Z` anchor, a short li
 The CI website job builds the page with GitHub Pages' Jekyll action and uploads the rendered page for review. Merging the PR lets the existing Pages deployment publish it; no separate hosting setup is needed.
 
 ## Create the Web Store ZIP
+
+For every store update, follow the [release submission checklist](store/submission-checklist.md). Prepare an updated full description and version-specific release notes for both [Chrome](store/listing.md) and [Firefox](store/firefox.md), including reviewer/source-build notes. Update the website changelog and relevant guides in the same release. Keep submission readiness separate from approval: only advertise a store version as available after its listing confirms it.
 
 Run:
 

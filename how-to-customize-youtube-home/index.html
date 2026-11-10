@@ -29,7 +29,7 @@
     "@type": "HowTo",
     "name": "How to customize YouTube Home with ChannelFence",
     "description": "Choose which supported Home inserts to hide and set a thumbnail size for the compact Home grid.",
-    "dateModified": "2026-11-08",
+    "dateModified": "2026-11-10",
     "mainEntityOfPage": "https://channelfence.app/how-to-customize-youtube-home/",
     "step": [
       { "@type": "HowToStep", "name": "Open ChannelFence", "text": "Install ChannelFence from the Chrome Web Store or Firefox Add-ons, refresh any open YouTube tab, and open ChannelFence from your browser's extensions menu." },
@@ -59,8 +59,9 @@
       <header>
         <p class="eyebrow">Chrome and Firefox guide</p>
         <h1>Clean up YouTube Home and choose your thumbnail size</h1>
-        <p class="article-meta">Updated November 8, 2026 · For ChannelFence 0.2.9 on Chrome and desktop Firefox</p>
+        <p class="article-meta">Updated November 10, 2026 · Chrome and desktop Firefox</p>
         <p class="article-lead">Hide the Home inserts you do not want and fit more videos into your browser window. Each control is optional, so you can keep YouTube's usual layout or change just one thing.</p>
+        <p>The 0.2.10 changes mentioned below are <a href="../changelog/#v0-2-10">prepared for store submission</a>. They will reach store users after each store's review.</p>
       </header>
 
       <h2>Find the Home controls</h2>
@@ -86,7 +87,7 @@
         <li><strong>Recommendation prompts and feedback surveys.</strong></li>
       </ul>
       <p>The category filters across the top of Home, ordinary recommendations, courses, and mixes remain available unless their creators are blocked. Sponsored cards and Shorts have their own switches.</p>
-      <p>To remove Shorts shelves and cards too, turn on <strong>Hide Shorts in feeds</strong>. That option also covers supported search and other feeds; the Shorts tab and direct viewer stay available. See the <a href="../how-to-hide-youtube-shorts-in-chrome/">Shorts guide</a> for details.</p>
+      <p>To remove Shorts shelves and cards too, turn on <strong>Hide Shorts in feeds</strong>. That option also covers channel Home, search, and other supported feeds. YouTube's Shorts navigation item and the direct viewer stay available. Starting with 0.2.10, a creator's dedicated <strong>Shorts</strong> tab also stays visible, while creator blocks still apply. See the <a href="../how-to-hide-youtube-shorts-in-chrome/">Shorts guide</a> for details.</p>
 
       <h2>Make thumbnails smaller or larger</h2>
       <p>Turn on <strong>Compact Home grid</strong>, then choose a <strong>Thumbnail size</strong>:</p>
@@ -97,6 +98,10 @@
       </ul>
       <p>The number of columns adjusts to the space available in your browser. Window width, browser zoom, and YouTube's sidebar all affect it. A smaller window can show fewer columns at any size, so there is no need to choose a monitor resolution.</p>
       <p>The compact grid applies to Home. You can use it on its own, or combine it with the hiding options above.</p>
+
+      <h2>Keep block buttons visible in 0.2.10</h2>
+      <p>Version 0.2.10 keeps creator names and block buttons within narrow cards, including compact Home grids. Buttons appear before creator names by default. To change this, open <strong>Manage block list</strong>, then <strong>Appearance</strong>, and choose <strong>Before creator name</strong> or <strong>After creator name</strong> under <strong>Block button position</strong>.</p>
+      <p>The order follows YouTube's reading direction. This setting also applies to supported video cards outside Home and comments; channel headers, menus, and Shorts viewer controls keep their positions.</p>
 
       <h2>Return to your usual layout</h2>
       <p>Turn off <strong>Compact Home grid</strong> to restore YouTube's layout. Switch off either Home hiding option to show those inserts again. These changes leave your creator block list intact.</p>
