@@ -2,6 +2,7 @@ import { expect, test } from "../fixtures/extension.fixture";
 import { allLocales } from "../fixtures/locales";
 import { assertLiveYouTubeAccess } from "../fixtures/live-youtube-access";
 import { readNativeLockupCreator } from "../fixtures/native-lockup-creator";
+import { liveSearchMenuSelector, liveSearchResultSelector } from "../fixtures/live-search-selectors";
 import type { Locator, TestInfo } from "@playwright/test";
 
 async function captureAction(control: Locator, testInfo: TestInfo, name: string) {
@@ -98,17 +99,15 @@ for (const locale of allLocales) {
         timeout: 30_000
       });
       await expect(extensionPage.locator("html")).toHaveAttribute("lang", locale.documentLanguage);
-      const result = extensionPage.locator("ytd-video-renderer").filter({
-        has: extensionPage.locator("ytd-channel-name a[href]")
-      }).first();
+      const result = extensionPage.locator(liveSearchResultSelector).first();
       await expect(result).toBeVisible({ timeout: 30_000 });
       const blockButton = result.locator(".cf-block-button");
       await expect(blockButton).toHaveCount(1);
       const identity = await blockButton.getAttribute("data-cf-identity");
       expect(identity).toMatch(/^(?:handle|channel):/);
       await captureAction(blockButton, testInfo, `${locale.catalogCode}-live-search-block-button`);
-      await result.locator("ytd-menu-renderer button").first().click();
-      const action = extensionPage.locator("ytd-menu-popup-renderer:visible .cf-menu-item");
+      await result.locator(liveSearchMenuSelector).click();
+      const action = extensionPage.locator(".cf-menu-item:visible");
       await expect(action).toHaveCount(1);
       await expect(action.locator(".cf-menu-item__label"))
         .toHaveText(locale.messages.contentMenuBlock.message);

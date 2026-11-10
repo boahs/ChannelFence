@@ -3,6 +3,7 @@ import type { Frame, HTTPRequest, Page } from "puppeteer-core";
 import type { BidiConnection } from "puppeteer-core/internal/bidi/Connection.js";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
 import { assertLiveYouTubeAccess } from "../../e2e/fixtures/live-youtube-access";
+import { liveSearchMenuSelector, liveSearchResultSelector } from "../../e2e/fixtures/live-search-selectors";
 import { expect, expectAttribute, expectCount, expectContainsText, expectVisible, test } from "../extension.fixture";
 
 type ShortsEvent = {
@@ -138,21 +139,22 @@ test("adds block controls to a live watch-page right-rail lockup", async ({ addo
 
 test("adds a block control to live YouTube search results", async ({ addon }) => {
   await addon.page.goto("https://www.youtube.com/results?search_query=CustomGrow420", { waitUntil: "domcontentloaded", timeout: 30_000 });
-  const result = await addon.page.waitForSelector("ytd-video-renderer:has(ytd-channel-name a[href])", { visible: true, timeout: 30_000 });
+  const result = await addon.page.waitForSelector(liveSearchResultSelector, { visible: true, timeout: 30_000 });
   if (!result) throw new Error("No supported search result was rendered");
   await result.waitForSelector(".cf-block-button", { visible: true, timeout: 15_000 });
 });
 
 test("blocks a live video from its three-dot menu", async ({ addon }) => {
   await addon.page.goto("https://www.youtube.com/results?search_query=cat+videos", { waitUntil: "domcontentloaded", timeout: 30_000 });
-  const result = await addon.page.waitForSelector("ytd-video-renderer:has(ytd-channel-name a[href])", { visible: true, timeout: 30_000 });
+  const result = await addon.page.waitForSelector(liveSearchResultSelector, { visible: true, timeout: 30_000 });
   if (!result) throw new Error("No supported search result was rendered");
   await result.hover();
-  const menu = await result.waitForSelector("ytd-menu-renderer button[aria-label='Action menu']", { visible: true });
+  const menu = await result.waitForSelector(liveSearchMenuSelector, { visible: true });
   if (!menu) throw new Error("No search result overflow menu was rendered");
   await menu.click();
-  await expectVisible(addon.page, "ytd-menu-popup-renderer .cf-menu-item");
-  await addon.page.locator("ytd-menu-popup-renderer .cf-menu-item").click();
+  await expectCount(addon.page, ".cf-menu-item", 1);
+  await expectVisible(addon.page, ".cf-menu-item");
+  await addon.page.locator(".cf-menu-item").click();
   await expect.poll(() => result.evaluate((element) => element.checkVisibility()), { timeout: 15_000 }).toBe(false);
   await expect.poll(async () => (await addon.getStorage<{ cfBlockedChannels: unknown[] }>("cfBlockedChannels")).cfBlockedChannels.length).toBe(1);
 });
