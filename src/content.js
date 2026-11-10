@@ -1713,6 +1713,12 @@
 
   function positionBlockButton(button, anchor, host, pageButton) {
     const position = pageButton ? "after" : state.blockButtonPosition;
+    if (anchor?.matches("#attributed-channel-name, .ytContentMetadataViewModelMetadataRow")) {
+      // A linkless collaboration shares one native byline. Keep its row in
+      // place so inserting controls cannot change which metadata row is first.
+      host = anchor;
+      anchor = null;
+    }
     if (button.parentElement === host && button.__channelFenceAnchor === anchor &&
         (pageButton || button.dataset.cfPosition === position)) {
       return;
@@ -1723,7 +1729,9 @@
     if (anchor?.isConnected) {
       anchor.insertAdjacentElement(position === "before" ? "beforebegin" : "afterend", button);
     } else if (position === "before") {
-      host.prepend(button);
+      const firstNativeNode = [...host.childNodes]
+        .find((node) => !node.classList?.contains("cf-block-button"));
+      host.insertBefore(button, firstNativeNode || null);
     } else {
       host.append(button);
     }

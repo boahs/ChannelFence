@@ -112,7 +112,8 @@ for (const size of ["small", "medium", "large"]) {
     if (size === "small") {
       await addon.setStorage({ cfEnabled: false });
       await expectCount(addon.page, ".cf-block-button", 0);
-      await expectCSS(addon.page, "ytd-channel-name", "display", "inline-block");
+      // The native inline-block is blockified because it is a flex item.
+      await expectCSS(addon.page, "ytd-channel-name", "display", "block");
       await expectCSS(addon.page, ".ytAvatarStackViewModelAvatarStackText > span", "display", "inline");
       await addon.setStorage({ cfEnabled: true });
       await expectPlacement(addon.page, "after");

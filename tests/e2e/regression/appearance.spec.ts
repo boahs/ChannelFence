@@ -116,7 +116,8 @@ for (const size of ["small", "medium", "large"]) {
     if (size === "small") {
       await extensionStorage.set({ cfEnabled: false });
       await expect(extensionPage.locator(".cf-block-button")).toHaveCount(0);
-      await expect(extensionPage.locator("ytd-channel-name")).toHaveCSS("display", "inline-block");
+      // The native inline-block is blockified because it is a flex item.
+      await expect(extensionPage.locator("ytd-channel-name")).toHaveCSS("display", "block");
       await expect(extensionPage.locator(".ytAvatarStackViewModelAvatarStackText > span")).toHaveCSS("display", "inline");
       await extensionStorage.set({ cfEnabled: true });
       await expectPlacement(extensionPage, "after");

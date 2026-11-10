@@ -4,7 +4,7 @@ export function readNativeLockupCreator(
   root: Element, labels: { creator: string; goToChannel: string }
 ): string {
   const normalize = (value: string) => value.normalize("NFKC").replace(/\s+/g, " ").trim();
-  const label = normalize(root.querySelector(".ytLockupMetadataViewModelAvatar [aria-label]")
+  const label = normalize(root.querySelector(".ytLockupMetadataViewModelAvatar [aria-label]:not(.cf-block-button)")
     ?.getAttribute("aria-label") || "");
   // YouTube can retain the English avatar label on an otherwise localized page.
   const english = label.match(/^Go to channel\s+(.+)$/i);

@@ -8,13 +8,23 @@ const { rightRailLockup } = require("./e2e/fixtures/youtube-fixtures.ts");
 const english = { creator: "Sample", goToChannel: "Go to channel Sample" };
 function cardWithAvatar(label) {
   return { querySelector(selector) {
-    assert.equal(selector, ".ytLockupMetadataViewModelAvatar [aria-label]");
+    assert.equal(selector, ".ytLockupMetadataViewModelAvatar [aria-label]:not(.cf-block-button)");
     return label === null ? null : { getAttribute: () => label };
   } };
 }
 
 test("native movie creator is read independently of genre/year metadata", () => {
   assert.equal(readNativeLockupCreator(cardWithAvatar("Go to channel YouTube Movies"), english), "YouTube Movies");
+});
+
+test("ignores a ChannelFence control placed before the native avatar", () => {
+  const root = { querySelector(selector) {
+    if (selector === ".ytLockupMetadataViewModelAvatar [aria-label]") {
+      return { getAttribute: () => "Block YouTube Movies" };
+    }
+    return cardWithAvatar("Go to channel YouTube Movies").querySelector(selector);
+  } };
+  assert.equal(readNativeLockupCreator(root, english), "YouTube Movies");
 });
 
 test("native creator labels use the localized wording captured from YouTube", () => {
