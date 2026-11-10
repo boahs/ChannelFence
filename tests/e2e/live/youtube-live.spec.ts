@@ -1,5 +1,6 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 import { assertLiveYouTubeAccess } from "../fixtures/live-youtube-access";
+import { liveSearchMenuSelector, liveSearchResultSelector } from "../fixtures/live-search-selectors";
 import type { Frame, Request } from "@playwright/test";
 
 test("injects ChannelFence on the live YouTube origin", async ({ extensionPage }) => {
@@ -149,9 +150,7 @@ test("adds a block control to live YouTube search results", async ({ extensionPa
     timeout: 30_000
   });
 
-  const result = extensionPage.locator("ytd-video-renderer").filter({
-    has: extensionPage.locator("ytd-channel-name a[href]")
-  }).first();
+  const result = extensionPage.locator(liveSearchResultSelector).first();
   await expect(result).toBeVisible({ timeout: 30_000 });
   await expect(result.locator(".cf-block-button")).toBeVisible({ timeout: 15_000 });
 });
@@ -165,12 +164,11 @@ test("blocks a live video from its three-dot menu", async ({
     timeout: 30_000
   });
 
-  const result = extensionPage.locator("ytd-video-renderer").filter({
-    has: extensionPage.locator("ytd-channel-name a[href]")
-  }).first();
+  const result = extensionPage.locator(liveSearchResultSelector).first();
   await expect(result).toBeVisible({ timeout: 30_000 });
-  await result.locator("ytd-menu-renderer button[aria-label='Action menu']").click();
-  const action = extensionPage.locator("ytd-menu-popup-renderer:visible .cf-menu-item").last();
+  await result.locator(liveSearchMenuSelector).click();
+  const action = extensionPage.locator(".cf-menu-item:visible");
+  await expect(action).toHaveCount(1);
   await expect(action).toBeVisible({ timeout: 15_000 });
   await action.click();
 

@@ -1,6 +1,7 @@
 import { allLocales } from "../../e2e/fixtures/locales";
 import { assertLiveYouTubeAccess } from "../../e2e/fixtures/live-youtube-access";
 import { readNativeLockupCreator } from "../../e2e/fixtures/native-lockup-creator";
+import { liveSearchMenuSelector, liveSearchResultSelector } from "../../e2e/fixtures/live-search-selectors";
 import { expect, expectAttribute, expectCount, expectText, expectVisible, test, type FirefoxAddon } from "../extension.fixture";
 import { captureAction, expectInViewport, expectNativeLanguage, type Locale } from "../locale-checks";
 
@@ -44,7 +45,7 @@ for (const locale of allLocales) {
 
     test("blocks a search result through its overflow menu", async ({ addon }, testInfo) => {
       await openYouTube(addon, "/results?search_query=cat+videos", locale);
-      const resultSelector = "ytd-video-renderer:has(ytd-channel-name a[href])";
+      const resultSelector = liveSearchResultSelector;
       const result = await addon.page.waitForSelector(resultSelector, { visible: true, timeout: 30_000 });
       if (!result) throw new Error("No supported search result was rendered");
       await expect.poll(() => result.$$eval(".cf-block-button", (elements) => elements.length)).toBe(1);
@@ -52,10 +53,10 @@ for (const locale of allLocales) {
       expect(identity).toMatch(/^(?:handle|channel):/);
       await captureAction(addon.page, `${resultSelector} .cf-block-button`, testInfo, `${locale.catalogCode}-live-search-block-button`);
       await result.hover();
-      const menu = await result.waitForSelector("ytd-menu-renderer button", { visible: true, timeout: 30_000 });
+      const menu = await result.waitForSelector(liveSearchMenuSelector, { visible: true, timeout: 30_000 });
       if (!menu) throw new Error("The supported search result has no overflow button");
       await menu.click();
-      await expectCount(addon.page, "ytd-menu-popup-renderer .cf-menu-item", 1);
+      await expectCount(addon.page, ".cf-menu-item", 1);
       await expectText(addon.page, ".cf-menu-item__label", locale.messages.contentMenuBlock.message);
       await captureAction(addon.page, ".cf-menu-item", testInfo, `${locale.catalogCode}-live-search-block-menu`);
       await addon.page.locator(".cf-menu-item").click();
