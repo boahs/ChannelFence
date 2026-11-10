@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+<a id="v0-2-10"></a>
+
+## [0.2.10](#v0-2-10) - 2026-11-10
+
+Prepared for submission to the Chrome Web Store and Firefox Add-ons. Availability follows each store's review.
 
 - Moved inline block buttons before creator names by default. Choose **Before creator name** or **After creator name** under **Appearance** in settings; the order follows YouTube's reading direction.
 - Kept creator names and block buttons inside narrow cards, including compact Home grids.
@@ -8,6 +12,18 @@
 - Made the toolbar's saved block-list count optional and off by default. Enable **Show blocked-creator count on toolbar icon** in settings to restore it.
 - Added the Firefox Add-ons review link to Firefox settings.
 - Translated the new settings into all eighteen supported interface languages.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
+
+- Added matching Chrome and Firefox coverage for button placement, compact and narrow cards, right-to-left layouts, collaboration identities, and saved preferences across open tabs.
+- Checked placement and creator identity on supported comments and watch recommendations. Channel headers, menus, and Shorts viewer controls keep their existing positions.
+- Added channel Shorts checks for handle, channel-ID, and legacy channel URLs, navigation between channel tabs, preference changes, and blocked creators.
+- Added checks for the optional toolbar count and browser-specific review links. All eighteen interface-language suites cover the new settings.
+
+There are no new permissions, additional network requests, remote code, or extension analytics in this release.
+
+</details>
 
 <a id="v0-2-9"></a>
 
