@@ -144,7 +144,7 @@
     "message": "Tạm dừng mọi thao tác chặn mà không xóa danh sách."
   },
   "hideShortsHelp": {
-    "message": "Ẩn các mục và thẻ Shorts ở trang chủ, tìm kiếm và bảng tin khác. Thẻ Shorts vẫn dùng được."
+    "message": "Ẩn các mục và thẻ Shorts ở trang chủ, trang chủ của kênh, tìm kiếm và các bảng tin khác. Thẻ Shorts của kênh và trình phát Shorts vẫn dùng được."
   },
   "hideHomeAds": {
     "message": "Ẩn thẻ được tài trợ trên trang chủ"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Cũng ẩn bình luận khi ChannelFence xác định được kênh của người bình luận."
+  },
+  "appearance": {
+    "message": "Giao diện"
+  },
+  "blockButtonPosition": {
+    "message": "Vị trí nút chặn"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Di chuyển nút bên cạnh tên nhà sáng tạo trong các thẻ video và bình luận được hỗ trợ, theo hướng đọc của YouTube. Các nút điều khiển ở đầu trang, trong trình đơn và Shorts giữ nguyên vị trí."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Trước tên nhà sáng tạo"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Sau tên nhà sáng tạo"
+  },
+  "showBlockCount": {
+    "message": "Hiển thị số nhà sáng tạo đã chặn trên biểu tượng thanh công cụ"
+  },
+  "showBlockCountHelp": {
+    "message": "Hiển thị tổng số nhà sáng tạo trong danh sách chặn, không phải số bị ẩn trên trang hiện tại."
   },
   "blockedCreators": {
     "message": "Nhà sáng tạo bị chặn"

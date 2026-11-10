@@ -144,7 +144,7 @@
     "message": "Pauzeer alle blokkades zonder je lijst te verwijderen."
   },
   "hideShortsHelp": {
-    "message": "Verwijdert Shorts-secties en -kaarten van Home, uit zoekresultaten en uit andere feeds. Het tabblad Shorts blijft beschikbaar."
+    "message": "Verwijdert Shorts-secties en -kaarten van Home, van startpagina’s van kanalen, uit zoekresultaten en uit andere feeds. De Shorts-tabbladen van kanalen en de Shorts-speler blijven beschikbaar."
   },
   "hideHomeAds": {
     "message": "Gesponsorde kaarten op Home verbergen"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Verwijdert ook reacties als ChannelFence het kanaal van de schrijver kan herkennen."
+  },
+  "appearance": {
+    "message": "Weergave"
+  },
+  "blockButtonPosition": {
+    "message": "Positie van de blokkeerknop"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Verplaatst knoppen naast de naam van de maker in ondersteunde videokaarten en reacties, volgens de leesrichting van YouTube. Knoppen in paginakoppen, menu's en Shorts blijven op hun plek."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Voor de naam van de maker"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Na de naam van de maker"
+  },
+  "showBlockCount": {
+    "message": "Aantal geblokkeerde makers tonen op het werkbalkpictogram"
+  },
+  "showBlockCountHelp": {
+    "message": "Toont het totale aantal makers op je blokkeerlijst, niet het aantal dat op de huidige pagina verborgen is."
   },
   "blockedCreators": {
     "message": "Geblokkeerde makers"

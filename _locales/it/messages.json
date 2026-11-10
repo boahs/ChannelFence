@@ -144,7 +144,7 @@
     "message": "Sospendi tutti i blocchi senza eliminare l'elenco."
   },
   "hideShortsHelp": {
-    "message": "Rimuove le sezioni e le schede Shorts dalla Home, dalla ricerca e dagli altri feed. La scheda Shorts resta disponibile."
+    "message": "Rimuove le sezioni e le schede Shorts dalla Home, dalle pagine iniziali dei canali, dalla ricerca e dagli altri feed. Le schede Shorts dei canali e il lettore Shorts restano disponibili."
   },
   "hideHomeAds": {
     "message": "Nascondi le schede sponsorizzate nella Home"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Rimuove anche i commenti quando ChannelFence riesce a identificare il canale dell'autore."
+  },
+  "appearance": {
+    "message": "Aspetto"
+  },
+  "blockButtonPosition": {
+    "message": "Posizione del pulsante di blocco"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Sposta i pulsanti accanto ai nomi dei creator nelle schede video e nei commenti supportati, seguendo la direzione di lettura di YouTube. I controlli nelle intestazioni delle pagine, nei menu e negli Shorts mantengono la loro posizione."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Prima del nome del creator"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Dopo il nome del creator"
+  },
+  "showBlockCount": {
+    "message": "Mostra il numero di creator bloccati sull’icona della barra degli strumenti"
+  },
+  "showBlockCountHelp": {
+    "message": "Mostra il numero totale di creator nella tua lista di blocco, non il numero nascosto nella pagina attuale."
   },
   "blockedCreators": {
     "message": "Creator bloccati"

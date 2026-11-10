@@ -144,7 +144,7 @@
     "message": "Pausiere alle Blockierungen, ohne deine Liste zu löschen."
   },
   "hideShortsHelp": {
-    "message": "Entfernt Shorts-Bereiche und -Karten von der Startseite, aus der Suche und aus anderen Feeds. Der Tab „Shorts“ bleibt verfügbar."
+    "message": "Entfernt Shorts-Bereiche und -Karten von der Startseite, von Kanalstartseiten, aus der Suche und aus anderen Feeds. Shorts-Tabs auf Kanälen und der Shorts-Player bleiben verfügbar."
   },
   "hideHomeAds": {
     "message": "Gesponserte Karten auf der Startseite ausblenden"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Entfernt auch Kommentare, wenn ChannelFence den Kanal der kommentierenden Person erkennen kann."
+  },
+  "appearance": {
+    "message": "Darstellung"
+  },
+  "blockButtonPosition": {
+    "message": "Position der Blockieren-Schaltfläche"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Verschiebt die Schaltflächen neben den Namen der Creator in unterstützten Videokarten und Kommentaren entsprechend der Leserichtung von YouTube. Schaltflächen in Seitenköpfen, Menüs und Shorts behalten ihre Position."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Vor dem Namen"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Nach dem Namen"
+  },
+  "showBlockCount": {
+    "message": "Anzahl blockierter Creator auf dem Symbol in der Symbolleiste anzeigen"
+  },
+  "showBlockCountHelp": {
+    "message": "Zeigt die Gesamtzahl der Creator in deiner Blockierliste an, nicht die Anzahl der auf der aktuellen Seite ausgeblendeten Creator."
   },
   "blockedCreators": {
     "message": "Blockierte Creator"

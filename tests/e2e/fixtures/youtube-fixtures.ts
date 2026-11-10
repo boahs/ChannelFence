@@ -369,6 +369,61 @@ export function shortsViewer(displayName: string, handle: string): string {
     </ytd-shorts>`;
 }
 
+export function appearanceFeed(direction = "ltr"): string {
+  const longName = "A creator with a much longer name than this compact card";
+  // The nested avatar-stack byline and same-row statistics reproduce the
+  // modern Home shape. Native ellipsis belongs to the name, not the control.
+  const modern = `<ytd-rich-item-renderer data-testid="modern-creator">
+    <yt-lockup-view-model>
+      <a class="thumbnail" href="/watch?v=modern-creator">Video thumbnail</a>
+      <yt-lockup-metadata-view-model>
+        <div class="ytLockupMetadataViewModelTextContainer">
+          <h3>A modern Home video</h3>
+          <div class="ytLockupMetadataViewModelMetadata">
+            <div class="ytContentMetadataViewModelMetadataRow">
+              <yt-avatar-stack-view-model class="ytAvatarStackViewModelHost ytContentMetadataViewModelAvatarStack">
+                <span class="ytAttributedStringHost ytAvatarStackViewModelAvatarStackText ytAttributedStringWhiteSpacePreWrap">
+                  <span style="font-weight: 400"><a class="creator-link" href="/@moderncreator">${longName}</a></span>
+                </span>
+              </yt-avatar-stack-view-model>
+              <span class="verified" aria-label="Verified">✓</span>
+              <span class="statistics">1.5M · 4d</span>
+            </div>
+          </div>
+        </div>
+      </yt-lockup-metadata-view-model>
+    </yt-lockup-view-model>
+  </ytd-rich-item-renderer>`;
+  const legacy = `<ytd-rich-item-renderer data-testid="legacy-creator">
+    <a class="thumbnail" href="/watch?v=legacy-creator">Video thumbnail</a>
+    <h3>A legacy Home video</h3>
+    <div class="legacy-metadata">
+      <ytd-channel-name id="channel-name"><a class="creator-link" href="/@legacycreator">${longName}</a></ytd-channel-name>
+      <span class="verified" aria-label="Verified">✓</span>
+      <span class="statistics">1.5M · 4d</span>
+    </div>
+  </ytd-rich-item-renderer>`;
+  return `<style>
+    body { margin: 16px; }
+    ytd-browse, ytd-rich-grid-renderer { display: block; width: 100%; }
+    ytd-rich-grid-renderer > #contents { display: flex; flex-wrap: wrap; gap: 24px 16px; }
+    ytd-rich-item-renderer { box-sizing: border-box; width: calc((100% - 32px) / 3); margin: 0; padding: 8px; }
+    yt-lockup-view-model { border: 0; margin: 0; padding: 0; }
+    yt-lockup-metadata-view-model, .ytLockupMetadataViewModelTextContainer { display: block; min-width: 0; }
+    .thumbnail { display: block; height: 90px; background: #eee; }
+    h3 { margin: 8px 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .ytContentMetadataViewModelMetadataRow, .legacy-metadata { display: flex; align-items: center; overflow: hidden; gap: 4px; }
+    yt-avatar-stack-view-model { display: flex; min-width: 0; flex: 0 1 auto; }
+    .ytAvatarStackViewModelAvatarStackText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    ytd-channel-name { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .creator-link { white-space: nowrap; }
+    .verified, .statistics { flex: 0 0 auto; white-space: nowrap; }
+  </style>
+  <ytd-browse page-subtype="home" dir="${escapeHtml(direction)}"><ytd-rich-grid-renderer><div id="contents">
+    ${modern}${legacy}
+  </div></ytd-rich-grid-renderer></ytd-browse>`;
+}
+
 export function youtubeDocument(body: string, language = "en"): string {
   return `<!doctype html>
     <html lang="${escapeHtml(language)}">

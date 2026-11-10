@@ -144,7 +144,7 @@
     "message": "リストを削除せずに、すべてのブロックを一時停止します。"
   },
   "hideShortsHelp": {
-    "message": "ホーム、検索、その他のフィードからショートのセクションとカードを非表示にします。ショートタブは引き続き利用できます。"
+    "message": "ホーム、チャンネルのホーム、検索、その他のフィードからショートのセクションとカードを非表示にします。チャンネルのショートタブとショートの視聴画面は引き続き利用できます。"
   },
   "hideHomeAds": {
     "message": "ホームのスポンサー付きカードを非表示"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "ChannelFence が投稿者のチャンネルを識別できる場合は、コメントも非表示にします。"
+  },
+  "appearance": {
+    "message": "外観"
+  },
+  "blockButtonPosition": {
+    "message": "ブロックボタンの位置"
+  },
+  "blockButtonPositionHelp": {
+    "message": "対応する動画カードやコメントで、YouTubeの表示方向に合わせてクリエイター名の横にあるボタンの位置を変えます。ページヘッダー、メニュー、ショートの操作ボタンの位置は変わりません。"
+  },
+  "blockButtonPositionBefore": {
+    "message": "クリエイター名の前"
+  },
+  "blockButtonPositionAfter": {
+    "message": "クリエイター名の後"
+  },
+  "showBlockCount": {
+    "message": "ツールバーアイコンにブロックしたクリエイター数を表示"
+  },
+  "showBlockCountHelp": {
+    "message": "現在のページで非表示にした数ではなく、ブロックリスト内のクリエイターの合計数を表示します。"
   },
   "blockedCreators": {
     "message": "ブロックしたクリエイター"

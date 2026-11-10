@@ -25,8 +25,10 @@ test.describe("extension UI", () => {
     ] });
     await openOptions(addon);
     await expectText(addon.ui, "#blockedCount", "2");
-    // The Firefox package deliberately removes the Chrome Store review link.
-    await expectCount(addon.ui, '.review-note, a[href*="chromewebstore.google.com"]', 0);
+    await expectVisible(addon.ui, ".review-note");
+    await expectText(addon.ui, '[data-i18n="reviewHelp"]', "An honest review on Firefox Add-ons helps other people find it.");
+    await expectAttribute(addon.ui, ".review-note a", "href", "https://addons.mozilla.org/addon/channelfence/reviews/");
+    await expectCount(addon.ui, 'a[href*="chromewebstore.google.com"]', 0);
     await addon.ui.locator("#searchInput").fill("beta");
     await expectContainsText(addon.ui, "#blockList", "beta");
     await expect.poll(() => addon.ui.$eval("#blockList", (list) => list.textContent)).not.toContain("alpha");

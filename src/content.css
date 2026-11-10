@@ -145,6 +145,44 @@ html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
   transform: translateY(-0.5px) !important;
 }
 
+.cf-block-button[data-cf-position="before"] {
+  margin-inline-start: 0 !important;
+  margin-inline-end: 5px !important;
+}
+
+/* Reserve room for the control inside a truncated creator byline. Native
+   metadata wrappers otherwise keep their text's minimum width and push the
+   button or adjacent statistics out of narrow/compact cards. These rules stop
+   applying as soon as the inline control is removed. */
+:is(
+  ytd-channel-name, #channel-name, #owner-name,
+  ytd-channel-name #container, ytd-channel-name #text-container,
+  .ytLockupMetadataViewModelTextContainer,
+  .ytContentMetadataViewModelHost, .ytContentMetadataViewModelMetadataRow,
+  .ytContentMetadataViewModelAvatarStack, .ytAvatarStackViewModelAvatarStackText
+):has(.cf-block-button[data-cf-position]) {
+  min-inline-size: 0 !important;
+  max-inline-size: 100% !important;
+  flex-shrink: 1 !important;
+}
+
+:is(span, yt-formatted-string, ytd-channel-name):has(> .cf-block-button[data-cf-position]),
+.ytAvatarStackViewModelAvatarStackText:has(.cf-block-button[data-cf-position]) {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-inline-size: 0 !important;
+  max-inline-size: 100% !important;
+  vertical-align: middle !important;
+}
+
+:is(span, yt-formatted-string, ytd-channel-name):has(> .cf-block-button[data-cf-position]) > a {
+  flex: 0 1 auto !important;
+  min-inline-size: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
 .cf-channel-header-block {
   height: 38px !important;
   margin-inline-start: 8px !important;

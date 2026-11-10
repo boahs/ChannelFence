@@ -42,17 +42,16 @@ for (const locale of await readdir(path.join(sourceDir, "_locales"))) {
     `${JSON.stringify(messages, null, 2)}\n`);
 }
 
-// Match the English fallback markup to the Firefox catalogs. The Chrome review
-// link is omitted until a published Firefox listing has a verified review URL.
+// Match the English fallback markup and review destination to Firefox.
 for (const file of ["options.html", "welcome.html", "privacy.html"]) {
   const target = path.join(sourceDir, "ui", file);
   let html = await readFile(target, "utf8");
   if (file === "options.html") {
-    const review = /\r?\n      <div class="review-note">[\s\S]*?<\/a>\r?\n      <\/div>/;
-    if (!review.test(html)) {
-      throw new Error("Could not find the Chrome review block");
+    const reviewUrl = /href="https:\/\/chromewebstore\.google\.com\/[^"]+\/reviews"/;
+    if (!reviewUrl.test(html)) {
+      throw new Error("Could not find the Chrome review link");
     }
-    html = html.replace(review, "");
+    html = html.replace(reviewUrl, 'href="https://addons.mozilla.org/addon/channelfence/reviews/"');
   }
   for (const [key, message] of Object.entries(overrides.en)) {
     const element = new RegExp(`(<(?:p|span|div)\\b[^>]*data-i18n="${key}"[^>]*>)([\\s\\S]*?)(<\\/(?:p|span|div)>)`, "g");

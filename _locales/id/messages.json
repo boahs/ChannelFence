@@ -144,7 +144,7 @@
     "message": "Jeda semua pemblokiran tanpa menghapus daftar Anda."
   },
   "hideShortsHelp": {
-    "message": "Menghapus bagian dan kartu Shorts dari Beranda, penelusuran, dan feed lainnya. Tab Shorts tetap tersedia."
+    "message": "Menghapus bagian dan kartu Shorts dari Beranda, beranda channel, penelusuran, dan feed lainnya. Tab Shorts di channel dan pemutar Shorts tetap tersedia."
   },
   "hideHomeAds": {
     "message": "Sembunyikan kartu bersponsor di Beranda"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Juga menghapus komentar saat ChannelFence dapat mengenali channel pemberi komentar."
+  },
+  "appearance": {
+    "message": "Tampilan"
+  },
+  "blockButtonPosition": {
+    "message": "Posisi tombol blokir"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Memindahkan tombol di samping nama kreator pada kartu video dan komentar yang didukung, mengikuti arah baca YouTube. Kontrol di header halaman, menu, dan Shorts tetap di tempatnya."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Sebelum nama kreator"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Sesudah nama kreator"
+  },
+  "showBlockCount": {
+    "message": "Tampilkan jumlah kreator yang diblokir pada ikon bilah alat"
+  },
+  "showBlockCountHelp": {
+    "message": "Menampilkan jumlah total kreator dalam daftar blokir, bukan jumlah yang disembunyikan di halaman saat ini."
   },
   "blockedCreators": {
     "message": "Kreator yang diblokir"

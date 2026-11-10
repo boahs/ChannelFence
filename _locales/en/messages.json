@@ -144,7 +144,7 @@
     "message": "Pause all blocking without deleting your list."
   },
   "hideShortsHelp": {
-    "message": "Removes Shorts shelves and cards from Home, search, and other feeds. The Shorts tab remains available."
+    "message": "Removes Shorts shelves and cards from Home, channel Home, search, and other feeds. Channel Shorts tabs and the Shorts viewer remain available."
   },
   "hideHomeAds": {
     "message": "Hide sponsored cards on Home"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Also removes comments when ChannelFence can identify the commenter’s channel."
+  },
+  "appearance": {
+    "message": "Appearance"
+  },
+  "blockButtonPosition": {
+    "message": "Block button position"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Moves buttons beside creator names on supported video cards and comments, following YouTube's reading direction. Page headers, menus, and Shorts controls keep their positions."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Before creator name"
+  },
+  "blockButtonPositionAfter": {
+    "message": "After creator name"
+  },
+  "showBlockCount": {
+    "message": "Show blocked-creator count on toolbar icon"
+  },
+  "showBlockCountHelp": {
+    "message": "Shows the total number of creators on your block list, not the number hidden on the current page."
   },
   "blockedCreators": {
     "message": "Blocked creators"

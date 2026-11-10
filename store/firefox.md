@@ -13,7 +13,7 @@ Use Node.js 22.12 or later and run `npm ci`, then `npm run build:firefox`.
 
 In a separate Firefox test profile, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select the generated folder's `manifest.json`. Allow YouTube access if Firefox prompts, then refresh existing YouTube tabs. Temporary add-ons are removed when Firefox closes. After rebuilding, use **Reload** in `about:debugging` and refresh YouTube.
 
-The package keeps the original Chrome manifest and catalogs unchanged. The build applies `manifest.firefox.json` and `scripts/firefox-locales.json`, removes the Chrome review link, validates the generated package using Mozilla's linter, and archives only runtime files and the license. No compilation, minification, remote code, or runtime dependencies are added.
+The package keeps the original Chrome manifest and catalogs unchanged. The build applies `manifest.firefox.json` and `scripts/firefox-locales.json`, replaces the Chrome review link with the Firefox Add-ons review link, validates the generated package using Mozilla's linter, and archives only runtime files and the license. No compilation, minification, remote code, or runtime dependencies are added.
 
 ## Source package for Mozilla review
 

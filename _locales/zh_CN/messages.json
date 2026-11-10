@@ -144,7 +144,7 @@
     "message": "暂停所有屏蔽功能，同时保留列表。"
   },
   "hideShortsHelp": {
-    "message": "隐藏首页、搜索和其他信息流中的 Shorts 栏目与卡片。Shorts 标签页仍可使用。"
+    "message": "隐藏首页、频道首页、搜索和其他信息流中的 Shorts 栏目与卡片。频道的 Shorts 标签页和 Shorts 播放器仍可使用。"
   },
   "hideHomeAds": {
     "message": "隐藏首页的赞助卡片"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "当 ChannelFence 能识别评论者的频道时，也会隐藏其评论。"
+  },
+  "appearance": {
+    "message": "外观"
+  },
+  "blockButtonPosition": {
+    "message": "屏蔽按钮位置"
+  },
+  "blockButtonPositionHelp": {
+    "message": "按照 YouTube 的阅读方向，调整支持的视频卡片和评论中创作者名称旁的按钮位置。页面顶部、菜单和 Shorts 中的控件位置保持不变。"
+  },
+  "blockButtonPositionBefore": {
+    "message": "创作者名称之前"
+  },
+  "blockButtonPositionAfter": {
+    "message": "创作者名称之后"
+  },
+  "showBlockCount": {
+    "message": "在工具栏图标上显示已屏蔽的创作者数量"
+  },
+  "showBlockCountHelp": {
+    "message": "显示屏蔽列表中的创作者总数，而不是当前页面上隐藏的数量。"
   },
   "blockedCreators": {
     "message": "已屏蔽的创作者"

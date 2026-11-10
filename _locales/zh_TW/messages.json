@@ -144,7 +144,7 @@
     "message": "暫停所有封鎖功能，同時保留清單。"
   },
   "hideShortsHelp": {
-    "message": "隱藏首頁、搜尋和其他動態消息中的 Shorts 專區與卡片。Shorts 分頁仍可使用。"
+    "message": "隱藏首頁、頻道首頁、搜尋和其他動態消息中的 Shorts 專區與卡片。頻道的 Shorts 分頁和 Shorts 播放器仍可使用。"
   },
   "hideHomeAds": {
     "message": "隱藏首頁的贊助卡片"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "當 ChannelFence 能辨識留言者的頻道時，也會隱藏其留言。"
+  },
+  "appearance": {
+    "message": "外觀"
+  },
+  "blockButtonPosition": {
+    "message": "封鎖按鈕位置"
+  },
+  "blockButtonPositionHelp": {
+    "message": "依照 YouTube 的閱讀方向，調整支援的影片卡片和留言中創作者名稱旁的按鈕位置。頁面頂部、選單和 Shorts 中的控制項位置維持不變。"
+  },
+  "blockButtonPositionBefore": {
+    "message": "創作者名稱之前"
+  },
+  "blockButtonPositionAfter": {
+    "message": "創作者名稱之後"
+  },
+  "showBlockCount": {
+    "message": "在工具列圖示上顯示已封鎖的創作者數量"
+  },
+  "showBlockCountHelp": {
+    "message": "顯示封鎖清單中的創作者總數，而非目前頁面上隱藏的數量。"
   },
   "blockedCreators": {
     "message": "已封鎖的創作者"

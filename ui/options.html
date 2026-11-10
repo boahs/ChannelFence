@@ -68,7 +68,7 @@
       <div class="setting-row">
         <div>
           <div class="setting-row__title" data-i18n="hideShorts">Hide Shorts in feeds</div>
-          <div class="setting-row__copy" data-i18n="hideShortsHelp">Removes Shorts shelves and cards from Home, search, and other feeds. The Shorts tab remains available.</div>
+          <div class="setting-row__copy" data-i18n="hideShortsHelp">Removes Shorts shelves and cards from Home, channel Home, search, and other feeds. Channel Shorts tabs and the Shorts viewer remain available.</div>
         </div>
         <label class="switch">
           <input id="shortsToggle" type="checkbox" aria-label="Hide Shorts in YouTube feeds" data-i18n-aria-label="hideShortsAccessible">
@@ -127,6 +127,29 @@
         </div>
         <label class="switch">
           <input id="commentsToggle" type="checkbox" aria-label="Hide comments from blocked creators" data-i18n-aria-label="hideComments">
+          <span class="switch__track" aria-hidden="true"></span>
+        </label>
+      </div>
+      <h2 class="settings-subheading" id="appearanceHeading" data-i18n="appearance">Appearance</h2>
+
+      <div class="setting-row setting-row--language">
+        <div>
+          <label class="setting-row__title" for="blockButtonPositionSelect" data-i18n="blockButtonPosition">Block button position</label>
+          <div class="setting-row__copy" id="blockButtonPositionHelp" data-i18n="blockButtonPositionHelp">Moves buttons beside creator names on supported video cards and comments, following YouTube's reading direction. Page headers, menus, and Shorts controls keep their positions.</div>
+        </div>
+        <select class="language-select" id="blockButtonPositionSelect" aria-describedby="blockButtonPositionHelp" disabled>
+          <option value="before" data-i18n="blockButtonPositionBefore" selected>Before creator name</option>
+          <option value="after" data-i18n="blockButtonPositionAfter">After creator name</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-row__title" data-i18n="showBlockCount">Show blocked-creator count on toolbar icon</div>
+          <div class="setting-row__copy" id="showBlockCountHelp" data-i18n="showBlockCountHelp">Shows the total number of creators on your block list, not the number hidden on the current page.</div>
+        </div>
+        <label class="switch">
+          <input id="showBlockCountToggle" type="checkbox" aria-label="Show blocked-creator count on toolbar icon" data-i18n-aria-label="showBlockCount" aria-describedby="showBlockCountHelp" disabled>
           <span class="switch__track" aria-hidden="true"></span>
         </label>
       </div>

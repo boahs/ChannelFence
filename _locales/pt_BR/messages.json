@@ -144,7 +144,7 @@
     "message": "Pause todos os bloqueios sem excluir sua lista."
   },
   "hideShortsHelp": {
-    "message": "Remove seções e cartões de Shorts do início, da busca e de outros feeds. A aba Shorts continua disponível."
+    "message": "Remove seções e cartões de Shorts do início, da página inicial dos canais, da busca e de outros feeds. As abas Shorts dos canais e o visualizador de Shorts continuam disponíveis."
   },
   "hideHomeAds": {
     "message": "Ocultar cartões patrocinados no início"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Também remove comentários quando o ChannelFence consegue identificar o canal de quem comentou."
+  },
+  "appearance": {
+    "message": "Aparência"
+  },
+  "blockButtonPosition": {
+    "message": "Posição do botão de bloqueio"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Move os botões ao lado dos nomes dos criadores nos cartões de vídeo e comentários compatíveis, seguindo a direção de leitura do YouTube. Os controles nos cabeçalhos das páginas, menus e Shorts mantêm suas posições."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Antes do nome do criador"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Depois do nome do criador"
+  },
+  "showBlockCount": {
+    "message": "Mostrar a contagem de criadores bloqueados no ícone da barra de ferramentas"
+  },
+  "showBlockCountHelp": {
+    "message": "Mostra o total de criadores na sua lista de bloqueio, não a quantidade ocultada na página atual."
   },
   "blockedCreators": {
     "message": "Criadores bloqueados"

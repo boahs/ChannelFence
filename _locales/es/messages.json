@@ -144,7 +144,7 @@
     "message": "Pausa todos los bloqueos sin borrar tu lista."
   },
   "hideShortsHelp": {
-    "message": "Quita las secciones y tarjetas de Shorts de Inicio, las búsquedas y otras listas de videos. La pestaña Shorts sigue disponible."
+    "message": "Quita las secciones y tarjetas de Shorts de Inicio, el inicio de los canales, las búsquedas y otras listas de videos. Las pestañas Shorts de los canales y el visor de Shorts siguen disponibles."
   },
   "hideHomeAds": {
     "message": "Ocultar tarjetas patrocinadas en Inicio"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "También oculta los comentarios cuando ChannelFence puede identificar el canal de quien los publica."
+  },
+  "appearance": {
+    "message": "Apariencia"
+  },
+  "blockButtonPosition": {
+    "message": "Posición del botón de bloqueo"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Mueve los botones junto al nombre del creador en las tarjetas de vídeo y los comentarios compatibles, siguiendo la dirección de lectura de YouTube. Los controles de las cabeceras de página, los menús y Shorts mantienen su posición."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Antes del nombre"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Después del nombre"
+  },
+  "showBlockCount": {
+    "message": "Mostrar el número de creadores bloqueados en el icono de la barra de herramientas"
+  },
+  "showBlockCountHelp": {
+    "message": "Muestra el total de creadores en tu lista de bloqueo, no el número ocultado en la página actual."
   },
   "blockedCreators": {
     "message": "Creadores bloqueados"

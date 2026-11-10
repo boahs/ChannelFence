@@ -144,7 +144,7 @@
     "message": "Listenizi silmeden tüm engellemeleri duraklatın."
   },
   "hideShortsHelp": {
-    "message": "Ana sayfa, arama ve diğer akışlardaki Shorts bölümlerini ve kartlarını kaldırır. Shorts sekmesi kullanılabilir durumda kalır."
+    "message": "Ana sayfa, kanal ana sayfaları, arama ve diğer akışlardaki Shorts bölümlerini ve kartlarını kaldırır. Kanalların Shorts sekmeleri ve Shorts oynatıcısı kullanılabilir durumda kalır."
   },
   "hideHomeAds": {
     "message": "Ana sayfadaki sponsorlu kartları gizle"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "ChannelFence yorum yapan kişinin kanalını tanıyabiliyorsa yorumlarını da kaldırır."
+  },
+  "appearance": {
+    "message": "Görünüm"
+  },
+  "blockButtonPosition": {
+    "message": "Engelleme düğmesinin konumu"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Desteklenen video kartlarında ve yorumlarda içerik üreticisinin adının yanındaki düğmeleri YouTube'un okuma yönüne göre taşır. Sayfa başlıklarındaki, menülerdeki ve Shorts'taki kontrollerin konumu değişmez."
+  },
+  "blockButtonPositionBefore": {
+    "message": "İsimden önce"
+  },
+  "blockButtonPositionAfter": {
+    "message": "İsimden sonra"
+  },
+  "showBlockCount": {
+    "message": "Araç çubuğu simgesinde engellenen içerik üreticisi sayısını göster"
+  },
+  "showBlockCountHelp": {
+    "message": "Geçerli sayfada gizlenenlerin sayısını değil, engelleme listenizdeki içerik üreticilerinin toplam sayısını gösterir."
   },
   "blockedCreators": {
     "message": "Engellenen içerik üreticileri"

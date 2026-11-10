@@ -2,7 +2,7 @@ import { setTimeout as delay } from "node:timers/promises";
 import type { Page, HTTPRequest } from "puppeteer-core";
 import { expect, test, expectVisible, expectText, expectCount, expectAttribute, expectCSS, openFixture, openCreatorMenu } from "../extension.fixture";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
-import { shortsShelf, shortsViewer } from "../../e2e/fixtures/youtube-fixtures";
+import { channelHeader, shortsShelf, shortsViewer } from "../../e2e/fixtures/youtube-fixtures";
 import { installConsumedShortsScroll } from "../../e2e/fixtures/shorts-scroll-reset";
 
 const byTestId = (id: string): string => `[data-testid="${id}"]`;
@@ -205,6 +205,75 @@ test.describe("YouTube Shorts controls", () => {
     await expectVisible(page, byTestId("standalone-short"));
     await expectVisible(page, byTestId("modern-shorts-shelf"));
     await expectVisible(page, byTestId("shorts-guide"));
+  });
+
+  test("keeps channel Shorts tabs available for supported channel URL formats", async ({ addon }) => {
+    const page = addon.page;
+    await addon.setStorage({ cfHideHomeShorts: true });
+    for (const path of [
+      "/@shortscreator/shorts",
+      "/@shortscreator/shorts/?view=latest",
+      "/channel/UCshortscreator0001/shorts",
+      "/c/ShortsCreator/shorts",
+      "/user/ShortsCreator/shorts"
+    ]) {
+      await openFixture(page, shortsShelf(), path);
+      await expectVisible(page, byTestId("regular-video") + " .cf-block-button");
+      for (const card of ["shorts-section", "standalone-short", "modern-shorts-shelf", "compact-short"]) {
+        await expectVisible(page, byTestId(card));
+      }
+      await expectCount(page, "#cf-hard-block-overlay", 0);
+    }
+  });
+
+  test("restores channel Shorts during navigation while continuing to hide feed shelves", async ({ addon }) => {
+    const page = addon.page;
+    await addon.setStorage({ cfHideHomeShorts: true });
+    await openFixture(page, shortsShelf(), "/");
+    await expectVisible(page, byTestId("standalone-short"), false);
+
+    // Reuse the same elements, as YouTube does when switching channel tabs.
+    // A channel called @shorts must still have its Home shelf hidden.
+    for (const [path, visible] of [
+      ["/@shorts/shorts", true],
+      ["/@shorts", false],
+      ["/@shorts/shorts/?view=latest", true]
+    ] as const) {
+      await page.evaluate((nextPath) => {
+        document.dispatchEvent(new Event("yt-navigate-start", { bubbles: true }));
+        history.pushState({}, "", nextPath);
+        document.dispatchEvent(new Event("yt-navigate-finish", { bubbles: true }));
+      }, path);
+      for (const card of ["shorts-section", "standalone-short", "modern-shorts-shelf", "compact-short"]) {
+        await expectVisible(page, byTestId(card), visible);
+      }
+      await expectVisible(page, byTestId("regular-video"));
+      if (!visible) {
+        await addon.setStorage({ cfHideHomeShorts: false });
+        await expectVisible(page, byTestId("standalone-short"));
+        await addon.setStorage({ cfHideHomeShorts: true });
+        await expectVisible(page, byTestId("standalone-short"), false);
+      }
+    }
+  });
+
+  test("still blocks a blocked creator's channel Shorts tab while feed hiding is enabled", async ({ addon }) => {
+    const page = addon.page;
+    await addon.setStorage({
+      cfHideHomeShorts: true,
+      cfBlockedChannels: [blockedCreator("@shortscreator", "Shorts Creator")]
+    });
+    await openFixture(page,
+      channelHeader("Shorts Creator", "@shortscreator") + shortsShelf(),
+      "/@shortscreator/shorts"
+    );
+    await expectVisible(page, "#cf-hard-block-overlay");
+    await expectText(page, "#cf-hard-block-overlay p", "shortscreator is on your ChannelFence block list.");
+    await page.locator("#cf-hard-block-overlay .cf-hard-block-actions button:last-child").click();
+    await expectCount(page, "#cf-hard-block-overlay", 0);
+    await expectVisible(page, byTestId("standalone-short"));
+    await expectVisible(page, byTestId("compact-short"));
+    expect((await addon.getStorage("cfBlockedChannels")).cfBlockedChannels).toEqual([]);
   });
 
   test("keeps direct Shorts pages available when feed Shorts are hidden", async ({ addon }) => {

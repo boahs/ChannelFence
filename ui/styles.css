@@ -475,6 +475,11 @@ select:focus-visible {
   font-size: 18px;
 }
 
+.settings-card .settings-subheading {
+  margin-top: 20px;
+  margin-bottom: 12px;
+}
+
 .settings-intro {
   color: var(--muted);
   line-height: 1.55;

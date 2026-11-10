@@ -144,7 +144,7 @@
     "message": "Mettez tous les blocages en pause sans supprimer votre liste."
   },
   "hideShortsHelp": {
-    "message": "Retire les sections et les cartes Shorts de l’accueil, de la recherche et des autres flux. L’onglet Shorts reste accessible."
+    "message": "Retire les sections et les cartes Shorts de l’accueil, de l’accueil des chaînes, de la recherche et des autres flux. Les onglets Shorts des chaînes et le lecteur Shorts restent accessibles."
   },
   "hideHomeAds": {
     "message": "Masquer les cartes sponsorisées sur l’accueil"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "Retire aussi les commentaires lorsque ChannelFence peut identifier la chaîne de leur auteur."
+  },
+  "appearance": {
+    "message": "Apparence"
+  },
+  "blockButtonPosition": {
+    "message": "Position du bouton de blocage"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Déplace les boutons à côté du nom des créateurs dans les fiches vidéo et les commentaires pris en charge, dans le sens de lecture de YouTube. Les commandes des en-têtes de page, des menus et de Shorts gardent leur position."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Avant le nom du créateur"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Après le nom du créateur"
+  },
+  "showBlockCount": {
+    "message": "Afficher le nombre de créateurs bloqués sur l’icône de la barre d’outils"
+  },
+  "showBlockCountHelp": {
+    "message": "Affiche le nombre total de créateurs dans votre liste de blocage, et non le nombre masqué sur la page actuelle."
   },
   "blockedCreators": {
     "message": "Créateurs bloqués"

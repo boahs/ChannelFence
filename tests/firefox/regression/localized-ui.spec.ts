@@ -47,6 +47,17 @@ for (const locale of allLocales) {
       await expectAttribute(addon.ui, "html", "lang", messages.languageCode.message);
       await expect.poll(() => addon.ui.title()).toBe(messages.settingsPageTitle.message);
       await expectHomeControls(addon.ui, messages);
+      await expectText(addon.ui, "#appearanceHeading", messages.appearance.message);
+      await expectText(addon.ui, 'label[for="blockButtonPositionSelect"]', messages.blockButtonPosition.message);
+      await expectValue(addon.ui, "#blockButtonPositionSelect", "before");
+      await expectAttribute(addon.ui, "#blockButtonPositionSelect", "aria-describedby", "blockButtonPositionHelp");
+      await expectText(addon.ui, "#blockButtonPositionHelp", messages.blockButtonPositionHelp.message);
+      expect(await addon.ui.$$eval("#blockButtonPositionSelect option", (options) => options.map((option) => option.textContent)))
+        .toEqual([messages.blockButtonPositionBefore.message, messages.blockButtonPositionAfter.message]);
+      await expectAttribute(addon.ui, "#showBlockCountToggle", "aria-label", messages.showBlockCount.message);
+      expect(await addon.ui.$eval("#showBlockCountToggle", (input) => (input as HTMLInputElement).checked)).toBe(false);
+      await expectAttribute(addon.ui, "#showBlockCountToggle", "aria-describedby", "showBlockCountHelp");
+      await expectText(addon.ui, "#showBlockCountHelp", messages.showBlockCountHelp.message);
       await expectText(addon.ui, 'label[for="manualBlockInput"]', messages.manualBlockLabel.message);
       await expectText(addon.ui, "#manualBlockButton", messages.blockCreator.message);
       await addon.ui.locator("#manualBlockInput").fill(`@${locale.creator}`);

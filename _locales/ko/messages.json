@@ -144,7 +144,7 @@
     "message": "차단 목록을 삭제하지 않고 모든 차단을 일시 중지합니다."
   },
   "hideShortsHelp": {
-    "message": "홈, 검색 및 기타 피드에서 Shorts 섹션과 카드를 숨깁니다. Shorts 탭은 계속 사용할 수 있습니다."
+    "message": "홈, 채널 홈, 검색 및 기타 피드에서 Shorts 섹션과 카드를 숨깁니다. 채널의 Shorts 탭과 Shorts 시청 화면은 계속 사용할 수 있습니다."
   },
   "hideHomeAds": {
     "message": "홈에서 광고 카드 숨기기"
@@ -181,6 +181,27 @@
   },
   "hideCommentsHelp": {
     "message": "ChannelFence가 댓글 작성자의 채널을 식별할 수 있으면 해당 댓글도 숨깁니다."
+  },
+  "appearance": {
+    "message": "모양"
+  },
+  "blockButtonPosition": {
+    "message": "차단 버튼 위치"
+  },
+  "blockButtonPositionHelp": {
+    "message": "지원되는 동영상 카드와 댓글에서 YouTube의 읽기 방향에 따라 크리에이터 이름 옆 버튼의 위치를 바꿉니다. 페이지 헤더, 메뉴, Shorts의 버튼 위치는 그대로 유지됩니다."
+  },
+  "blockButtonPositionBefore": {
+    "message": "크리에이터 이름 앞"
+  },
+  "blockButtonPositionAfter": {
+    "message": "크리에이터 이름 뒤"
+  },
+  "showBlockCount": {
+    "message": "도구 모음 아이콘에 차단한 크리에이터 수 표시"
+  },
+  "showBlockCountHelp": {
+    "message": "현재 페이지에서 숨긴 수가 아닌, 차단 목록에 있는 전체 크리에이터 수를 표시합니다."
   },
   "blockedCreators": {
     "message": "차단한 크리에이터"

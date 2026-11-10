@@ -31,7 +31,7 @@ YouTube's "Don't recommend channel" control changes recommendations. It is not a
 
 You can also open ChannelFence settings and paste a handle such as `@creator` or a YouTube channel URL into **Block by handle or channel URL**.
 
-ChannelFence also works inside the Shorts viewer. Use the branded ChannelFence action beside the current Short or the ChannelFence action in its menu. After blocking the current creator, ChannelFence moves to the next Short instead of showing the blocked-page screen. Because compact Shorts cards omit their creators, ChannelFence requests their public creator metadata from YouTube while your block list is not empty. This lets ChannelFence keep matching Shorts hidden and block from a compact card without opening it or leaving the feed. These lookups are cached only in memory. When you explicitly block from a compact Short, its public `/shorts/...` path is stored locally with the creator record so that exact card stays hidden after a refresh. To remove intrusive Shorts shelves and cards from Home, search, and other feeds, turn on **Hide Shorts in feeds** in the popup or settings. The Shorts navigation and direct viewer remain available when you choose to open them.
+ChannelFence also works inside the Shorts viewer. Use the branded ChannelFence action beside the current Short or the ChannelFence action in its menu. After blocking the current creator, ChannelFence moves to the next Short instead of showing the blocked-page screen. Because compact Shorts cards omit their creators, ChannelFence requests their public creator metadata from YouTube while your block list is not empty. This lets ChannelFence keep matching Shorts hidden and block from a compact card without opening it or leaving the feed. These lookups are cached only in memory. When you explicitly block from a compact Short, its public `/shorts/...` path is stored locally with the creator record so that exact card stays hidden after a refresh. To remove intrusive Shorts shelves and cards from Home, channel Home, search, and other feeds, turn on **Hide Shorts in feeds** in the popup or settings. The Shorts navigation, channels' dedicated Shorts tabs, and direct viewer remain available when you choose to open them. Your creator blocks still apply there.
 
 You can undo immediately, pause filtering without losing your list, or manage every blocked creator from the extension’s settings. ChannelFence does not block reuploads posted by a different creator.
 
@@ -54,6 +54,15 @@ The popup and settings include three optional controls for desktop YouTube Home,
 - **Compact Home grid** lets you choose Small, Medium, or Large thumbnails. The grid adapts to the available width, with up to six, five, or four columns respectively.
 
 These preferences are saved locally and work with an empty block list. Regular recommendations, courses, mixes, and the top category filters remain available. Sponsored cards and **Hide Shorts in feeds** have separate controls. An attached survey is hidden without removing its ordinary video. The Home controls do not hide search information panels or ads during video playback. Their labels are available in all eighteen supported interface languages, and they require no new permissions or network requests.
+
+## Extension appearance
+
+Open **Manage block list → Appearance** to change these preferences:
+
+- **Block button position** puts inline buttons before creator names by default, with an option to place them after. The order follows YouTube's text direction, so before means left in a left-to-right layout and right in a right-to-left layout. This applies to supported video cards and comments; page headers, menus, and Shorts controls keep their positions.
+- **Show blocked-creator count on toolbar icon** is off by default. When enabled, it shows the total number of creators in your saved block list while blocking is active, not the number hidden on the current page.
+
+Both preferences are saved locally and update open YouTube tabs.
 
 ## Privacy and permissions
 
@@ -107,6 +116,13 @@ See [Firefox build and listing guidance](store/firefox.md) for testing, privacy 
 13. Enable the compact Home grid and try each thumbnail size at wide and narrow window sizes. Confirm cards stay readable and in order, shelves keep their place, and disabling the option restores YouTube's layout. Reopen the popup and settings to check that your choices are saved.
 
 After your Canary checks, upload the same `dist/ChannelFence-0.2.9.zip` through the Chrome Web Store Developer Dashboard.
+
+### Appearance and Shorts checks in Chrome and Firefox
+
+1. In **Manage block list → Appearance**, try both block button positions. Check long creator names in each compact thumbnail size and in narrow windows: names should truncate without pushing the button or metadata off the card. Change YouTube's language to Arabic and check that before/after follows YouTube's direction, even if ChannelFence uses a different language. Page header, menu, and Shorts controls should keep their positions.
+2. With several YouTube tabs open, enable **Show blocked-creator count on toolbar icon**. Switch tabs and confirm the badge shows your total saved block count. Block or unblock a creator, pause/resume filtering, and turn the badge off; open tabs should reflect each change. Reload settings to check both appearance preferences are saved.
+3. Enable **Hide Shorts in feeds** and visit YouTube Home, a channel's Home tab, and search. Shorts shelves and cards should disappear. Open the channel's dedicated Shorts tab and a direct Short: both should remain available. Navigate back to Home without reloading and check that its Shorts are hidden again. Block a creator and confirm the exception does not restore that creator's content.
+4. In Firefox settings, confirm **Leave a review** opens ChannelFence's Firefox Add-ons reviews page. In Chrome, it should open the Chrome Web Store review page.
 
 ## Languages
 

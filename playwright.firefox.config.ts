@@ -7,8 +7,9 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 2,
   timeout: 45_000,
-  // Finish reports before the CI job's hard deadline, even after many failures.
-  globalTimeout: process.env.CI ? 14 * 60_000 : undefined,
+  // The 308-test suite can exceed 14 minutes on slower CI runners. Keep a
+  // bounded suite deadline while leaving setup/report time in the 22-minute job.
+  globalTimeout: process.env.CI ? 18 * 60_000 : undefined,
   expect: { timeout: 7_500 },
   outputDir: "firefox-test-results",
   reporter: [

@@ -10,6 +10,8 @@
     hideHomePromotions: "cfHideHomePromotions",
     compactHomeGrid: "cfCompactHomeGrid",
     compactHomeSize: "cfCompactHomeSize",
+    blockButtonPosition: "cfBlockButtonPosition",
+    showBlockCount: "cfShowBlockCount",
     language: "cfLanguage"
   });
 
@@ -22,6 +24,8 @@
     [STORAGE.hideHomePromotions]: false,
     [STORAGE.compactHomeGrid]: false,
     [STORAGE.compactHomeSize]: "medium",
+    [STORAGE.blockButtonPosition]: "before",
+    [STORAGE.showBlockCount]: false,
     [STORAGE.language]: "auto"
   });
 
