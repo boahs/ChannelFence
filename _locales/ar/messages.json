@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "يزيل التعليقات أيضًا عندما يستطيع ChannelFence التعرف على قناة صاحب التعليق."
   },
+  "appearance": {
+    "message": "المظهر"
+  },
+  "blockButtonPosition": {
+    "message": "موضع زر الحظر"
+  },
+  "blockButtonPositionHelp": {
+    "message": "ضع الزر قبل أسماء صنّاع المحتوى أو بعدها، وفقًا لاتجاه القراءة في YouTube."
+  },
+  "blockButtonPositionBefore": {
+    "message": "قبل اسم صانع المحتوى"
+  },
+  "blockButtonPositionAfter": {
+    "message": "بعد اسم صانع المحتوى"
+  },
+  "showBlockCount": {
+    "message": "عرض عدد صنّاع المحتوى المحظورين على أيقونة شريط الأدوات"
+  },
+  "showBlockCountHelp": {
+    "message": "يعرض العدد الإجمالي لصنّاع المحتوى في قائمة الحظر، وليس عدد المخفيين في الصفحة الحالية."
+  },
   "blockedCreators": {
     "message": "منشئو المحتوى المحظورون"
   },

@@ -45,7 +45,10 @@ function loadWorker(options = {}) {
     storage: {
       local: {
         get: async () => values,
-        set: async (details) => calls.push(["storage", details])
+        set: async (details) => {
+          calls.push(["storage", details]);
+          Object.assign(values, details);
+        }
       }
     },
     tabs: {
@@ -54,20 +57,20 @@ function loadWorker(options = {}) {
     }
   };
   const sandbox = {
+    URL,
     ChannelFenceI18n: {
       get: (key) => key,
       loadCatalog: async (language) => ({ language })
     },
-    ChannelFenceShared: {
-      DEFAULTS: values,
-      STORAGE: {
-        enabled: "cfEnabled",
-        blocked: "cfBlockedChannels"
-      },
-      sanitizeBlockedEntries: options.sanitizeBlockedEntries || ((entries) => entries || [])
-    },
     chrome
   };
+  vm.runInNewContext(fs.readFileSync(path.join(root, "src", "shared.js"), "utf8"), sandbox);
+  if (options.sanitizeBlockedEntries) {
+    sandbox.ChannelFenceShared = {
+      ...sandbox.ChannelFenceShared,
+      sanitizeBlockedEntries: options.sanitizeBlockedEntries
+    };
+  }
   if (!options.eventPage) {
     sandbox.importScripts = (...scripts) => calls.push(["imports", scripts]);
   }
@@ -76,7 +79,16 @@ function loadWorker(options = {}) {
     fs.readFileSync(path.join(root, "src", "service-worker.js"), "utf8"),
     sandbox
   );
-  return { calls, events };
+  return { calls, events, values };
+}
+
+async function syncAction(events, tabId) {
+  events.message.listener({ type: "CF_SYNC_ACTION" }, { tab: { id: tabId } });
+  await new Promise((resolve) => setImmediate(resolve));
+}
+
+function badgeText(calls, tabId) {
+  return calls.filter(([type, details]) => type === "badge" && details.tabId === tabId).at(-1)?.[1].text;
 }
 
 for (const eventPage of [false, true]) {
@@ -95,15 +107,14 @@ for (const eventPage of [false, true]) {
       assert.equal(events.message.listener({ type: "CF_GET_MESSAGES", language: "ar" }, {}, resolve), true);
     });
     assert.deepEqual(catalog, { language: "ar" });
-    events.message.listener({ type: "CF_SYNC_ACTION" }, { tab: { id: 42 } });
-    await new Promise((resolve) => setImmediate(resolve));
-    assert.ok(calls.some(([type, details]) =>
-      type === "badge" && details.text === "1" && details.tabId === 42));
+    await syncAction(events, 42);
+    assert.equal(badgeText(calls, 42), "");
   });
 }
 
 test("uses a blank global badge and a count only for a YouTube sender tab", async () => {
-  const { calls, events } = loadWorker();
+  const { calls, events, values } = loadWorker();
+  values.cfShowBlockCount = true;
 
   await events.installed.listener({ reason: "update" });
   const globalBadge = calls.find(([type]) => type === "badge");
@@ -111,15 +122,77 @@ test("uses a blank global badge and a count only for a YouTube sender tab", asyn
   assert.equal(globalBadge[1].text, "");
   assert.equal(globalBadge[1].tabId, undefined);
 
-  events.message.listener({ type: "CF_SYNC_ACTION" }, { tab: { id: 42 } });
-  await new Promise((resolve) => setImmediate(resolve));
-  assert.ok(calls.some(([type, details]) =>
-    type === "badge" && details.text === "1" && details.tabId === 42));
+  await syncAction(events, 42);
+  assert.equal(badgeText(calls, 42), "1");
+  assert.equal(badgeText(calls, 99), undefined);
 
   events.tabUpdated.listener(42, { status: "loading" });
   await new Promise((resolve) => setImmediate(resolve));
-  assert.ok(calls.some(([type, details]) =>
-    type === "badge" && details.text === "" && details.tabId === 42));
+  assert.equal(badgeText(calls, 42), "");
+});
+
+test("defaults the badge off for fresh installs and existing lists without a preference", async () => {
+  for (const values of [{}, { cfBlockedChannels: [{ aliases: ["handle:@example"] }] }]) {
+    const worker = loadWorker({ values });
+    await worker.events.installed.listener({ reason: "update" });
+    assert.equal(values.cfShowBlockCount, false);
+    await syncAction(worker.events, 42);
+    assert.equal(badgeText(worker.calls, 42), "");
+  }
+});
+
+test("keeps the explicit badge choice across updates and restarts", async () => {
+  const worker = loadWorker();
+  worker.values.cfShowBlockCount = true;
+  await worker.events.installed.listener({ reason: "update" });
+  await worker.events.startup.listener();
+  assert.equal(worker.values.cfShowBlockCount, true);
+  await syncAction(worker.events, 42);
+  assert.equal(badgeText(worker.calls, 42), "1");
+
+  worker.values.cfShowBlockCount = false;
+  await worker.events.startup.listener();
+  assert.equal(worker.values.cfShowBlockCount, false);
+  await syncAction(worker.events, 42);
+  assert.equal(badgeText(worker.calls, 42), "");
+});
+
+test("updates both YouTube tabs after badge, block-list, and pause changes", async () => {
+  const { calls, events, values } = loadWorker();
+  const changes = [
+    [{ cfShowBlockCount: true }, "1"],
+    [{ cfBlockedChannels: [{ aliases: ["handle:@one"] }, { aliases: ["handle:@two"] }] }, "2"],
+    [{ cfBlockedChannels: [{ aliases: ["handle:@two"] }] }, "1"],
+    [{ cfEnabled: false }, ""],
+    [{ cfEnabled: true }, "1"],
+    [{ cfShowBlockCount: false }, ""],
+    [{ cfShowBlockCount: true }, "1"],
+    [{ cfBlockedChannels: [] }, ""]
+  ];
+  for (const [patch, expected] of changes) {
+    Object.assign(values, patch);
+    // Each open YouTube content script requests its own action update on storage changes.
+    for (const tabId of [42, 43]) {
+      await syncAction(events, tabId);
+      assert.equal(badgeText(calls, tabId), expected, JSON.stringify(patch));
+    }
+    assert.equal(badgeText(calls), "");
+    assert.equal(badgeText(calls, 99), undefined);
+  }
+});
+
+test("counts sanitized creator entries and caps the visible badge at 999+", async () => {
+  const { calls, events, values } = loadWorker();
+  values.cfShowBlockCount = true;
+  values.cfBlockedChannels = [null, {}, { aliases: ["handle:@example"] }];
+  await syncAction(events, 42);
+  assert.equal(badgeText(calls, 42), "1");
+
+  values.cfBlockedChannels = Array.from({ length: 1000 }, (_, index) => ({
+    aliases: [`handle:@creator${index}`]
+  }));
+  await syncAction(events, 42);
+  assert.equal(badgeText(calls, 42), "999+");
 });
 
 test("migrates canonical blocked-entry labels when the extension updates", async () => {

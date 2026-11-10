@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "當 ChannelFence 能辨識留言者的頻道時，也會隱藏其留言。"
   },
+  "appearance": {
+    "message": "外觀"
+  },
+  "blockButtonPosition": {
+    "message": "封鎖按鈕位置"
+  },
+  "blockButtonPositionHelp": {
+    "message": "依照 YouTube 的閱讀方向，將按鈕放在創作者名稱之前或之後。"
+  },
+  "blockButtonPositionBefore": {
+    "message": "創作者名稱之前"
+  },
+  "blockButtonPositionAfter": {
+    "message": "創作者名稱之後"
+  },
+  "showBlockCount": {
+    "message": "在工具列圖示上顯示已封鎖的創作者數量"
+  },
+  "showBlockCountHelp": {
+    "message": "顯示封鎖清單中的創作者總數，而非目前頁面上隱藏的數量。"
+  },
   "blockedCreators": {
     "message": "已封鎖的創作者"
   },

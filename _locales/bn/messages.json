@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "ChannelFence মন্তব্যকারীর চ্যানেল শনাক্ত করতে পারলে তাঁর মন্তব্যও লুকিয়ে দেয়।"
   },
+  "appearance": {
+    "message": "চেহারা"
+  },
+  "blockButtonPosition": {
+    "message": "ব্লক বোতামের অবস্থান"
+  },
+  "blockButtonPositionHelp": {
+    "message": "YouTube-এর পড়ার দিক অনুযায়ী ক্রিয়েটরের নামের আগে বা পরে বোতাম রাখুন।"
+  },
+  "blockButtonPositionBefore": {
+    "message": "ক্রিয়েটরের নামের আগে"
+  },
+  "blockButtonPositionAfter": {
+    "message": "ক্রিয়েটরের নামের পরে"
+  },
+  "showBlockCount": {
+    "message": "টুলবার আইকনে ব্লক করা ক্রিয়েটরের সংখ্যা দেখান"
+  },
+  "showBlockCountHelp": {
+    "message": "আপনার ব্লক তালিকায় থাকা মোট ক্রিয়েটরের সংখ্যা দেখায়, বর্তমান পৃষ্ঠায় লুকানো ক্রিয়েটরের সংখ্যা নয়।"
+  },
   "blockedCreators": {
     "message": "ব্লক করা নির্মাতারা"
   },

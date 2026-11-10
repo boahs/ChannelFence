@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "Juga menghapus komentar saat ChannelFence dapat mengenali channel pemberi komentar."
   },
+  "appearance": {
+    "message": "Tampilan"
+  },
+  "blockButtonPosition": {
+    "message": "Posisi tombol blokir"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Letakkan tombol sebelum atau sesudah nama kreator, mengikuti arah baca YouTube."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Sebelum nama kreator"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Sesudah nama kreator"
+  },
+  "showBlockCount": {
+    "message": "Tampilkan jumlah kreator yang diblokir pada ikon bilah alat"
+  },
+  "showBlockCountHelp": {
+    "message": "Menampilkan jumlah total kreator dalam daftar blokir, bukan jumlah yang disembunyikan di halaman saat ini."
+  },
   "blockedCreators": {
     "message": "Kreator yang diblokir"
   },

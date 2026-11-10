@@ -34,11 +34,13 @@ async function ensureDefaults() {
 async function badgeState() {
   const values = await chrome.storage.local.get([
     Shared.STORAGE.enabled,
-    Shared.STORAGE.blocked
+    Shared.STORAGE.blocked,
+    Shared.STORAGE.showBlockCount
   ]);
   const enabled = values[Shared.STORAGE.enabled] !== false;
   const count = Shared.sanitizeBlockedEntries(values[Shared.STORAGE.blocked]).length;
-  const badgeText = enabled && count > 0 ? (count > 999 ? "999+" : String(count)) : "";
+  const showBlockCount = values[Shared.STORAGE.showBlockCount] === true;
+  const badgeText = enabled && showBlockCount && count > 0 ? (count > 999 ? "999+" : String(count)) : "";
 
   return { enabled, count, badgeText };
 }

@@ -40,6 +40,16 @@ for (const locale of allLocales) {
         messages.compactHomeSizeMedium.message,
         messages.compactHomeSizeLarge.message
       ]);
+      await expect(extensionPage.locator("#appearanceHeading")).toHaveText(messages.appearance.message);
+      const position = extensionPage.getByRole("combobox", { name: messages.blockButtonPosition.message });
+      await expect(position).toHaveValue("before");
+      await expect(position).toHaveAccessibleDescription(messages.blockButtonPositionHelp.message);
+      await expect(position.locator("option")).toHaveText([
+        messages.blockButtonPositionBefore.message, messages.blockButtonPositionAfter.message
+      ]);
+      const badge = extensionPage.getByRole("checkbox", { name: messages.showBlockCount.message, exact: true });
+      await expect(badge).not.toBeChecked();
+      await expect(badge).toHaveAccessibleDescription(messages.showBlockCountHelp.message);
       await extensionPage.getByRole("textbox", { name: messages.manualBlockLabel.message })
         .fill(`@${locale.creator}`);
       await extensionPage.getByRole("button", { name: messages.blockCreator.message, exact: true }).click();

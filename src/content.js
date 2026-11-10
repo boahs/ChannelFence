@@ -164,6 +164,7 @@
     hideHomePromotions: false,
     compactHomeGrid: false,
     compactHomeSize: "medium",
+    blockButtonPosition: "before",
     blocked: [],
     blockedLookup: Shared.createBlockedLookup([]),
     channelPageIdentity: null,
@@ -278,6 +279,7 @@
     state.compactHomeGrid = values[Shared.STORAGE.compactHomeGrid] === true;
     state.compactHomeSize = ["small", "large"].includes(values[Shared.STORAGE.compactHomeSize])
       ? values[Shared.STORAGE.compactHomeSize] : "medium";
+    state.blockButtonPosition = values[Shared.STORAGE.blockButtonPosition] === "after" ? "after" : "before";
     const storedBlocked = values[Shared.STORAGE.blocked] || [];
     state.blocked = storedBlocked;
     rebuildBlockedLookup();
@@ -1709,6 +1711,25 @@
     }
   }
 
+  function positionBlockButton(button, anchor, host, pageButton) {
+    const position = pageButton ? "after" : state.blockButtonPosition;
+    if (button.parentElement === host && button.__channelFenceAnchor === anchor &&
+        (pageButton || button.dataset.cfPosition === position)) {
+      return;
+    }
+    if (!pageButton) {
+      button.dataset.cfPosition = position;
+    }
+    if (anchor?.isConnected) {
+      anchor.insertAdjacentElement(position === "before" ? "beforebegin" : "afterend", button);
+    } else if (position === "before") {
+      host.prepend(button);
+    } else {
+      host.append(button);
+    }
+    button.__channelFenceAnchor = anchor;
+  }
+
   function ensureBlockButton(root, pageButton, ownerContext) {
     if (!state.enabled || !root) {
       return;
@@ -1734,15 +1755,9 @@
     if (existingButton) {
       existingButton.title = I18n.get("contentBlockWithBrand", displayName);
       setAttributeIfChanged(existingButton, "aria-label", I18n.get("contentBlockNamed", displayName));
-      if (ownerContext?.anchor?.isConnected &&
-          existingButton.__channelFenceAnchor !== ownerContext.anchor) {
-        ownerContext.anchor.insertAdjacentElement("afterend", existingButton);
-        existingButton.__channelFenceAnchor = ownerContext.anchor;
-      } else if (!ownerContext?.anchor && existingButton.parentElement !== host) {
-        // YouTube swaps hidden and visible metadata containers while hydrating
-        // cards. Keep a retained control attached to the current visible host.
-        host.append(existingButton);
-      }
+      // Also reposition retained controls when the preference changes or
+      // YouTube swaps a hidden metadata container for its visible replacement.
+      positionBlockButton(existingButton, ownerContext?.anchor || null, host, pageButton);
       return;
     }
 
@@ -1815,11 +1830,7 @@
       );
     }, true);
 
-    if (ownerContext?.anchor?.isConnected) {
-      ownerContext.anchor.insertAdjacentElement("afterend", button);
-    } else {
-      host.append(button);
-    }
+    positionBlockButton(button, ownerContext?.anchor || null, host, pageButton);
   }
 
   function ensureCompactShortButton(root) {
@@ -2914,6 +2925,13 @@
       const size = changes[Shared.STORAGE.compactHomeSize].newValue;
       state.compactHomeSize = ["small", "large"].includes(size) ? size : "medium";
     }
+    if (changes[Shared.STORAGE.blockButtonPosition]) {
+      state.blockButtonPosition = changes[Shared.STORAGE.blockButtonPosition].newValue === "after"
+        ? "after" : "before";
+    }
+    if (changes[Shared.STORAGE.showBlockCount]) {
+      requestActionUpdate();
+    }
     if (changes[Shared.STORAGE.blocked]) {
       const nextBlocked = changes[Shared.STORAGE.blocked].newValue || [];
       if (!blockedListsEqual(state.blocked, nextBlocked)) {
@@ -2932,7 +2950,8 @@
     if (changes[Shared.STORAGE.enabled] || changes[Shared.STORAGE.blocked] ||
         changes[Shared.STORAGE.hideComments] || changes[Shared.STORAGE.hideHomeShorts] ||
         changes[Shared.STORAGE.hideHomeAds] || changes[Shared.STORAGE.hideHomePromotions] ||
-        changes[Shared.STORAGE.compactHomeGrid] || changes[Shared.STORAGE.compactHomeSize]) {
+        changes[Shared.STORAGE.compactHomeGrid] || changes[Shared.STORAGE.compactHomeSize] ||
+        changes[Shared.STORAGE.blockButtonPosition]) {
       scheduleStorageScan();
     }
   });

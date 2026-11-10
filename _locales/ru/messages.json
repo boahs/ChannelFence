@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "Также убирает комментарии, если ChannelFence может определить канал комментатора."
   },
+  "appearance": {
+    "message": "Внешний вид"
+  },
+  "blockButtonPosition": {
+    "message": "Расположение кнопки блокировки"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Размещает кнопку до или после имени автора с учётом направления чтения в YouTube."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Перед именем автора"
+  },
+  "blockButtonPositionAfter": {
+    "message": "После имени автора"
+  },
+  "showBlockCount": {
+    "message": "Показывать число заблокированных авторов на значке панели инструментов"
+  },
+  "showBlockCountHelp": {
+    "message": "Показывает общее число авторов в списке блокировки, а не число скрытых на текущей странице."
+  },
   "blockedCreators": {
     "message": "Заблокированные авторы"
   },

@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "ChannelFence가 댓글 작성자의 채널을 식별할 수 있으면 해당 댓글도 숨깁니다."
   },
+  "appearance": {
+    "message": "모양"
+  },
+  "blockButtonPosition": {
+    "message": "차단 버튼 위치"
+  },
+  "blockButtonPositionHelp": {
+    "message": "YouTube의 읽기 방향에 따라 크리에이터 이름 앞이나 뒤에 버튼을 배치합니다."
+  },
+  "blockButtonPositionBefore": {
+    "message": "크리에이터 이름 앞"
+  },
+  "blockButtonPositionAfter": {
+    "message": "크리에이터 이름 뒤"
+  },
+  "showBlockCount": {
+    "message": "도구 모음 아이콘에 차단한 크리에이터 수 표시"
+  },
+  "showBlockCountHelp": {
+    "message": "현재 페이지에서 숨긴 수가 아닌, 차단 목록에 있는 전체 크리에이터 수를 표시합니다."
+  },
   "blockedCreators": {
     "message": "차단한 크리에이터"
   },

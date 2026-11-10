@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "Cũng ẩn bình luận khi ChannelFence xác định được kênh của người bình luận."
   },
+  "appearance": {
+    "message": "Giao diện"
+  },
+  "blockButtonPosition": {
+    "message": "Vị trí nút chặn"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Đặt nút trước hoặc sau tên nhà sáng tạo, theo hướng đọc của YouTube."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Trước tên nhà sáng tạo"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Sau tên nhà sáng tạo"
+  },
+  "showBlockCount": {
+    "message": "Hiển thị số nhà sáng tạo đã chặn trên biểu tượng thanh công cụ"
+  },
+  "showBlockCountHelp": {
+    "message": "Hiển thị tổng số nhà sáng tạo trong danh sách chặn, không phải số bị ẩn trên trang hiện tại."
+  },
   "blockedCreators": {
     "message": "Nhà sáng tạo bị chặn"
   },

@@ -11,6 +11,8 @@ const elements = {
   homePromotions: document.getElementById("homePromotionsToggle"),
   compactHomeGrid: document.getElementById("compactHomeGridToggle"),
   compactHomeSize: document.getElementById("compactHomeSizeSelect"),
+  blockButtonPosition: document.getElementById("blockButtonPositionSelect"),
+  showBlockCount: document.getElementById("showBlockCountToggle"),
   comments: document.getElementById("commentsToggle"),
   blockedCount: document.getElementById("blockedCount"),
   manualForm: document.getElementById("manualBlockForm"),
@@ -179,6 +181,15 @@ elements.compactHomeSize.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.compactHomeSize]: elements.compactHomeSize.value });
 });
 
+elements.blockButtonPosition.addEventListener("change", async () => {
+  const position = elements.blockButtonPosition.value === "after" ? "after" : "before";
+  await chrome.storage.local.set({ [Shared.STORAGE.blockButtonPosition]: position });
+});
+
+elements.showBlockCount.addEventListener("change", async () => {
+  await chrome.storage.local.set({ [Shared.STORAGE.showBlockCount]: elements.showBlockCount.checked });
+});
+
 elements.shorts.addEventListener("change", async () => {
   await chrome.storage.local.set({ [Shared.STORAGE.hideHomeShorts]: elements.shorts.checked });
   showToast(I18n.get(elements.shorts.checked ? "hideShortsToast" : "showShortsToast"));
@@ -296,8 +307,12 @@ async function initialize() {
   elements.compactHomeSize.value = ["small", "medium", "large"].includes(values[Shared.STORAGE.compactHomeSize])
     ? values[Shared.STORAGE.compactHomeSize] : "medium";
   elements.comments.checked = values[Shared.STORAGE.hideComments] !== false;
+  elements.blockButtonPosition.value = values[Shared.STORAGE.blockButtonPosition] === "after" ? "after" : "before";
+  elements.showBlockCount.checked = values[Shared.STORAGE.showBlockCount] === true;
   renderLocalizedUI();
   elements.language.disabled = false;
+  elements.blockButtonPosition.disabled = false;
+  elements.showBlockCount.disabled = false;
 }
 
 I18n.onChange(renderLocalizedUI);
@@ -328,6 +343,12 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
   if (changes[Shared.STORAGE.hideComments]) {
     elements.comments.checked = changes[Shared.STORAGE.hideComments].newValue !== false;
+  }
+  if (changes[Shared.STORAGE.blockButtonPosition]) {
+    elements.blockButtonPosition.value = changes[Shared.STORAGE.blockButtonPosition].newValue === "after" ? "after" : "before";
+  }
+  if (changes[Shared.STORAGE.showBlockCount]) {
+    elements.showBlockCount.checked = changes[Shared.STORAGE.showBlockCount].newValue === true;
   }
   if (changes[Shared.STORAGE.blocked]) {
     blockedEntries = Shared.sanitizeBlockedEntries(

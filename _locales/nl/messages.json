@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "Verwijdert ook reacties als ChannelFence het kanaal van de schrijver kan herkennen."
   },
+  "appearance": {
+    "message": "Weergave"
+  },
+  "blockButtonPosition": {
+    "message": "Positie van de blokkeerknop"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Plaats de knop voor of na de naam van de maker, volgens de leesrichting van YouTube."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Voor de naam van de maker"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Na de naam van de maker"
+  },
+  "showBlockCount": {
+    "message": "Aantal geblokkeerde makers tonen op het werkbalkpictogram"
+  },
+  "showBlockCountHelp": {
+    "message": "Toont het totale aantal makers op je blokkeerlijst, niet het aantal dat op de huidige pagina verborgen is."
+  },
   "blockedCreators": {
     "message": "Geblokkeerde makers"
   },

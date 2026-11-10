@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "当 ChannelFence 能识别评论者的频道时，也会隐藏其评论。"
   },
+  "appearance": {
+    "message": "外观"
+  },
+  "blockButtonPosition": {
+    "message": "屏蔽按钮位置"
+  },
+  "blockButtonPositionHelp": {
+    "message": "按照 YouTube 的阅读方向，将按钮放在创作者名称之前或之后。"
+  },
+  "blockButtonPositionBefore": {
+    "message": "创作者名称之前"
+  },
+  "blockButtonPositionAfter": {
+    "message": "创作者名称之后"
+  },
+  "showBlockCount": {
+    "message": "在工具栏图标上显示已屏蔽的创作者数量"
+  },
+  "showBlockCountHelp": {
+    "message": "显示屏蔽列表中的创作者总数，而不是当前页面上隐藏的数量。"
+  },
   "blockedCreators": {
     "message": "已屏蔽的创作者"
   },

@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "जब ChannelFence टिप्पणी करने वाले का चैनल पहचान सके, तो उसकी टिप्पणियाँ भी हटा देता है।"
   },
+  "appearance": {
+    "message": "दिखावट"
+  },
+  "blockButtonPosition": {
+    "message": "ब्लॉक बटन की जगह"
+  },
+  "blockButtonPositionHelp": {
+    "message": "YouTube की पढ़ने की दिशा के अनुसार बटन को क्रिएटर के नाम से पहले या बाद में रखें।"
+  },
+  "blockButtonPositionBefore": {
+    "message": "क्रिएटर के नाम से पहले"
+  },
+  "blockButtonPositionAfter": {
+    "message": "क्रिएटर के नाम के बाद"
+  },
+  "showBlockCount": {
+    "message": "टूलबार आइकन पर ब्लॉक किए गए क्रिएटर्स की संख्या दिखाएँ"
+  },
+  "showBlockCountHelp": {
+    "message": "आपकी ब्लॉक सूची में मौजूद क्रिएटर्स की कुल संख्या दिखाता है, मौजूदा पेज पर छिपाए गए क्रिएटर्स की संख्या नहीं।"
+  },
   "blockedCreators": {
     "message": "ब्लॉक किए गए क्रिएटर"
   },

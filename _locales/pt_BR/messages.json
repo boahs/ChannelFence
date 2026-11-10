@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "Também remove comentários quando o ChannelFence consegue identificar o canal de quem comentou."
   },
+  "appearance": {
+    "message": "Aparência"
+  },
+  "blockButtonPosition": {
+    "message": "Posição do botão de bloqueio"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Posicione o botão antes ou depois dos nomes dos criadores, seguindo a direção de leitura do YouTube."
+  },
+  "blockButtonPositionBefore": {
+    "message": "Antes do nome do criador"
+  },
+  "blockButtonPositionAfter": {
+    "message": "Depois do nome do criador"
+  },
+  "showBlockCount": {
+    "message": "Mostrar a contagem de criadores bloqueados no ícone da barra de ferramentas"
+  },
+  "showBlockCountHelp": {
+    "message": "Mostra o total de criadores na sua lista de bloqueio, não a quantidade ocultada na página atual."
+  },
   "blockedCreators": {
     "message": "Criadores bloqueados"
   },

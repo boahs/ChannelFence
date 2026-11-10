@@ -182,6 +182,27 @@
   "hideCommentsHelp": {
     "message": "ChannelFence yorum yapan kişinin kanalını tanıyabiliyorsa yorumlarını da kaldırır."
   },
+  "appearance": {
+    "message": "Görünüm"
+  },
+  "blockButtonPosition": {
+    "message": "Engelleme düğmesinin konumu"
+  },
+  "blockButtonPositionHelp": {
+    "message": "Düğmeyi YouTube'un okuma yönüne göre içerik üreticisinin adından önce veya sonra yerleştirin."
+  },
+  "blockButtonPositionBefore": {
+    "message": "İsimden önce"
+  },
+  "blockButtonPositionAfter": {
+    "message": "İsimden sonra"
+  },
+  "showBlockCount": {
+    "message": "Araç çubuğu simgesinde engellenen içerik üreticisi sayısını göster"
+  },
+  "showBlockCountHelp": {
+    "message": "Geçerli sayfada gizlenenlerin sayısını değil, engelleme listenizdeki içerik üreticilerinin toplam sayısını gösterir."
+  },
   "blockedCreators": {
     "message": "Engellenen içerik üreticileri"
   },

@@ -10,12 +10,14 @@ const root = path.join(__dirname, "..");
 
 test("builds a separate validated Firefox package without changing Chrome sources", () => {
   const sourceManifest = fs.readFileSync(path.join(root, "manifest.json"), "utf8");
+  const sourceOptions = fs.readFileSync(path.join(root, "ui", "options.html"), "utf8");
   const chromeManifest = JSON.parse(sourceManifest);
   execFileSync(process.execPath, ["scripts/build-firefox.mjs"], { cwd: root, stdio: "pipe" });
   const directory = path.join(root, "dist", `ChannelFence-${chromeManifest.version}-firefox`);
   const manifest = JSON.parse(fs.readFileSync(path.join(directory, "manifest.json"), "utf8"));
 
   assert.equal(fs.readFileSync(path.join(root, "manifest.json"), "utf8"), sourceManifest);
+  assert.equal(fs.readFileSync(path.join(root, "ui", "options.html"), "utf8"), sourceOptions);
   assert.equal(chromeManifest.background.service_worker, "src/service-worker.js");
   assert.equal(manifest.background.service_worker, undefined);
   assert.deepEqual(manifest.background.scripts, ["src/shared.js", "src/i18n.js", "src/service-worker.js"]);
@@ -40,7 +42,14 @@ test("builds a separate validated Firefox package without changing Chrome source
     assert.deepEqual(Object.keys(packaged).sort(), Object.keys(source).sort(), locale);
     assert.doesNotMatch(JSON.stringify(packaged), /Chrome/, locale);
     assert.match(source.welcomePrivacy.message, /Chrome/, locale);
+    assert.match(packaged.reviewHelp.message, /Firefox Add-ons/, locale);
   }
+  const options = fs.readFileSync(path.join(directory, "ui", "options.html"), "utf8");
+  assert.match(options, /class="review-note"/);
+  assert.match(options, /href="https:\/\/addons\.mozilla\.org\/addon\/channelfence\/reviews\/"/);
+  assert.match(options, /data-i18n="reviewHelp">An honest review on Firefox Add-ons helps other people find it\./);
+  assert.match(options, /data-i18n="leaveReview">Leave a review<\/a>/);
+  assert.match(sourceOptions, /href="https:\/\/chromewebstore\.google\.com\/[^"]+\/reviews"/);
   for (const file of ["options.html", "welcome.html", "privacy.html"]) {
     const html = fs.readFileSync(path.join(directory, "ui", file), "utf8");
     assert.doesNotMatch(html, /Chrome|chromewebstore\.google\.com/, file);
