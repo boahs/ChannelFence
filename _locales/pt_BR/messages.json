@@ -144,7 +144,7 @@
     "message": "Pause todos os bloqueios sem excluir sua lista."
   },
   "hideShortsHelp": {
-    "message": "Remove seções e cartões de Shorts do início, da busca e de outros feeds. A aba Shorts continua disponível."
+    "message": "Remove seções e cartões de Shorts do início, da página inicial dos canais, da busca e de outros feeds. As abas Shorts dos canais e o visualizador de Shorts continuam disponíveis."
   },
   "hideHomeAds": {
     "message": "Ocultar cartões patrocinados no início"

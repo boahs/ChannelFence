@@ -144,7 +144,7 @@
     "message": "Pausa todos los bloqueos sin borrar tu lista."
   },
   "hideShortsHelp": {
-    "message": "Quita las secciones y tarjetas de Shorts de Inicio, las búsquedas y otras listas de videos. La pestaña Shorts sigue disponible."
+    "message": "Quita las secciones y tarjetas de Shorts de Inicio, el inicio de los canales, las búsquedas y otras listas de videos. Las pestañas Shorts de los canales y el visor de Shorts siguen disponibles."
   },
   "hideHomeAds": {
     "message": "Ocultar tarjetas patrocinadas en Inicio"

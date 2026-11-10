@@ -144,7 +144,7 @@
     "message": "Listenizi silmeden tüm engellemeleri duraklatın."
   },
   "hideShortsHelp": {
-    "message": "Ana sayfa, arama ve diğer akışlardaki Shorts bölümlerini ve kartlarını kaldırır. Shorts sekmesi kullanılabilir durumda kalır."
+    "message": "Ana sayfa, kanal ana sayfaları, arama ve diğer akışlardaki Shorts bölümlerini ve kartlarını kaldırır. Kanalların Shorts sekmeleri ve Shorts oynatıcısı kullanılabilir durumda kalır."
   },
   "hideHomeAds": {
     "message": "Ana sayfadaki sponsorlu kartları gizle"

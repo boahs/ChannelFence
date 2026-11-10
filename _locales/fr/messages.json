@@ -144,7 +144,7 @@
     "message": "Mettez tous les blocages en pause sans supprimer votre liste."
   },
   "hideShortsHelp": {
-    "message": "Retire les sections et les cartes Shorts de l’accueil, de la recherche et des autres flux. L’onglet Shorts reste accessible."
+    "message": "Retire les sections et les cartes Shorts de l’accueil, de l’accueil des chaînes, de la recherche et des autres flux. Les onglets Shorts des chaînes et le lecteur Shorts restent accessibles."
   },
   "hideHomeAds": {
     "message": "Masquer les cartes sponsorisées sur l’accueil"

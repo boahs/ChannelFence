@@ -144,7 +144,7 @@
     "message": "Pausiere alle Blockierungen, ohne deine Liste zu löschen."
   },
   "hideShortsHelp": {
-    "message": "Entfernt Shorts-Bereiche und -Karten von der Startseite, aus der Suche und aus anderen Feeds. Der Tab „Shorts“ bleibt verfügbar."
+    "message": "Entfernt Shorts-Bereiche und -Karten von der Startseite, von Kanalstartseiten, aus der Suche und aus anderen Feeds. Shorts-Tabs auf Kanälen und der Shorts-Player bleiben verfügbar."
   },
   "hideHomeAds": {
     "message": "Gesponserte Karten auf der Startseite ausblenden"

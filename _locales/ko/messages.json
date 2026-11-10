@@ -144,7 +144,7 @@
     "message": "차단 목록을 삭제하지 않고 모든 차단을 일시 중지합니다."
   },
   "hideShortsHelp": {
-    "message": "홈, 검색 및 기타 피드에서 Shorts 섹션과 카드를 숨깁니다. Shorts 탭은 계속 사용할 수 있습니다."
+    "message": "홈, 채널 홈, 검색 및 기타 피드에서 Shorts 섹션과 카드를 숨깁니다. 채널의 Shorts 탭과 Shorts 시청 화면은 계속 사용할 수 있습니다."
   },
   "hideHomeAds": {
     "message": "홈에서 광고 카드 숨기기"

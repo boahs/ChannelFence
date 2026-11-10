@@ -4,6 +4,7 @@
 
 - Moved inline block buttons before creator names by default. Choose **Before creator name** or **After creator name** under **Appearance** in settings; the order follows YouTube's reading direction.
 - Kept creator names and block buttons inside narrow cards, including compact Home grids.
+- Kept a channel's dedicated Shorts tab visible when **Hide Shorts in feeds** is enabled. Shorts shelves on Home, channel Home, and search remain hidden; blocked creators stay blocked.
 - Made the toolbar's saved block-list count optional and off by default. Enable **Show blocked-creator count on toolbar icon** in settings to restore it.
 - Added the Firefox Add-ons review link to Firefox settings.
 - Translated the new settings into all eighteen supported interface languages.

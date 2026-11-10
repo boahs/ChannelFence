@@ -144,7 +144,7 @@
     "message": "Tạm dừng mọi thao tác chặn mà không xóa danh sách."
   },
   "hideShortsHelp": {
-    "message": "Ẩn các mục và thẻ Shorts ở trang chủ, tìm kiếm và bảng tin khác. Thẻ Shorts vẫn dùng được."
+    "message": "Ẩn các mục và thẻ Shorts ở trang chủ, trang chủ của kênh, tìm kiếm và các bảng tin khác. Thẻ Shorts của kênh và trình phát Shorts vẫn dùng được."
   },
   "hideHomeAds": {
     "message": "Ẩn thẻ được tài trợ trên trang chủ"

@@ -1,6 +1,6 @@
 import { type Page } from "puppeteer-core";
 import { blockedCreator } from "../../e2e/fixtures/extension.fixture";
-import { appearanceFeed, creatorCard } from "../../e2e/fixtures/youtube-fixtures";
+import { appearanceFeed, comment, creatorCard, watchOwner } from "../../e2e/fixtures/youtube-fixtures";
 import {
   activateExtensionPage, expect, expectAttribute, expectCount, expectCSS, expectValue, expectVisible,
   openFixture, openOptions, test
@@ -146,6 +146,41 @@ for (const { direction, youtubeLanguage, extensionLanguage } of [
       .cfBlockedChannels.map((entry) => entry.key)).toEqual(["handle:@legacycreator"]);
   });
 }
+
+test("moves comment and watch recommendation controls without changing who they block", async ({ addon }) => {
+  const page = addon.page;
+  await openFixture(page, [
+    watchOwner("Watching Creator", "@watchingcreator"),
+    comment({ id: "comment", handle: "@commenter", displayName: "Commenter" }),
+    creatorCard({ id: "recommendation", handle: "@recommendedcreator", displayName: "Recommended Creator", tag: "ytd-compact-video-renderer" })
+  ].join(""), "/watch?v=fixture-video");
+  for (const position of ["before", "after"] as const) {
+    await addon.setStorage({ cfBlockButtonPosition: position });
+    for (const [id, handle] of [["comment", "commenter"], ["recommendation", "recommendedcreator"]]) {
+      const card = `[data-testid="${id}"]`;
+      await expectCount(page, `${card} .cf-block-button`, 1);
+      await expectVisible(page, `${card} .cf-block-button`);
+      await expect.poll(() => page.$eval(`${card} a[href='/@${handle}']`, (anchor, position) => {
+        const button = position === "before" ? anchor.previousElementSibling : anchor.nextElementSibling;
+        const name = anchor.getBoundingClientRect();
+        const bounds = button?.getBoundingClientRect();
+        return {
+          identity: button?.getAttribute("data-cf-identity"),
+          correctSide: Boolean(bounds && (position === "before" ? bounds.right <= name.left + 1 : bounds.left >= name.right - 1))
+        };
+      }, position)).toEqual({ identity: `handle:@${handle}`, correctSide: true });
+    }
+  }
+  await page.locator('[data-testid="comment"] .cf-block-button').click();
+  await expectVisible(page, '[data-testid="comment"]', false);
+  await expectVisible(page, '[data-testid="recommendation"]');
+  await expectVisible(page, "ytd-watch-metadata");
+  await page.locator('[data-testid="recommendation"] .cf-block-button').click();
+  await expectVisible(page, '[data-testid="recommendation"]', false);
+  await expectVisible(page, "ytd-watch-metadata");
+  expect((await addon.getStorage<{ cfBlockedChannels: Array<{ key: string }> }>("cfBlockedChannels"))
+    .cfBlockedChannels.map((entry) => entry.key).sort()).toEqual(["handle:@commenter", "handle:@recommendedcreator"]);
+});
 
 test("preserves each collaborator's control and identity when position changes", async ({ addon }) => {
   const card = '[data-testid="collaboration"]';

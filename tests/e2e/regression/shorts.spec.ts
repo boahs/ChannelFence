@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
-import { shortsShelf, shortsViewer } from "../fixtures/youtube-fixtures";
+import { channelHeader, shortsShelf, shortsViewer } from "../fixtures/youtube-fixtures";
 import { installConsumedShortsScroll } from "../fixtures/shorts-scroll-reset";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
@@ -186,6 +186,85 @@ test.describe("YouTube Shorts controls", () => {
     await expect(youtube.card("standalone-short")).toBeVisible();
     await expect(youtube.card("modern-shorts-shelf")).toBeVisible();
     await expect(youtube.card("shorts-guide")).toBeVisible();
+  });
+
+  test("keeps channel Shorts tabs available for supported channel URL formats", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    await extensionStorage.set({ cfHideHomeShorts: true });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    for (const path of [
+      "/@shortscreator/shorts",
+      "/@shortscreator/shorts/?view=latest",
+      "/channel/UCshortscreator0001/shorts",
+      "/c/ShortsCreator/shorts",
+      "/user/ShortsCreator/shorts"
+    ]) {
+      await youtube.open(shortsShelf(), path);
+      await expect(youtube.blockButton("regular-video")).toBeVisible();
+      for (const card of ["shorts-section", "standalone-short", "modern-shorts-shelf", "compact-short"]) {
+        await expect(youtube.card(card)).toBeVisible();
+      }
+      await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+    }
+  });
+
+  test("restores channel Shorts during navigation while continuing to hide feed shelves", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    await extensionStorage.set({ cfHideHomeShorts: true });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(shortsShelf(), "/");
+    await expect(youtube.card("standalone-short")).toBeHidden();
+
+    // Reuse the same elements, as YouTube does when switching channel tabs.
+    // A channel called @shorts must still have its Home shelf hidden.
+    for (const [path, visible] of [
+      ["/@shorts/shorts", true],
+      ["/@shorts", false],
+      ["/@shorts/shorts/?view=latest", true]
+    ] as const) {
+      await extensionPage.evaluate((nextPath) => {
+        document.dispatchEvent(new Event("yt-navigate-start", { bubbles: true }));
+        history.pushState({}, "", nextPath);
+        document.dispatchEvent(new Event("yt-navigate-finish", { bubbles: true }));
+      }, path);
+      for (const card of ["shorts-section", "standalone-short", "modern-shorts-shelf", "compact-short"]) {
+        await expect(youtube.card(card)).toBeVisible({ visible });
+      }
+      await expect(youtube.card("regular-video")).toBeVisible();
+      if (!visible) {
+        await extensionStorage.set({ cfHideHomeShorts: false });
+        await expect(youtube.card("standalone-short")).toBeVisible();
+        await extensionStorage.set({ cfHideHomeShorts: true });
+        await expect(youtube.card("standalone-short")).toBeHidden();
+      }
+    }
+  });
+
+  test("still blocks a blocked creator's channel Shorts tab while feed hiding is enabled", async ({
+    extensionPage,
+    extensionStorage
+  }) => {
+    await extensionStorage.set({
+      cfHideHomeShorts: true,
+      cfBlockedChannels: [blockedCreator("@shortscreator", "Shorts Creator")]
+    });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(
+      channelHeader("Shorts Creator", "@shortscreator") + shortsShelf(),
+      "/@shortscreator/shorts"
+    );
+    const overlay = extensionPage.locator("#cf-hard-block-overlay");
+    await expect(overlay).toBeVisible();
+    await expect(overlay).toContainText("shortscreator is on your ChannelFence block list.");
+    await overlay.getByRole("button", { name: "Unblock and continue" }).click();
+    await expect(overlay).toHaveCount(0);
+    await expect(youtube.card("standalone-short")).toBeVisible();
+    await expect(youtube.card("compact-short")).toBeVisible();
+    expect((await extensionStorage.get("cfBlockedChannels")).cfBlockedChannels).toEqual([]);
   });
 
   test("keeps direct Shorts pages available when feed Shorts are hidden", async ({

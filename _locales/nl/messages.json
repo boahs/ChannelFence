@@ -144,7 +144,7 @@
     "message": "Pauzeer alle blokkades zonder je lijst te verwijderen."
   },
   "hideShortsHelp": {
-    "message": "Verwijdert Shorts-secties en -kaarten van Home, uit zoekresultaten en uit andere feeds. Het tabblad Shorts blijft beschikbaar."
+    "message": "Verwijdert Shorts-secties en -kaarten van Home, van startpagina’s van kanalen, uit zoekresultaten en uit andere feeds. De Shorts-tabbladen van kanalen en de Shorts-speler blijven beschikbaar."
   },
   "hideHomeAds": {
     "message": "Gesponsorde kaarten op Home verbergen"

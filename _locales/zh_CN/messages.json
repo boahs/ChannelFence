@@ -144,7 +144,7 @@
     "message": "暂停所有屏蔽功能，同时保留列表。"
   },
   "hideShortsHelp": {
-    "message": "隐藏首页、搜索和其他信息流中的 Shorts 栏目与卡片。Shorts 标签页仍可使用。"
+    "message": "隐藏首页、频道首页、搜索和其他信息流中的 Shorts 栏目与卡片。频道的 Shorts 标签页和 Shorts 播放器仍可使用。"
   },
   "hideHomeAds": {
     "message": "隐藏首页的赞助卡片"

@@ -144,7 +144,7 @@
     "message": "Pause all blocking without deleting your list."
   },
   "hideShortsHelp": {
-    "message": "Removes Shorts shelves and cards from Home, search, and other feeds. The Shorts tab remains available."
+    "message": "Removes Shorts shelves and cards from Home, channel Home, search, and other feeds. Channel Shorts tabs and the Shorts viewer remain available."
   },
   "hideHomeAds": {
     "message": "Hide sponsored cards on Home"

@@ -2541,7 +2541,9 @@
   }
 
   function shouldHideShortsItem(item) {
-    if (!state.enabled || !state.hideHomeShorts || isShortsRoute()) {
+    // Opening a channel's Shorts tab is an explicit choice, like the viewer.
+    const isChannelShortsTab = /^\/(?:@[^/]+|(?:channel|c|user)\/[^/]+)\/shorts\/?$/.test(location.pathname);
+    if (!state.enabled || !state.hideHomeShorts || isShortsRoute() || isChannelShortsTab) {
       return false;
     }
     if (item.matches("ytd-rich-section-renderer")) {

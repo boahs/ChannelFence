@@ -1,6 +1,6 @@
 import { type Page } from "@playwright/test";
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
-import { appearanceFeed, creatorCard } from "../fixtures/youtube-fixtures";
+import { appearanceFeed, comment, creatorCard, watchOwner } from "../fixtures/youtube-fixtures";
 import { OptionsPage } from "../pages/extension-ui.page";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
@@ -153,6 +153,40 @@ for (const { direction, youtubeLanguage, extensionLanguage } of [
       .cfBlockedChannels.map((entry) => entry.key)).toEqual(["handle:@legacycreator"]);
   });
 }
+
+test("moves comment and watch recommendation controls without changing who they block", async ({ extensionPage, extensionStorage }) => {
+  const youtube = new YouTubeSurfacePage(extensionPage);
+  await youtube.open([
+    watchOwner("Watching Creator", "@watchingcreator"),
+    comment({ id: "comment", handle: "@commenter", displayName: "Commenter" }),
+    creatorCard({ id: "recommendation", handle: "@recommendedcreator", displayName: "Recommended Creator", tag: "ytd-compact-video-renderer" })
+  ].join(""), "/watch?v=fixture-video");
+  for (const position of ["before", "after"] as const) {
+    await extensionStorage.set({ cfBlockButtonPosition: position });
+    for (const [id, handle] of [["comment", "commenter"], ["recommendation", "recommendedcreator"]]) {
+      await expect(youtube.blockButton(id)).toHaveCount(1);
+      await expect(youtube.blockButton(id)).toBeVisible();
+      await expect.poll(() => youtube.card(id).locator(`a[href='/@${handle}']`).evaluate((anchor, position) => {
+        const button = position === "before" ? anchor.previousElementSibling : anchor.nextElementSibling;
+        const name = anchor.getBoundingClientRect();
+        const bounds = button?.getBoundingClientRect();
+        return {
+          identity: button?.getAttribute("data-cf-identity"),
+          correctSide: Boolean(bounds && (position === "before" ? bounds.right <= name.left + 1 : bounds.left >= name.right - 1))
+        };
+      }, position)).toEqual({ identity: `handle:@${handle}`, correctSide: true });
+    }
+  }
+  await youtube.blockButton("comment").click();
+  await expect(youtube.card("comment")).toBeHidden();
+  await expect(youtube.card("recommendation")).toBeVisible();
+  await expect(extensionPage.locator("ytd-watch-metadata")).toBeVisible();
+  await youtube.blockButton("recommendation").click();
+  await expect(youtube.card("recommendation")).toBeHidden();
+  await expect(extensionPage.locator("ytd-watch-metadata")).toBeVisible();
+  expect((await extensionStorage.get<{ cfBlockedChannels: Array<{ key: string }> }>("cfBlockedChannels"))
+    .cfBlockedChannels.map((entry) => entry.key).sort()).toEqual(["handle:@commenter", "handle:@recommendedcreator"]);
+});
 
 test("preserves each collaborator's control and identity when position changes", async ({ extensionPage, extensionStorage }) => {
   const youtube = new YouTubeSurfacePage(extensionPage);
