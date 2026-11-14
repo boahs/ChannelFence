@@ -221,9 +221,11 @@ for (const locale of allLocales) {
       await expect(card).toBeVisible({ timeout: 30_000 });
       const shortHref = await card.locator("a[href^='/shorts/']").first().getAttribute("href");
       expect(shortHref).toMatch(/^\/shorts\//);
+      // YouTube can repeat the same Short in multiple search shelves.
+      // Keep the interaction and layout assertions on its first occurrence.
       const selectedCard = extensionPage.locator("ytm-shorts-lockup-view-model").filter({
         has: extensionPage.locator(`a[href='${shortHref}']`)
-      });
+      }).first();
       const layoutItem = selectedCard.locator(
         "xpath=ancestor::div[contains(@class, 'ytGridShelfViewModelGridShelfItem')][1]"
       );
