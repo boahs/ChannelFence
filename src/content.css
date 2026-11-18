@@ -206,19 +206,29 @@ ytd-comment-view-model #header-author > h3:has(> .cf-block-button[data-cf-positi
 
 /* Current Home cards put creators, badges and statistics on one clipped row.
    Give views/age (or a live watching count) their own line while our control
-   is present, in both native and compact grids. Keep YouTube's DOM order. */
-ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) {
+   is present, in both native and compact grids. Match the native statistics
+   boundary so older creator rows keep their badges beside the name. */
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]):has(
+  > .ytContentMetadataViewModelLeadingIcon,
+  > :is(.ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack) ~ .ytContentMetadataViewModelMetadataTextLastPart[role="text"]
+) {
   flex-wrap: wrap !important;
   column-gap: 4px !important;
 }
 
-ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position])::after {
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]):has(
+  > .ytContentMetadataViewModelLeadingIcon,
+  > :is(.ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack) ~ .ytContentMetadataViewModelMetadataTextLastPart[role="text"]
+)::after {
   content: "";
   flex-basis: 100%;
   order: 1;
 }
 
-ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) > :is(
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]):has(
+  > .ytContentMetadataViewModelLeadingIcon,
+  > :is(.ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack) ~ .ytContentMetadataViewModelMetadataTextLastPart[role="text"]
+) > :is(
   .ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack
 ):not(.ytContentMetadataViewModelLeadingIcon ~ *):not(.ytContentMetadataViewModelMetadataTextLastPart) {
   flex: 0 1 auto !important;
@@ -227,17 +237,26 @@ ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-b
   overflow: hidden !important;
 }
 
-ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) > .ytContentMetadataViewModelDelimiter {
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]):has(
+  > .ytContentMetadataViewModelLeadingIcon,
+  > :is(.ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack) ~ .ytContentMetadataViewModelMetadataTextLastPart[role="text"]
+) > .ytContentMetadataViewModelDelimiter {
   display: none !important;
 }
 
 /* Linkless collaboration rows keep controls beside the shared byline. Divide
    its remaining width between names so each verified badge stays with its name. */
-ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(> .cf-block-button[data-cf-position]) > .ytContentMetadataViewModelMetadataText:not(.ytContentMetadataViewModelLeadingIcon ~ *):not(.ytContentMetadataViewModelMetadataTextLastPart) {
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(> .cf-block-button[data-cf-position]):has(
+  > .ytContentMetadataViewModelLeadingIcon,
+  > :is(.ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack) ~ .ytContentMetadataViewModelMetadataTextLastPart[role="text"]
+) > .ytContentMetadataViewModelMetadataText:not(.ytContentMetadataViewModelLeadingIcon ~ *):not(.ytContentMetadataViewModelMetadataTextLastPart) {
   flex: 1 1 0 !important;
 }
 
-ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) > :is(
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]):has(
+  > .ytContentMetadataViewModelLeadingIcon,
+  > :is(.ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack) ~ .ytContentMetadataViewModelMetadataTextLastPart[role="text"]
+) > :is(
   .ytContentMetadataViewModelLeadingIcon,
   .ytContentMetadataViewModelLeadingIcon ~ :not(.cf-block-button),
   .ytContentMetadataViewModelMetadataTextLastPart[role="text"]

@@ -23,11 +23,10 @@ function compactShortMetadata() {
     }
     const shortUrl = url.searchParams.get("url") || "";
     if (metadata.refreshing) {
-      refreshRequests.push(shortUrl);
       await request.abort();
+      refreshRequests.push(shortUrl);
       return;
     }
-    requestedShorts.push(shortUrl);
     const path = new URL(shortUrl).pathname;
     const blockedCreator = path === "/shorts/compact-one";
     await request.respond({
@@ -40,6 +39,7 @@ function compactShortMetadata() {
           : "https://www.youtube.com/@allowedshortscreator"
       })
     });
+    requestedShorts.push(shortUrl);
   }
   return metadata;
 }
@@ -456,6 +456,9 @@ test.describe("YouTube Shorts controls", () => {
       shortPaths: ["/shorts/compact-one"]
     });
     await expectVisible(page, byTestId("compact-short"), false);
+    // Blocking starts lookups for the remaining cards. Finish their responses
+    // before teardown closes Firefox's interception connection.
+    await expect.poll(() => metadata.requestedShorts.length).toBe(3);
   });
 
   test("blocks the visible creator from the current Shorts viewer", async ({ addon }) => {
