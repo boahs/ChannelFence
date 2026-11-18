@@ -532,8 +532,8 @@ test.describe("Collaboration creator identities", () => {
     await youtube.card("single-creator")
       .getByRole("button", { name: "Block Simon and Martina", exact: true }).click();
 
-    const stored = await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels");
-    expect(stored.cfBlockedChannels[0]).toMatchObject({
+    await expect.poll(async () => (await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels"))
+      .cfBlockedChannels[0]).toMatchObject({
       aliases: ["name:simon and martina"],
       displayName: "Simon and Martina"
     });
