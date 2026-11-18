@@ -148,6 +148,8 @@ for (const locale of allLocales) {
       expect(await blockButton.getAttribute("aria-label")).toContain(creatorName);
       const identity = await blockButton.getAttribute("data-cf-identity");
       expect(identity).toBeTruthy();
+      // A name-only identity can contain a literal pipe in the creator's name.
+      const aliases = identity!.startsWith("name:") ? [identity!] : identity!.split("|");
       await captureAction(blockButton, testInfo, `${locale.catalogCode}-live-recommendation-block-button`);
       await recommendation.getByRole("button", { name: locale.moreActions, exact: true }).click();
       const action = extensionPage.locator(".cf-menu-item:visible");
@@ -162,7 +164,7 @@ for (const locale of allLocales) {
           cfBlockedChannels: Array<{ aliases: string[] }>;
         }>("cfBlockedChannels");
         return stored.cfBlockedChannels.map((entry) => entry.aliases);
-      }).toEqual([expect.arrayContaining(identity!.split("|"))]);
+      }).toEqual([expect.arrayContaining(aliases)]);
     });
 
     test("keeps the localized Shorts viewer caption readable within the native action stack", async ({
@@ -175,7 +177,7 @@ for (const locale of allLocales) {
       const channelBar = extensionPage.locator("ytd-shorts yt-reel-channel-bar-view-model")
         .filter({ has: extensionPage.locator("a[href*='/@']") }).first();
       await expect(channelBar).toBeVisible({ timeout: 30_000 });
-      const reel = channelBar.locator("xpath=ancestor::ytd-reel-video-renderer[1]");
+      const reel = channelBar.locator("xpath=ancestor::*[self::ytd-reel-video-renderer or self::ytd-reel-video-renderer-cow][1]");
       const action = reel.locator(".cf-shorts-action");
       const caption = action.locator(".cf-shorts-action__label");
       await expect(caption).toHaveText(locale.messages.contentBlock.message);

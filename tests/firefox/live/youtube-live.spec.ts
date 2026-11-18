@@ -33,7 +33,7 @@ async function observeShortsNavigation(page: Page): Promise<void> {
         type, at: Date.now(), path: location.pathname, visibility: document.visibilityState,
         readyState: document.readyState,
         nextButton: document.querySelector("ytd-shorts #navigation-button-down button")?.outerHTML ?? null,
-        rendererCount: document.querySelectorAll("ytd-shorts ytd-reel-video-renderer").length,
+        rendererCount: document.querySelectorAll("ytd-shorts :is(ytd-reel-video-renderer, ytd-reel-video-renderer-cow)").length,
         scroller: scroller && {
           scrollTop: scroller.scrollTop, clientHeight: scroller.clientHeight,
           scrollHeight: scroller.scrollHeight, overflowY: getComputedStyle(scroller).overflowY
@@ -200,7 +200,7 @@ test("advances after blocking the current live Shorts creator", async ({ addon }
   const channel = await addon.page.waitForSelector("ytd-shorts yt-reel-channel-bar-view-model:has(a[href*='/@'])", { visible: true, timeout: 30_000 });
   if (!channel) throw new Error("The Shorts creator bar was not rendered");
   expect(await channel.$$eval(".cf-block-button", (elements) => elements.length)).toBe(0);
-  const reel = await channel.evaluateHandle((element) => element.closest("ytd-reel-video-renderer")!);
+  const reel = await channel.evaluateHandle((element) => element.closest("ytd-reel-video-renderer, ytd-reel-video-renderer-cow")!);
   const button = await reel.asElement()!.waitForSelector(".cf-shorts-action__button", { visible: true, timeout: 15_000 });
   if (!button) throw new Error("ChannelFence's Shorts action was not rendered");
   const url = addon.page.url();

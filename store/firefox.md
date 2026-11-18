@@ -1,13 +1,13 @@
 # Firefox build and listing guidance
 
-Desktop Firefox version 0.2.9 is publicly available from [Firefox Add-ons](https://addons.mozilla.org/addon/channelfence/). This document prepares version 0.2.10 for submission; it does not indicate Mozilla approval or store availability for that update. Firefox shares the Chrome feature set and all eighteen interface languages. Use the store listing for normal installation; the packages below are for development and Mozilla submission.
+Use [Firefox Add-ons](https://addons.mozilla.org/addon/channelfence/) for normal installation. This document prepares version 0.2.11 for submission; it does not indicate Mozilla approval or store availability for that update. Firefox shares the Chrome feature set and all eighteen interface languages. The packages below are for development and Mozilla submission.
 
 ## Build and load
 
 Use Node.js 22.12 or later and run `npm ci`, then `npm run build:firefox`.
 
-- Temporary testing folder: `dist/ChannelFence-0.2.10-firefox/`.
-- Unsigned Mozilla upload package: `dist/ChannelFence-0.2.10-firefox.zip`.
+- Temporary testing folder: `dist/ChannelFence-0.2.11-firefox/`.
+- Unsigned Mozilla upload package: `dist/ChannelFence-0.2.11-firefox.zip`.
 - Firefox minimum: 142.0. Desktop only; Android has not been validated.
 - Add-on ID: `channelfence@channelfence.app`. This identifies the add-on; it is not a contact email address. Keep it stable for future updates.
 
@@ -22,10 +22,10 @@ The Firefox build preprocesses the manifest, translations, and HTML. Select **Ye
 Create the source archive from the exact commit recorded in the tested ZIP's `.validation.txt` file. With that commit checked out, run:
 
 ```powershell
-git -c core.autocrlf=false archive --format=zip --output=dist/ChannelFence-0.2.10-firefox-source.zip HEAD LICENSE package.json package-lock.json manifest.json manifest.firefox.json scripts/build-firefox.mjs scripts/firefox-locales.json src ui _locales assets/icons store/firefox.md
+git -c core.autocrlf=false archive --format=zip --output=dist/ChannelFence-0.2.11-firefox-source.zip HEAD LICENSE package.json package-lock.json manifest.json manifest.firefox.json scripts/build-firefox.mjs scripts/firefox-locales.json src ui _locales assets/icons store/firefox.md
 ```
 
-Reviewer build instructions: extract the source archive, use Node.js 24, and run `npm ci` followed by `npm run build:firefox` from its root. The build downloads the locked developer dependencies and writes `dist/ChannelFence-0.2.10-firefox.zip`. No credentials or private files are required. The release package workflow builds on Ubuntu; its validation record identifies the commit and tested archive. ZIP timestamps may differ when rebuilding, so compare extracted file contents.
+Reviewer build instructions: extract the source archive, use Node.js 24, and run `npm ci` followed by `npm run build:firefox` from its root. The build downloads the locked developer dependencies and writes `dist/ChannelFence-0.2.11-firefox.zip`. No credentials or private files are required. The release package workflow builds on Ubuntu; its validation record identifies the commit and tested archive. ZIP timestamps may differ when rebuilding, so compare extracted file contents.
 
 See [Mozilla's source-code submission requirements](https://extensionworkshop.com/documentation/publish/source-code-submission/).
 
@@ -33,7 +33,7 @@ See [Mozilla's source-code submission requirements](https://extensionworkshop.co
 
 `npm run test:unit` checks the shared runtime, both background environments, localization, and Firefox packaging. `npm run typecheck` checks the browser tests. `npm run test:e2e` retains the existing Chromium regressions.
 
-Set `CHANNELFENCE_FIREFOX_PATH` to an installed Firefox executable and run `npm run test:firefox` after building. This suite installs the actual Firefox package into a temporary browser profile and uses intercepted YouTube fixtures. It does not inject a replacement extension API. Reports and screenshots are kept as local test artifacts.
+Set `CHANNELFENCE_FIREFOX_PATH` to an installed Firefox executable and run `npm run test:firefox` after building. This suite installs the actual Firefox package into a temporary browser profile and uses intercepted YouTube fixtures. The settings-startup cases separately run the packaged scripts with a controlled storage API to verify delayed and failed initial reads. Reports and screenshots are kept as local test artifacts.
 
 **Firefox regression tests** runs the deterministic scenarios on pull requests, pushes to `main`, and manual requests. **Firefox live YouTube tests** runs daily at 12:17 in `America/New_York` and accepts manual runs. Chromium has a separate live workflow at 00:17 and 12:17 daily. Firefox covers the equivalent Chromium fixture scenarios and live journeys across all 18 languages. CI installs matching signed Firefox language packs and verifies native UI language selection. The Firefox test guide documents privileged file-picker and toolbar-popup checks that still need manual release validation.
 
@@ -59,13 +59,15 @@ Description:
 
 ChannelFence is a free, open-source YouTube channel blocker for Firefox. Block a creator once and hide their matching content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
-What's new in 0.2.10:
+What's new in 0.2.11:
 
-- Block buttons now appear before creator names by default. Choose before or after in Appearance settings; the order follows YouTube's reading direction on supported video cards and comments.
-- Improved creator-name and block-button layouts on narrow cards and compact Home grids.
-- Hide Shorts in feeds now keeps a channel's dedicated Shorts tab available. Shorts shelves on Home, channel Home, and search stay hidden, and blocked creators stay blocked.
-- The toolbar's saved block-list count is now optional and off by default. Turn it on in settings if you want to see your total number of blocked creators.
-- Added the Firefox Add-ons review link in settings and translated the new settings into all eighteen supported interface languages. Permissions and data handling are unchanged.
+- Blocking controls now wait for saved settings to load, preventing an early click from overwriting an existing block list.
+- Updated controls and creator detection for YouTube's newer Shorts viewer layout.
+- Fixed alignment of comment authors, block buttons, timestamps, and channel-owner reply badges.
+- Improved Home creator and statistics layouts in normal and compact grids, including live viewer counts and verified badges.
+- Improved identification of separate creators on supported collaboration cards, keeping view counts and upload ages out of creator names.
+
+Known issue observed in Firefox: a Short from an already blocked creator may occasionally fail to advance while the Shorts viewer is starting. This remains unresolved in 0.2.11.
 
 Features:
 
@@ -101,16 +103,17 @@ License: MIT
 
 ChannelFence is independent software and is not affiliated with, endorsed by, or sponsored by Mozilla or Google. YouTube is a trademark of Google LLC.
 
-## Release notes for 0.2.10
+## Release notes for 0.2.11
 
-Paste this into Mozilla's **Release Notes** field for version 0.2.10:
+Paste this into Mozilla's **Release Notes** field for version 0.2.11:
 
-- Block buttons now appear before creator names by default. Choose before or after under Appearance in the full settings; the order follows YouTube's reading direction on supported video cards and comments.
-- Kept creator names and block buttons inside narrow cards, including compact Home grids.
-- Kept a channel's dedicated Shorts tab available when Hide Shorts in feeds is on. Shorts shelves on Home, channel Home, and search remain hidden; blocked creators stay blocked.
-- Made the toolbar's total saved blocked-creator count optional and off by default. Enable it in settings if you prefer to see the count.
-- Added a Firefox Add-ons review link in settings.
-- Translated the new settings into all eighteen supported interface languages.
+- Protected existing block lists by waiting for saved settings before showing blocking controls.
+- Updated controls and creator detection for YouTube's newer Shorts viewer layout.
+- Kept comment authors, timestamps, block buttons, and channel-owner reply badges aligned.
+- Improved Home statistics readability in normal and compact grids while preserving verified badges beside creator names.
+- Kept identified collaborators separate from one another and from view counts and upload ages.
+
+Known issue observed in Firefox: a Short from an already blocked creator may occasionally fail to advance while the Shorts viewer is starting. This remains unresolved in 0.2.11.
 
 No new permissions or additional network requests. Settings and block lists remain stored locally, with no extension analytics or developer-controlled server.
 
@@ -128,15 +131,17 @@ Privacy and support questions: https://channelfence.app/support/ or https://gith
 
 ## Reviewer notes
 
-This is version 0.2.10 of the Firefox build of the open-source ChannelFence extension. The ZIP contains readable JavaScript, HTML, CSS, translations, and icons. Source is at https://github.com/boahs/ChannelFence. The matching source archive is supplied separately with this submission.
+This is version 0.2.11 of the Firefox build of the open-source ChannelFence extension. The ZIP contains readable JavaScript, HTML, CSS, translations, and icons. Source is at https://github.com/boahs/ChannelFence. The matching source archive is supplied separately with this submission.
 
-To reproduce the submitted Firefox package, extract ChannelFence-0.2.10-firefox-source.zip, use Node.js 24, and run `npm ci` followed by `npm run build:firefox` from its root. The build preprocesses the manifest, bundled translations, and HTML for Firefox and creates dist/ChannelFence-0.2.10-firefox.zip. No compilation or minification is used. ZIP timestamps may differ; compare extracted file contents. No credentials or private files are needed.
+To reproduce the submitted Firefox package, extract ChannelFence-0.2.11-firefox-source.zip, use Node.js 24, and run `npm ci` followed by `npm run build:firefox` from its root. The build preprocesses the manifest, bundled translations, and HTML for Firefox and creates dist/ChannelFence-0.2.11-firefox.zip. No compilation or minification is used. ZIP timestamps may differ; compare extracted file contents. No credentials or private files are needed.
 
 Firefox uses an MV3 event page instead of Chrome's service worker. Content scripts run only on www.youtube.com and m.youtube.com. The only API permission is storage. The websiteContent declaration covers public compact Short URLs sent to YouTube's same-origin oEmbed endpoint. Those requests omit credentials and referrers. No data goes to the developer.
 
 No account is required. Load desktop YouTube, use the ChannelFence control beside a creator or the supported three-dot menu, and confirm matching cards disappear. Use Undo to restore them. Settings also allow manually adding a handle, changing language, and enabling optional Home controls.
 
-For this update, open Manage block list and change the before/after block-button setting under Appearance. Confirm the inline button moves on supported video cards and comments, including compact Home cards. Header, menu, and Shorts viewer controls keep their positions. The saved block-list count is off by default; enable it in settings and confirm the toolbar shows the total saved creator count. With Hide Shorts in feeds enabled, Home, channel Home, and search Shorts shelves are hidden, but an unblocked channel's dedicated Shorts tab and the Shorts viewer remain available. Existing creator blocks still apply. The settings review link opens Firefox Add-ons. Permissions, network behavior, and data handling are unchanged.
+For this update, reload YouTube with an existing block list, block another creator once its control appears, and confirm both entries remain saved. Check comments and channel-owner replies with the before/after Appearance setting: the author, control, and timestamp should align where space allows, with the owner's badge preserved. On supported Home cards, check that statistics stay readable in normal and compact grids and verified badges remain beside creator names. Supported collaboration controls should identify separate creators without including view counts or upload ages. The newer Shorts viewer layout has updated controls and creator detection. Permissions, network behavior, and data handling are unchanged.
+
+Known issue observed in Firefox: a Short from an already blocked creator may occasionally fail to advance while the Shorts viewer is starting. This intermittent behavior remains unresolved in 0.2.11.
 
 ## Submission
 

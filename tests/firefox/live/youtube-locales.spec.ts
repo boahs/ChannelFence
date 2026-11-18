@@ -78,6 +78,8 @@ for (const locale of allLocales) {
       expect(await recommendation.$eval(".cf-block-button", (element) => element.getAttribute("aria-label"))).toContain(creator);
       const identity = await recommendation.$eval(".cf-block-button", (element) => element.getAttribute("data-cf-identity"));
       expect(identity).toBeTruthy();
+      // A name-only identity can contain a literal pipe in the creator's name.
+      const aliases = identity!.startsWith("name:") ? [identity!] : identity!.split("|");
       await captureAction(addon.page, `${selector} .cf-block-button`, testInfo, `${locale.catalogCode}-live-recommendation-block-button`);
       const menu = await recommendation.waitForSelector(`button[aria-label=${JSON.stringify(locale.moreActions)}]`, { visible: true });
       if (!menu) throw new Error("No localized recommendation overflow button was rendered");
@@ -88,12 +90,12 @@ for (const locale of allLocales) {
       await addon.page.locator(".cf-menu-item").click();
       await expect.poll(() => recommendation.evaluate((element) => element.checkVisibility())).toBe(false);
       await expect.poll(async () => (await addon.getStorage<{ cfBlockedChannels: Array<{ aliases: string[] }> }>("cfBlockedChannels"))
-        .cfBlockedChannels.map((entry) => entry.aliases)).toEqual([expect.arrayContaining(identity!.split("|"))]);
+        .cfBlockedChannels.map((entry) => entry.aliases)).toEqual([expect.arrayContaining(aliases)]);
     });
 
     test("keeps the localized Shorts viewer caption readable within the native action stack", async ({ addon }, testInfo) => {
       await openYouTube(addon, "/shorts/E4PB_V8yZso", locale);
-      const reel = "ytd-shorts ytd-reel-video-renderer:has(yt-reel-channel-bar-view-model a[href*='/@'])";
+      const reel = "ytd-shorts :is(ytd-reel-video-renderer, ytd-reel-video-renderer-cow):has(yt-reel-channel-bar-view-model a[href*='/@'])";
       await addon.page.waitForSelector(`${reel} yt-reel-channel-bar-view-model`, { visible: true, timeout: 30_000 });
       const action = `${reel} .cf-shorts-action`;
       const caption = `${action} .cf-shorts-action__label`;

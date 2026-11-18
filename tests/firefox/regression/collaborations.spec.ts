@@ -483,8 +483,8 @@ test.describe("Collaboration creator identities", () => {
     await expectCount(page, '[data-testid="single-creator"] .cf-block-button', 1);
     await page.locator('[data-testid="single-creator"] button[aria-label="Block Simon and Martina"]').click();
 
-    const stored = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
-    expect(stored.cfBlockedChannels[0]).toMatchObject({
+    await expect.poll(async () => (await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels"))
+      .cfBlockedChannels[0]).toMatchObject({
       aliases: ["name:simon and martina"],
       displayName: "Simon and Martina"
     });

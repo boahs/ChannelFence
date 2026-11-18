@@ -12,13 +12,13 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
-What's new in 0.2.10:
+What's new in 0.2.11:
 
-- Block buttons now appear before creator names by default. Choose before or after in Appearance settings; the order follows YouTube's reading direction on supported video cards and comments.
-- Improved creator-name and block-button layouts on narrow cards and compact Home grids.
-- Hide Shorts in feeds now keeps a channel's dedicated Shorts tab available. Shorts shelves on Home, channel Home, and search stay hidden, and blocked creators stay blocked.
-- The toolbar's saved block-list count is now optional and off by default. Turn it on in settings if you want to see your total number of blocked creators.
-- Translated the new settings into all eighteen supported interface languages. Permissions and data handling are unchanged.
+- Blocking controls now wait for saved settings to load, preventing an early click from overwriting an existing block list.
+- Updated controls and creator detection for YouTube's newer Shorts viewer layout.
+- Fixed alignment of comment authors, block buttons, timestamps, and channel-owner reply badges.
+- Improved Home creator and statistics layouts in normal and compact grids, including live viewer counts and verified badges.
+- Improved identification of separate creators on supported collaboration cards, keeping view counts and upload ages out of creator names.
 
 Features:
 
@@ -66,15 +66,15 @@ ChannelFence is independent software and is not affiliated with, endorsed by, or
 
 YouTube is a trademark of Google LLC.
 
-## Release notes for 0.2.10
+## Release notes for 0.2.11
 
 Use this shorter update summary wherever the submission or release form asks for release notes. The detailed description above also includes a What's new section.
 
-- Moved inline block buttons before creator names by default, with a before/after choice under Appearance in full settings.
-- Kept creator names and block buttons inside narrow cards, including compact Home grids.
-- Kept channel Shorts tabs available when Hide Shorts in feeds is on. Home, channel Home, and search Shorts shelves remain hidden; creator blocks still apply.
-- Made the toolbar's total saved blocked-creator count optional and off by default.
-- Translated the new settings into all eighteen supported interface languages.
+- Protected existing block lists by waiting for saved settings before showing blocking controls.
+- Updated controls and creator detection for YouTube's newer Shorts viewer layout.
+- Kept comment authors, timestamps, block buttons, and channel-owner reply badges aligned.
+- Improved Home statistics readability in normal and compact grids while preserving verified badges beside creator names.
+- Kept identified collaborators separate from one another and from view counts and upload ages.
 
 No new permissions or additional network requests. Settings and block lists remain stored locally, with no extension analytics or developer-controlled server.
 

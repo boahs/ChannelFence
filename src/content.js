@@ -12,6 +12,7 @@
   const BLOCKED_SHORT_CONTROL_WAIT_MS = 3000;
   const BLOCKED_SHORT_RETRY_MS = 250;
   const BLOCKED_SHORT_MAX_WAIT_MS = 10000;
+  const SHORTS_RENDERER_SELECTOR = ":is(ytd-reel-video-renderer, ytd-reel-video-renderer-cow)";
 
   const CONTENT_SELECTOR = [
     "ytd-rich-item-renderer",
@@ -21,7 +22,7 @@
     "ytd-playlist-video-renderer",
     "ytd-playlist-panel-video-renderer",
     "ytd-reel-item-renderer",
-    "ytd-reel-video-renderer",
+    SHORTS_RENDERER_SELECTOR,
     "ytm-shorts-lockup-view-model",
     "ytm-shorts-lockup-view-model-v2",
     "ytd-channel-renderer",
@@ -127,7 +128,7 @@
     "ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2";
 
   const PAGE_OWNER_SELECTORS = [
-    "ytd-shorts ytd-reel-video-renderer",
+    `ytd-shorts ${SHORTS_RENDERER_SELECTOR}`,
     "ytd-shorts yt-reel-channel-bar-view-model",
     "yt-reel-channel-bar-view-model",
     "yt-page-header-renderer",
@@ -135,7 +136,7 @@
     "ytd-watch-metadata #owner",
     "ytd-video-owner-renderer",
     "ytd-channel-name#channel-name",
-    "ytd-reel-video-renderer[is-active]",
+    `${SHORTS_RENDERER_SELECTOR}[is-active]`,
     "ytm-slim-owner-renderer"
   ];
 
@@ -157,6 +158,7 @@
   ].join(",");
 
   const state = {
+    settingsReady: false,
     enabled: true,
     hideComments: true,
     hideHomeShorts: false,
@@ -293,6 +295,7 @@
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         await loadState();
+        state.settingsReady = true;
         markWatchPending();
         requestActionUpdate();
         scheduleScan();
@@ -301,9 +304,9 @@
         await new Promise((resolve) => setTimeout(resolve, 150 * (attempt + 1)));
       }
     }
-    // Keep the default enabled/empty state usable if Chrome is still settling
-    // immediately after a fresh unpacked install. Storage changes will sync in.
-    scheduleScan();
+    // Controls must not save an empty fallback over a block list we could not
+    // read. Leave the page usable if the initial settings remain unavailable.
+    clearWatchPending();
   }
 
   function channelAnchorsFromElement(root) {
@@ -538,26 +541,41 @@
   function collaborationNamesFromElement(root) {
     let names = [];
     for (const byline of collaborationBylineElements(root)) {
-      if (/^zh(?:-|$)/i.test(document.documentElement.lang) &&
-          root.querySelector("yt-avatar-stack-view-model") &&
-          byline.matches(".ytContentMetadataViewModelMetadataRow[role='group']")) {
+      const chineseByline = /^zh(?:-|$)/i.test(document.documentElement.lang);
+      if (root.querySelector("yt-avatar-stack-view-model") &&
+          byline.matches(".ytContentMetadataViewModelMetadataRow[role='group']") &&
+          (chineseByline || byline.querySelector(
+            ":scope > .ytContentMetadataViewModelLeadingIcon, :scope > .ytContentMetadataViewModelMetadataTextLastPart"
+          ))) {
         const copy = byline.cloneNode(true);
         copy.querySelectorAll(".cf-block-button, .cf-shorts-action, .cf-menu-item")
           .forEach((control) => control.remove());
-        const fields = [...copy.querySelectorAll(
-          ":scope > .ytContentMetadataViewModelMetadataText[role='text']"
-        )];
-        // The captured two-owner shape puts the connector in the second field.
-        // Keep internal 和 and punctuation inside each creator's complete name.
+        const fields = [];
+        for (const child of copy.children) {
+          // Native Home rows append views/age or a live viewer count after the
+          // creators. Those fields must never become part of a creator identity.
+          if (child.matches(".ytContentMetadataViewModelLeadingIcon, .ytContentMetadataViewModelMetadataTextLastPart")) {
+            break;
+          }
+          if (child.matches(".ytContentMetadataViewModelMetadataText[role='text']")) {
+            fields.push(child);
+          }
+        }
+        // The captured two-owner shapes put a connector in the second field.
+        // Remove only that prefix, preserving conjunctions inside either name.
         const labels = fields.map((field) => field.childElementCount === 0
           ? field.textContent.trim() : "");
-        if (labels.length === 2 && labels[1].startsWith("和")) {
-          const candidates = [labels[0], labels[1].slice(1)]
+        const connector = chineseByline ? /^和/ : /^(?:and|&)\s+/i;
+        let candidates = [];
+        if (labels.length === 2 && connector.test(labels[1])) {
+          candidates = [labels[0], labels[1].replace(connector, "")]
             .map(cleanLinklessLockupCreatorName);
-          if (candidates.every((name) => name && !/(?:\.{3}|\u2026)$/.test(name)) &&
-              candidates.length > names.length) {
-            names = candidates;
-          }
+        } else if (!chineseByline && labels.length === 1) {
+          candidates = splitCollaborationLabel(labels[0]);
+        }
+        if (candidates.every((name) => name && !/(?:\.{3}|\u2026)$/.test(name)) &&
+            candidates.length > names.length) {
+          names = candidates;
         }
         // Unknown grouped shapes must not become one invented owner. Linked
         // creators remain available through the existing stable-owner path.
@@ -829,7 +847,7 @@
       ? scrollerRect.top + (scrollerRect.height / 2)
       : innerHeight / 2;
     const renderers = [...document.querySelectorAll(
-      "ytd-shorts ytd-reel-video-renderer"
+      `ytd-shorts ${SHORTS_RENDERER_SELECTOR}`
     )].filter((renderer) => {
       const style = getComputedStyle(renderer);
       return style.display !== "none" && style.visibility !== "hidden";
@@ -1078,8 +1096,8 @@
       "#owner-name a",
       "yt-page-header-renderer h1",
       "ytd-c4-tabbed-header-renderer #channel-name",
-      "ytd-reel-video-renderer[is-active] #channel-name",
-      "ytd-reel-video-renderer[is-active] a[href^='/@']"
+      `${SHORTS_RENDERER_SELECTOR}[is-active] #channel-name`,
+      `${SHORTS_RENDERER_SELECTOR}[is-active] a[href^='/@']`
     ];
     let displayName = owners[0]?.displayName || "";
     if (!isShortsRoute()) {
@@ -1250,7 +1268,7 @@
       control.querySelector("button")?.getAttribute("aria-label")
     ].filter(Boolean).join(" ");
     const isShortsControl = Boolean(control.closest(
-      "ytd-reel-video-renderer, yt-reel-player-overlay-view-model, reel-action-bar-view-model"
+      `${SHORTS_RENDERER_SELECTOR}, yt-reel-player-overlay-view-model, reel-action-bar-view-model`
     ));
     return Boolean(control.closest(
       "ytd-menu-renderer, yt-menu-renderer, .ytLockupMetadataViewModelMenuButton, " +
@@ -1454,7 +1472,7 @@
   }
 
   function rememberMenuContext(event) {
-    if (!state.enabled || !(event.target instanceof Element)) {
+    if (!state.settingsReady || !state.enabled || !(event.target instanceof Element)) {
       return;
     }
     const control = event.target.closest(
@@ -2006,7 +2024,7 @@
     }
 
     const isCurrentShortsViewer = isShortsRoute() &&
-      root.matches?.("ytd-reel-video-renderer");
+      root.matches?.(SHORTS_RENDERER_SELECTOR);
     if (isCurrentShortsViewer) {
       buttonsOwnedByRoot(root).forEach((button) => button.remove());
       ensureShortsAction(root, owners[0] || null);
@@ -2071,7 +2089,7 @@
       // match on ordinary cards.
       (collaborationNames.length > 0 && matchingEntry([], collaborationNames))
     );
-    const isShortsViewer = isShortsRoute() && item.matches("ytd-reel-video-renderer");
+    const isShortsViewer = isShortsRoute() && item.matches(SHORTS_RENDERER_SELECTOR);
     const shouldHide = state.enabled && blocked && (!isComment || state.hideComments) &&
       !isShortsViewer;
     if (isCompactShort) {
@@ -2336,7 +2354,7 @@
       return false;
     }
 
-    const renderers = [...document.querySelectorAll("ytd-shorts ytd-reel-video-renderer")];
+    const renderers = [...document.querySelectorAll(`ytd-shorts ${SHORTS_RENDERER_SELECTOR}`)];
     const current = currentShortsRenderer();
     const currentIndex = renderers.indexOf(current);
     const next = currentIndex >= 0 ? renderers[currentIndex + 1] : null;
@@ -2596,6 +2614,10 @@
     state.mutationShortsRoots.clear();
     state.mutationRouteDirty = false;
 
+    if (!state.settingsReady) {
+      return;
+    }
+
     syncCurrentRoute();
 
     syncHomeAppearance();
@@ -2693,7 +2715,7 @@
     const target = mutation.target instanceof Element
       ? mutation.target
       : mutation.target.parentElement;
-    const targetRenderer = target?.closest?.("ytd-reel-video-renderer");
+    const targetRenderer = target?.closest?.(SHORTS_RENDERER_SELECTOR);
     if (targetRenderer) {
       return targetRenderer;
     }
@@ -2701,10 +2723,10 @@
       if (!(node instanceof Element)) {
         continue;
       }
-      if (node.matches?.("ytd-reel-video-renderer")) {
+      if (node.matches?.(SHORTS_RENDERER_SELECTOR)) {
         return node;
       }
-      const nestedRenderer = node.querySelector?.("ytd-reel-video-renderer");
+      const nestedRenderer = node.querySelector?.(SHORTS_RENDERER_SELECTOR);
       if (nestedRenderer) {
         return nestedRenderer;
       }
@@ -2795,6 +2817,10 @@
     state.mutationRoots.clear();
     state.mutationShortsRoots.clear();
     state.mutationRouteDirty = false;
+
+    if (!state.settingsReady) {
+      return;
+    }
 
     if (routeDirty) {
       refreshChannelPageIdentity();
@@ -3009,7 +3035,7 @@
 
       if (mutation.type === "attributes") {
         if (isShortsRoute() && mutation.attributeName === "is-active" &&
-          target.matches("ytd-reel-video-renderer")) {
+          target.matches(SHORTS_RENDERER_SELECTOR)) {
           state.mutationRouteDirty = true;
         }
         scheduleMutationElement(target);

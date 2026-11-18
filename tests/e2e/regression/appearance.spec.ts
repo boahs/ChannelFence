@@ -14,6 +14,10 @@ async function expectPlacement(page: Page, position: "before" | "after", directi
     const bounds = button.getBoundingClientRect();
     const outer = card.getBoundingClientRect();
     const statistics = card.querySelector(".statistics")!.getBoundingClientRect();
+    const badgeElement = card.querySelector(".verified")!;
+    const badge = badgeElement.getBoundingClientRect();
+    const byline = badgeElement.previousElementSibling!.getBoundingClientRect();
+    const badgeGap = Math.max(badge.left - byline.right, byline.left - badge.right);
     const buttonOnLeft = position === "before" ? direction === "ltr" : direction === "rtl";
     return {
       ready: true,
@@ -22,11 +26,14 @@ async function expectPlacement(page: Page, position: "before" | "after", directi
       nameVisible: name.width > 1 && name.left >= outer.left - 1 && name.right <= outer.right + 1,
       buttonVisible: bounds.width >= 20 && bounds.left >= outer.left - 1 && bounds.right <= outer.right + 1 &&
         button.contains(document.elementFromPoint(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)),
-      statisticsVisible: statistics.left >= outer.left - 1 && statistics.right <= outer.right + 1
+      statisticsVisible: statistics.left >= outer.left - 1 && statistics.right <= outer.right + 1,
+      badgeBesideName: badgeGap >= -1 && badgeGap <= 12 &&
+        Math.abs(badge.top + badge.height / 2 - byline.top - byline.height / 2) <= 2
     };
   }), { position, direction }), { message: `Both creator controls fit and appear ${position} the name on ${direction} YouTube` })
     .toEqual(Array.from({ length: 2 }, () => ({
-      ready: true, singleButton: true, correctSide: true, nameVisible: true, buttonVisible: true, statisticsVisible: true
+      ready: true, singleButton: true, correctSide: true, nameVisible: true, buttonVisible: true,
+      statisticsVisible: true, badgeBesideName: true
     })));
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
 }
