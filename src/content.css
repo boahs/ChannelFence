@@ -100,10 +100,10 @@ html.cf-hide-home-promotions ytd-browse[page-subtype="home"] ytd-rich-grid-rende
 }
 
 html.cf-watch-pending ytd-watch-flexy #movie_player,
-html.cf-watch-pending ytd-shorts ytd-reel-video-renderer video,
-html.cf-watch-pending ytd-shorts ytd-reel-video-renderer #player,
-html.cf-watch-pending ytd-reel-video-renderer[is-active] video,
-html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
+html.cf-watch-pending ytd-shorts :is(ytd-reel-video-renderer, ytd-reel-video-renderer-cow) video,
+html.cf-watch-pending ytd-shorts :is(ytd-reel-video-renderer, ytd-reel-video-renderer-cow) #player,
+html.cf-watch-pending :is(ytd-reel-video-renderer, ytd-reel-video-renderer-cow)[is-active] video,
+html.cf-watch-pending :is(ytd-reel-video-renderer, ytd-reel-video-renderer-cow)[is-active] #player {
   visibility: hidden !important;
 }
 
@@ -181,6 +181,72 @@ html.cf-watch-pending ytd-reel-video-renderer[is-active] #player {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
+}
+
+/* Comment author links are block-level inside a heading. Keep the control and
+   author together without changing the timestamp or the owner's badge shape. */
+ytd-comment-view-model #header-author > h3:has(> .cf-block-button[data-cf-position]) {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-inline-size: 0 !important;
+  max-inline-size: 100% !important;
+}
+
+ytd-comment-view-model #header-author > h3:has(> .cf-block-button[data-cf-position]) > #author-text {
+  min-inline-size: 0 !important;
+}
+
+ytd-comment-view-model #header-author > h3:has(> .cf-block-button[data-cf-position]) > #author-text > span {
+  box-sizing: border-box !important;
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Current Home cards put creators, badges and statistics on one clipped row.
+   Give views/age (or a live watching count) their own line while our control
+   is present, in both native and compact grids. Keep YouTube's DOM order. */
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) {
+  flex-wrap: wrap !important;
+  column-gap: 4px !important;
+}
+
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position])::after {
+  content: "";
+  flex-basis: 100%;
+  order: 1;
+}
+
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) > :is(
+  .ytContentMetadataViewModelMetadataText, .ytContentMetadataViewModelAvatarStack
+):not(.ytContentMetadataViewModelLeadingIcon ~ *):not(.ytContentMetadataViewModelMetadataTextLastPart) {
+  flex: 0 1 auto !important;
+  min-inline-size: 0 !important;
+  max-inline-size: calc(100% - 26px) !important;
+  overflow: hidden !important;
+}
+
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) > .ytContentMetadataViewModelDelimiter {
+  display: none !important;
+}
+
+/* Linkless collaboration rows keep controls beside the shared byline. Divide
+   its remaining width between names so each verified badge stays with its name. */
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(> .cf-block-button[data-cf-position]) > .ytContentMetadataViewModelMetadataText:not(.ytContentMetadataViewModelLeadingIcon ~ *):not(.ytContentMetadataViewModelMetadataTextLastPart) {
+  flex: 1 1 0 !important;
+}
+
+ytd-browse[page-subtype="home"] .ytContentMetadataViewModelMetadataRow:has(.cf-block-button[data-cf-position]) > :is(
+  .ytContentMetadataViewModelLeadingIcon,
+  .ytContentMetadataViewModelLeadingIcon ~ :not(.cf-block-button),
+  .ytContentMetadataViewModelMetadataTextLastPart[role="text"]
+) {
+  order: 2 !important;
+  flex-shrink: 0 !important;
+  max-inline-size: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
 }
 
 .cf-channel-header-block {

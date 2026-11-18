@@ -275,7 +275,7 @@ test("advances after blocking the current live Shorts creator", async ({
   }).first();
   await expect(channelBar).toBeVisible({ timeout: 30_000 });
   await expect(channelBar.locator(".cf-block-button")).toHaveCount(0);
-  const currentReel = channelBar.locator("xpath=ancestor::ytd-reel-video-renderer[1]");
+  const currentReel = channelBar.locator("xpath=ancestor::*[self::ytd-reel-video-renderer or self::ytd-reel-video-renderer-cow][1]");
   const blockButton = currentReel.locator(".cf-shorts-action__button");
   await expect(blockButton).toBeVisible({ timeout: 15_000 });
   const blockedUrl = extensionPage.url();
