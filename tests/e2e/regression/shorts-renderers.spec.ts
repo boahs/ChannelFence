@@ -71,12 +71,14 @@ for (const tag of shortsRendererTags) {
       const youtube = new YouTubeSurfacePage(extensionPage);
       await youtube.open(shortsRendererQueue(tag), "/shorts/first");
       await expect(youtube.card("first-reel").locator(".cf-shorts-action")).toBeVisible();
-      await extensionPage.evaluate(() => {
+      await extensionPage.evaluate(async () => {
         document.dispatchEvent(new Event("yt-navigate-start", { bubbles: true }));
         history.pushState({}, "", "/shorts/same-creator");
         document.querySelector('[data-testid="first-reel"] a[href^="/shorts/"]')!
           .setAttribute("href", "/shorts/same-creator");
         document.dispatchEvent(new Event("yt-navigate-finish", { bubbles: true }));
+        // Let the queued route scan capture the old owner before its later rerender.
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       });
       await expect(extensionPage.locator("html")).toHaveClass(/cf-watch-pending/);
       await extensionPage.evaluate(() => {

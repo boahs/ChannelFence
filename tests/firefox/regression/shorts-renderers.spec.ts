@@ -70,12 +70,14 @@ for (const tag of shortsRendererTags) {
       await addon.setStorage({ cfBlockedChannels: [blockedCreator("@unrelated", "unrelated")] });
       await openFixture(page, shortsRendererQueue(tag), "/shorts/first");
       await expectVisible(page, '[data-testid="first-reel"] .cf-shorts-action');
-      await page.evaluate(() => {
+      await page.evaluate(async () => {
         document.dispatchEvent(new Event("yt-navigate-start", { bubbles: true }));
         history.pushState({}, "", "/shorts/same-creator");
         document.querySelector('[data-testid="first-reel"] a[href^="/shorts/"]')!
           .setAttribute("href", "/shorts/same-creator");
         document.dispatchEvent(new Event("yt-navigate-finish", { bubbles: true }));
+        // Let the queued route scan capture the old owner before its later rerender.
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       });
       await expectCount(page, "html.cf-watch-pending", 1);
       await page.evaluate(() => {
