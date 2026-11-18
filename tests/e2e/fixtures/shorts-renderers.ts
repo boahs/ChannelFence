@@ -28,7 +28,7 @@ export function shortsRendererQueue(tag: typeof shortsRendererTags[number]): str
       </div>
     </${tag}>`).join("");
 
-  return `
+  const viewer = `
     <style>
       ytd-shorts { width: 600px; }
       #shorts-container { height: 480px; overflow-y: auto; }
@@ -40,8 +40,13 @@ export function shortsRendererQueue(tag: typeof shortsRendererTags[number]): str
     <ytd-shorts>
       <div id="shorts-container"><div id="shorts-inner-container">${reels}</div></div>
       <div id="navigation-button-down"><button>Next video</button></div>
-    </ytd-shorts>
+    </ytd-shorts>`;
+
+  // YouTube creates its reels in page JavaScript, rather than parsing them from
+  // the initial HTML response. Escape markup so it cannot terminate this script.
+  return `
     <script>
+      document.body.insertAdjacentHTML('beforeend', ${JSON.stringify(viewer).replaceAll("<", "\\u003c")});
       const reels = Array.from(document.querySelectorAll('${tag}'));
       const scroller = document.querySelector('#shorts-container');
       const nextButton = document.querySelector('#navigation-button-down button');
