@@ -158,6 +158,7 @@
   ].join(",");
 
   const state = {
+    settingsReady: false,
     enabled: true,
     hideComments: true,
     hideHomeShorts: false,
@@ -294,6 +295,7 @@
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         await loadState();
+        state.settingsReady = true;
         markWatchPending();
         requestActionUpdate();
         scheduleScan();
@@ -302,9 +304,9 @@
         await new Promise((resolve) => setTimeout(resolve, 150 * (attempt + 1)));
       }
     }
-    // Keep the default enabled/empty state usable if Chrome is still settling
-    // immediately after a fresh unpacked install. Storage changes will sync in.
-    scheduleScan();
+    // Controls must not save an empty fallback over a block list we could not
+    // read. Leave the page usable if the initial settings remain unavailable.
+    clearWatchPending();
   }
 
   function channelAnchorsFromElement(root) {
@@ -1470,7 +1472,7 @@
   }
 
   function rememberMenuContext(event) {
-    if (!state.enabled || !(event.target instanceof Element)) {
+    if (!state.settingsReady || !state.enabled || !(event.target instanceof Element)) {
       return;
     }
     const control = event.target.closest(
@@ -2612,6 +2614,10 @@
     state.mutationShortsRoots.clear();
     state.mutationRouteDirty = false;
 
+    if (!state.settingsReady) {
+      return;
+    }
+
     syncCurrentRoute();
 
     syncHomeAppearance();
@@ -2811,6 +2817,10 @@
     state.mutationRoots.clear();
     state.mutationShortsRoots.clear();
     state.mutationRouteDirty = false;
+
+    if (!state.settingsReady) {
+      return;
+    }
 
     if (routeDirty) {
       refreshChannelPageIdentity();

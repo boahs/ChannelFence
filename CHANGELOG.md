@@ -2,11 +2,12 @@
 
 ## Unreleased
 
+- Wait for saved settings before showing blocking controls, preventing an early click from replacing the existing block list while it is still loading.
 - Support YouTube's newer Shorts viewer layout, including its block control, creator tracking, and advancement past blocked creators.
 - Keep comment author names, channel-owner reply badges, block controls, and timestamps aligned.
 - Give Home video statistics room below creator names in both the default and compact grids, keeping views, upload ages, and live viewer counts readable.
 - Keep creators separate on supported collaboration cards whose metadata includes views, upload ages, or live viewer counts.
-- Add matching Chrome and Firefox regression coverage for the new Shorts layout, comment headers, and Home metadata. Correct a live-test assertion for creator names containing a literal `|` character.
+- Add matching Chrome and Firefox regression coverage for settings startup, the new Shorts layout, comment headers, and Home metadata. Correct a live-test assertion for creator names containing a literal `|` character.
 
 <a id="v0-2-10"></a>
 
