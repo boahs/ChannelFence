@@ -1,13 +1,28 @@
 # Changelog
 
-## Unreleased
+<a id="v0-2-11"></a>
+
+## [0.2.11](#v0-2-11) - 2026-11-18
+
+Prepared for submission to the Chrome Web Store and Firefox Add-ons. Availability follows each store's review.
 
 - Wait for saved settings before showing blocking controls, preventing an early click from replacing the existing block list while it is still loading.
 - Support YouTube's newer Shorts viewer layout, including its block control, creator tracking, and advancement past blocked creators.
 - Keep comment author names, channel-owner reply badges, block controls, and timestamps aligned.
 - Give Home video statistics room below creator names in both the default and compact grids, keeping views, upload ages, and live viewer counts readable.
 - Keep creators separate on supported collaboration cards whose metadata includes views, upload ages, or live viewer counts.
-- Add matching Chrome and Firefox regression coverage for settings startup, the new Shorts layout, comment headers, and Home metadata. Correct a live-test assertion for creator names containing a literal `|` character.
+
+Known issue: on Firefox, opening a Short from an already-blocked creator can occasionally fail to advance automatically. This remains under investigation.
+
+<details markdown="1">
+<summary>Technical details and tests</summary>
+
+- Added matching Chrome and Firefox regression coverage for settings startup, the new Shorts layout, comment headers, and Home metadata.
+- Corrected a live-test assertion for creator names containing a literal `|` character and synchronized existing checks with completed storage writes and fixture responses.
+
+There are no new permissions, additional network requests, remote code, or extension analytics in this release.
+
+</details>
 
 <a id="v0-2-10"></a>
 
