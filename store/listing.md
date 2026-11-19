@@ -12,13 +12,9 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
-What's new in 0.2.11:
+What's new in 0.2.12:
 
-- Blocking controls now wait for saved settings to load, preventing an early click from overwriting an existing block list.
-- Updated controls and creator detection for YouTube's newer Shorts viewer layout.
-- Fixed alignment of comment authors, block buttons, timestamps, and channel-owner reply badges.
-- Improved Home creator and statistics layouts in normal and compact grids, including live viewer counts and verified badges.
-- Improved identification of separate creators on supported collaboration cards, keeping view counts and upload ages out of creator names.
+- Improved automatic advancement past already-blocked Shorts when YouTube's viewer is still initializing.
 
 Features:
 
@@ -66,15 +62,11 @@ ChannelFence is independent software and is not affiliated with, endorsed by, or
 
 YouTube is a trademark of Google LLC.
 
-## Release notes for 0.2.11
+## Release notes for 0.2.12
 
 Use this shorter update summary wherever the submission or release form asks for release notes. The detailed description above also includes a What's new section.
 
-- Protected existing block lists by waiting for saved settings before showing blocking controls.
-- Updated controls and creator detection for YouTube's newer Shorts viewer layout.
-- Kept comment authors, timestamps, block buttons, and channel-owner reply badges aligned.
-- Improved Home statistics readability in normal and compact grids while preserving verified badges beside creator names.
-- Kept identified collaborators separate from one another and from view counts and upload ages.
+- Improved automatic advancement past already-blocked Shorts when YouTube's viewer is still initializing.
 
 No new permissions or additional network requests. Settings and block lists remain stored locally, with no extension analytics or developer-controlled server.
 
