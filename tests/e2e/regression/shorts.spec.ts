@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 import { channelHeader, shortsShelf, shortsViewer } from "../fixtures/youtube-fixtures";
-import { installConsumedShortsScroll } from "../fixtures/shorts-scroll-reset";
+import { installConsumedShortsScroll, installShortsSequenceStartup } from "../fixtures/shorts-scroll-reset";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
 
 async function mockCompactShortMetadata(page: Page): Promise<string[]> {
@@ -705,6 +705,96 @@ test.describe("YouTube Shorts controls", () => {
     await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
     await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
   });
+
+  for (const firstNext of ["zero", "tiny", "sizing"] as const) {
+    test(`restores the captured Shorts sequence target after ${firstNext} native movement`, async ({ extensionPage, extensionStorage }) => {
+      const youtube = new YouTubeSurfacePage(extensionPage);
+      await youtube.open(shortsViewer("Sequence Blocked Creator", "@sequenceblocked"), "/shorts/sequence-blocked");
+      await extensionPage.evaluate(installShortsSequenceStartup, firstNext);
+      await extensionStorage.set({
+        cfBlockedChannels: [blockedCreator("@sequenceblocked", "Sequence Blocked Creator")]
+      });
+
+      await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/sequence-allowed", { timeout: 6_000 });
+      await expect(youtube.card("shorts-action-bar").getByRole("button", {
+        name: "Block Sequence Allowed Creator with ChannelFence"
+      })).toBeVisible();
+      if (firstNext !== "zero") {
+        await expect(extensionPage.locator("#shorts-container")).toHaveAttribute("data-reset-count", "1");
+      }
+      await expect(extensionPage.locator("#shorts-container")).toHaveAttribute("data-sizing-phase", "ready");
+      await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+      await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+      // Let existing retry ticks run after success to catch a stale second advance.
+      await extensionPage.waitForTimeout(750);
+      await expect(extensionPage.locator("#navigation-button-down button")).toHaveAttribute("data-click-count", "1");
+      const positions = await extensionPage.locator("#shorts-container").evaluate(element =>
+        JSON.parse((element as HTMLElement).dataset.scrollPositions!) as number[]);
+      // Real scrolling must select cell 1 without reaching the sentinel cell 2.
+      expect(positions[0]).toBe(0);
+      expect(positions.at(-1)).toBeGreaterThanOrEqual(250);
+      expect(Math.max(...positions)).toBeLessThan(750);
+      await expect(extensionPage.locator("#shorts-container")).toHaveAttribute("data-paths", JSON.stringify([
+        "/shorts/sequence-blocked", "/shorts/sequence-allowed"
+      ]));
+      await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/sequence-allowed");
+      const stored = await extensionStorage.get<{ cfBlockedChannels: Array<{ aliases: string[] }> }>("cfBlockedChannels");
+      expect(stored.cfBlockedChannels).toHaveLength(1);
+      expect(stored.cfBlockedChannels[0].aliases).toContain("handle:@sequenceblocked");
+    });
+  }
+
+  test("does not restore a Shorts sequence target after its shared renderer moves before the URL", async ({ extensionPage, extensionStorage }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(shortsViewer("Sequence Blocked Creator", "@sequenceblocked"), "/shorts/sequence-blocked");
+    await extensionPage.evaluate(installShortsSequenceStartup, "moved" as const);
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@sequenceblocked", "Sequence Blocked Creator")]
+    });
+    await expect(extensionPage.locator('[id="1"] ytd-reel-video-renderer')).toHaveCount(1);
+    await expect.poll(() => extensionPage.locator("#shorts-container").evaluate(element => element.scrollTop)).toBe(0);
+    await expect.poll(() => extensionPage.locator("#shorts-container").evaluate(element =>
+      (JSON.parse((element as HTMLElement).dataset.scrollPositions!) as number[]).at(-1))).toBe(0);
+    const resetPositions = await extensionPage.locator("#shorts-container").getAttribute("data-scroll-positions");
+    expect(Math.max(...JSON.parse(resetPositions!) as number[])).toBeGreaterThan(2);
+    // Hold the native route beyond the existing three-second recovery window.
+    await extensionPage.waitForTimeout(3_500);
+    await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/sequence-blocked");
+    await expect(extensionPage.locator("#navigation-button-down button")).toHaveAttribute("data-click-count", "1");
+    await expect(extensionPage.locator("#shorts-container")).toHaveAttribute("data-scroll-positions", resetPositions!);
+    await extensionPage.evaluate(() => document.dispatchEvent(new Event("fixture-finish-shorts-route")));
+    await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/sequence-allowed");
+    await expect(youtube.card("shorts-action-bar").getByRole("button", {
+      name: "Block Sequence Allowed Creator with ChannelFence"
+    })).toBeVisible();
+    await expect(extensionPage.locator("html")).not.toHaveClass(/cf-watch-pending/);
+  });
+
+  for (const cancellation of ["replaced target", "reordered target", "trusted input"] as const) {
+    test(`does not restore a captured Shorts sequence target after ${cancellation}`, async ({ extensionPage, extensionStorage }) => {
+      const youtube = new YouTubeSurfacePage(extensionPage);
+      await youtube.open(shortsViewer("Sequence Blocked Creator", "@sequenceblocked"), "/shorts/sequence-blocked");
+      await extensionPage.evaluate(installShortsSequenceStartup, "zero" as const);
+      await extensionPage.evaluate(reason => {
+        document.querySelector("#navigation-button-down button")!.addEventListener("click", () => {
+          const target = document.querySelector('.reel-video-in-sequence-new[id="1"]')!;
+          if (reason === "replaced target") target.replaceWith(target.cloneNode(true));
+          if (reason === "reordered target") target.parentElement!.append(target);
+        }, { once: true });
+      }, cancellation);
+      await extensionStorage.set({
+        cfBlockedChannels: [blockedCreator("@sequenceblocked", "Sequence Blocked Creator")]
+      });
+      await expect(extensionPage.locator("#navigation-button-down button")).toHaveAttribute("data-click-count", "1");
+      if (cancellation === "trusted input") await extensionPage.keyboard.press("Escape");
+      // Invalidated captures must remain unused after the recovery becomes due.
+      await extensionPage.waitForTimeout(3_500);
+      await expect(extensionPage).toHaveURL("https://www.youtube.com/shorts/sequence-blocked");
+      await expect(extensionPage.locator("#navigation-button-down button")).toHaveAttribute("data-click-count", "1");
+      await expect(extensionPage.locator("#shorts-container")).toHaveAttribute("data-scroll-positions", "[0]");
+      await expect(extensionPage.locator("#cf-hard-block-overlay")).toHaveCount(0);
+    });
+  }
 
   test("recovers once when YouTube resets the first native next scroll", async ({
     extensionPage,

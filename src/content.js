@@ -2203,6 +2203,16 @@
       return;
     }
     const origin = scroller.scrollTop;
+    const renderer = currentShortsRenderer();
+    const source = renderer?.closest(".reel-video-in-sequence-new");
+    const target = source?.nextElementSibling;
+    const sourceId = source?.id;
+    const targetId = target?.id;
+    const sequenceTarget = target?.matches(".reel-video-in-sequence-new") &&
+      /^-?\d+$/.test(sourceId) && /^-?\d+$/.test(targetId) &&
+      Number(targetId) === Number(sourceId) + 1
+      ? { renderer, source, target, parent: source.parentElement, sourceId, targetId }
+      : null;
     const inputEvents = ["pointerdown", "wheel", "keydown"];
     let moved = false;
     const onScroll = () => {
@@ -2216,7 +2226,7 @@
         observation.resetAt = 0;
       } else if (moved) {
         // YouTube can consume its first Next scroll while initializing layout.
-        // Only an actual move and reset warrants one recovery, never a slow route.
+        // Without a fixed destination, only a move and reset warrants recovery.
         observation.resetAt = Date.now();
       }
     };
@@ -2227,6 +2237,9 @@
     };
     const observation = {
       resetAt: 0,
+      scroller,
+      origin,
+      sequenceTarget,
       cleanup: () => {
         scroller.removeEventListener("scroll", onScroll);
         for (const type of inputEvents) {
@@ -2239,6 +2252,24 @@
     for (const type of inputEvents) {
       document.addEventListener(type, cancelOnInput, { capture: true, passive: true });
     }
+  }
+
+  function restoreBlockedShortTarget(recovery) {
+    const { renderer, source, target, parent, sourceId, targetId } = recovery.sequenceTarget;
+    if (!recovery.scroller.isConnected || !recovery.scroller.contains(parent) ||
+      source.parentElement !== parent || target.parentElement !== parent ||
+      source.id !== sourceId || target.id !== targetId ||
+      source.nextElementSibling !== target || !source.contains(renderer) ||
+      currentShortsRenderer() !== renderer) {
+      return;
+    }
+    const targetBounds = target.getBoundingClientRect();
+    if (!targetBounds.height || targetBounds.top <= source.getBoundingClientRect().top) {
+      return;
+    }
+    // YouTube's Next control scrolls to this same sequence cell. Keep that
+    // destination even if native layout consumed the first attempt.
+    target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   }
 
   function clearBlockedShortFailedOpen() {
@@ -2407,15 +2438,25 @@
     const waitedForControls = Date.now() - startedAt >= BLOCKED_SHORT_CONTROL_WAIT_MS;
     const advanceAlreadyAttempted = state.blockedShortAdvanceAttempted ||
       state.blockedShortScrollAttempted;
+    const recovery = state.blockedShortScrollRecovery;
+    const resetSettled = recovery?.resetAt &&
+      Date.now() - recovery.resetAt >= BLOCKED_SHORT_RETRY_MS;
+    const targetStillAtOrigin = recovery?.sequenceTarget && waitedForControls &&
+      Math.abs(recovery.scroller.scrollTop - recovery.origin) <= 2;
     if (!advanceAlreadyAttempted && nextButtonEnabled) {
       state.blockedShortAdvanceAttempted = true;
       observeBlockedShortScrollReset(sourceRouteIdentity);
       nextButton.click();
-    } else if (nextButtonEnabled && state.blockedShortScrollRecovery?.resetAt &&
-      Date.now() - state.blockedShortScrollRecovery.resetAt >= BLOCKED_SHORT_RETRY_MS) {
-      // Leave YouTube a full retry interval to finish the observed layout reset.
+    } else if (nextButtonEnabled && (resetSettled || targetStillAtOrigin)) {
       clearBlockedShortScrollRecovery();
-      nextButton.click();
+      if (recovery.sequenceTarget) {
+        // Startup can consume Next without measurable movement. After the
+        // existing controls wait, restore its fixed target once, never "next"
+        // relative to a potentially newer native video index.
+        restoreBlockedShortTarget(recovery);
+      } else if (resetSettled) {
+        nextButton.click();
+      }
     } else if (!advanceAlreadyAttempted && waitedForControls &&
       scrollTowardNextShort()) {
       state.blockedShortScrollAttempted = true;

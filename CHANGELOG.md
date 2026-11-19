@@ -1,5 +1,23 @@
 # Changelog
 
+<a id="v0-2-12"></a>
+
+## [0.2.12](#v0-2-12) - 2026-11-19
+
+Prepared for Chrome Web Store submission only. Availability follows store review. Firefox store submission is deferred.
+
+- Improve automatic advancement past already-blocked Shorts when YouTube's viewer is still initializing.
+
+<details markdown="1">
+<summary>Technical details</summary>
+
+- Restore the originally captured next Short once when YouTube accepts a Next action without moving the viewer.
+- Keep the existing ten-second deadline and cancel pending recovery when navigation or blocking state changes.
+
+There are no new permissions, additional network requests, remote code, or extension analytics in this release.
+
+</details>
+
 <a id="v0-2-11"></a>
 
 ## [0.2.11](#v0-2-11) - 2026-11-18

@@ -1,10 +1,10 @@
 # Firefox build and listing guidance
 
-Use [Firefox Add-ons](https://addons.mozilla.org/addon/channelfence/) for normal installation. This document prepares version 0.2.11 for submission; it does not indicate Mozilla approval or store availability for that update. Firefox shares the Chrome feature set and all eighteen interface languages. The packages below are for development and Mozilla submission.
+Use [Firefox Add-ons](https://addons.mozilla.org/addon/channelfence/) for normal installation. This document retains the 0.2.11 submission materials; Firefox store submission is deferred while Chrome 0.2.12 is prepared. It does not indicate Mozilla approval or store availability for that update. Firefox shares the Chrome feature set and all eighteen interface languages.
 
 ## Build and load
 
-Use Node.js 22.12 or later and run `npm ci`, then `npm run build:firefox`.
+For the retained 0.2.11 build, extract `ChannelFence-0.2.11-firefox-source.zip` or use tested commit `0bb4e0c660aa0d9625dc3ebb65c2f858928e7e09`. From that source, use Node.js 22.12 or later and run `npm ci`, then `npm run build:firefox`. Building a newer checkout uses its manifest version and does not reproduce the 0.2.11 package below.
 
 - Temporary testing folder: `dist/ChannelFence-0.2.11-firefox/`.
 - Unsigned Mozilla upload package: `dist/ChannelFence-0.2.11-firefox.zip`.
@@ -19,10 +19,10 @@ The package keeps the original Chrome manifest and catalogs unchanged. The build
 
 The Firefox build preprocesses the manifest, translations, and HTML. Select **Yes** when Mozilla asks whether source code is needed, and attach the matching source archive under its source-code field, separately from the installable Firefox ZIP.
 
-Create the source archive from the exact commit recorded in the tested ZIP's `.validation.txt` file. With that commit checked out, run:
+The retained 0.2.11 ZIP's `.validation.txt` records commit `0bb4e0c660aa0d9625dc3ebb65c2f858928e7e09`. To recreate its matching source archive, use that exact commit:
 
 ```powershell
-git -c core.autocrlf=false archive --format=zip --output=dist/ChannelFence-0.2.11-firefox-source.zip HEAD LICENSE package.json package-lock.json manifest.json manifest.firefox.json scripts/build-firefox.mjs scripts/firefox-locales.json src ui _locales assets/icons store/firefox.md
+git -c core.autocrlf=false archive --format=zip --output=dist/ChannelFence-0.2.11-firefox-source.zip 0bb4e0c660aa0d9625dc3ebb65c2f858928e7e09 LICENSE package.json package-lock.json manifest.json manifest.firefox.json scripts/build-firefox.mjs scripts/firefox-locales.json src ui _locales assets/icons store/firefox.md
 ```
 
 Reviewer build instructions: extract the source archive, use Node.js 24, and run `npm ci` followed by `npm run build:firefox` from its root. The build downloads the locked developer dependencies and writes `dist/ChannelFence-0.2.11-firefox.zip`. No credentials or private files are required. The release package workflow builds on Ubuntu; its validation record identifies the commit and tested archive. ZIP timestamps may differ when rebuilding, so compare extracted file contents.
