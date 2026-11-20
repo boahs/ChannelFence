@@ -124,6 +124,28 @@
   const LINKLESS_LOCKUP_AVATAR_SELECTOR =
     ".ytLockupMetadataViewModelAvatar [aria-label^='Go to channel ']";
 
+  // YouTube's collaboration connectors, from native creator bylines. These
+  // follow the page language, independently of ChannelFence's UI language.
+  const COLLABORATION_CONNECTORS = {
+    en: /^(?:and|&)\s+/i,
+    ko: /^및\s+/,
+    ja: /^、\s*/,
+    pt: /^e\s+/i,
+    ru: /^и\s+/i,
+    es: /^(?:y|e)\s+/i,
+    fr: /^et\s+/i,
+    de: /^und\s+/i,
+    zh: /^和\s*/,
+    hi: /^और\s+/,
+    id: /^dan\s+/i,
+    bn: /^এবং\s+/,
+    tr: /^ve\s+/i,
+    vi: /^và\s+/i,
+    ar: /^و\s*/,
+    it: /^e\s+/i,
+    nl: /^en\s+/i
+  };
+
   const COMPACT_SHORTS_SELECTOR =
     "ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2";
 
@@ -379,7 +401,26 @@
             Shared.normalizeCreatorName(candidate) === Shared.normalizeCreatorName(name)));
         if (explicitName) {
           displayName = explicitName;
-        } else if (/\s+(?:and|&)\s+\d+\s+more$/i.test(displayName)) {
+        } else if (!Shared.cleanCreatorDisplayName(anchor.textContent)) {
+          // Search keeps a hidden uploader-avatar link with a localized
+          // "Go to channel" label. Match its complete name against the visible
+          // byline without treating the translated instruction as a creator.
+          const labels = [anchor.getAttribute("aria-label"), anchor.getAttribute("title")]
+            .map((label) => Shared.normalizeCreatorName(label));
+          displayName = [...collaborationNames].sort((left, right) => right.length - left.length)
+            .find((name) => labels.some((label) => {
+              const normalized = Shared.normalizeCreatorName(name);
+              const index = label.indexOf(normalized);
+              if (index === -1) {
+                return false;
+              }
+              const before = label.slice(0, index);
+              const after = label.slice(index + normalized.length);
+              return (!before && /^\s/.test(after)) ||
+                (/[\s:]$/.test(before) && !after) ||
+                (/["„「]$/.test(before) && /^["“」]/.test(after));
+            })) || displayName;
+        } else if (collapsedCollaborationLead(displayName)) {
           displayName = splitCollaborationLabel(displayName)[0] || displayName;
         }
       }
@@ -487,12 +528,13 @@
       `#attributed-channel-name, ${LINKLESS_LOCKUP_CREATOR_ROW_SELECTOR}`
     ) || [])].some((element) => {
       const label = Shared.cleanCreatorDisplayName(linklessLockupCreatorLabel(element));
-      if (/\s+(?:and|&)\s+\d+\s+more$/i.test(label)) {
+      if (collapsedCollaborationLead(label)) {
         return true;
       }
       const normalized = Shared.normalizeCreatorName(label);
       return [...(state.channelPageIdentity?.names || [])].some((name) =>
-        normalized.startsWith(`${name} and `) || normalized.startsWith(`${name} & `));
+        normalized.startsWith(`${name} `) &&
+        collaborationConnector().test(normalized.slice(name.length).trimStart()));
     });
   }
 
@@ -508,26 +550,49 @@
     return visible.length > 0 ? visible : elements;
   }
 
+  function collaborationConnector() {
+    const language = document.documentElement.lang.toLowerCase().split("-")[0];
+    return COLLABORATION_CONNECTORS[language] || COLLABORATION_CONNECTORS.en;
+  }
+
+  function cleanCollaborationLabel(value) {
+    return String(value || "").normalize("NFKC")
+      .replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "")
+      .replace(/\s+/g, " ").trim();
+  }
+
+  function collapsedCollaborationLead(label) {
+    const english = label.match(/^(.*?)\s+(?:and|&)\s+\d+\s+more\s*$/i);
+    const spanish = /^es(?:-|$)/i.test(document.documentElement.lang)
+      ? label.match(/^(.*?)\s+(?:y|e)\s+\d+\s+más\s*$/i) : null;
+    return (english || spanish)?.[1] || "";
+  }
+
   function splitCollaborationLabel(value) {
     // Limit each creator after splitting, not the combined byline: three full
     // channel names can exceed the single-name length limit.
-    const label = String(value || "").normalize("NFKC")
-      .replace(/[\u200B-\u200D\uFEFF]/g, "")
-      .replace(/\s+/g, " ").trim()
+    const label = cleanCollaborationLabel(value)
       .replace(/^go to channel\s+/i, "");
     if (!label || /^collaboration channels$/i.test(label)) {
       return [];
     }
     // "and 2 more" is a count, not a creator. Only the named lead is known
     // when the rest of the participants are absent from the DOM.
-    const collapsed = label.match(/^(.*?)\s+(?:and|&)\s+\d+\s+more\s*$/i);
+    const collapsed = collapsedCollaborationLead(label);
     const normalized = Shared.normalizeCreatorName(label);
+    const connector = collaborationConnector();
+    // Localized connectors can also occur inside a channel name. Extract them
+    // only at native creator-field or badge boundaries, never by guessing where
+    // an unstructured translated byline separates the creators.
+    if (connector !== COLLABORATION_CONNECTORS.en) {
+      return collapsed ? [cleanLinklessLockupCreatorName(collapsed)] : [];
+    }
     const channelTitle = [...(state.channelPageIdentity?.names || [])].find((name) =>
-      normalized.startsWith(`${name} and `) || normalized.startsWith(`${name} & `));
+      normalized.startsWith(`${name} `) && connector.test(normalized.slice(name.length).trimStart()));
     const remainder = channelTitle
-      ? label.slice(channelTitle.length).replace(/^\s+(?:and|&)\s+/i, "")
+      ? label.slice(channelTitle.length).trimStart().replace(connector, "")
       : label;
-    const parts = collapsed ? [collapsed[1]] : [
+    const parts = collapsed ? [collapsed] : [
       ...(channelTitle ? [label.slice(0, channelTitle.length)] : []),
       ...remainder.split(/\s+(?:and|&)\s+|,\s*/i)
     ];
@@ -542,11 +607,9 @@
     let names = [];
     for (const byline of collaborationBylineElements(root)) {
       const chineseByline = /^zh(?:-|$)/i.test(document.documentElement.lang);
+      const connector = collaborationConnector();
       if (root.querySelector("yt-avatar-stack-view-model") &&
-          byline.matches(".ytContentMetadataViewModelMetadataRow[role='group']") &&
-          (chineseByline || byline.querySelector(
-            ":scope > .ytContentMetadataViewModelLeadingIcon, :scope > .ytContentMetadataViewModelMetadataTextLastPart"
-          ))) {
+          byline.matches(".ytContentMetadataViewModelMetadataRow[role='group']")) {
         const copy = byline.cloneNode(true);
         copy.querySelectorAll(".cf-block-button, .cf-shorts-action, .cf-menu-item")
           .forEach((control) => control.remove());
@@ -554,20 +617,25 @@
         for (const child of copy.children) {
           // Native Home rows append views/age or a live viewer count after the
           // creators. Those fields must never become part of a creator identity.
-          if (child.matches(".ytContentMetadataViewModelLeadingIcon, .ytContentMetadataViewModelMetadataTextLastPart")) {
+          if (child.matches(".ytContentMetadataViewModelLeadingIcon") ||
+              (child.matches(".ytContentMetadataViewModelMetadataTextLastPart") &&
+                !connector.test(cleanCollaborationLabel(child.textContent)))) {
             break;
           }
           if (child.matches(".ytContentMetadataViewModelMetadataText[role='text']")) {
             fields.push(child);
           }
         }
-        // The captured two-owner shapes put a connector in the second field.
-        // Remove only that prefix, preserving conjunctions inside either name.
+        // Each additional creator has a connector prefix. LastPart describes
+        // position, not identity: it can be either a creator or live statistics.
+        // Strip only the prefix, preserving conjunctions inside creator names.
         const labels = fields.map((field) => field.childElementCount === 0
-          ? field.textContent.trim() : "");
-        const connector = chineseByline ? /^和/ : /^(?:and|&)\s+/i;
+          ? cleanCollaborationLabel(field.textContent) : "");
+        const collapsed = collapsedCollaborationLead(labels.join(" "));
         let candidates = [];
-        if (labels.length === 2 && connector.test(labels[1])) {
+        if (collapsed) {
+          candidates = [cleanLinklessLockupCreatorName(collapsed)];
+        } else if (labels.length === 2 && connector.test(labels[1])) {
           candidates = [labels[0], labels[1].replace(connector, "")]
             .map(cleanLinklessLockupCreatorName);
         } else if (!chineseByline && labels.length === 1) {
@@ -580,6 +648,33 @@
         // Unknown grouped shapes must not become one invented owner. Linked
         // creators remain available through the existing stable-owner path.
         continue;
+      }
+      if (byline.matches("#attributed-channel-name")) {
+        const copy = byline.cloneNode(true);
+        copy.querySelectorAll(".cf-block-button, .cf-shorts-action, .cf-menu-item")
+          .forEach((control) => control.remove());
+        // Legacy search exposes each verified creator as a text run followed
+        // by its badge. Preserve those boundaries instead of splitting words
+        // such as "and" that can also occur inside a channel's actual name.
+        const badges = copy.querySelectorAll(".ytAttributedStringImageElement[role='img']");
+        badges.forEach((badge) => badge.replaceWith("\u0000"));
+        const labels = copy.textContent.split("\u0000").map(cleanCollaborationLabel).filter(Boolean);
+        if (labels.length === 2 && connector.test(labels[1])) {
+          const collapsed = collapsedCollaborationLead(labels.join(" "));
+          const candidates = (collapsed ? [collapsed] : [labels[0], labels[1].replace(connector, "")])
+            .map(cleanLinklessLockupCreatorName);
+          if (candidates.every((name) => name && !/(?:\.{3}|\u2026)$/.test(name))) {
+            if (candidates.length > names.length) {
+              names = candidates;
+            }
+            continue;
+          }
+        }
+        if (badges.length > 0) {
+          // A badge only after the final creator does not reveal where their
+          // names separate. Keep linked identities instead of inventing owners.
+          continue;
+        }
       }
       const elements = [byline, ...byline.querySelectorAll("[title], [aria-label]")];
       for (const element of elements) {

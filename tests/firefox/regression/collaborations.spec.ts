@@ -2,6 +2,10 @@ import {
   blockedCreator, expect, expectVisible, expectCount, openCreatorMenu, openFixture, test
 } from "../extension.fixture";
 import { channelHeader, rightRailLockup } from "../../e2e/fixtures/youtube-fixtures";
+import {
+  collaborationLayouts, collaborationLocales, localizedCollaboration, reportedCollaborators,
+  partiallyBadgedSpanishCollaboration, unstructuredChineseCollaboration
+} from "../../e2e/fixtures/localized-collaboration";
 
 const creators = [
   { handle: "@businessinsider", displayName: "Business Insider" },
@@ -86,6 +90,141 @@ type StoredBlockedCreators = {
     nameAliases: string[];
   }>;
 };
+
+test.describe("Localized collaboration controls", () => {
+  for (const locale of collaborationLocales) {
+    test(`keeps search and recommendation collaborators independently blockable in ${locale.name}`, async ({ addon }) => {
+      const page = addon.page;
+      const [lead, guest] = reportedCollaborators;
+      const markup = collaborationLayouts.map((layout) => localizedCollaboration(layout, locale)).join("") +
+        rightRailLockup({ id: "solo-lead", displayName: lead }) +
+        rightRailLockup({ id: "solo-guest", displayName: guest });
+      await openFixture(page, markup, "/results?search_query=collaboration", locale.pageLanguage);
+
+      for (const layout of collaborationLayouts) {
+        const card = `[data-testid="${layout}"]`;
+        const buttons = card + " .cf-block-button";
+        await expectCount(page, buttons, 2);
+        expect(await page.$$eval(buttons, (elements) => elements.map((element) => element.getAttribute("aria-label")).sort()))
+          .toEqual(reportedCollaborators.map((name) => `Block ${name}`).sort());
+        for (const name of reportedCollaborators) {
+          await expectVisible(page, `${card} button[aria-label="Block ${name}"]`);
+        }
+      }
+
+      // The legacy card exposes a stable lead URL on a hidden avatar. Its
+      // localized accessibility label must not become the saved creator name.
+      await page.locator(`[data-testid="legacy-search"] button[aria-label="Block ${lead}"]`).click();
+      for (const layout of collaborationLayouts) await expectVisible(page, `[data-testid="${layout}"]`, false);
+      await expectVisible(page, '[data-testid="solo-lead"]', false);
+      await expectVisible(page, '[data-testid="solo-guest"]');
+      const leadBlock = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+      expect(leadBlock.cfBlockedChannels).toEqual([expect.objectContaining({
+        key: "handle:@hmtvmusic", aliases: ["handle:@hmtvmusic"], nameAliases: expect.arrayContaining([lead])
+      })]);
+
+      await addon.setStorage({ cfBlockedChannels: [] });
+      for (const layout of collaborationLayouts) await expectVisible(page, `[data-testid="${layout}"]`);
+      await expectVisible(page, '[data-testid="solo-lead"]');
+      await page.locator(`[data-testid="right-rail"] button[aria-label="Block ${guest}"]`).click();
+      for (const layout of collaborationLayouts) await expectVisible(page, `[data-testid="${layout}"]`, false);
+      await expectVisible(page, '[data-testid="solo-guest"]', false);
+      await expectVisible(page, '[data-testid="solo-lead"]');
+      const guestBlock = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+      expect(guestBlock.cfBlockedChannels).toEqual([expect.objectContaining({
+        key: "name:hmtv telugu news", aliases: ["name:hmtv telugu news"], displayName: guest
+      })]);
+
+      // Loading with an existing guest block must filter all three native shapes.
+      await page.reload({ waitUntil: "domcontentloaded" });
+      for (const layout of collaborationLayouts) await expectVisible(page, `[data-testid="${layout}"]`, false);
+      await expectVisible(page, '[data-testid="solo-guest"]', false);
+      await expectVisible(page, '[data-testid="solo-lead"]');
+    });
+  }
+
+  test("preserves Spanish conjunctions inside names and blocks the selected menu collaborator", async ({ addon }) => {
+    const page = addon.page;
+    const locale = collaborationLocales.find((candidate) => candidate.youtubeLanguage === "es")!;
+    const names = ["Cocina y Amigos", "Artes y Oficios"];
+    await addon.setStorage({ cfBlockedChannels: [blockedCreator("@cocina", "Cocina")] });
+    await openFixture(page, collaborationLayouts.map((layout) => localizedCollaboration(layout, locale, names)).join("") +
+      rightRailLockup({ id: "solo-lead", displayName: names[0] }) +
+      rightRailLockup({ id: "solo-guest", displayName: names[1] }), "/results?search_query=collaboration", "es");
+
+    for (const layout of collaborationLayouts) {
+      const card = `[data-testid="${layout}"]`;
+      await expectVisible(page, card);
+      await expectCount(page, card + " .cf-block-button", 2);
+      for (const name of names) await expectVisible(page, `${card} button[aria-label="Block ${name}"]`);
+    }
+    await openCreatorMenu(page, '[data-testid="legacy-search-menu"]');
+    await expectCount(page, ".cf-menu-item", 2);
+    await page.locator(`[role="menuitem"][aria-label="Block ${names[1]} with ChannelFence"]`).click();
+    for (const layout of collaborationLayouts) await expectVisible(page, `[data-testid="${layout}"]`, false);
+    await expectVisible(page, '[data-testid="solo-guest"]', false);
+    await expectVisible(page, '[data-testid="solo-lead"]');
+    const stored = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(2);
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      aliases: ["name:artes y oficios"], displayName: "Artes y Oficios"
+    });
+    expect(stored.cfBlockedChannels[1].aliases).toEqual(["handle:@cocina"]);
+  });
+
+  test("blocks only the named lead in a collapsed Spanish collaboration", async ({ addon }) => {
+    const page = addon.page;
+    await openFixture(page, collaborationLockup({
+      stackLabel: "Canales de colaboración", groupedFields: ["Lead Creator", "y 2 más"]
+    }), "/results?search_query=collaboration", "es");
+
+    await expectCount(page, '[data-testid="collaboration"] .cf-block-button', 1);
+    await page.locator('[data-testid="collaboration"] button[aria-label="Block Lead Creator"]').click();
+    await expectVisible(page, '[data-testid="collaboration"]', false);
+    const stored = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([expect.objectContaining({
+      key: "name:lead creator", aliases: ["name:lead creator"], displayName: "Lead Creator"
+    })]);
+  });
+
+  test("preserves only explicit owners in an ambiguous Chinese legacy byline", async ({ addon }) => {
+    const page = addon.page;
+    await addon.setStorage({ cfBlockedChannels: [blockedCreator("@hmtvtelugunews", "hmtv Telugu News")] });
+    await openFixture(page, unstructuredChineseCollaboration("unknown-creators") +
+      unstructuredChineseCollaboration("known-uploader", true), "/results?search_query=collaboration", "zh-Hant-TW");
+
+    await expectVisible(page, '[data-testid="unknown-creators"]');
+    await expectCount(page, '[data-testid="unknown-creators"] .cf-block-button', 0);
+    await expectVisible(page, '[data-testid="known-uploader"]');
+    await expectCount(page, '[data-testid="known-uploader"] .cf-block-button', 1);
+    await page.locator('[data-testid="known-uploader"] [data-cf-identity="handle:@hmtvmusic"]').click();
+    await expectVisible(page, '[data-testid="known-uploader"]', false);
+    await expectVisible(page, '[data-testid="unknown-creators"]');
+    const stored = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(2);
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      key: "handle:@hmtvmusic", aliases: ["handle:@hmtvmusic"], displayName: "hmtvmusic"
+    });
+    expect(stored.cfBlockedChannels[1].aliases).toEqual(["handle:@hmtvtelugunews"]);
+  });
+
+  test("does not split Spanish names when only one collaborator has a badge", async ({ addon }) => {
+    const page = addon.page;
+    await addon.setStorage({ cfBlockedChannels: [blockedCreator("@artes", "Artes y Oficios")] });
+    await openFixture(page, partiallyBadgedSpanishCollaboration(), "/results?search_query=collaboration", "es");
+
+    await expectVisible(page, '[data-testid="legacy-search"]');
+    await expectCount(page, '[data-testid="legacy-search"] .cf-block-button', 1);
+    await page.locator('[data-testid="legacy-search"] [data-cf-identity="handle:@hmtvmusic"]').click();
+    await expectVisible(page, '[data-testid="legacy-search"]', false);
+    const stored = await addon.getStorage<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(2);
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      key: "handle:@hmtvmusic", aliases: ["handle:@hmtvmusic"], displayName: "hmtvmusic"
+    });
+    expect(stored.cfBlockedChannels[1].aliases).toEqual(["handle:@artes"]);
+  });
+});
 
 test.describe("Collaboration creator identities", () => {
   for (const creator of creators) {
