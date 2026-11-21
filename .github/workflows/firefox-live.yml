@@ -11,11 +11,18 @@ on:
         description: Optional test-title filter; leave blank to run the complete suite
         type: string
         default: ""
+      stability:
+        description: Repeat selected checks three times without retries
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       grep:
         type: string
         default: ""
+      stability:
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -51,9 +58,11 @@ jobs:
         run: npm run build:firefox
       - name: Run all live YouTube checks in Firefox
         # Allow sequential live checks to finish and leave time to upload diagnostics.
-        run: npm run test:firefox:live -- --global-timeout=1500000 --grep "$TEST_GREP"
+        run: npm run test:firefox:live -- --global-timeout=1500000 --grep "$TEST_GREP" --repeat-each "$TEST_REPEAT_EACH" --retries "$TEST_RETRIES"
         env:
           TEST_GREP: ${{ inputs.grep || '' }}
+          TEST_REPEAT_EACH: ${{ inputs.stability && '3' || '1' }}
+          TEST_RETRIES: ${{ inputs.stability && '0' || '1' }}
           CHANNELFENCE_FIREFOX_PATH: ${{ steps.firefox.outputs.firefox-path }}
       - name: Upload Firefox live diagnostics
         if: always()

@@ -12,9 +12,10 @@ Block YouTube channels and creators across Home, search, recommendations, Shorts
 
 ChannelFence is an open-source, privacy-first YouTube channel blocker for Chrome. Block a YouTube channel or creator once, and ChannelFence hides their content across supported Home feeds, search results, recommendations, Watch Next, Shorts, playlists, comments, and direct pages.
 
-What's new in 0.2.12:
+What's new in 0.2.13:
 
-- Improved automatic advancement past already-blocked Shorts when YouTube's viewer is still initializing.
+- Restored separate block buttons for identified creators on supported collaboration search results and recommendation cards across YouTube languages.
+- Existing blocks now hide those collaboration cards when an identified collaborator matches your saved list.
 
 Features:
 
@@ -62,11 +63,12 @@ ChannelFence is independent software and is not affiliated with, endorsed by, or
 
 YouTube is a trademark of Google LLC.
 
-## Release notes for 0.2.12
+## Release notes for 0.2.13
 
 Use this shorter update summary wherever the submission or release form asks for release notes. The detailed description above also includes a What's new section.
 
-- Improved automatic advancement past already-blocked Shorts when YouTube's viewer is still initializing.
+- Restored separate block buttons for identified creators on supported collaboration search results and recommendation cards across YouTube languages.
+- Existing blocks now hide those collaboration cards when an identified collaborator matches your saved list.
 
 No new permissions or additional network requests. Settings and block lists remain stored locally, with no extension analytics or developer-controlled server.
 
