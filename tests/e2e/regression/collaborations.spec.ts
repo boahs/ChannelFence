@@ -1,6 +1,10 @@
 import { blockedCreator, expect, test } from "../fixtures/extension.fixture";
 import { channelHeader, rightRailLockup } from "../fixtures/youtube-fixtures";
 import { YouTubeSurfacePage } from "../pages/youtube-surface.page";
+import {
+  collaborationLayouts, collaborationLocales, localizedCollaboration, reportedCollaborators,
+  partiallyBadgedSpanishCollaboration, unstructuredChineseCollaboration
+} from "../fixtures/localized-collaboration";
 
 const creators = [
   { handle: "@businessinsider", displayName: "Business Insider" },
@@ -85,6 +89,147 @@ type StoredBlockedCreators = {
     nameAliases: string[];
   }>;
 };
+
+test.describe("Localized collaboration controls", () => {
+  for (const locale of collaborationLocales) {
+    test(`keeps search and recommendation collaborators independently blockable in ${locale.name}`, async ({
+      extensionPage, extensionStorage
+    }) => {
+      const youtube = new YouTubeSurfacePage(extensionPage);
+      const [lead, guest] = reportedCollaborators;
+      const markup = collaborationLayouts.map((layout) => localizedCollaboration(layout, locale)).join("") +
+        rightRailLockup({ id: "solo-lead", displayName: lead }) +
+        rightRailLockup({ id: "solo-guest", displayName: guest });
+      await youtube.open(markup, "/results?search_query=collaboration", locale.pageLanguage);
+
+      for (const layout of collaborationLayouts) {
+        const buttons = youtube.blockButton(layout);
+        await expect(buttons).toHaveCount(2);
+        expect(await buttons.evaluateAll((elements) => elements.map((element) => element.getAttribute("aria-label")).sort()))
+          .toEqual(reportedCollaborators.map((name) => `Block ${name}`).sort());
+        for (const name of reportedCollaborators) {
+          await expect(youtube.card(layout).getByRole("button", { name: `Block ${name}`, exact: true })).toBeVisible();
+        }
+      }
+
+      // The legacy card exposes a stable lead URL on a hidden avatar. Its
+      // localized accessibility label must not become the saved creator name.
+      await youtube.card("legacy-search").getByRole("button", { name: `Block ${lead}`, exact: true }).click();
+      for (const layout of collaborationLayouts) await expect(youtube.card(layout)).toBeHidden();
+      await expect(youtube.card("solo-lead")).toBeHidden();
+      await expect(youtube.card("solo-guest")).toBeVisible();
+      const leadBlock = await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels");
+      expect(leadBlock.cfBlockedChannels).toEqual([expect.objectContaining({
+        key: "handle:@hmtvmusic", aliases: ["handle:@hmtvmusic"], nameAliases: expect.arrayContaining([lead])
+      })]);
+
+      await extensionStorage.set({ cfBlockedChannels: [] });
+      for (const layout of collaborationLayouts) await expect(youtube.card(layout)).toBeVisible();
+      await expect(youtube.card("solo-lead")).toBeVisible();
+      await youtube.card("right-rail").getByRole("button", { name: `Block ${guest}`, exact: true }).click();
+      for (const layout of collaborationLayouts) await expect(youtube.card(layout)).toBeHidden();
+      await expect(youtube.card("solo-guest")).toBeHidden();
+      await expect(youtube.card("solo-lead")).toBeVisible();
+      const guestBlock = await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels");
+      expect(guestBlock.cfBlockedChannels).toEqual([expect.objectContaining({
+        key: "name:hmtv telugu news", aliases: ["name:hmtv telugu news"], displayName: guest
+      })]);
+
+      // Loading with an existing guest block must filter all three native shapes.
+      await extensionPage.reload({ waitUntil: "domcontentloaded" });
+      for (const layout of collaborationLayouts) await expect(youtube.card(layout)).toBeHidden();
+      await expect(youtube.card("solo-guest")).toBeHidden();
+      await expect(youtube.card("solo-lead")).toBeVisible();
+    });
+  }
+
+  test("preserves Spanish conjunctions inside names and blocks the selected menu collaborator", async ({
+    extensionPage, extensionStorage
+  }) => {
+    const locale = collaborationLocales.find((candidate) => candidate.youtubeLanguage === "es")!;
+    const names = ["Cocina y Amigos", "Artes y Oficios"];
+    await extensionStorage.set({ cfBlockedChannels: [blockedCreator("@cocina", "Cocina")] });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(collaborationLayouts.map((layout) => localizedCollaboration(layout, locale, names)).join("") +
+      rightRailLockup({ id: "solo-lead", displayName: names[0] }) +
+      rightRailLockup({ id: "solo-guest", displayName: names[1] }), "/results?search_query=collaboration", "es");
+
+    for (const layout of collaborationLayouts) {
+      await expect(youtube.card(layout)).toBeVisible();
+      await expect(youtube.blockButton(layout)).toHaveCount(2);
+      for (const name of names) {
+        await expect(youtube.card(layout).getByRole("button", { name: `Block ${name}`, exact: true })).toBeVisible();
+      }
+    }
+    const menu = await youtube.openCreatorMenuItems("legacy-search-menu");
+    await expect(menu).toHaveCount(2);
+    await extensionPage.getByRole("menuitem", { name: `Block ${names[1]} with ChannelFence`, exact: true }).click();
+    for (const layout of collaborationLayouts) await expect(youtube.card(layout)).toBeHidden();
+    await expect(youtube.card("solo-guest")).toBeHidden();
+    await expect(youtube.card("solo-lead")).toBeVisible();
+    const stored = await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(2);
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      aliases: ["name:artes y oficios"], displayName: "Artes y Oficios"
+    });
+    expect(stored.cfBlockedChannels[1].aliases).toEqual(["handle:@cocina"]);
+  });
+
+  test("blocks only the named lead in a collapsed Spanish collaboration", async ({ extensionPage, extensionStorage }) => {
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(collaborationLockup({
+      stackLabel: "Canales de colaboración", groupedFields: ["Lead Creator", "y 2 más"]
+    }), "/results?search_query=collaboration", "es");
+
+    await expect(youtube.blockButton("collaboration")).toHaveCount(1);
+    await youtube.card("collaboration").getByRole("button", { name: "Block Lead Creator", exact: true }).click();
+    await expect(youtube.card("collaboration")).toBeHidden();
+    const stored = await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toEqual([expect.objectContaining({
+      key: "name:lead creator", aliases: ["name:lead creator"], displayName: "Lead Creator"
+    })]);
+  });
+
+  test("preserves only explicit owners in an ambiguous Chinese legacy byline", async ({ extensionPage, extensionStorage }) => {
+    await extensionStorage.set({
+      cfBlockedChannels: [blockedCreator("@hmtvtelugunews", "hmtv Telugu News")]
+    });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(unstructuredChineseCollaboration("unknown-creators") +
+      unstructuredChineseCollaboration("known-uploader", true), "/results?search_query=collaboration", "zh-Hant-TW");
+
+    await expect(youtube.card("unknown-creators")).toBeVisible();
+    await expect(youtube.blockButton("unknown-creators")).toHaveCount(0);
+    await expect(youtube.card("known-uploader")).toBeVisible();
+    await expect(youtube.blockButton("known-uploader")).toHaveCount(1);
+    await youtube.card("known-uploader").locator('[data-cf-identity="handle:@hmtvmusic"]').click();
+    await expect(youtube.card("known-uploader")).toBeHidden();
+    await expect(youtube.card("unknown-creators")).toBeVisible();
+    const stored = await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(2);
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      key: "handle:@hmtvmusic", aliases: ["handle:@hmtvmusic"], displayName: "hmtvmusic"
+    });
+    expect(stored.cfBlockedChannels[1].aliases).toEqual(["handle:@hmtvtelugunews"]);
+  });
+
+  test("does not split Spanish names when only one collaborator has a badge", async ({ extensionPage, extensionStorage }) => {
+    await extensionStorage.set({ cfBlockedChannels: [blockedCreator("@artes", "Artes y Oficios")] });
+    const youtube = new YouTubeSurfacePage(extensionPage);
+    await youtube.open(partiallyBadgedSpanishCollaboration(), "/results?search_query=collaboration", "es");
+
+    await expect(youtube.card("legacy-search")).toBeVisible();
+    await expect(youtube.blockButton("legacy-search")).toHaveCount(1);
+    await youtube.card("legacy-search").locator('[data-cf-identity="handle:@hmtvmusic"]').click();
+    await expect(youtube.card("legacy-search")).toBeHidden();
+    const stored = await extensionStorage.get<StoredBlockedCreators>("cfBlockedChannels");
+    expect(stored.cfBlockedChannels).toHaveLength(2);
+    expect(stored.cfBlockedChannels[0]).toMatchObject({
+      key: "handle:@hmtvmusic", aliases: ["handle:@hmtvmusic"], displayName: "hmtvmusic"
+    });
+    expect(stored.cfBlockedChannels[1].aliases).toEqual(["handle:@artes"]);
+  });
+});
 
 test.describe("Collaboration creator identities", () => {
   for (const creator of creators) {
