@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Restore separate creator block buttons and saved-block matching on supported localized collaboration search results and recommendation cards.
+
 <a id="v0-2-12"></a>
 
 ## [0.2.12](#v0-2-12) - 2026-11-19
