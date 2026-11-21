@@ -1,8 +1,23 @@
 # Changelog
 
-## Unreleased
+<a id="v0-2-13"></a>
+
+## [0.2.13](#v0-2-13) - 2026-11-21
+
+Prepared for submission to the Chrome Web Store and Firefox Add-ons. Availability follows each store's review.
 
 - Restore separate creator block buttons and saved-block matching on supported localized collaboration search results and recommendation cards.
+- Bring Firefox up to date with improved advancement past already-blocked Shorts while YouTube's viewer is initializing, previously included in Chrome 0.2.12.
+
+<details markdown="1">
+<summary>Technical details</summary>
+
+- Recognize native creator fields and verified-badge boundaries across all eighteen supported YouTube languages, while keeping view counts and upload ages out of creator identities.
+- Preserve explicit channel links when translated bylines do not expose enough information to identify every collaborator.
+
+There are no new permissions, additional network requests, remote code, or extension analytics in this release.
+
+</details>
 
 <a id="v0-2-12"></a>
 
